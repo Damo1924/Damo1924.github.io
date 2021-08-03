@@ -1,0 +1,157 @@
+# GIT STUDY (210801 ~ )
+
+### 1. Version Control System
+
+#### 1-1. What is Version Control?
+
+버전 관리 시스템(Version Control System, VCS)은 소스 코드의 변화를 추적하고 관리할 수 있도록 해주는 프로그래밍 도구이다.
+
+간단한 프로그램의 경우에는 꼭 VCS를 사용하여 버전 관리를 할 필요는 없다. 하지만 코드가 복잡해지고 팀 단위로 개발하는 상황이라면 VCS를 사용함으로써 개발 효율을 크게 향상시킬 수 있다. 대부분의 프로젝트들은 "file tree"의 구조를 가지고 있는데, 여러 사람이 각기 다른 부분을 수정하다보면 서로 호환되지 않는 문제가 발생할 수 있고, 오류가 발생했을 때 그 원인을 찾기도 쉽지 않다.
+
+버전 관리 시스템은 코드의 모든 변경사항들을 포함한 전체 파일의 히스토리를 특정 저장소에 기록해두기 때문에 개발 도중 어떤 문제가 발생한다해도 이전 버전들과의 비교를 통해 쉽고 빠르게 문제점을 발견하고 해결할 수 있게 된다. 실제로 많은 기업들에서 SVN이나 Git과 같은 VCS들을 이용해서 개발을 하고 있다.
+
+
+
+#### 1-2. Benefits of VCS: *Traceability, Branching, Merging*
+
+먼저 VCS를 이용하면 파일의 모든 변경 사항을 기록해서 언제든지 찾아보거나 특정 시점(버전)의 코드를 불러올 수 있다. 이때 '파일의 모든 변경 사항'이란 파일의 생성, 삭제뿐만 아니라 파일의 수정 사항, 심지어 누가, 언제, 어떤 목적으로 수정하였는지까지를 의미하기 때문에 오류가 발생한다해도 비교적 쉽게 그 원인을 찾고 해결할 수 있다는 장점이 있다.
+
+VCS를 사용함으로써 얻을 수 있는 또다른 장점은 여러 branch를 생성함으로써 서로 다른 사람이나 팀들이 각자 독립적인 stream에서 작업을 할 수 있다는 것이다. 각자 맡은 부분을 따로 작업한 후에는 서로의 결과물을 합칠 수 있는 기능도 제공한다. 또한, 굳이 팀 프로젝트가 아니더라도 branching을 통해 좀 더 체계적인 개발이 가능하다.
+
+
+
+#### 1-3. Types of VCS
+
+##### Centralized Version Control System (CVCS)
+
+CVCS는 하나의 중앙 서버에서 여러 개발자들이 각자 맡은 파트의 사본(working copy, checkout)을 받아 작업하는 방식이다. 각자 작업을 마치면, 변경 사항들을 중앙 서버의 repository에 commit하여 다른 사람들이 접근할 수 있도록 한다. CVCS는 하나의 repository를 통해 작업이 이루어지기 때문에 개발자들과 전체 개발의 책임자나 관리자가 프로젝트의 진행 상황을 파악하기 수월하다는 장점이 있다. 하지만 코드의 변경사항을 기록해두는 repository가 유일하기 때문에 만약 중앙 서버에 문제가 발생한다면 그동안의 정보들을 한꺼번에 잃을 수 있다는 단점이 있다. 대표적으로  CVS, Subversion(SVN) 등이 있다.
+
+##### Distributed Version Control System (DVCS)
+
+DVCS는 저장소가 하나라는 CVCS의 치명적인 단점을 개선한 버전 관리 시스템으로, 하나의 중앙 서버를 가지고 있다는 점은 CVCS와 동일하지만, 모든 개발자들이 각자의  repository를 가지고 있다는 점에서 차이가 있다. 작업을 하기 위해서는 먼저 중앙 서버의 repository에서 개인의 local repository로 정보를 pull해야 한다. 그 후, local repository에서 working copy를 받아와 작업을 한 다음 다시 local repository에 commit을 한다. 이 변경사항들을 중앙 서버에 업데이트하는 것을 push라고 부른다. 대표적으로 Git, Mercurial 등이 있다. 
+
+
+
+### 2. More about Git
+
+#### 2-1. Features of Git
+
+- **Free and open source**
+- **Speed**: A lot faster than other VCS, because there's no need to connect to any network.
+- **Scalable**: Can handle the increase of the number of collaborators in the future.
+- **Reliable**: Every contributor has its own local repository, so it is safe from system crashes.
+- **Secure**: Git uses the SHA1(Secure Hash Function) to keep files and its history.
+- **Easy Branching**
+- **Non-linear / Distributed development**
+
+
+
+#### 2-2. Github & Git Bash
+
+- **Git**: Set of command line utility programs that are designed to execute on a Unix style command-line environment.
+- **Github**: Git web hosting survice, provides server to store files and its history.
+- **Git Bash**: An application for Miscrosoft Windows environments which provides a emulation layer for a Git command line experience.
+
+Git은 Unix 명령어를 기반으로 만들어진 유틸리티 소프트웨어(utility software)인데, Linux나 macOS와 같은 운영 체제는 built-in Unix command line termianls를 포함하고 있지만 Microsoft Windows의 경우 Windows command prompt라는 Unix 기반이 아닌 터미널 환경이기 때문에 Git을 사용하기 위해 Git Bash를 설치하는 것이다.
+
+Bash는 "Bourne Again Shell"을 의미하는데, 이때 shell이란 사용자로부터 명령을 받아 프로그램을 실행하는 termianl application이다. Bash는 Linux와 macOS에서는 기본적으로 있는 shell이다.
+
+정리해보면, Github는 Git의 Remote repository가 만들어지는 서버를 제공하는 웹호스팅 서비스이고 Git Bash는 Windows 환경에서 Unix 기반의 Git을 사용할 수 있도록 만들어진 도구라고 할 수 있다. 
+
+
+
+#### 2-3. Glossary
+
+- **Repository**: 프로젝트의 서로 다른 버전들을 보관하고 있는 저장소
+  - **Remote repository**: Git의 server에 있는 저장소
+  - **Local repository**: 개발자의 local machine에 있는 저장소
+- **Cloning**: Remote repository를 복제해서 개발자의 local system에 불러오는 작업
+- **Push**: Local repository에서 변경된 이력을 remote repository를 갱신
+- **Pull**: Remote repository에서 최신 변경 이력을 가져와서 local repository에 적용 
+
+- **Three Trees of Git**
+  : It's a node and pointer-based data structures that Git uses to track a timeline of edits.
+  - **The Working Directory**: Repository로부터 `git clone`을 통해 받은, local filesystem에 있는 특정 시점의 프로젝트를 의미하며, 파일의 수정이 이루어지는 공간이다.
+  - **Staging Area**: Working Directory에서 `git add`를 통해 전달된 파일의 변경 사항에 대한 정보를 담고 있다.
+  - **Git Repository**: 프로젝트의 데이터를 저장하는 곳으로, `git commit` 명령어를 통해 현재 파일의 상태와 변경 사항에 대한 정보를 영구적으로 추가할 수 있다. 
+
+- **Stages of a File**
+  - **Untracked**: 한 번도 commit 또는 stage 되지 않았거나 Git repository로부터 삭제되어 Git이 추적하지 못하는 파일
+  - **Tracked**: Git repository에 Commit된 파일
+  - **Staged**: Commit할 준비가 되어 Staging Area에 있는 상태
+  - **Modified**: 수정했지만, 아직 stage하지 않은 파일 
+
+- **Branch**: 독립적으로 어떤 작업을 진행하기 위한 가지 또는 분기점을 의미한다.
+  - **Master**: Git repository를 만들 때 함께 만들어지는 branch
+  - **Checkout**: 앞으로 작업할 branch를 선언하는 것
+  - **Head**: 현재 작업 중인 branch를 가리키는 포인터
+- **Merge**: 서로 다른 branch의 내용을 현재 branch로 가져와 합치는 작업 
+
+- **Tag**: Commit을 참조하기 쉽도록 이름을 붙이는 것
+  - **Lightweight Tag**(일반 태그): 이름만 붙일 수 있는 Tag
+  - **Annotated Tag**(주석 태그): 이름, 설명, 만든 사람, 날짜 등의 정보를 포함하는 Tag
+
+
+
+### 3. Git Bash commands
+#### 3-1. Git Bash의 기본 명령 구조
+```
+$ CommandName [options] [directory / userinput]
+```
+
+- '$'는 입력을 받을 준비가 되었다는 의미이다.
+- **Case-sensitive**: Git Bash는 대소문자를 구분하기 때문에 유의해서 입력한다.
+- **Spaces counts**: 폴더나 파일 이름 등과 같은 사용자 입력에 공백이 포함된 경우, " "를 이용해서 입력한다.
+
+
+
+#### 3-2. Bash commands (Linux commands)
+
+##### Print Working Directory: `pwd`
+
+- `$ pwd` : 현재 위치한 디렉토리를 출력
+
+##### Change Directory: `cd`
+- `$ cd ~`  : Home Directory로 이동
+- `$ cd /c/SomeFolder/` : 특정 폴더로 이동
+- `$ cd .` : 이전 위치로 이동
+- `$ cd ..` : 상위 폴더로 이동 
+
+
+
+##### List Directory Contents: `ls`
+- `$ ls -1` : 한 줄에 하나의 폴더/파일이 나타나도록 나열
+- `$ ls -r` : 정렬 순서를 반대로 나열
+- `$ ls -a` : 숨겨진 폴더/파일까지 포함한 모든 것을 나열
+- `$ ls -d */` : 폴더들만 나열
+- `$ ls -l` : 각 폴더/파일에 대한 자세한 정보까지 나오도록 나열
+
+
+
+##### **mkdir**: Make Directory
+- `$ mkdir NewFolder` : 현재 위치에 NewFolder라는 이름의 폴더 생성
+- `$ mkdir /c/ExistingFolder/NewFolder` : 특정 위치에 폴더 생성
+- `$ mkdir New_1/New_2` : 현재 위치에 New_1, 그 안에 New_2 폴더 생성 
+
+
+
+##### **touch**, **echo**: Create Files
+- `$ touch newFileName.txt` : 현재 위치에 빈 텍스트 파일 생성
+- `$ touch /c/SomeFolder/newFile.txt` : 특정 위치에 빈 텍스트 파일 생성
+- `$ touch newFile_1.txt newFile_2.txt` : 현재 위치에 빈 텍스트 파일 2개 생성
+- `$ echo "This text is added to the end of the file" >> newFile.txt`
+: 텍스트를 파일의 마지막에 추가하고, 만약 파일이 존재하지 않으면 새로 만든다.
+- `$ echo "This text replaces existing text in the file" > newFile.txt`
+: 텍스트를 파일에 덮어쓴다. 만약 파일이 존재하지 않으면 새로 만든다. 
+
+
+
+##### **rm**: Remove Files
+- `$ rm DeleteFileName` : 현재 위치에 있는 특정 파일 삭제 
+
+
+
+##### **remir**, **rm -rf**: Remove Directories
+- `$ rmdir DeleteFolderName` : 특정 폴더가 비어있다면 삭제, 만약 비어있지 않다면 실패
+- `$ rm -rf DeleteFolderName` : 특정 폴더와 그 안의 모든 폴더/파일을 삭제
+
