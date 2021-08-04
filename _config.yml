@@ -15,7 +15,7 @@
 minimal_mistakes_skin    : "custom" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
 
 # Site Settings
-locale                   : "ko-KR"
+locale                   : "-KR"
 title                    : "Today's Study"
 title_separator          : "-"
 subtitle                 : "Every-day-record"
