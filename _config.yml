@@ -103,7 +103,7 @@ analytics:
 author:
   name             : "Damo"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "기계공학 전공 대학생의 코딩 블로그"
+  bio              : ""
   location         : "South Korea"
   email            : "99john99@naver.com"
   links:
