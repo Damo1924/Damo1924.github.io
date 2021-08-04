@@ -289,3 +289,4 @@ defaults:
       share: false
       related: true
       classes: wide
+      sidebar_main: true
