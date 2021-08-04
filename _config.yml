@@ -19,7 +19,7 @@ locale                   : "-KR"
 title                    : "Today's Study"
 title_separator          : "-"
 subtitle                 : "Every-day-record"
-name                     : "Damo"
+name                     : "Jeonghun Park"
 description              : "An amazing website."
 url                      : "https://Damo1924.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
@@ -101,9 +101,9 @@ analytics:
 
 # Site Author
 author:
-  name             : "Damo"
+  name             : "Jeonghun Park"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : ""
+  bio              : "코딩을 처음 접한 공대생"
   location         : "South Korea"
   email            : "99john99@naver.com"
   links:
