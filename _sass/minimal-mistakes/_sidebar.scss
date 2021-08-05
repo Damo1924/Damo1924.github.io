@@ -8,13 +8,13 @@
 
 .sidebar {
   @include clearfix();
-  // @include breakpoint(max-width $large) {
-  //   /* fix z-index order of follow links */
-  //   position: relative;
-  //   z-index: 10;
-  //   -webkit-transform: translate3d(0, 0, 0);
-  //   transform: translate3d(0, 0, 0);
-  // }
+  @include breakpoint(max-width $large) {
+    /* fix z-index order of follow links */
+    position: relative;
+    z-index: 10;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
 
   @include breakpoint($large) {
     float: left;
@@ -58,7 +58,7 @@
   li {
     font-family: $sans-serif;
     font-size: $type-size-6;
-    line-height: 2;
+    line-height: 1.5;
   }
 
   img {
@@ -124,8 +124,8 @@
 .author__avatar {
   display: table-cell;
   vertical-align: top;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
 
   @include breakpoint($large) {
     display: block;
@@ -138,8 +138,8 @@
     border-radius: 15%;
 
     @include breakpoint($large) {
-      padding: 5px;
-      border: 1px solid $border-color;
+      padding: 3px;
+      border: 2px solid $border-color;
     }
   }
 }
@@ -192,7 +192,7 @@
   display: table-cell;
   vertical-align: middle;
   font-family: $sans-serif;
-  z-index: 20;
+  z-index: 10;
   cursor: pointer;
 
   li:last-child {
@@ -316,7 +316,7 @@
     padding-top: 2px;
     padding-bottom: 2px;
     color: inherit;
-    font-size: $type-size-4;
+    font-size: $type-size-5;
     text-decoration: none;
 
     &:hover {
