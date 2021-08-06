@@ -3,6 +3,6 @@ main:
   - title: "Home"
     url: https://damo1924.github.io/
   - title: "About"
-    url: https://damo1924.github.io/about
+    url: /about/
   - title: "Category"
-    url: https://damo1924.github.io/categories/cpp
+    url: /categories/
