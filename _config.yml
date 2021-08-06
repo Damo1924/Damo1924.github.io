@@ -102,7 +102,7 @@ analytics:
 # Site Author
 author:
   name             : "Jeonghun Park"
-  avatar           : "docs/assets/images/jp-1.jpg"
+  avatar           : "/assets/images/jp-1.jpg"
   bio              : "코딩을 처음 접한 공대생"
   location         : "South Korea"
   email            : "99john99@naver.com"
