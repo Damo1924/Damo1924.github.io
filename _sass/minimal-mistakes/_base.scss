@@ -178,7 +178,7 @@ td > code {
 
   &:before,
   &:after {
-    letter-spacing: normal;
+    letter-spacing: -0.07em;
     content: "\00a0"; /* non-breaking space*/
   }
 }
