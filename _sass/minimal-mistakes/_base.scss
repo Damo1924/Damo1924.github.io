@@ -172,12 +172,12 @@ td > code {
   padding-bottom: 0.1rem;
   font-size: 0.9em;
   color: #fff;
-  background: #133813; //inline code background color
+  background: #263238; //inline code background color
   border-radius: $border-radius;
 
   &:before,
   &:after {
-    letter-spacing: -0.1em;
+    letter-spacing: -0.15em;
     content: "\00a0"; /* non-breaking space*/
   }
 }
