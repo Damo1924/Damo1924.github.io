@@ -79,7 +79,7 @@ C/C++에서 함수는 두 가지 방법(call-by-value, call-by-reference)으로 
 
 3. **C-style 배열을 함수로 전달할 때**  
 	C-style 배열을 함수로 전달할 때 포인터를 이용하면 배열이 아닌 포인터를 전달하는 것이기 때문에 `sizeof()`와 같은 함수와 연산자들이 원하는대로 작동하지 않는다. 이는 배열을 참조형으로 전달함으로써 해결할 수 있는데, 이때 반드시 parameter에 배열의 크기를 정의해주어야 한다.
- 	```cpp
+  ```cpp
 	#include <iostream>
 	using namespace std;
 	
