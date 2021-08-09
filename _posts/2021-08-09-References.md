@@ -109,19 +109,19 @@ C/C++에서 함수는 두 가지 방법(call-by-value, call-by-reference)으로 
 # 3. Pointer vs Reference
 포인터와 참조형은 함수에 매개변수를 전달하는데 사용할 수 있고, 함수 내에서 실제 매개변수의 값을 변경할 수 있도록 해준다. 또, 데이터의 복사본을 전달하는 것이 아닌 실제 매개변수와 동일한 메모리에서 작업할 수 있도록 해주기 때문에 크기가 큰 객체들을 복사함으로써 발생하는 메모리 낭비를 방지한다. 그렇다면 포인터와 참조형은 어떤 차이를 가지고 있을까?
 
-- **References are less powerful than pointers**
-  C++에서 참조형은 포인터에 비해 다음과 같은 한계점들을 가지고 있다.
-  1) 참조형은 선언과 동시에 초기화되어야 한다.
-  2) 참조형은 null 값을 가지지 못한다.
-  3) 한 번 참조형이 정의되면 다른 변수를 참조하도록 변경할 수 없다.
-  이러한 한계점들로 인해 참조형은 List, Tree와 같은 자료구조들에 대해 사용할 수 없다. (Java의 경우에는 참조형이 위와 같은 한계가 없기 때문에 포인터가 필요하지 않는다고 한다.)
+- **References are less powerful than pointers**  
+    C++에서 참조형은 포인터에 비해 다음과 같은 한계점들을 가지고 있다.  
+    1) 참조형은 선언과 동시에 초기화되어야 한다.  
+    2) 참조형은 null 값을 가지지 못한다.  
+    3) 한 번 참조형이 정의되면 다른 변수를 참조하도록 변경할 수 없다.  
+    이러한 한계점들로 인해 참조형은 List, Tree와 같은 자료구조들에 대해 사용할 수 없다. (Java의 경우에는 참조형이 위와 같은 한계가 없기 때문에 포인터가 필요하지 않는다고 한다.)
 
-- **References are safer and easier to use**
-  C++에서 참조형들이 포인터에 비해 뚜렷한 한계가 있음에도 참조형을 사용하는 이유는 좀 더 안전하고, 사용하기 쉽기 때문이다. 참조형은 선언과 동시에 초기화되어야하기 때문에 포인터와 달리 허용되지 않은 위치를 참조하는 일이 없다. 또, 참조형들은 다른 연산자 없이 그 자체로 변수의 값에 접근하고 수정할 수 있다. 선언할 때 자료형 뒤에 `&`만 붙여주면 된다. Member에 접근하는 방법도 포인터는 arrow operator `->`를 사용해야 하지만 참조형은 dot operator `.`로 접근할 수 있다.
+- **References are safer and easier to use**  
+    C++에서 참조형들이 포인터에 비해 뚜렷한 한계가 있음에도 참조형을 사용하는 이유는 좀 더 안전하고, 사용하기 쉽기 때문이다. 참조형은 선언과 동시에 초기화되어야하기 때문에 포인터와 달리 허용되지 않은 위치를 참조하는 일이 없다. 또, 참조형들은 다른 연산자 없이 그 자체로 변수의 값에 접근하고 수정할 수 있다. 선언할 때 자료형 뒤에 `&`만 붙여주면 된다. Member에 접근하는 방법도 포인터는 arrow operator `->`를 사용해야 하지만 참조형은 dot operator `.`로 접근할 수 있다.
 
 
 <br/>
 # References
-[1] [Geeksforgeeks, 'References in C++'](https://www.geeksforgeeks.org/references-in-c/)
-[2] [learncpp.com, 'Reference variables'](https://www.learncpp.com/cpp-tutorial/references/)
-[3] [Geeksforgeeks, 'Passing by pointer Vs Passing by Reference in C++'](https://www.geeksforgeeks.org/passing-by-pointer-vs-passing-by-reference-in-c/)
+[1] [Geeksforgeeks, 'References in C++'](https://www.geeksforgeeks.org/references-in-c/)<br/>
+[2] [learncpp.com, 'Reference variables'](https://www.learncpp.com/cpp-tutorial/references/)<br/>
+[3] [Geeksforgeeks, 'Passing by pointer Vs Passing by Reference in C++'](https://www.geeksforgeeks.org/passing-by-pointer-vs-passing-by-reference-in-c/)<br/>
