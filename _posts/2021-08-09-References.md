@@ -37,7 +37,7 @@ x = 30, ref = 30
 3. **References can not be reassigned**:참조형 변수는 초기화된 후에 다른 변수를 참조하도록 변경할 수 없다. 
 
 
-<br/><br/><br/>
+<br/><br/>
 # 2. Applications of References
 ## 2-1. References as function parameters
 - 함수가 참조형을 변수로 전달받으면 **기존 변수의 값을 변경**할 수 있게 된다.
