@@ -37,8 +37,8 @@ x = 30, ref = 30
 3. **References can not be reassigned**:참조형 변수는 초기화된 후에 다른 변수를 참조하도록 변경할 수 없다. 
 
 
-<br/><br/>
-# 2. call-by-value & call-by-references
+<br/>
+# 2. 함수 호출 방식
 C/C++에서 함수는 두 가지 방법(call-by-value, call-by-reference)으로 호출될 수 있다. 이때 함수에 전달되는 매개변수를 **실제 매개변수**, 함수가 전달받은 매개변수를 **형식 매개변수**라고 부른다.
 
 ## 2-1. Call-by-value
