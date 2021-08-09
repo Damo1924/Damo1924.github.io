@@ -68,9 +68,26 @@ a = 3, b = 2
 함수에 크기가 큰 객체를 전달해야하는 경우 참조형을 사용하지 않는다면 객체의 복사본을 생성하기 때문에 CPU의 작업 속도나 메모리를 낭비하게 된다. 참조형을 사용하면 복사본을 만들지 않기 때문에 보다 효율적인 코드를 짤 수 있다.
 
 ## 2-2. Using references to pass C-style arrays to functions
+C-style 배열을 함수로 전달할 때 포인터를 이용하면 배열이 아닌 포인터를 전달하는 것이기 때문에 `sizeof()`와 같은 함수나 연산자들이 원하는대로 작동하지 않는다. 이는 배열을 참조형으로 전달함으로써 해결할 수 있는데, 이때 반드시 parameter에 배열의 크기를 정의해주어야 한다.
+```cpp
+#include <iostream>
+using namespace std;
 
+void printElements(int (&arr)[4])
+{
+    for (int i = 0; i < sizeof(arr)/sizeof(int); i++) cout << arr[i] << " ";
+}
+int main()
+{
+    int data[] = {1, 3, 5, 6};
+    printElement(data);
+}
+```
+```
+1 3 5 6
+```
 
-
+## 2-3. References as shortcuts
 
 
 
