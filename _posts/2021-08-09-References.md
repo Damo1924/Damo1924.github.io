@@ -48,6 +48,7 @@ C/C++에서 함수는 두 가지 방법(call-by-value, call-by-reference)으로 
 참조에 의한 호출 방식은 함수 호출시 인자로 전달되는 변수의 reference를 전달한다. 실제 매개변수와 형식 매개변수 모두 동일한 메모리를 참조하기 때문에 함수 내에서 값이 달라지면 실제 매개변수의 값도 달라지게 된다.
 주로 다음과 같은 상황에서 call-by-reference를 사용한다.
 1. **함수 내에서 실제 매개변수를 변경하고 싶을 때**  
+
 ```cpp
 #include <iostream>
 using namespace std;
