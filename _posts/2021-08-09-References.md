@@ -49,7 +49,7 @@ C/C++에서 함수는 두 가지 방법(call-by-value, call-by-reference)으로 
 주로 다음과 같은 상황에서 call-by-reference를 사용한다.
 1. **함수 내에서 실제 매개변수를 변경하고 싶을 때**  
 ```cpp
-#include<iostream>
+#include <iostream>
 using namespace std;
 
 void swap (int& first, int& second)
