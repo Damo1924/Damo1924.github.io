@@ -5,6 +5,9 @@ toc_label: "On this page"
 toc_icon: "chevron-right"
 categories:
   - Algorithm
+use_math: true
+comments: true
+
 ---
 
 # 0. What is Sorting?
@@ -105,7 +108,7 @@ void Bubblesort_3(int* arr, int len)
 ```
 
 ## 1-3. Bubble sort time complexity
-> Average case:
+> Average case: $$\[O(n^{2})\]$$
 
 
 
