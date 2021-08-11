@@ -110,6 +110,13 @@ void Bubblesort_3(int* arr, int len)
 ## 1-3. Bubble sort time complexity
 > Average case: $O(n^2)$
 
+길이 $n$인 배열을 정렬하고자 할 때, $k$ 번째 pass에서 $n - k$번의 비교 연산을 하므로 bubble sort의 총 비교 연산 횟수는 다음과 같다.<br/>
+$$1 + 2 + \cdots + (n - 1) = \frac{n \times (n-1)}{2}$$
+Big O Notation의 성질에 의해 계수와 일차항은 무시할 수 있으므로 시작복잡도는 $O(n^2)$임을 알 수 있다.
+
+
+<br/>
+# 2. Insertion sort
 
 
 
