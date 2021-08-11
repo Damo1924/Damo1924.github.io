@@ -11,7 +11,8 @@ comments: true
 ---
 
 # 0. What is Sorting?
-정렬(sorting)은 computer science에서 가장 많이 연구된 알고리즘 중 하나로, 값(value)의 대소 관계에 따라 데이터 집합을 일정한 순서로 바꾸는 것을 말한다. 적절한 정렬 알고리즘을 이용한다면, 더 효과적이고 효율적인 코드를 작성할 수 있다. 대표적으로 다음과 같은 문제들에서 정렬 알고리즘을 사용할 수 있다.
+정렬(sorting)은 computer science에서 가장 많이 연구된 알고리즘 중 하나로, 값(value)의 대소 관계에 따라 데이터 집합을 일정한 순서로 바꾸는 것을 말한다. 적절한 정렬 알고리즘을 이용한다면, 더 효과적이고 효율적인 코드를 작성할 수 있다.  
+대표적으로 다음과 같은 문제들에서 정렬 알고리즘을 사용할 수 있다.
 - **검색(searching)**: 정렬된 리스트에서 원소를 검색하는 것이 훨씬 더 빠르다.
 - **선택(selection)**: 어떤 데이터를 대표하는 값을 선택할 때, 정렬된 데이터에서 찾는 것이 더 쉽다. 예를 들어 **kth-largest value**나 **median value**를 구하려고 한다면 값이 오름차순이나 내림차순으로 정렬되어 있는 것이 훨씬 빠르다.
 - **분포(distribution)**: 리스트의 원소들에 대한 도수 분포를 분석하고자 할 때 사용할 수 있다. 예를 들어 리스트가 정렬되어 있다면 최빈값을 찾는 일은 매우 간단해진다.
@@ -150,7 +151,9 @@ void Insertionsort(int* arr, int len)
 > Average-case: $O(n^2)$, Worst-case: $O(n^2)$
 
 **-** Insertion sort는 비록 bubble sort와 동일한 시간 복잡도를 가지는 알고리즘이지만, 실제로 걸리는 시간을 비교해보면 bubble sort에 비해 평균적으로 빠르다. 이는 실질적인 비교/교환 연산의 수가 더 적기 때문이다.  
+
 **-** Merge sort, quicksort와 같은 매우 강력한 정렬 알고리즘들이 있지만, **크기가 작은 리스트를 정렬하는데 걸리는 시간을 측정해보면 insertion sort가 더 빠르다**는 것을 알 수 있다. 특히 quicksort를 사용하는 경우, 어느 정도 작은 크기의 리스트에 대해서는 insertion sort를 이용하기도 한다. Python의 내장 정렬 함수 `sorted()`와 `.sort()`의 정렬 알고리즘인 Timsort은 전체 배열을 작은 부분으로 나누어서 각 부분들을 insertion sort로 정렬한 뒤 합치는 방식을 사용한다.  
+
 **-** 물론 입력 크기의 제곱에 비례하는 시간복잡도를 가지고 있기 때문에 **크기가 큰 입력에 대해서는 비효율적**이다.
 
 ## 2-4. Binary insertion sort
@@ -168,7 +171,7 @@ void Insertionsort(int* arr, int len)
 - 검색하려는 값과 중앙값이 같으면 검색 종료
 - 검색하려는 값이 더 크면 `pl = pc+1`
 - 검색하려는 값이 더 작다면 `pr = pc-1`
-**-** 위 과정을 반복하면서 검색 범위를 계속 줄여나간다.
+**-** 위 과정을 반복하면서 검색 범위를 계속 줄여나간다.  
 **-** 만약 `pl`이 'pr`보다 커지면 더 이상 검색할 범위가 없으므로 검색하려는 원소가 존재하지 않는다는 의미이다.
 
 </div>
@@ -202,12 +205,11 @@ void Binary_insertionsort(int* arr, int len)
 <summary> 분할정복이란? </summary>
 <div markdown = "1">
 
-> **재귀(recursion)**
-> 복잡한 문제를 해결하기 위해 문제를 비교적 쉽게 해결 가능한 작은 소문제(subproblem)들로 나누는 것을 의미한다.
+> **재귀(recursion)**: 복잡한 문제를 해결하기 위해 문제를 비교적 쉽게 해결 가능한 작은 소문제(subproblem)들로 나누는 것을 의미한다.
 
-분할 정복 알고리즘은 대부분 다음과 같은 구조를 가진다.
-1) Input을 각 subproblem에 대응되는 여러 개의 조각으로 나눈다.
-2) 각 subproblem을 재귀적으로(recursively) 해결한다.
+분할 정복 알고리즘은 대부분 다음과 같은 구조를 가진다.  
+1) Input을 각 subproblem에 대응되는 여러 개의 조각으로 나눈다.  
+2) 각 subproblem을 재귀적으로(recursively) 해결한다.  
 3) Subproblem들의 해들을 하나로 합쳐 기존 문제의 해를 얻어낸다.
 
 </div>
@@ -216,8 +218,8 @@ void Binary_insertionsort(int* arr, int len)
 
 ## 3-1. Merge sort algorithm
 Merge sort는 일반적으로 두 개의 함수로 구현한다.
-1. Input을 반으로 나누는 함수 (재귀)
-2. 나누어진 두 리스트를 입력받아 하나로 합치는 함수 (Merge)
+1. **Input을 반으로 나누는 함수** (재귀)
+2. **나누어진 두 리스트를 입력받아 하나로 합치는 함수** (Merge)
 
 첫 번째 함수는 input을 동일한 크기의 배열로 나눈 후 두 번째 함수로 전달한다.
 
@@ -230,6 +232,67 @@ Merge sort는 일반적으로 두 개의 함수로 구현한다.
 
 
 ## 3-2. Merge sort implementation
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+void merge(int* v, int start, int midpoint, int end)
+{
+    vector<int> temp; // 병합한 결과 저장
+    
+    int pl = start, pr = midpoint; // 비교할 원소를 가리키는 인덱스
+    while (true)
+    {
+        // 둘 중 작은 원소를 temp에 추가하는 작업 반복
+        if (*(v + pl) < *(v + pr)){
+            temp.push_back(*(v + pl));
+            pl++;
+        }
+        else{
+            temp.push_back(*(v + pr));
+            pr++;
+        }
+        
+        // 어느 한 쪽이 모두 추가되었으면 다른 쪽의 나머지 원소들을 temp에 추가하고 break
+        if (pr == end){
+            for (int i = pl; i < midpoint; i++) temp.push_back(*(v + i));
+            break;
+        }
+        if (pl == midpoint){
+            for (int i = pr; i < end; i++) temp.push_back(*(v + i));
+            break;
+        }
+    }
+    
+    // 병합한 결과를 기존 벡터에 업데이트
+    for (int i = start; i < end; i++) *(v + i) = temp[i - start];
+}
+
+void Mergesort(int* v, int start, int end)
+{
+    if (end - start == 1) return; // 나누어진 부분들의 크기가 1일 때까지 나눈다는 의미
+    
+    int midpoint = (start + end) / 2;
+    Mergesort(v, start, midpoint); // 앞부분 정렬
+    Mergesort(v, midpoint, end); // 뒷부분 정렬
+    merge(v, start, midpoint, end); // 병합
+}
+
+int main()
+{
+    vector<int> vec = {1, 8, 7, 5, 10, 2};
+    Mergesort(vec.data(), 0, vec.size());
+    for(int i = 0; i < vec.size(0; i++) cout << vec[i] << " ";
+}
+```
+```
+1 2 5 7 8 10
+```
+
+## 3-3. Merge sort time complexity
+> Average-case: $O(n \log_{2} n)$, Worst-case: $O(n \log_{2} n)$
+
 
 
 
