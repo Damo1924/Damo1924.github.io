@@ -108,9 +108,7 @@ void Bubblesort_3(int* arr, int len)
 ```
 
 ## 1-3. Bubble sort time complexity
-Average case: 
-
-$$O(n^2)$$
+Average case: $O(n^2)$
 
 
 
