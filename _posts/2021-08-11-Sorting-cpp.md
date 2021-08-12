@@ -384,9 +384,9 @@ int main()
 ## 4-3. Quicksort time complexity
 > Average-case: $O(n \log_{2} n)$, Worst-case: $O(n^2)$
 
-**-** 리스트를 나누는데 $O(n^2)$, 이 과정을 평균적으로 $\log_{2} n$번 반복하기 때문에 quicksort는 mergesort와 동일한 $O(n \log_{2} n)의 시간복잡도를 갖는다. 그러나 worst-case의 경우, quicksort의 시간복잡도는 $O(n^2)$으로 커지게 된다.  
+**-** 리스트를 나누는데 $O(n^2)$, 이 과정을 평균적으로 $\log_{2} n$번 반복하기 때문에 quicksort는 mergesort와 동일한 $O(n \log_{2} n)$의 시간복잡도를 갖는다. 그러나 worst-case의 경우, quicksort의 시간복잡도는 $O(n^2)$으로 커지게 된다.  
 
-> Quicksort와 mergesort의 평균 시간복잡도가 같다고 해도 실제로 런타임을 측정해보면 평균적으로 quicksort가 더 빠르다는 것을 알 수 있다.
+> Quicksort와 mergesort의 평균 시간복잡도가 같다고 해도 실제로 런타임을 측정해보면 평균적으로 quicksort가 더 빠르다.
 
 **-** 그 이유는 바로 **pivot element**에 따라서 나눈 두 리스트의 크기가 달라지기 때문이다.  
 
@@ -394,8 +394,8 @@ int main()
 - Pivot element를 **중앙값**으로 택하면 각 subproblem이 previous problem의 절반 크기로 나누어지기 때문에 최대 $\log_{2} n$의 recursion level이 발생한다.
 - Pivot element를 **최댓값**이나 **최솟값**으로 택하면 나누어진 두 리스트가 최대로 불균형한 경우이므로 $n-1$의 recursion level이 발생하게 된다.
 
-> 이론적으로는 먼저 리스트의 중앙값을 찾아 pivot element로 선택함으로써 worst-case 마저 $O(n \log_{2} n)$의 시간복잡도로 해결할 수 있다. 중앙값을 찾는 알고리즘은 $O(n)$의 시간복잡도를 갖기 때문에 전체 시간복잡도는 $O(n) + O(n \log_{2} n)$이 되고, 이는 Big O Notation의 성질에 의해 $O(n \log_{2} n)$으로 정리할 수 있다.  
-> 그럼에도 중앙값을 찾아서 pivot element로 선택하는 방법은 실제로 거의 사용되지 않는다. 중앙값을 찾는 방식이 효과를 보기 위해서는 입력의 크기가 매우 커야하고 **랜덤으로 선택한다고 해도 worst-case는 거의 나타나지 않기 때문이다.**
+>  이론적으로는 먼저 리스트의 중앙값을 찾아 pivot element로 선택함으로써 worst-case 마저 $O(n \log_{2} n)$의 시간복잡도로 해결할 수 있다. 중앙값을 찾는 알고리즘은 $O(n)$의 시간복잡도를 갖기 때문에 전체 시간복잡도는 $O(n) + O(n \log_{2} n)$이 되고, 이는 Big O Notation의 성질에 의해 $O(n \log_{2} n)$으로 정리할 수 있다.  
+>  그럼에도 중앙값을 찾아서 pivot element로 선택하는 방법은 실제로 거의 사용되지 않는다. 중앙값을 찾는 방식이 효과를 보기 위해서는 입력의 크기가 매우 커야하고 **랜덤으로 선택한다고 해도 worst-case는 거의 나타나지 않기 때문이다.**
 
 **-** Quicksort도 merge sort와 마찬가지로 크기가 작은 input에 대해서는 bubble sort와 insertion sort보다 느린 모습을 보여준다.
 
