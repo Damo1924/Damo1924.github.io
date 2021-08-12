@@ -293,14 +293,111 @@ int main()
 ## 3-3. Merge sort time complexity
 > Average-case: $O(n \log_{2} n)$, Worst-case: $O(n \log_{2} n)$
 
+**-** 정렬된 두 리스트를 하나로 합치는 함수는 각 원소를 최대 1번씩 체크하므로 $O(n)$의 시간복잡도를 가진다. Input을 반으로 나누는 과정은 각 리스트의 길이가 1이 될때까지 반복하기 때문에 $O(\log_{2} n)$의 시간복잡도를 가진다. 나누어진 각각의 배열에 대해 합치는 작업이 이루어지므로 merge sort의 시간복잡도는 $O(n \log_{2} n)$임을 알 수 있다. 흥미롭게도 이는 **정렬 알로리즘이 가질 수 있는 가장 좋은 worst-case time complexity**이다.  
+
+**-** 이처럼 merge sort는 크기가 큰 입력에 대해서는 매우 강력한 알고리즘이지만, 크기가 작은 입력에 대해서는 bubble sort와 insertion sort 같은 단순 정렬 알고리즘들보다 더 느리다.  
+
+**-** Merge sort의 또다른 한계점은 기존 벡터 외에도 다른 벡터를 사용한다는 점이다. 다른 정렬 알고리즘들에 비해 더 많은 메모리를 사용하기 때문에 memory-constrained hardware에서는 merge sort 대신 다른 알고리즘을 사용하는 것이 좋을 수 있다.
 
 
+<br/>
+# 4. Quicksort
+> 분할 정복을 이용한 정렬 알고리즘으로, merge sort와 비슷하지만 **pivot element**를 선택해서 그 원소를 기준으로 input을 나눈다는 점에서 차이가 있다.
 
+## 4-1. Quicksort algorithm
+분할 정복이므로 다음 과정이 재귀적으로 이루어진다.
+**-** Pivot element를 선택  
+**-** Pivot element보다 큰 원소들의 배열과 작은 원소들의 배열로 나눈다.  
+**-** Pivot element의 왼쪽에 작은 원소들이, 오른쪽에는 큰 원소들이 배치되어 pivot element와 그도 동일한 값을 가지는 원소들은 자연스럽게 정렬된다.  
 
+위 과정을 각 배열의 크기가 1이 될때까지 반복하면 전체 input이 정렬된다.
 
+## 4-2. Quicksort implementation
+```cpp
+void Quicksort(int* v, int start, int end)
+{
+    if (end - start <= 1) return;
+    
+    vector<int> low, same, high;
+    int pivot = *(v + (start + end) / 2); // 중앙에 위치한 값을 pivot element로 선택
+    
+    // pivot element와 비교해서 알맞은 벡터에 push
+    for (int i = start; i < end; i++)
+    {
+        if (*(v + i) < p) low.push_back(*(v + i));
+        else if (*(v + i) > p) high.push_back(*(v + i));
+        else same.push_back(*(v + i));
+    }
+    
+    // low - same - high 순으로 기존 벡터를 업데이트
+    int L = low.size(), S = same.size(), H = high.size();
+    for (int i = 0; i < L; i++) *(v + start + i) = low[i];
+    for (int i = 0; i < S; i++) *(v + start + i + L) = pivot;
+    for (int i = 0; i < H; i++) *(v + start + i + L + S) = high[i];
+    
+    // low, high에 대해 재귀적으로 정렬
+    Quicksort(v, start, start + L);
+    Quicksort(v, start + L + S, end);
+}
+```
+: 위 코드는 가장 단순하게 구현한 quicksort이다. 하지만 추가적인 벡터를 사용하고 배열을 나눈 결과를 기존 벡터에 업데이트 해야하기 때문에 메모리와 시간적인 측면에서 개선의 여지가 있다. 아래는 추가적인 벡터를 사용하지 않고 기존 벡터 내에서 정렬을 하도록 구현한 quicksort이다.
 
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
 
+void Quicksort(int* v, int start, int end)
+{
+    int pl = start, pr = end, pivot = *(v + (start + end)/2);
+    
+    // 기존 벡터만 사용해서 배열 나누기
+    while (pl <= pr){
+        while (*(v + pl) < pivot) pl++; // pivot 왼쪽에 있는 원소들 중 pivot보다 큰 원소 탐색
+        while (*(v + pr) > pivot) pr--; // pivot 오른쪽에 있는 원소들 중 pivot보다 작은 원소 탐색
+        
+        // 두 원소를 교환
+        if (pl <= pr){
+            int temp = *(v + pl);
+            *(v + pl) = *(v + pr);
+            *(v + pr) = temp;
+            pl++;
+            pr--;
+        }
+    }
+    
+    if (start < pr) Quicksort(v, start, pr);
+    if (pl < end) Quicksort(v, pl, end);
+}
 
+int main()
+{
+    vector<int> vec = {1, 10, 8, 3, 5};
+    Quicksort(vec.data(), 0, vec.size() - 1); // end에 벡터의 마지막 원소의 인덱스가 들어감에 주의
+    for (int i = 0; i < vec.size(); i++) cout << vec[i] << " ";
+}
+```
+```
+1 3 5 8 10
+```
+
+## 4-3. Quicksort time complexity
+> Average-case: $O(n \log_{2} n)$, Worst-case: $O(n^2)$
+
+**-** 리스트를 나누는데 $O(n^2)$, 이 과정을 평균적으로 $\log_{2} n$번 반복하기 때문에 quicksort는 mergesort와 동일한 $O(n \log_{2} n)의 시간복잡도를 갖는다. 그러나 worst-case의 경우, quicksort의 시간복잡도는 $O(n^2)$으로 커지게 된다.  
+
+> Quicksort와 mergesort의 평균 시간복잡도가 같다고 해도 실제로 런타임을 측정해보면 평균적으로 quicksort가 더 빠르다는 것을 알 수 있다.
+
+**-** 그 이유는 바로 **pivot element**에 따라서 나눈 두 리스트의 크기가 달라지기 때문이다.  
+
+**-** Quicksort 알고리즘에서 number of recursion levels는 각 리스트에서 pivot의 위치에 따라서 달라지게 되고, 이는 시간 복잡도에 영향을 미친다.
+- Pivot element를 **중앙값**으로 택하면 각 subproblem이 previous problem의 절반 크기로 나누어지기 때문에 최대 $\log_{2} n$의 recursion level이 발생한다.
+- Pivot element를 **최댓값**이나 **최솟값**으로 택하면 나누어진 두 리스트가 최대로 불균형한 경우이므로 $n-1$의 recursion level이 발생하게 된다.
+
+> 이론적으로는 먼저 리스트의 중앙값을 찾아 pivot element로 선택함으로써 worst-case 마저 $O(n \log_{2} n)$의 시간복잡도로 해결할 수 있다. 중앙값을 찾는 알고리즘은 $O(n)$의 시간복잡도를 갖기 때문에 전체 시간복잡도는 $O(n) + O(n \log_{2} n)$이 되고, 이는 Big O Notation의 성질에 의해 $O(n \log_{2} n)$으로 정리할 수 있다.  
+> 그럼에도 중앙값을 찾아서 pivot element로 선택하는 방법은 실제로 거의 사용되지 않는다. 중앙값을 찾는 방식이 효과를 보기 위해서는 입력의 크기가 매우 커야하고 **랜덤으로 선택한다고 해도 worst-case는 거의 나타나지 않기 때문이다.**
+
+**-** Quicksort도 merge sort와 마찬가지로 크기가 작은 input에 대해서는 bubble sort와 insertion sort보다 느린 모습을 보여준다.
 
 
 
