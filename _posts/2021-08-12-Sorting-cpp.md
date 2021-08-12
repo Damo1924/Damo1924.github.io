@@ -404,6 +404,6 @@ int main()
 이 외에도 정말 다양한 정렬 알고리즘들이 존재하지만, 이번 포스트에서는 가장 대표적인 4가지 정렬에 대해서 공부해보았다. 다음에 힙 정렬과 C++ 내장 정렬 함수에 대해서도 다루어 볼 생각이다.
 <br/>
 # References
-[1] [Realpython, 'sorting algorithms - python'](https://realpython.com/sorting-algorithms-python/)
+[1] [Realpython, 'sorting algorithms - python'](https://realpython.com/sorting-algorithms-python/)  
 [2] 자료구조와 함께 배우는 알고리즘 입문, Bohyoh Shibata 저, 이지스 퍼블리싱
 
