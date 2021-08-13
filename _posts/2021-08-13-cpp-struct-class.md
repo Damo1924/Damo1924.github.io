@@ -57,6 +57,15 @@ s.name = "Kim";
 s.age = 19;
 s.height = 173.5;
 ```
+Dot operator를 통해 구조체 내부에 정의한 함수도 호출할 수 있다.
+```cpp
+s.printInfo();
+```
+Name: Kim
+Age: 19
+Height: 173.5
+```
+
 
 
 
@@ -81,7 +90,7 @@ s.height = 173.5;
 
 # References
 [1] [Geeksforgeeks, 'Structures in C++'](https://www.geeksforgeeks.org/structures-in-cpp/)
-
+[2] [Geeksforgeeks, 'Difference between C structures and C++ structures](https://www.geeksforgeeks.org/difference-c-structures-c-structures/?ref=rp)
 
 
 
