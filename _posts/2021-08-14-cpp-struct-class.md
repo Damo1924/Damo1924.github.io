@@ -20,8 +20,7 @@ use_math: true
 
 아래 코드는 `Student`라는 구조체를 만들어 본 코드이다.
 ```cpp
-struct Student
-{
+struct Student {
     string name;
     int age;
     double height;
@@ -32,7 +31,17 @@ struct Student
     }
 };
 ```
-학생들의 이름, 나이, 키를 저장할 변수들과 저장된 정보를 출력해서 보여주는 멤버 함수를 정의하였다.
+학생들의 이름, 나이, 키를 저장할 변수들과 저장된 정보를 출력해서 보여주는 멤버 함수를 정의하였다. 이때 기존 C 언어에서는 구조체 내에 함수를 정의하는 것이 불가능했는데, C++에서는 위와 같이 함수를 구조체 내에 정의할 수 있게 되었다. C 에서는 다음과 같이 멤버 함수를 정의하였다.
+```cpp
+struct Student {
+    ...
+};
+
+void Student::printInfo(){
+    cout << "Name: " << name << endl;
+    cout << "Age: " << age << endl;
+    cout << "Height: " << height << endl;
+}
 
 ## 1-3. 구조체 선언하기 
 구조체의 선언은 일반적인 변수들을 선언하듯이 해줄 수 있다.
@@ -46,8 +55,7 @@ Student students[10];
 
 아래와 같이 `struct`로 구조체를 정의함과 동시에 객체를 선언할 수도 있다.
 ```cpp
-struct Student
-{
+struct Student{
     ...
 } a, b, c;
 ```
@@ -100,8 +108,7 @@ int main() {
 ```
 (2, 1)
 ```
-: 2차원 평면 위의 점의 좌표를 원점 대칭시키는 함수를 포인터를 통해 구현한 코드이다. 이때 새로운 연산자 arrow operator `->`가 등장한다.  
-- **Arrow operator(->)**: 멤버를 가진 객체들을 가리키는 포인터에 사용하는 역참조(dereference) 연산자이다. 객체의 멤버들의 주소로 직접 접근할 수 있게 해주며, `ptr->x`는 `(*ptr).x`와 동일하다.
+: 2차원 평면 위의 점의 좌표를 원점 대칭시키는 함수를 포인터를 통해 구현한 코드이다. 이때 새로운 연산자 arrow operator `->`가 등장한다. 이는 멤버를 가진 객체들을 가리키는 포인터에 사용하는 역참조(dereference) 연산자이다. 객체의 멤버들의 주소로 직접 접근할 수 있게 해주며, `ptr->x`는 `(*ptr).x`와 동일하다.
 
 ## 1-6. 중첩 구조체(Nesting structures)
 구조체는 다른 구조체의 멤버로 사용할 수 있다.
@@ -173,13 +180,13 @@ acb object[3];
 ```
 만약 마지막 정수형 변수에 4 byte를 할당하고 구조체를 크기 20 byte(= 8 + 8 + 4)로 저장한다면, 구조체의 크기가 8의 배수가 되지 않아서 데이터를 읽어올 때 불필요한 CPU 사이클이 발생하게 된다. 즉, 마지막 4 byte의 추가된 메모리는 구조체 자체로 인한 padding byte인 것이다.
 
-/* 위 내용은 Reference 4, 5와 유튜브 영상(https://www.youtube.com/watch?v=aROgtACPjjg)을 참고해서 작성하였다.
+* 위 내용은 Reference 4, 5와 유튜브 영상(https://www.youtube.com/watch?v=aROgtACPjjg)을 참고해서 작성하였다.
 
 
 <br/>
 # 2. Class
-## 2-1. 
-
+## 2-1. 클래스란?
+기존 C 언어에서 구조체가 있었다면, C++에서 새롭게 등장한 사용자 정의 자료형이 바로 클래스(Class)이다. 
 
 
 # References
