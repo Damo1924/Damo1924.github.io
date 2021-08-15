@@ -121,7 +121,7 @@ struct triangle {
 }
 
 int main() {
-    triangle T = {{0, 0}, {1, 0}, {0, 1}};
+    triangle T = \{{0, 0}, {1, 0}, {0, 1}};
     cout << T.A.x << endl;
 }
 ```
