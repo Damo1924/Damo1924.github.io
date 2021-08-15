@@ -1,5 +1,5 @@
 ---
-title: "Struct & Class in C++"
+title: "User defined data type in C++: Struct, Class (+ operator overloading)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -76,31 +76,71 @@ Height: 173.5
 
 ## 1-5. 구조체 포인터
 구조체는 다른 자료형들과 마찬가지로 함수에 전달하고 반환값으로도 사용할 수 있으며, 포인터를 선언해서 활용할 수도 있다.
+```cpp
+#include <iostream>
+using namespace std;
+
+struct point {
+    double x;
+    double y;
+}
+
+void ori_symmetry(point* A) {
+    double temp = A->x;
+    A->x = A->y;
+    A->y = temp;
+}
+
+int main() {
+    point A = {1, 2};
+    ori_symmetry(&A);
+    cout << "(" << A.x << ", " << A.y << ")" << endl;
+}
+```
+```
+(2, 1)
+```
+: 2차원 평면 위의 점의 좌표를 원점 대칭시키는 함수를 포인터를 통해 구현한 코드이다. 이때 새로운 연산자 arrow operator `->`가 등장한다.  
+- **Arrow operator(->)**: 멤버를 가진 객체들을 가리키는 포인터에 사용하는 역참조(dereference) 연산자이다. 객체의 멤버들의 주소로 직접 접근할 수 있게 해주며, `ptr->x`는 `(*ptr).x`와 동일하다.
+
+## 1-6. 중첩 구조체(Nesting structures)
+구조체는 다른 구조체의 멤버로 사용할 수 있다.
+```cpp
+#include <iostream>
+using namespace std;
+
+struct point {
+    double x;
+    double y;
+}
+
+struct triangle {
+    point A;
+    point B;
+    point C;
+}
+
+int main() {
+    triangle T = {{0, 0}, {1, 0}, {0, 1}};
+    cout << T.A.x << endl;
+}
+```
+```
+0
+```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br/>
+# 2. Class
+## 2-1. 
 
 
 
 # References
 [1] [Geeksforgeeks, 'Structures in C++'](https://www.geeksforgeeks.org/structures-in-cpp/)  
 [2] [Geeksforgeeks, 'Difference between C structures and C++ structures](https://www.geeksforgeeks.org/difference-c-structures-c-structures/?ref=rp)  
+[3] [cplusplus, 'Data structures'](https://www.cplusplus.com/doc/tutorial/structures/)  
+[4] [cplusplus, 'Classes'](http://www.cplusplus.com/doc/tutorial/classes/)  
 
 
 
