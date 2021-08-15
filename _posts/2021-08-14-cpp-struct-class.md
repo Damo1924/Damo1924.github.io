@@ -83,7 +83,7 @@ using namespace std;
 struct point {
     double x;
     double y;
-}
+};
 
 void ori_symmetry(point* A) {
     double temp = A->x;
@@ -112,13 +112,13 @@ using namespace std;
 struct point {
     double x;
     double y;
-}
+};
 
 struct triangle {
     point A;
     point B;
     point C;
-}
+};
 
 int main() {
     triangle T = { {0, 0}, {1, 0}, {0, 1} };
@@ -128,6 +128,52 @@ int main() {
 ```
 0
 ```
+: 이처럼 중첩 구조체를 사용할 경우에는 dot operator를 여러 번 사용함으로써 원하는 멤버에 접근할 수 있다.
+
+## 1-7. 구조체의 크기, 패딩(Structure Padding)
+아래와 같은 구조체의 객체의 크기는 얼마일까?
+```cpp
+struct abc {
+    char a;
+    int b;
+    double c;
+};
+```
+단순히 `a`는 1byte, `b`는 4byte, `c`는 8byte이므로 1+4+8 = 13 byte가 될 것이라고 추측해볼 수 있지만, 그렇지 않다.
+```cpp
+abc object;
+cout << "size of structure: " << sizeof(object) << endl;
+```
+```
+size of structure: 16
+```
+직접 크기를 출력해보면 16byte임을 알 수 있다. 이는 **메모리에 효율적으로 접근하기 위해서 컴파일러가 Padding bytes를 추가하기 때문**이다. 32 bit 시스템에서는 CPU 한 사이클 당 4 byte의 메모리를, 64 bit 시스템에서는 한 사이클 당 8 byte의 메모리를 읽어온다. 만약 Padding byte 없이 그대로 저장하게 되면 한 번의 사이클로 읽어올 수 있는 값을 두 번의 사이클로 읽어오게 되므로 효율적이지 못하게 된다. 그래서 컴파일러는 CPU의 한 사이클에 해당하는 메모리의 크기로 끊어서 struct의 변수들을 저장한다. 이러한 데이터 정렬, 접근 방식을 **data structure alignment**라고 부른다.
+
+앞선 예시를 64 bit 시스템에서 실행시키면, `a`와 `b`를 차례대로 저장을 한 다음 8 - (1 + 4) = 3 byte 만큼의 padding byte를 추가하고 `c`를 저장하게 된다. 그렇기 때문에 크기가 16 byte라는 결과가 나온 것이다. 아래는 멤버 변수들의 순서를 달리 바꾸어 본 결과이다.
+```cpp
+struct acb {
+    char a;
+    double c
+    int b;
+} object;
+
+int main()
+{
+    cout << "size of structure: " << sizeof(object) << endl;
+}
+```
+```
+size of structure: 24
+```
+멤버 변수의 순서를 바꾼 결과, 이번에는 구조체의 크기가 24가 되었다. `a`에 이어 `c`를 저장해야 하기 때문에 7 byte만큼의 padding byte를 추가한다. 그 다음 `c`와 `b`를 저장하면서 총 24 byte를 사용하게 되는 것이다.
+
+그런데 이 케이스에서 마지막 정수형 변수 `b`를 저장하기만 하면 되는데 왜 4 byte가 아닌 8 byte가 필요한지 의문점이 생길 수도 있다. 그 이유는 구조체의 멤버 변수들과 동시에 구조체 객체 자체도 padding을 통해 저장하기 때문이다. 다음과 같이 구조체 배열을 만든 경우를 생각해보자.
+```cpp
+acb object[3];
+```
+만약 마지막 정수형 변수에 4 byte를 할당하고 구조체를 크기 20 byte(= 8 + 8 + 4)로 저장한다면, 구조체의 크기가 8의 배수가 되지 않아서 데이터를 읽어올 때 불필요한 CPU 사이클이 발생하게 된다. 즉, 마지막 4 byte의 추가된 메모리는 구조체 자체로 인한 padding byte인 것이다.
+
+/* 위 내용은 Reference 4, 5와 유튜브 영상(https://www.youtube.com/watch?v=aROgtACPjjg)을 참고해서 작성하였다.
 
 
 <br/>
@@ -140,8 +186,10 @@ int main() {
 [1] [Geeksforgeeks, 'Structures in C++'](https://www.geeksforgeeks.org/structures-in-cpp/)  
 [2] [Geeksforgeeks, 'Difference between C structures and C++ structures](https://www.geeksforgeeks.org/difference-c-structures-c-structures/?ref=rp)  
 [3] [cplusplus, 'Data structures'](https://www.cplusplus.com/doc/tutorial/structures/)  
-[4] [cplusplus, 'Classes'](http://www.cplusplus.com/doc/tutorial/classes/)  
-
+[4] [Stack Overflow, 'Structure Padding'](https://stackoverflow.com/questions/29813803/structure-padding)  
+[5] [Geeksforgeeks, 'Structure Member Alignment, Padding and Data Packing'](https://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/)  
+[6] [cplusplus, 'Classes'](http://www.cplusplus.com/doc/tutorial/classes/)  
+[6] 
 
 
 
