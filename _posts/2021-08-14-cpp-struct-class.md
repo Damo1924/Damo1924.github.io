@@ -180,13 +180,154 @@ acb object[3];
 ```
 만약 마지막 정수형 변수에 4 byte를 할당하고 구조체를 크기 20 byte(= 8 + 8 + 4)로 저장한다면, 구조체의 크기가 8의 배수가 되지 않아서 데이터를 읽어올 때 불필요한 CPU 사이클이 발생하게 된다. 즉, 마지막 4 byte의 추가된 메모리는 구조체 자체로 인한 padding byte인 것이다.
 
-* 위 내용은 Reference 4, 5와 유튜브 영상(https://www.youtube.com/watch?v=aROgtACPjjg)을 참고해서 작성하였다.
+* 1-7의 내용은 Reference 4, 5와 유튜브 영상(https://www.youtube.com/watch?v=aROgtACPjjg)을 참고해서 작성하였다.
+
+# 2. C++의 구조체 확장
+구조체는 C 언어에서 사용하던 사용자 정의 자료형으로, C++에서도 그대로 사용할 수 있다. C++에서는 C의 구조체를 확장하여 제공하고 있는데, 어떤 점들이 추가되었는지 알아보았다.
+## 2-1. 접근 제어 지시자(Access specifiers)
+C의 구조체와 C++의 구조체의 가장 큰 차이점은 바로 접근 제어 지시자의 유무이다. 접근 제어 지시자에는 public, private, protected가 있는데, 이를 통해 멤버에 대한 접근에 제한을 둘 수 있다.
+- **public**: 어디서든 접근이 가능하다.
+- **private**: 외부에서 접근이 불가능하다.
+- **protected**: 외부에서 접근이 불가능하나, 상속된 파생 클래스에서는 접근이 허용된다.  
+C++ 구조체에서 **접근 제어 지시자가 생략된 경우에는 기본적으로 public 멤버**로 간주된다. 앞서 1-2에서 구현해 본 구조체를 접근 제어 지시자를 추가해서 변형시켜 보았다.
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+private: // 외부에서 접근이 불가능한 멤버들
+    string name;
+    int age;
+    double height;
+public: // 외부에서 접근이 가능한 멤버들
+    void printInfo();
+    void setInfo(string _name, int _age, double _height);
+};
+
+void Student::printInfo(){
+    cout << "Name: " << name << endl;
+    cout << "Age: " << age << endl;
+    cout << "Height: " << height << endl;
+}
+
+void Student::setInfo(string _name, int _age, double _height){
+    name = _name;
+    age = _age;
+    height = _height;
+}
+
+int main(){
+    Student s;
+    s.setInfo("Kim", 23, 181.1);
+    s.printInfo();
+}
+```
+```
+Name: Kim
+Age: 23
+Height: 181.1
+```
+학생의 정보를 저장할 멤버 변수들을 외부에서 접근할 수 없도록 private로 지정해두면 `s.name = "Kim"` 과 같이 멤버에 접근해서 초기화하는 것이 불가능하다. 그래서 객체를 초기화할 수 있도록 `setInfo()` 함수를 정의해 주었다. 이처럼 접근 제어 지시자를 이용해서 멤버에 대한 접근을 제한할 수 있다.
+
+## 2-2. 구조체의 생성자(Constructor)
+위에서 멤버 변수들을 private으로 설정했기 때문에 변수들을 초기화하기 위한 추가적인 함수를 정의해 주어야 했다. 이때 **생성자(Constructor)를 이용하면 추가적인 함수 없이, 객체 생성과 동시에 초기화할 수 있게 된다.** 생성자는 객체 생성시에 호출되는 함수로, 만약 생성자를 구현하지 않는다면 아무런 인자를 받지 않고 아무런 일도 하지 않는 디폴트 생성자가 존재하게 된다. 생성자를 정의할 때에는 반환형 없이 구조체의 이름과 동일한 이름을 사용한다.
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Student {
+private:
+    string name;
+    int age;
+    double height;
+public:
+    Student(string _name, int _age, double _height); // 생성자: 반환형 X, 구조체 이름과 동일한 이름, 매개변수 지정
+};
+
+int main(){
+    Student s("Kim", 23, 181.1); // 객체 생성과 동시에 초기화
+}
+```
+또한, 생성자로 함수의 일종이므로 **함수 오버로딩(function overloading)**이 가능하다. 전달한 인자의 개수나 자료형에 따라서 생성자의 기능을 다르게 정의할 수 있다.
+
+## 2-3. 연산자 오버로딩(Operator overloading)
+연산자 오버로딩이란 사용자 정의 자료형에 관한 연산자를 정의하여 좀 더 편하게 사용할 수 있게 만들어주는 C++의 문법적인 기능을 말한다. 물론 함수로도 구현해도 상관없지만, 연산자를 이용하면 조금 더 직관적이고 편리하게 사용 가능하기 때문에 알아두는 것이 좋다.
+
+연산자는 피연산자(operand)의 개수에 따라 **단항 연산자**와 **이항 연산자**로 나뉘는데, 오버로딩을 할 때에도 연산자가 단항인지 이항인지를 고려해야 한다. 다음은 단항 연산자와 이항 연산자로 사용되는 `-`에 대해 연산자 오버로딩을 해본 코드이다.
+```cpp
+#include <iostream>
+using namespace std;
+
+struct point {
+    double x;
+    double y;
+};
+
+// 단항 연산자
+point operator-(point A){
+    point res;
+    res.x = -A.x;
+    res.y = -A.y;
+    return res;
+}
+
+// 이항 연산자
+point operator-(point A, point B){
+    point res;
+    res.x = A.x - B.x;
+    res.y = A.y - B.y;
+    return res;
+}
+
+int main(){
+    point A = {3, 5}, B = {1, 2};
+    point C = -A, D = A-B;
+    cout << "C: (" << C.x << ", " << C.y << ")" << endl;
+    cout << "D: (" << D.x << ", " << D.y << ")" << endl;
+}
+```
+```
+C: (-3, -5)
+D: (2, 3)
+```
+연산자 오버로딩을 할 때에는 마치 함수를 정의하듯이 반환형(구조체 이름)과 연산자 종류, 그리고 괄호 안에 피연산자를 넣어준다. 단항 연산자는 피연산자를 한 개, 이항 연산자를 피연산자 두 개를 콤마로 구분해서 넣어준다. 이렇게 연산자 오버로딩을 하고 하면, 사용자 정의 자료형에 대해서도 연산자를 사용할 수 있게 된다.
+
+구조체나 클래스 안에서 연산자 오버로딩을 하는 경우라면, 첫 번째 인자를 제외하고 정의한다. 첫 번째 인자를 입력하지 않아도 그 구조체의 객체를 가리킨다고 생각하면 된다. 다음은 구조체 안에서 연산자 오버로딩을 하여 앞선 예시와 동일한 연산자 오버로딩을 한 코드이다.
+```cpp
+struct point {
+    double x;
+    double y;
+    
+    point operator-(){
+        point res;
+        res.x = -x; // dot operator 없이 변수 명을 그대로 사용
+        res.y = -y;
+        return res;
+    }
+    
+    point operator-(point B){
+        point res;
+        res.x = x - B.x;
+        res.y = y - B.y;
+        return res;
+    }
+};
+```
 
 
 <br/>
-# 2. Class
-## 2-1. 클래스란?
-기존 C 언어에서 구조체가 있었다면, C++에서 새롭게 등장한 사용자 정의 자료형이 바로 클래스(Class)이다. 
+# 3. Class
+## 3-1. 클래스란? (구조체와의 차이점)
+기존 C 언어에서 구조체가 있었다면, C++에서 새롭게 등장한 사용자 정의 자료형이 바로 클래스(Class)이다. 사실상 몇 가지 차이점들을 제외하고는 구조체와 거의 동일하다고 볼 수 있기 때문에 3절에서는 클래스에서만 가능한 것들에 대해서 다룰 것이다. 먼저, 그 전에 C++의 구조체와 클래스의 차이점에 대해서 짚고 넘어가 보도록 하겠다.
+
+
+## 3-2. 접근 제어 지시자(Access specifiers)
+C의 구조체와 C++의 구조체/클래스의 가장 큰 차이점은 바로 접근 제어 지시자의 유무이다. 접근 제어 지시자에는 public, private, protected가 있는데, 이를 통해 멤버에 대한 접근에 제한을 둘 수 있다.
+- **public**: 어디서든 접근이 가능하다.
+- **private**: 외부에서 접근이 불가능하다.
+- **protected**: 외부에서 접근이 불가능하나, 상속된 파생 클래스에서는 접근이 허용된다.
 
 
 # References
