@@ -184,8 +184,10 @@ acb object[3];
 
 
 <br/>
-# 2. C++의 구조체 확장
-구조체는 C 언어에서 사용하던 사용자 정의 자료형으로, C++에서도 약간의 차이만 있을뿐, 그대로 사용할 수 있다. 그렇다면 C++의 구조체만의 특징에 대해서 알아보도록 하겠다.
+# 2. C++의 구조체 확장, 클래스(Class)
+1절에서는 구조체의 기본적인 내용들에 대해서 알아보았다. 2절에서는 C++의 구조체/클래스의 특징과 기능에 대해서 알아보도록 하겠다.
+
+> 원래 구조체는 C 언어에서 사용하던 사용자 정의 자료형이다. C++로 넘어오면서 C의 구조체에서는 없었던 것들이 추가되면서 만들어진 새로운 사용자 정의 자료형이 바로 클래스(class)이다. 그런데 C++에서 C와의 호환성을 위해 구조체를 사용할 수 있도록 한 것이다. C의 구조체와 C++의 클래스와의 차이는 엄청나지만, 사실상 C++에서 구조체와 클래스는 거의 차이가 없다고 봐도 무방할 정도이다. 가장 확실한 차이는 접근 제어 지시자의 기본값이 다르다는 것인데, 이 부분만 조심한다면 struct를 class로, class를 struct로 바꾸어 써도 아무런 문제 없이 코드가 돌아갈 가능성이 매우 높다.
 
 ## 2-1. 접근 제어 지시자(Access specifiers)
 C의 구조체와 C++의 구조체의 가장 큰 차이점은 바로 접근 제어 지시자의 유무이다. 접근 제어 지시자에는 public, private, protected가 있는데, 이를 통해 멤버에 대한 접근에 제한을 둘 수 있다.
@@ -193,7 +195,7 @@ C의 구조체와 C++의 구조체의 가장 큰 차이점은 바로 접근 제�
 - **private**: 외부에서 접근이 불가능하다.
 - **protected**: 외부에서 접근이 불가능하나, 상속된 파생 클래스에서는 접근이 허용된다.
 
-이때, C++ 구조체에서 **접근 제어 지시자가 생략된 경우에는 기본적으로 public 멤버**로 간주된다는 점을 기억해두도록 하자.
+> C++의 구조체에서 **접근 제어 지시자가 생략된 경우에는 기본적으로 public 멤버**로 간주된다. 그러나 **클래스에서는 접근 제어 지시자가 생략된 경우에는 private 맴버**로 간주된다.
 
 아래는 접근 제어 지시자를 사용해서 구조체를 정의해 본 코드이다.
 ```cpp
@@ -236,7 +238,7 @@ Height: 181.1
 ```
 학생의 정보를 저장할 멤버 변수들을 외부에서 접근할 수 없도록 private로 지정해두면 `s.name = "Kim"` 과 같이 멤버에 접근해서 초기화하는 것이 불가능하다. 그래서 객체를 초기화할 수 있도록 `setInfo()` 함수를 정의해 주었다. 이처럼 접근 제어 지시자를 이용해서 멤버에 대한 접근을 제한할 수 있다.
 
-## 2-2. 구조체의 생성자(Constructor)
+## 2-2. 생성자(Constructor)
 위에서 멤버 변수들을 private으로 설정했기 때문에 변수들을 초기화하기 위한 추가적인 함수를 정의해 주어야 했다. 이때 **생성자(Constructor)를 이용하면 추가적인 함수 없이, 객체 생성과 동시에 초기화할 수 있게 된다.** 생성자는 객체 생성시에 호출되는 함수로, 만약 생성자를 구현하지 않는다면 아무런 인자를 받지 않고 아무런 일도 하지 않는 디폴트 생성자가 존재하게 된다. 생성자를 정의할 때에는 반환형 없이 구조체의 이름과 동일한 이름을 사용한다.
 ```cpp
 #include <iostream>
@@ -252,11 +254,74 @@ public:
     Student(string _name, int _age, double _height); // 생성자: 반환형 X, 구조체 이름과 동일한 이름, 매개변수 지정
 };
 
+Student::Student(string _name, int _age, double _height){ // 마찬가지로 반환형을 적지 않는다.
+    name = _name;
+    age = _age;
+    height = _height;
+}
+
 int main(){
     Student s("Kim", 23, 181.1); // 객체 생성과 동시에 초기화
 }
 ```
-또한, 생성자로 함수의 일종이므로 **함수 오버로딩(function overloading)**이 가능하다. 전달한 인자의 개수나 자료형에 따라서 생성자의 기능을 다르게 정의할 수 있다.
+또한, 생성자로 함수의 일종이므로 **함수 오버로딩(function overloading)**이 가능하다. 전달한 인자의 개수나 자료형에 따라서 생성자의 기능을 다르게 정의할 수 있다. 예를 들어 다음과 같이 **default constructor**를 정의해서 사용할 수 있다.
+```
+#include <iostream>
+using namespace std;
+
+struct Rectangle {
+private:
+    int w, h;
+public:
+    Rectangle(); // 아무런 인자도 받지 않는 default constructor
+    Rectangle(int, int);
+    int area(){return w*h;}
+};
+
+Rectangle::Rectangle(){
+    w = 10; // 생성자에 값을 입력해서 초기화해주지 않으면 스스로 설정해둔 값으로 초기화된다.
+    h = 10;
+}
+
+Rectangle::Rectangle(int _w, int _h){
+    w = _w;
+    h = _h;
+}
+
+int main(){
+    Rectangle A; // default constructor는 괄호 없이 객체를 선언하면 자동으로 호출된다.
+    Rectangle B (5, 10);
+    cout << "A의 넓이: " << A.area() << endl;
+    cout << "B의 넓이: " << B.area() << endl;
+}
+```
+```
+A의 넓이: 100
+B의 넓이: 50
+```
+
+사실 C++ 11에서는 위처럼 default constructor를 정의하지 않고 아래와 같이 일반 멤버 변수에 직접 초기값을 할당할 수 있다.
+```cpp
+struct Rectangle {
+private:
+    int w = 1, h = 1;
+}
+```
+이를 **멤버 초기화(Member initialization)**이라고 부른다. 그런데 멤버 초기화를 생성자와 함께 이용할 수도 있다. 아래 코드를 보자.
+```cpp
+struct Rectangle {
+private:
+    int w = 1, h = 1;
+public:
+    Rectangle(int _w, int _h) : w(_w), h(_h) {}
+}
+```
+다음 세 코드는 멤버 변수들을 초기화하는 동일한 기능을 한다.
+> `Rectangle(int _w, int _h) { w = _w; h = _h; }`
+> `Rectangle(int _w, int _h) : w(_w) { h = _h; }`
+> `Rectangle(int _w, int _h) : w(_w), h(_h) {}`
+
+이처럼 멤버 초기화를 이용한 생성자는 상속한 클래스의 변수들을 초기화할 때 사용된다.
 
 ## 2-3. 연산자 오버로딩(Operator overloading)
 연산자 오버로딩이란 사용자 정의 자료형에 관한 연산자를 정의하여 좀 더 편하게 사용할 수 있게 만들어주는 C++의 문법적인 기능을 말한다. 물론 함수로도 구현해도 상관없지만, 연산자를 이용하면 조금 더 직관적이고 편리하게 사용 가능하기 때문에 알아두는 것이 좋다.
@@ -322,20 +387,78 @@ struct point {
 };
 ```
 
+## 2-4. 상속(Inheritance)
+상속은 **어떤 클래스의 변수와 함수들을 그대로 물려받아 사용하고 싶을 때 사용**한다. 클래스를 상속하기 위해서는 상속받을 클래스의 이름 옆에 `:`와 접근 제한자, 그리고 상속할 클래스의 이름을 붙여주면 된다. 상속하는 클래스를 **부모 클래스(base class, super class)**, 상속받은 클래스를 **자식 클래스(derived class, sub class)**라고 부른다.
+
+부모 클래스 앞에 오는 접근 제한자는 제한자보다 접근 범위가 넓은 멤버를 모두 제한자로 바꾸어 상속한다는 의미를 가진다. 예를 들어 private 상속을 하게 되면 public과 protected 모두 private보다 접근 범위가 넓기 때문에 부모 클래스의 모든 멤버가 private로 상속된다. 반대로 public 상속을 하게 되면 public보다 접근 범위가 넓은 것은 없기 때문에 부모 클래스의 멤버들이 기존에 정의된 상태 그대로 상속된다.
+
+다음은 클래스 상속을 이용한 예시이다.
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Human{ // Base class
+private:
+    string name;
+    int age;
+public:
+    Human(string _name, int _age): name(_name), age(_age) { }
+    void printInfo(){
+        cout << "Name: " << name << ", Age: " << age << endl;
+    }
+};
+
+class Student: public Human { // Derived class, public inheritance
+private:
+    int grade;
+    string major;
+public:
+    Student(string _name, int _age, int _grade, string _major): Human(_name, _age){ // Member initialization
+        grade = _grade;
+        major = _major;
+    }
+    void printInfo_S(){
+        printInfo(); // Member function from the Base class is usable
+        cout << " - Grade: " << grade << ", Major: " << major << endl;
+    }
+};
+
+int main() {
+    Student s("Park", 22, 2, "Biology");
+    s.printInfo(); // Member function from the Base class is usable
+    cout << "\n";
+    s.printInfo_S();
+}
+```
+```
+Name: Park, Age: 22
+
+Name: Park, Age: 22
+ - Grade: 2, Major: Biology
+```
+이처럼 상속을 이용하면 기존에 정의된 클래스를 이용해서 보다 편리하게 새로운 클래스를 정의할 수 있다. 멤버 초기화를 이용해서 Base class의 멤버 변수들을 초기화하였다.
+
+위 코드에서 `Student` 클래스의 `printInfo_S()` 함수는 부모 클래스에 있는 `printInfo()` 함수와 겹치지 않게 하기 위해 이름에 `_S`를 붙여주었다. 그런데 함수 구분하지 않고 그냥 덮어쓰고 싶다면 부모 클래스에 있는 함수의 이름을 그대로 사용하면 된다. 이를 **상속 오버라이딩(Inheritance overriding)**이라고 하는데, 부모 클래스에 이미 정의된 함수를 **재정의**한다는 의미이다.
+```cpp
+class Student: public Human {
+private:
+    int grade;
+    string major;
+public:
+    Student(string _name, int _age, int _grade, string _major): Human(_name, _age){ // Member initialization
+        grade = _grade;
+        major = _major;
+    }
+    void printInfo(){
+        Human::printInfo(); // 범위 지정 연산자(::)를 통해 부모 클래스의 함수를 호출할 수 있다.
+        cout << " - Grade: " << grade << ", Major: " << major << endl;
+    }
+};
+```
+
 
 <br/>
-# 3. Class
-## 3-1. 클래스란? (구조체와의 차이점)
-기존 C 언어에서 구조체가 있었다면, C++에서 새롭게 등장한 사용자 정의 자료형이 바로 클래스(Class)이다. 사실상 몇 가지 차이점들을 제외하고는 구조체와 거의 동일하다고 볼 수 있기 때문에 3절에서는 클래스에서만 가능한 것들에 대해서 다룰 것이다. 먼저, 그 전에 C++의 구조체와 클래스의 차이점에 대해서 짚고 넘어가 보도록 하겠다.
-
-
-## 3-2. 접근 제어 지시자(Access specifiers)
-C의 구조체와 C++의 구조체/클래스의 가장 큰 차이점은 바로 접근 제어 지시자의 유무이다. 접근 제어 지시자에는 public, private, protected가 있는데, 이를 통해 멤버에 대한 접근에 제한을 둘 수 있다.
-- **public**: 어디서든 접근이 가능하다.
-- **private**: 외부에서 접근이 불가능하다.
-- **protected**: 외부에서 접근이 불가능하나, 상속된 파생 클래스에서는 접근이 허용된다.
-
-
 # References
 [1] [Geeksforgeeks, 'Structures in C++'](https://www.geeksforgeeks.org/structures-in-cpp/)  
 [2] [Geeksforgeeks, 'Difference between C structures and C++ structures](https://www.geeksforgeeks.org/difference-c-structures-c-structures/?ref=rp)  
@@ -343,7 +466,7 @@ C의 구조체와 C++의 구조체/클래스의 가장 큰 차이점은 바로 �
 [4] [Stack Overflow, 'Structure Padding'](https://stackoverflow.com/questions/29813803/structure-padding)  
 [5] [Geeksforgeeks, 'Structure Member Alignment, Padding and Data Packing'](https://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/)  
 [6] [cplusplus, 'Classes'](http://www.cplusplus.com/doc/tutorial/classes/)  
-[6] 
+[7] [Geeksforgeeks, 'Structue vs class in C++](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)  
 
 
 
