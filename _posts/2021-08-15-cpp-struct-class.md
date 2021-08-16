@@ -1,5 +1,5 @@
 ---
-title: "User defined data type in C++: Struct, Class (+ operator overloading)"
+title: "User defined data type in C++: Struct, Class"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -390,7 +390,7 @@ struct point {
 ## 2-4. 상속(Inheritance)
 상속은 **어떤 클래스의 변수와 함수들을 그대로 물려받아 사용하고 싶을 때 사용**한다. 클래스를 상속하기 위해서는 상속받을 클래스의 이름 옆에 `:`와 접근 제한자, 그리고 상속할 클래스의 이름을 붙여주면 된다. 상속하는 클래스를 **부모 클래스(base class, super class)**, 상속받은 클래스를 **자식 클래스(derived class, sub class)**라고 부른다.
 
-부모 클래스 앞에 오는 접근 제한자는 제한자보다 접근 범위가 넓은 멤버를 모두 제한자로 바꾸어 상속한다는 의미를 가진다. 예를 들어 private 상속을 하게 되면 public과 protected 모두 private보다 접근 범위가 넓기 때문에 부모 클래스의 모든 멤버가 private로 상속된다. 반대로 public 상속을 하게 되면 public보다 접근 범위가 넓은 것은 없기 때문에 부모 클래스의 멤버들이 기존에 정의된 상태 그대로 상속된다.
+부모 클래스 앞에 오는 접근 제한자는 **제한자보다 접근 범위가 넓은 멤버를 모두 제한자로 바꾸어 상속한다는 의미**를 가진다. 예를 들어 private 상속을 하게 되면 public과 protected 모두 private보다 접근 범위가 넓기 때문에 부모 클래스의 모든 멤버가 private로 상속된다. 반대로 public 상속을 하게 되면 public보다 접근 범위가 넓은 것은 없기 때문에 부모 클래스의 멤버들이 기존에 정의된 상태 그대로 상속된다.
 
 다음은 클래스 상속을 이용한 예시이다.
 ```cpp
