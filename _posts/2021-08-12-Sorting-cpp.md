@@ -305,7 +305,7 @@ int main()
 > 분할 정복을 이용한 정렬 알고리즘으로, merge sort와 비슷하지만 **pivot element**를 선택해서 그 원소를 기준으로 input을 나눈다는 점에서 차이가 있다.
 
 ## 4-1. Quicksort algorithm
-분할 정복이므로 다음 과정이 재귀적으로 이루어진다.
+분할 정복이므로 다음 과정이 재귀적으로 이루어진다.  
 **-** Pivot element를 선택  
 **-** Pivot element보다 큰 원소들의 배열과 작은 원소들의 배열로 나눈다.  
 **-** Pivot element의 왼쪽에 작은 원소들이, 오른쪽에는 큰 원소들이 배치되어 pivot element와 그도 동일한 값을 가지는 원소들은 자연스럽게 정렬된다.  
@@ -400,8 +400,10 @@ int main()
 **-** Quicksort도 merge sort와 마찬가지로 크기가 작은 input에 대해서는 bubble sort와 insertion sort보다 느린 모습을 보여준다.
 
 
-<br/><br/>
+<br/>
 이 외에도 정말 다양한 정렬 알고리즘들이 존재하지만, 이번 포스트에서는 가장 대표적인 4가지 정렬에 대해서 공부해보았다. 다음에 힙 정렬과 C++ 내장 정렬 함수에 대해서도 다루어 볼 생각이다.
+
+
 <br/>
 # References
 [1] [Realpython, 'sorting algorithms - python'](https://realpython.com/sorting-algorithms-python/)  
