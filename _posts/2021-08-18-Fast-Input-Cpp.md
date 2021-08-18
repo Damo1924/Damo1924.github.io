@@ -83,7 +83,48 @@ int readInt()
 : `getchar()` 함수를 통해 0부터 9까지의 숫자 문자들이 48부터 57까지의 정수로 반환되는데, 48은 2진법으로 110000으로 나타낼 수 있다. 즉, `getchar() & 15`로부터 0부터 9까지의 숫자를 바로 얻을 수 있고, `getchar() & 16`은 숫자라면 1이지만 개행(10)이나 공백(32)의 경우에는 0이 되어 while 문이 종료된다. 다만, 위 코드는 음이 아닌 정수만 받아올 수 있음에 유의하자.
 
 ## 2-3. 직접 버퍼를 만들고 읽어오는 방법
+`getchar()`가 다른 표준입력 함수(scanf, cin)에 비해 빠르긴 하지만, 결국 한 번에 한 문자씩 입력 스트림의 버퍼에서 읽어오는 것이기 때문에 직접 버퍼를 만들어서 읽어오는 것이 더 효율적이다. 이를 구현하기 위해서는 `fread()`를 이용해야 한다.
+
+`fread()`는 파일을 읽어올 때 사용하는 함수로, 다음과 같은 구조를 가지고 있다.
+```cpp
+size_t fread(
+    void *buffer,
+    size_t size,
+    size_t count,
+    FILE *stream
+);
+```
+- **buffer**: 데이터를 저장할 문자열 주소
+- **size**: 읽어올 데이터의 크기
+- **count**: 읽어올 데이터의 개수
+- **stream**: 읽을 파일의 포인터
+
+`fread()`는 입력 *stream*으로부터 *size* byte의 데이터 *count*개를 읽어온 후, *buffer*에 저장한다. 이를 이용해서 `getchar()` 대신 사용할 수 있는 함수를 만들 수 있다.
+```cpp
+char buf[1 << 17];
+
+char read() {
+    static int idx = 1 << 17;
+    if (idx == 1 << 17) {
+        fread(buf, 1, 1 << 17, stdin);
+        idx = 0;
+    }
+    return buf[idx++];
+}
+```
+- **idx**: 정적(static) 변수로, buffer에서 반환할 데이터의 index를 의미
+- **buf**: 1 << 17 크기의 문자 배열(buffer 역할)
+- **stdin**: 표준입력(standard input)
+
+가장 처음 read()가 호출되면, `fread()`를 통해 입력버퍼로부터 1 << 17 byte의 데이터를 받아와서 자체 버퍼 buf에 저장한다. 그 후 `idx = 0`으로 갱신해서 buf의 첫 번째 원소부터 읽어나간다. 만약 버퍼를 끝까지 읽었다면(idx = 1 << 17), 다시 입력버퍼로부터 1 << 17 byte의 데이터를 받아와서 자체 버퍼에 저장하는 과정을 반복한다. 이제 이 `read()` 함수를 2-2에서 구현한 `readInt()` 함수에서 `getchar()` 대신 써주면 된다.
+
+## 2-4. 추가적인 방법들
+위에서 다룬 방법들보다 더 빠른 입력을 원한다면, `<unistd.h>` 헤더 파일에 있는 `syscall` 함수를 사용하거나 리눅스에서 직접 하드웨어에 접근하는 `mmap` 함수를 사용하면 된다. 다만 아직 컴퓨터나 C++ 언어에 대한 지식이 많이 부족한 내가 공부하기에는 조금 벅찬 것 같아 추후에 기회가 된다면 더 공부해보도록 하겠다.
 
 
-
-보다
+<br/>
+# References
+[1] [talALGO, 'Fast I/O'](https://panty.run/fastio/)  
+[2] [TCPschool, '스트림과 버퍼'](https://tcpschool.com/cpp/cpp_io_streamBuffer)  
+[3] [stackoverflow, 'Significance of ios_base::syne_with_stdio(flase); cin.tie(NULL);'](https://stackoverflow.com/questions/31162367/significance-of-ios-basesync-with-stdiofalse-cin-tienull)  
+[4] [Microsoft, 'fread'](https://docs.microsoft.com/en-us/cpp/c-runtime-library/reference/fread?view=msvc-160)  
