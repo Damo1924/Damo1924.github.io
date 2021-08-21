@@ -123,9 +123,9 @@ C++에서 스텍은 큐와 마찬가지로 다른 컨테이너를 underlying con
 using namespace std;
 int main()
 {
-    queue<int> st_deque;
-    queue<int, vector<int>> st_vector;
-    queue<int, list<int>> st_list;
+    stack<int> st_deque;
+    stack<int, vector<int>> st_vector;
+    stack<int, list<int>> st_list;
 }
 ```
 
@@ -163,7 +163,7 @@ int main()
 **1) empty()**: 스텍이 비어있으면 true, 아니면 false를 반환  
 **2) size()**: 스텍에 있는 원소의 개수를 반환
 
-## 4-4. Element Access: front(), back()
+## 4-4. Element Access: back()
 **1) back()**: 스텍의 마지막 원소의 참조형을 반환
 
 
