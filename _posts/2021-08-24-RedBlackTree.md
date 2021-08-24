@@ -35,4 +35,10 @@ Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가�
 
 <br/>
 # 2. Insertion & Removal in Red-Black Tree
+Red-black tree는 일반적인 이진 탐색 트리와 동일한 방법으로 노드를 삽입하거나 삭제하게 되면 위에서 다룬 조건들을 만족하지 않게 된다. 노드를 삽입, 삭제하고 나서도 조건을 만족하도록 하는 과정을 **rebalancing**이라고 부르며, 다음 두 작업을 통해 이루어진다.
+
+- **Recoloring**: 노드의 색을 변환
+- **Tree rotation**: 이진 트리에서 노드의 순서를 변경하지 않고 트리의 구조만 바꾸는 작업
+
+  > Tree rotation is used to decrease its height by moving smaller subtrees down and larger subtrees up, resulting in improved performance of many tree operations.
 
