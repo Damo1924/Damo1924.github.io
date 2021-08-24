@@ -73,9 +73,9 @@ Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을
 - **이진 탐색 트리(binary search tree)의 조건을 만족해야한다.**  
   한 노드의 key 값을 k라고 할 때, left subtree에 있는 노드들은 모두 k보다 작고, right subtree에 있는 노드들은 모두 k보다 크다.
 
-그림 1에서 트리 회전 전의 트리를 보자. 위의 두 가지 제한조건에 의해 tree rotation 이후의 트리는 다음을 만족해야한다.
-\1) 중위순회를 했을 때 `A-P-S-G-U`의 순서로 노드를 순회해야한다.
-\2) S의 키 값이 P보다는 크고 G보다는 작아야한다. 즉, S는 P의 right subtree에 위치함과 동시에 G의 left subtree에 위치해야한다.
+그림 1에서 트리 회전 전의 트리를 보자. 위의 두 가지 제한조건에 의해 tree rotation 이후의 트리는 다음을 만족해야한다.  
+1) 중위순회를 했을 때 `A-P-S-G-U`의 순서로 노드를 순회해야한다.  
+2) S의 키 값이 P보다는 크고 G보다는 작아야한다. 즉, S는 P의 right subtree에 위치함과 동시에 G의 left subtree에 위치해야한다.  
 실제로 그림 1에서 tree rotation 이후의 트리 구조는 이를 잘 만족한다는 것을 확인할 수 있다.
 
 
