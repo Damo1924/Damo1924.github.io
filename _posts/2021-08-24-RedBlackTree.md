@@ -55,18 +55,28 @@ Red-black tree는 일반적인 이진 탐색 트리와 동일한 방법으로 �
 ## 2-1. Tree rotation
 > An operation on a binary tree that changes the structure ***without interfering with the order of the elements.*** Tree rotation is used to **decrease its height** by moving smaller subtrees down and larger subtrees up, resulting in **improved performance of many tree operations.**
 
-Tree rotation은 두 가지 방향이 존재하며, 다음과 같이 일어난다. 시계방향 회전을 오른쪽 회전(right rotation), 반시계방향 회전을 왼쪽 회전(left rotation)이라고 한다.
+Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을 오른쪽 회전(right rotation), 반시계방향 회전을 왼쪽 회전(left rotation)이라고 한다.
 
 (사진)
 
-Tree rotation이 어떻게 진행되는지 이해하려면 그 제한조건에 대해 이해해야한다. Tree rotation은 다음 제한조건들을 지키면서 트리의 구조를 바꾼다.
+각 노드를 다음과 같은 notation을 이용해서 표기하였다.
+- `A`: 현재 주목하고 있는 노드
+- `P`: A의 부모 노드
+- `S`: A의 형제 노드
+- `G`: P의 부모 노드
+- `U`: P의 형제 노드
+
+왜 Tree rotation이 그림과 같이 이루어지는지 알기 위해서는 그 제한조건에 대해 이해해야한다. Tree rotation은 다음 제한조건들을 지키면서 트리의 구조를 바꾸어야한다.
 
 - **중위순회(in-order traversal)를 통해 방문한 노드의 순서가 동일해야한다.**  
   중위순회는 left subtree, root, right subtree 순으로 트리를 순회하는 방법이다.
 - **이진 탐색 트리(binary search tree)의 조건을 만족해야한다.**  
   한 노드의 key 값을 k라고 할 때, left subtree에 있는 노드들은 모두 k보다 작고, right subtree에 있는 노드들은 모두 k보다 크다.
 
-
+그림 1에서 트리 회전 전의 트리를 보자. 위의 두 가지 제한조건에 의해 tree rotation 이후의 트리는 다음을 만족해야한다.
+\1) 중위순회를 했을 때 `A-P-S-G-U`의 순서로 노드를 순회해야한다.
+\2) S의 키 값이 P보다는 크고 G보다는 작아야한다. 즉, S는 P의 right subtree에 위치함과 동시에 G의 left subtree에 위치해야한다.
+실제로 그림 1에서 tree rotation 이후의 트리 구조는 이를 잘 만족한다는 것을 확인할 수 있다.
 
 
 
