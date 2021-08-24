@@ -57,7 +57,7 @@ Red-black tree는 일반적인 이진 탐색 트리와 동일한 방법으로 �
 
 Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을 오른쪽 회전(right rotation), 반시계방향 회전을 왼쪽 회전(left rotation)이라고 한다.
 
-<img width = "80%" src = "https://user-images.githubusercontent.com/88201512/130643150-46b0fab0-5181-48da-af77-9a09eb7a9871.jpg">
+<center><img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130643150-46b0fab0-5181-48da-af77-9a09eb7a9871.jpg"></center>
 
 각 노드를 다음과 같은 notation을 이용해서 표기하였다.
 - `A`: 현재 주목하고 있는 노드
