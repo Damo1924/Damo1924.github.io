@@ -49,5 +49,28 @@ Red-black tree는 일반적인 이진 탐색 트리와 동일한 방법으로 �
 
 - **Recoloring**: 노드의 색을 변환
 - **Tree rotation**: 이진 트리에서 노드의 순서를 변경하지 않고 트리의 구조만 바꾸는 작업
-  > Tree rotation is used to **decrease its height** by moving smaller subtrees down and larger subtrees up, resulting in **improved performance of many tree operations.**
 
+경우에 따라서 recoloring과 tree rotation을 이용해서 red-black tree의 조건을 만족하도록 rebalancing하는데, 꽤나 복잡한 과정임에도 불구하고 시간복잡도는 $O(\log n)$이다. 삽입과 삭제가 이루어지는 과정에 대해 알아보기 전에 tree rotation이 어떻게 이루어지는지부터 알아보도록 하겠다.
+
+## 2-1. Tree rotation
+> An operation on a binary tree that changes the structure ***without interfering with the order of the elements.*** Tree rotation is used to **decrease its height** by moving smaller subtrees down and larger subtrees up, resulting in **improved performance of many tree operations.**
+
+Tree rotation은 두 가지 방향이 존재하며, 다음과 같이 일어난다. 시계방향 회전을 오른쪽 회전(right rotation), 반시계방향 회전을 왼쪽 회전(left rotation)이라고 한다.
+
+(사진)
+
+Tree rotation이 어떻게 진행되는지 이해하려면 그 제한조건에 대해 이해해야한다. Tree rotation은 다음 제한조건들을 지키면서 트리의 구조를 바꾼다.
+
+- **중위순회(in-order traversal)를 통해 방문한 노드의 순서가 동일해야한다.**  
+  중위순회는 left subtree, root, right subtree 순으로 트리를 순회하는 방법이다.
+- **이진 탐색 트리(binary search tree)의 조건을 만족해야한다.**  
+  한 노드의 key 값을 k라고 할 때, left subtree에 있는 노드들은 모두 k보다 작고, right subtree에 있는 노드들은 모두 k보다 크다.
+
+
+
+
+
+<br/>
+# References
+[1] [WIKIPEDIA, 'Red-black tree'](https://en.m.wikipedia.org/wiki/Red%E2%80%93black_tree)  
+[2] [WIKIPEDIA, 'Tree rotation'](https://en.m.wikipedia.org/wiki/Tree_rotation)  
