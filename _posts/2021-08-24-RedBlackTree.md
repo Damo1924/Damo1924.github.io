@@ -122,14 +122,16 @@ Red-black tree에 노드를 삽입할 때는 삽입하는 노드(A)의 초기 �
 **1) A가 루트인 경우**: A를 black node로 recoloring
 
 **2) A.Uncle이 Red인 경우**: P와 U를 black, G를 red로 recoloring
-<center><img width = "60%" src = "https://user-images.githubusercontent.com/88201512/130732735-c242524e-c300-49dd-b4bc-7e3028899c11.jpg"></center>
+<img width = "60%" src = "https://user-images.githubusercontent.com/88201512/130733249-e6376f09-e728-40a7-bbed-92adf725a31f.jpg">
 위 그림에서 G는 전체 트리의 루트가 아닌, 서브 트리의 노드이다.
 
-**3) A.Uncle이 Black인 경우 (triangle)**: G에 대한 right rotation
-<center><img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130732738-0fd60ca6-f0c5-4574-80b0-5d1b9716f82b.jpg"></center>
+**3) A.Uncle이 Black인 경우 (triangle)**: P에 대한 left rotation + G에 대한 right rotation + A를 black, G를 res로 recoloring
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130733254-8e59022b-346d-491f-81d4-702436bb018b.jpg">
 
 **4) A.Uncle이 Black인 경우 (line)**: G에 대한 right rotation + P를 black, G를 red로 recoloring
-<center><img width = "65%" src = "https://user-images.githubusercontent.com/88201512/130732742-b05c6dd9-d493-4a77-874a-97e61bb1d415.jpg"></center>
+<img width = "65%" src = "https://user-images.githubusercontent.com/88201512/130733255-7263188c-3b56-4125-916d-53c023830825.jpg">
+
+Rebalancing이 제대로 이루어졌는지 알아보기 위해서는 red-black tree의 조건4와 조건5를 체크해보면 된다. 한 눈에 보아도 red node가 연속으로 등장하는 경우는 없으므로 조건4는 모두 만족한다. 사실 이 복잡한 삽입 과정이 필요한 이유는 바로 조건5 때문이다. Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모두 동일하다는 것을 확인하기 위해서는 서브 트리의 루트부터 시작해서 각 노드까지 등장한 black node의 개수가 같아야한다. 예를 들어 2번 케이스는 서브 트리의 루트인 G부터 A, S, U 까지의 경로에서 등장하는 black node의 개수가 전부 1개씩 증가하게 된다. 개수가 달라지긴 했지만, 결국 모든 경로에 대해 1개씩 동일하게 증가한 것이므로 조건5를 만족하게 된다. 이처럼 3, 4번 케이스에 대해서도 확인해보면 모두 조건을 만족한다는 것을 알 수 있다.
 
 ## 2-3. Removal
 
