@@ -38,11 +38,11 @@ Red-black tree의 임의의 노드 $v$에 대해 다음과 같이 정의한다.
 $h(v) = v의 높이$
 $bh(v) = v부터 가장 먼 leaf node까지의 경로에 있는 black node의 개수(v 제외)$
 
-**[사실1]** $(v의 서브트리에 있는 노드의 개수) >= 2^{bh(v)}-1$
-<img width = "80%" src = "https://user-images.githubusercontent.com/88201512/130709506-62721284-0bb3-444e-a807-109134d0b1a8.jpg">
+**[사실1]** $(v$의 서브트리에 있는 노드의 개수$) \geq 2^{bh(v)}-1$
+> <img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130709506-62721284-0bb3-444e-a807-109134d0b1a8.jpg">
 
 **[사실2]** $bh(r) >= \frac{h}{2}$
-Red-black tree의 조건 4로부터 red node가 연속해서 나올 수 없기 때문에 경로 상의 black node의 개수는 항상 높이의 절반보다 크거나 같다.
+> Red-black tree의 조건 4로부터 red node가 연속해서 나올 수 없기 때문에 경로 상의 black node의 개수는 항상 높이의 절반보다 크거나 같다.
 
 
 
