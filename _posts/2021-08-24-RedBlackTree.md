@@ -21,12 +21,30 @@ Red-black tree는 **self-balancing binary search tree**라는 이진 트리의 �
 > - 왼쪽 서브 트리에 있는 모든 노드의 key 값은 자신의 key 값보다 작아야 한다.
 > - 오른쪽 서브 트리에 있는 모든 노드의 key 값은 자신의 key 값보다 커야 한다.
 
+## 1-1. Properties of red-black trees
 Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가지고 있는 이진 탐색 트리로, 이진 탐색 트리의 조건에 더해 다음과 같은 조건들을 만족해야 한다.
 - **[조건1]** 노드는 Red 또는 Black 중 하나이다.
 - **[조건2]** 루트(root) 노드는 Black이다.
 - **[조건3]** 모든 리프 노드들(NIL leaves / null leaves)은 Black이다. (Null leaf: 트리의 끝을 나타내는 데만 쓰이는 노드)
 - **[조건4]** Red 노드의 자식 노드는 항상 Black이다. 즉, Red 노드는 연속해서 나타날 수 없다.
 - **[조건5]** 어떤 노드에서 해당 노드의 하위 리프(leaf) 노드에 도달하는 모든 경로에는 모두 같은 개수의 Black 노드가 있다.
+
+## 1-2. Height of red-black trees
+1-1에서 살펴본 red-black tree의 속성들로부터 트리의 높이에 대한 다음 명제를 증명해보도록 하겠다.
+
+> Red-black tree의 높이를 $h$라고 할 때, $h = O(\log_{2} n)$이다.
+
+Red-black tree의 임의의 노드 $v$에 대해 다음과 같이 정의한다.
+$h(v) = v의 높이$
+$bh(v) = v부터 가장 먼 leaf node까지의 경로에 있는 black node의 개수(v 제외)$
+
+**[사실1]** $(v의 서브트리에 있는 노드의 개수) >= 2^{bh(v)}-1$
+<img width = "80%" src = "https://user-images.githubusercontent.com/88201512/130709506-62721284-0bb3-444e-a807-109134d0b1a8.jpg">
+
+**[사실2]** $bh(r) >= \frac{h}{2}$
+Red-black tree의 조건 4로부터 red node가 연속해서 나올 수 없기 때문에 경로 상의 black node의 개수는 항상 높이의 절반보다 크거나 같다.
+
+
 
 위 조건들로 인해 red-black tree는 **루트 노드부터 가장 먼 리프 노드까지의 거리가 가장 가까운 리프 노드까지의 경로의 두 배보다 항상 작다.** 그 이유는 바로  최단 경로는 모두 Black 노드로만 구성되어 있고, 최장 경로는 Black 노드와 Red 노드가 번갈아 나오기 때문이다. 루트 노드와 리프 노드가 모두 Black 노드이므로 자연스럽게 최장 경로의 길이는 최단 경로의 두 배보다 커질 수 없게 되는 것이다.
 
