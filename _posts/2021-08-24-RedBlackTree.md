@@ -118,15 +118,21 @@ Red-black tree에 노드를 삽입할 때는 삽입하는 노드(A)의 초기 �
 4. A.Uncle = Black (line)
 
 이제 각 케이스에 대해 rebalancing이 어떻게 이루어지는지 알아보자.
-**1) A가 루트인 경우**: 이 때는 A를 black node로 recoloring해주면 된다.
+**1) A가 루트인 경우**: A를 black node로 recoloring
 
-**2) A.Uncle이 Red인 경우**
+**2) A.Uncle이 Red인 경우**: P와 U를 black, G를 red로 recoloring
+<center><img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130726688-63544bf8-728d-4956-b6e3-9ad124edb780.jpg"></center>
+위 그림에서 G는 전체 트리의 루트가 아닌, 서브 트리의 노드이다.
 
-**3) A.Uncle이 Black인 경우 (triangle)**
+**3) A.Uncle이 Black인 경우 (triangle)**: G에 대한 right rotation
+<center><img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130726703-a8c26e7d-21ec-45c6-b873-607f91c9f22c.jpg"></center>
 
-**4) A.Uncle이 Black인 경우 (line)**
+**4) A.Uncle이 Black인 경우 (line)**: G에 대한 right rotation + P를 black, G를 red로 recoloring
+<center><img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130726738-501a22c9-4f7a-437e-858c-1b871a750ff9.jpg"></center>
 
 ## 2-3. Removal
+
+
 
 <br/>
 # References
