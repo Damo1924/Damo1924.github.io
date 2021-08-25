@@ -32,33 +32,43 @@ Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가�
 ## 1-2. Height of red-black trees
 1-1에서 살펴본 red-black tree의 속성들로부터 트리의 높이에 대한 다음 명제를 증명해보도록 하겠다.
 
-> Red-black tree의 높이를 $h$라고 할 때, $h = O(\log_{2} n)$이다.
+**[명제]** Red-black tree의 높이를 $h$라고 할 때, $h = O(\log_{2} n)$이다.
 
 Red-black tree의 임의의 노드 $v$에 대해 다음과 같이 정의한다.
-$h(v) = v의 높이$
-$bh(v) = v부터 가장 먼 leaf node까지의 경로에 있는 black node의 개수(v 제외)$
+$h(v) = v$의 높이
+$bh(v) = v$부터 가장 먼 leaf node까지의 경로에 있는 black node의 개수($v$ 제외)
 
-**[사실1]** $(v$의 서브트리에 있는 노드의 개수$) \geq 2^{bh(v)}-1$
+먼저, 다음 두 가지 보조 정리를 증명해야한다.  
+**[Lemma 1]** $(v$의 서브트리에 있는 노드의 개수$) \geq 2^{bh(v)}-1$
 > <img width = "70%" src = "https://user-images.githubusercontent.com/88201512/130709506-62721284-0bb3-444e-a807-109134d0b1a8.jpg">
 
-**[사실2]** $bh(r) >= \frac{h}{2}$
+**[Lemma 2]** $bh(r) >= \frac{h}{2}$
 > Red-black tree의 조건 4로부터 red node가 연속해서 나올 수 없기 때문에 경로 상의 black node의 개수는 항상 높이의 절반보다 크거나 같다.
 
+Root node를 $r$이라고 할 때, **Lemma 1, 2**로부터 다음을 얻을 수 있다.
+> $(r$의 서브트리에 있는 노드의 개수$) \geq 2^{bh(r)} - 1 \geq 2^{\frac{h}{2}} - 1$
+
+Red-black tree에 있는 노드의 총 개수를 $n$이라고 할 때, $n$에 대해 정리하면 다음과 같다.
+> $n \geq 2^{\frac{h}{2}}$  
+> $\log_{2} n \geq \frac{h}{2}$  
+> $\therefore h \leq 2\log_{2} n$
+
+Big O notation에서는 계수를 무시할 수 있으므로, $h = O(\log_{2} n)$을 얻을 수 있다. $\square$
 
 
 위 조건들로 인해 red-black tree는 **루트 노드부터 가장 먼 리프 노드까지의 거리가 가장 가까운 리프 노드까지의 경로의 두 배보다 항상 작다.** 그 이유는 바로  최단 경로는 모두 Black 노드로만 구성되어 있고, 최장 경로는 Black 노드와 Red 노드가 번갈아 나오기 때문이다. 루트 노드와 리프 노드가 모두 Black 노드이므로 자연스럽게 최장 경로의 길이는 최단 경로의 두 배보다 커질 수 없게 되는 것이다.
 
 이와 같은 red-black tree의 특징을 **roughly balanced**라고 부르는데, 트리에 노드를 삽입, 삭제, 검색할 때 worst-case의 시간복잡도는 트리의 높이에 의해 결정되기 때문에 **일반적인 이진 탐색 트리에 비해 더 효율적으로 삽입과 삭제, 검색이 가능**하다는 것을 알 수 있다.
 
-다음은 red-black tree operations의 시간복잡도를 나타낸 표이다.
 
+## 1-3. Time complexity of red-black tree operations
 |Operations|Average-case|Worst-case|
 |:---:|:---:|:---:|
 |Search|$O(\log n)$|$O(\log n)$|
 |Insert|$O(\log n)$|$O(\log n)$|
 |Delete|$O(\log n)$|$O(\log n)$|
 
-노드를 삽입, 삭제, 검색하는 작업의 시간복잡도가 모두 $O(\log n)$임을 알 수 있다. 또한 각 작업에 대해 최악의 경우에도 일정한 실행 시간을 보장한다는 장점이 있다.
+노드를 삽입, 삭제, 검색하는 작업의 시간복잡도가 모두 $O(\log n)$임을 알 수 있다. 특히 red-black tree는 각 작업에 대해 최악의 경우에도 일정한 실행 시간을 보장한다는 장점이 있다.
 
 
 <br/>
