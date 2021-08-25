@@ -74,7 +74,7 @@ Big O notation에서는 계수를 무시할 수 있으므로, $h = O(\log_{2} n)
 
 
 <br/>
-# 2. Insertion & Removal in Red-Black Tree
+# 2. Insertion & Deletion in Red-Black Tree
 Red-black tree는 일반적인 이진 탐색 트리와 동일한 방법으로 노드를 삽입하거나 삭제하게 되면 위에서 다룬 조건들을 만족하지 않게 된다. 노드를 삽입, 삭제하고 나서도 조건을 만족하도록 하는 과정을 **rebalancing**이라고 부르며, 다음 두 작업을 통해 이루어진다.
 
 - **Recoloring**: 노드의 색을 변환
@@ -148,7 +148,13 @@ Rebalancing이 제대로 이루어졌는지 알아보기 위해서는 red-black 
 
 Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모두 동일하다는 것을 확인하기 위해서는 서브 트리의 루트부터 시작해서 각 노드까지 등장한 black node의 개수가 같아야한다. 예를 들어 2번 케이스는 서브 트리의 루트인 G부터 A, S, U 까지의 경로에서 등장하는 black node의 개수가 전부 1개씩 증가하게 된다. 개수가 달라지긴 했지만, 결국 모든 경로에 대해 1개씩 동일하게 증가한 것이므로 조건5를 만족하게 된다. 이처럼 3, 4번 케이스에 대해서도 확인해보면 모두 조건5를 만족한다는 것을 알 수 있다.
 
-## 2-3. Removal
+## 2-3. Deletion
+Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 복잡하다.
+
+노드를 삭제하는 과정을 크게 두 부분으로 나눌 수 있다.
+1. 삭제할 노드의 자리에 들어갈 **replacement** 찾기
+2. 트리를 red-black tree의 조건을 만족하도록 rebalancing
+
 
 
 
