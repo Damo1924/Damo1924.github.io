@@ -22,7 +22,7 @@ Red-black tree는 **self-balancing binary search tree**라는 이진 트리의 �
 > - 오른쪽 서브 트리에 있는 모든 노드의 key 값은 자신의 key 값보다 커야 한다.
 
 ## 1-1. Properties of red-black trees
-Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가지고 있는 이진 탐색 트리로, 이진 탐색 트리의 조건에 더해 다음과 같은 조건들을 만족해야 한다.
+Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가지고 있는 이진 탐색 트리로, 이진 탐색 트리의 조건에 더해 다음 조건들을 만족해야 한다.
 - **[조건1]** 노드는 Red 또는 Black 중 하나이다.
 - **[조건2]** 루트(root) 노드는 Black이다.
 - **[조건3]** 모든 리프 노드들(NIL leaves / null leaves)은 Black이다. (Null leaf: 트리의 끝을 나타내는 데만 쓰이는 노드)
@@ -34,8 +34,8 @@ Red-black tree는 각각의 노드가 Red 또는 Black인 색깔 속성을 가�
 
 **[명제]** Red-black tree의 높이를 $h$라고 할 때, $h = O(\log_{2} n)$이다.
 
-Red-black tree의 임의의 노드 $v$에 대해 다음과 같이 정의한다.
-$h(v) = v$의 높이
+Red-black tree의 임의의 노드 $v$에 대해 다음과 같이 정의한다.  
+$h(v) = v$의 높이  
 $bh(v) = v$부터 가장 먼 leaf node까지의 경로에 있는 black node의 개수($v$ 제외)
 
 먼저, 다음 두 가지 보조 정리를 증명해야한다.  
