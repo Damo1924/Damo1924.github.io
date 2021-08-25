@@ -55,7 +55,9 @@ Root node를 $r$이라고 할 때, **Lemma 1, 2**로부터 다음을 얻을 수 
 
 Red-black tree에 있는 노드의 총 개수를 $n$이라고 할 때, $n$에 대해 정리하면 다음과 같다.
 > $n \geq 2^{\frac{h}{2}}$
+> 
 > $\log_{2} n \geq \frac{h}{2}$
+> 
 > $\therefore h \leq 2\log_{2} n$
 
 Big O notation에서는 계수를 무시할 수 있으므로, $h = O(\log_{2} n)$을 얻을 수 있다. $\square$
@@ -111,4 +113,5 @@ Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을
 <br/>
 # References
 [1] [WIKIPEDIA, 'Red-black tree'](https://en.m.wikipedia.org/wiki/Red%E2%80%93black_tree)  
-[2] [WIKIPEDIA, 'Tree rotation'](https://en.m.wikipedia.org/wiki/Tree_rotation)  
+[2] [Youtube, '자료구조 - 균형탐색이진트리 - Red-Black 트리', Chan-Su shin](https://youtu.be/SHdYv41iCmE)  
+[3] [WIKIPEDIA, 'Tree rotation'](https://en.m.wikipedia.org/wiki/Tree_rotation)  
