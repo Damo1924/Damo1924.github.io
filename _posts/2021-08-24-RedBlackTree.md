@@ -1,9 +1,9 @@
 ---
-title: "Red-Black Tree with C++"
+title: "Red-Black Tree"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
-categories:
+categories:    
   - Algorithm
 use_math: true
 comments: true
@@ -16,7 +16,7 @@ Red-black tree는 **self-balancing binary search tree**라는 이진 트리의 �
 > **자가 균형 이진 탐색 트리 Self-balancing binary search tree**  
 > 원소의 삽입과 삭제가 일어나는 경우에 자동으로 트리의 높이를 작게 유지하는 노드 기반의 이진 탐색 트리
 
-> **이진 탐색 트리 Binary search tree**  
+> **이진 탐색 트리 Binary search tree(BST)**  
 > 모든 노드에 대해 다음 조건을 만족하는 이진 트리를 이진 탐색 트리라고 한다.
 > - 왼쪽 서브 트리에 있는 모든 노드의 key 값은 자신의 key 값보다 작아야 한다.
 > - 오른쪽 서브 트리에 있는 모든 노드의 key 값은 자신의 key 값보다 커야 한다.
@@ -91,10 +91,10 @@ Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을
 
 각 노드를 다음과 같은 notation을 이용해서 표기하였다.
 - `A`: 현재 주목하고 있는 노드
-- `P`: A의 부모 노드
-- `S`: A의 형제 노드
-- `G`: P의 부모 노드
-- `U`: P의 형제 노드
+- `P`: A의 부모 노드 (A.Parent)
+- `S`: A의 형제 노드 (A.Sibling)
+- `G`: P의 부모 노드 (A.Grandparent)
+- `U`: P의 형제 노드 (A.Uncle)
 
 왜 Tree rotation이 그림과 같이 이루어지는지 알기 위해서는 그 제한조건에 대해 이해해야한다. Tree rotation은 다음 제한조건들을 지키면서 트리의 구조를 바꾸어야한다.
 
@@ -103,12 +103,30 @@ Tree rotation에는 두 가지 방향이 존재하는데, 시계방향 회전을
 - **이진 탐색 트리(binary search tree)의 조건을 만족해야한다.**  
   한 노드의 key 값을 k라고 할 때, left subtree에 있는 노드들은 모두 k보다 작고, right subtree에 있는 노드들은 모두 k보다 크다.
 
-그림 1에서 트리 회전 전의 트리를 보자. 위의 두 가지 제한조건에 의해 tree rotation 이후의 트리는 다음을 만족해야한다.  
+그림 1에서 트리 회전 전의 트리를 보자. 위의 두 가지 제한조건에 의해 right tree rotation 이후의 트리는 다음을 만족해야한다.
+
 1) 중위순회를 했을 때 `A-P-S-G-U`의 순서로 노드를 순회해야한다.  
 2) S의 키 값이 P보다는 크고 G보다는 작아야한다. 즉, S는 P의 right subtree에 위치함과 동시에 G의 left subtree에 위치해야한다.  
+
 실제로 그림 1에서 tree rotation 이후의 트리 구조는 이를 잘 만족한다는 것을 확인할 수 있다.
 
+## 2-2. Insertion
+Red-black tree에 노드를 삽입할 때는 삽입하는 노드(A)의 초기 상태는 Red이다. 트리의 rebalancing은 아래 4가지 케이스로 나누어서 생각해볼 수 있다.
+1. A = root
+2. A.Uncle = Red
+3. A.Uncle = Black (triangle)
+4. A.Uncle = Black (line)
 
+이제 각 케이스에 대해 rebalancing이 어떻게 이루어지는지 알아보자.
+**1) A가 루트인 경우**: 이 때는 A를 black node로 recoloring해주면 된다.
+
+**2) A.Uncle이 Red인 경우**
+
+**3) A.Uncle이 Black인 경우 (triangle)**
+
+**4) A.Uncle이 Black인 경우 (line)**
+
+## 2-3. Removal
 
 <br/>
 # References
