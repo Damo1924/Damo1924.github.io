@@ -193,7 +193,7 @@ map에 대해 알아보기 위해 자료들을 찾아보다가 한 질문글을 
 #include <map>
 using namespace std;
 
-// 조건을 만족하는 원소를 삭제하는 함수
+// 조건을 만족하는 원소를 삭제하는 generic function
 template <typename Map, typename F>
 void map_erase_if(Map& m, F pred) {
     typename Map::iterator it = m.begin();
