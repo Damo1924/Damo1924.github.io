@@ -43,8 +43,56 @@ void swap(T x, T y) {
 템플릿을 이용해서 여러 데이터 타입에 대한 클래스를 생성할 수도 있다. 우리가 자주 사용하는 여러 컨테이너들(vector, pair, list, ...)이 클래스 템플릿을 이용해서 정의되어 있기 때문에 원하는 자료형을 저장할 수 있는 컨테이너를 자유롭게 이용할 수 있는 것이다.
 ```cpp
 #include <iostream>
-```
+using namespace std;
 
+template <typename T>
+class Array {
+private:
+    T *ptr;
+    int size;
+public:
+    Array(T arr[], int s);
+    void printArray();
+};
+
+template <typename T>
+Array<T>::Array(T arr[], int s) {
+    ptr = new T[s];
+    size = s;
+    for(int i = 0; i < size; i++) ptr[i] = arr[i];
+}
+
+template <typename T>
+void Array<T>::printArray() {
+    for (int i = 0; i < size; i++) cout << *(ptr + i) << " ";
+    cout << endl;
+}
+
+int main()
+{
+    int a[5] = {1, 2, 3, 4, 5};
+    Array<int> arr1(a, 5);
+    arr1.printArray();
+    
+    char b[5] = {'a', 'b', 'c', 'd', 'e'};
+    Array<char> arr2(b, 5);
+    arr2.printArray();
+}
+```
+```
+1 2 3 4 5
+a b c d e
+```
+다만, 함수 템플릿과는 달리 **클래스 템플릿은 선언할 때** `<int>`**와 같이 자료형을 함께 선언해야 한다.**
+
+또한, 클래스 템플릿은 다른 일반 매개변수처럼 **여러 개의 템플릿 인자를 사용할 수도 있고, 기본값을 설정할 수도 있다.**
+```cpp
+template <typename T, typename F = int>
+class Temp {
+// 임의의 클래스
+}
+```
+위의 예시에서 만약 `Temp<char> C`라고 선언하면 `Temp<char, int>`가 호출된다.
 
 ## 1-2. 템플릿의 작동 방식: 템플릿의 인스턴스화(template instantiation)
 그렇다면 템플릿은 어떤 방식으로 작동할까?
@@ -93,12 +141,9 @@ void sort<char> (char arr[], int size)
 먼저 일반적인 자료형에 대한 함수 템플릿을 정의한 후에, `template <>`으로 특정 자료형에 대한 특수한 정의를 해주면 된다. 
 
 
-
-템플릿(template)은 
-
+<br/>
 # References
 [1] [Geeksforgeeks, 'Templates in C++'](https://www.geeksforgeeks.org/templates-cpp/)  
 [2] [WIKIPEDIA, 'Generic programming'](https://en.m.wikipedia.org/wiki/Generic_programming)  
 [3] [TCPschool.com, '함수 템플릿'](http://tcpschool.com/cpp/cpp_template_function)  
 [4] [Geeksforgeeks, 'Template Specialization in C++'](https://www.geeksforgeeks.org/template-specialization-c/)  
-[5] 
