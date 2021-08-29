@@ -149,11 +149,27 @@ Rebalancing이 제대로 이루어졌는지 알아보기 위해서는 red-black 
 Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모두 동일하다는 것을 확인하기 위해서는 서브 트리의 루트부터 시작해서 각 노드까지 등장한 black node의 개수가 같아야한다. 예를 들어 2번 케이스는 서브 트리의 루트인 G부터 A, S, U 까지의 경로에서 등장하는 black node의 개수가 전부 1개씩 증가하게 된다. 개수가 달라지긴 했지만, 결국 모든 경로에 대해 1개씩 동일하게 증가한 것이므로 조건5를 만족하게 된다. 이처럼 3, 4번 케이스에 대해서도 확인해보면 모두 조건5를 만족한다는 것을 알 수 있다.
 
 ## 2-3. Deletion
-Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 복잡하다.
+Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 까다롭다.
 
 노드를 삭제하는 과정을 크게 두 부분으로 나눌 수 있다.
-1. 삭제할 노드의 자리에 들어갈 **replacement** 찾기
-2. 트리를 red-black tree의 조건을 만족하도록 rebalancing
+1. **삭제할 노드의 자리에 들어갈 *replacement* 찾기**
+2. **트리를 red-black tree의 조건을 만족하도록 rebalancing**
+
+먼저, replacement를 찾는 방법은 다음과 같다.
+- 삭제한 노드의 자식 노드들이 모두 NIL인 경우: **replacement = NIL**
+- 삭제한 노드의 자식 노드들 중 하나만 NIL인 경우: **replacement = non-NIL child**
+- 삭제한 노드의 자식 노드들 모두 NIL이 아닌 경우: **replacement = leftmost non-NIL node in the right subtree**(삭제한 노드의 오른쪽 서브 트리에 있는 노드 중 NIL을 제외하고 가장 왼쪽에 있는 노드)
+
+이렇게 삭제한 노드 자리에 들어갈 replacement를 선택했다면, 트리를 다시 red-black tree가 되도록 reblancing해 주어야 한다. 각 케이스에 대해 어떻게 트리를 수정해야하는지 표로 정리하였다.
+
+|Case|Deleted node|Replacement|Rebalancing|
+|:---:|:---:|:---:|:---:|
+|1|Red|Red or NIL|**Done**|
+|2|Red|Black|Color the replacement Red, and proceed to the appropriate case|
+|3|Black|Red|Color the replacement Black|
+|4|Black|Black or NIL|Proceed to the appropriate case|
+
+
 
 
 
@@ -163,3 +179,4 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
 [1] [WIKIPEDIA, 'Red-black tree'](https://en.m.wikipedia.org/wiki/Red%E2%80%93black_tree)  
 [2] [Youtube, '자료구조 - 균형탐색이진트리 - Red-Black 트리', Chan-Su shin](https://youtu.be/SHdYv41iCmE)  
 [3] [WIKIPEDIA, 'Tree rotation'](https://en.m.wikipedia.org/wiki/Tree_rotation)  
+[4] [Youtube, 'Red-black tree deletion: steps + 10 examples'](https://www.youtube.com/watch?v=eO3GzpCCUSg&t=590s)  
