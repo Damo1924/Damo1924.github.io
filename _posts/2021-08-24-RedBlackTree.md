@@ -192,7 +192,32 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
   이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
   
   2-2. **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
-    1) 
+    1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
+    S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 어느 쪽 자식인지에 따라서 케이스를 나눌 수 있다.
+    
+    |S의 위치|R의 위치|Case|
+    |:---:|:---:|:---:|
+    |Left|Left or Both children of s are red|LL|
+    |Left|Right|LR|
+    |Right|Right or Both children of s are red|RR|
+    |Right|Left|RL|
+    
+    2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
+    A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
+    |P의 색깔|recoloring|
+    |:---:|:---:|
+    |Red|A와 P를 모두 black으로 칠한다.|
+    |Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
+    
+    3) **S**가 red인 경우
+    S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
+    |S의 위치|rotation & recoloring|
+    |:---:|:---:|
+    |Left|P에 대해 right rotation - P를 red, S를 black으로 recoloriredng - P와 A를 black으로 칠해 double black 제거|
+    |Right|P에 대해 left rotation - P를 red, S를 black으로 recoloring - P와 A를 |
+    
+  2-3. **X**가 root: X를 black으로 칠한다.
+  
 
 <br/>
 # References
