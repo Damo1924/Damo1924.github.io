@@ -179,6 +179,8 @@ Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모�
 **(a) A 또는 X가 Red: A를 삭제하고 X를 black으로 칠한다.**  
 이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
 
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/131309471-e2564e11-48b7-4aed-b35f-96a8a6ba0519.jpg">
+
 **(b) A와 X가 모두 Black: A를 삭제하고 X를 double black으로 칠한다.**
 
 **(b-1) S가 black, S의 자식 노드 중 적어도 하나가 red인 경우**  
@@ -194,6 +196,10 @@ S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 �
 Rotation을 하고 나면 모두 다음 과정을 수행한다.
 - R을 black으로 recoloring
 
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/131309476-22737326-a05f-46c4-bd87-06f8602c89a0.jpg">
+
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/131309478-2445ee7d-d5d5-4891-a04b-0d736b8e2f5f.jpg">
+
 **(b-2) S가 black, S의 모든 자식 노드가 black인 경우**  
 A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 
@@ -201,6 +207,8 @@ A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 |:---:|:---:|
 |Red|A와 P를 모두 black으로 칠한다.|
 |Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
+
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/131309480-b1233260-93c4-4f64-a989-d9dad4f77a94.jpg">
 
 **(b-3) S가 red인 경우**  
 S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
@@ -213,6 +221,8 @@ S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
 Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
 - P를 red, S를 black으로 recoloring
 - P와 A를 black으로 칠해 double black 제거
+
+<img width = "70%" src = "https://user-images.githubusercontent.com/88201512/131309484-a07b0f5a-3c92-4e64-8b46-74e4868128c7.jpg">
 
 **(c) X가 root: X를 black으로 칠한다.**
 
