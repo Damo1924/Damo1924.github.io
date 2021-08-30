@@ -170,13 +170,16 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
 |4|Black|Black or NIL|Proceed to the appropriate case|
 
 
+노드를 삭제하는 과정도 삽입과 마찬가지로 **recoloring**과 **tree rotation**을 통해 이루어진다. 삽입 과정에서는 **Uncle node(U)**의 색깔에 따라서 경우를 나누었다면, 삭제는 **Sibling node(S)**의 색깔에 따라서 경우를 나눈다.
 
+노드를 삭제하는 과정은 상당히 복잡하고 처음에는 이해하기 어렵다. 이해를 돕기 위해 **double black** 표기를 사용하는데, black node가 삭제되고 black child로 대체되는 경우에 해당 child를 double black으로 표시한다. 그렇다면 우리의 목표는 double black을 single black으로 만드는 것이라고 할 수 있다.
 
-
+다음은 노드 삭제가 일어나는 과정이다.
+1. 
 
 <br/>
 # References
 [1] [WIKIPEDIA, 'Red-black tree'](https://en.m.wikipedia.org/wiki/Red%E2%80%93black_tree)  
 [2] [Youtube, '자료구조 - 균형탐색이진트리 - Red-Black 트리', Chan-Su shin](https://youtu.be/SHdYv41iCmE)  
 [3] [WIKIPEDIA, 'Tree rotation'](https://en.m.wikipedia.org/wiki/Tree_rotation)  
-[4] [Youtube, 'Red-black tree deletion: steps + 10 examples'](https://www.youtube.com/watch?v=eO3GzpCCUSg&t=590s)  
+[4] [Geeksforgeeks, 'Red-Black Tree | Set 3 (Delete)'](https://www.geeksforgeeks.org/red-black-tree-set-3-delete-2/)  
