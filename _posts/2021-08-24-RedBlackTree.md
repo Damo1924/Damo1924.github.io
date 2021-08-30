@@ -156,6 +156,8 @@ Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모�
 
 노드를 삭제하는 과정은 다음과 같다.
 
+---
+
 **Step 1. standard BST delete를 수행**
 
 |삭제할 노드의 자식 노드 수|삭제 방법|
@@ -168,6 +170,8 @@ Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모�
 - **Inorder predecessor**: 해당 노드의 왼쪽 서브트리에 있는 노드 중 값이 가장 큰 것
 
 내부 노드의 경우, 노드를 대체할 replacement를 복사한 다음 replacement를 삭제하는 것으로 생각할 수 있다. 그래서 이 과정을 수행하면 결국 leaf 또는 자식 노드가 하나인 노드가 삭제된다. 그러므로 우리는 자식 노드가 두 개인 경우는 고려할 필요가 없다.
+
+---
 
 **Step 2. 해당하는 케이스를 수행한다.**  
 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
@@ -188,7 +192,7 @@ S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 �
 |RL|Right|Left|S에 대해 right rotation + P에 대해 left rotation|
 
 Rotation을 하고 나면 모두 다음 과정을 수행한다.
-- **R을 black으로 recoloring**
+- R을 black으로 recoloring
 
 **(b-2) S가 black, S의 모든 자식 노드가 black인 경우**  
 A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
@@ -207,11 +211,12 @@ S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
 |Right|P에 대해 left rotation|
 
 Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
-- **P를 red, S를 black으로 recoloriredng**
-- **P와 A를 black으로 칠해 double black 제거**
+- P를 red, S를 black으로 recoloring
+- P와 A를 black으로 칠해 double black 제거
 
-**(c)X가 root: X를 black으로 칠한다.**
-  
+**(c) X가 root: X를 black으로 칠한다.**
+
+---
 
 <br/>
 # References
