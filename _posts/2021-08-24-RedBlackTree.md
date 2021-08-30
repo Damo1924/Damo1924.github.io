@@ -174,8 +174,25 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
 
 노드를 삭제하는 과정은 상당히 복잡하고 처음에는 이해하기 어렵다. 이해를 돕기 위해 **double black** 표기를 사용하는데, black node가 삭제되고 black child로 대체되는 경우에 해당 child를 double black으로 표시한다. 그렇다면 우리의 목표는 double black을 single black으로 만드는 것이라고 할 수 있다.
 
-다음은 노드 삭제가 일어나는 과정이다.
-1. 
+노드를 삭제하는 과정은 다음과 같다.
+1. **standard BST delete**를 수행한다.
+
+|삭제할 노드의 자식 노드 수|삭제 방법|
+|:---:|:---:|
+|0(leaf node)|해당 노드를 삭제|
+|1|해당 노드를 삭제하고 자식 노드로 대체|
+|2|해당 노드의 **inorder successor**(또는 inorder predecessor)를 찾아 대체|
+
+- **Inorder successor**: 해당 노드의 오른쪽 서브트리에 있는 노드 중 가장 값이 작은 것
+- **Inorder predecessor**: 해당 노드의 왼쪽 서브트리에 있는 노드 중 값이 가장 큰 것
+
+
+2. 해당하는 케이스를 수행한다. 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
+  2-1.**A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
+  이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
+  
+  2-2. **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
+    1) 
 
 <br/>
 # References
