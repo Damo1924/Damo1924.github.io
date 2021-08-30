@@ -175,48 +175,59 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
 노드를 삭제하는 과정은 상당히 복잡하고 처음에는 이해하기 어렵다. 이해를 돕기 위해 **double black** 표기를 사용하는데, black node가 삭제되고 black child로 대체되는 경우에 해당 child를 double black으로 표시한다. 그렇다면 우리의 목표는 double black을 single black으로 만드는 것이라고 할 수 있다.
 
 노드를 삭제하는 과정은 다음과 같다.
-1. **standard BST delete**를 수행한다.
+**1. standard BST delete를 수행**
 
 |삭제할 노드의 자식 노드 수|삭제 방법|
 |:---:|:---:|
-|0(leaf node)|해당 노드를 삭제|
-|1|해당 노드를 삭제하고 자식 노드로 대체|
-|2|해당 노드의 **inorder successor**(또는 inorder predecessor)를 찾아 대체|
+|**0** (leaf node)|해당 노드를 삭제|
+|**1**|해당 노드를 삭제하고 자식 노드로 대체|
+|**2**|해당 노드의 **inorder successor**(또는 inorder predecessor)를 찾아 대체|
 
 - **Inorder successor**: 해당 노드의 오른쪽 서브트리에 있는 노드 중 가장 값이 작은 것
 - **Inorder predecessor**: 해당 노드의 왼쪽 서브트리에 있는 노드 중 값이 가장 큰 것
 
 
-2. 해당하는 케이스를 수행한다. 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
-  2-1.**A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
-  이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
+**2.** 해당하는 케이스를 수행한다. 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
+
+**2-1.** **A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
+
+이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
   
-  2-2. **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
-    1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
-    S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 어느 쪽 자식인지에 따라서 케이스를 나눌 수 있다.
-    
-    |S의 위치|R의 위치|Case|
-    |:---:|:---:|:---:|
-    |Left|Left or Both children of s are red|LL|
-    |Left|Right|LR|
-    |Right|Right or Both children of s are red|RR|
-    |Right|Left|RL|
-    
-    2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
-    A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
-    |P의 색깔|recoloring|
-    |:---:|:---:|
-    |Red|A와 P를 모두 black으로 칠한다.|
-    |Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
-    
-    3) **S**가 red인 경우
-    S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
-    |S의 위치|rotation & recoloring|
-    |:---:|:---:|
-    |Left|P에 대해 right rotation - P를 red, S를 black으로 recoloriredng - P와 A를 black으로 칠해 double black 제거|
-    |Right|P에 대해 left rotation - P를 red, S를 black으로 recoloring - P와 A를 |
-    
-  2-3. **X**가 root: X를 black으로 칠한다.
+**2-2.** **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
+1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
+S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 어느 쪽 자식인지에 따라서 케이스를 나눌 수 있다.
+
+|S의 위치|R의 위치|Case|rotation|
+|:---:|:---:|:---:|:---:|
+|Left|Left or Both children of s are red|LL|P에 대해 right rotation|
+|Left|Right|LR|S에 대해 left rotation + P에 대해 right rotation|
+|Right|Right or Both children of s are red|RR|P에 대해 left rotation|
+|Right|Left|RL|S에 대해 right rotation + P에 대해 left rotation|
+
+Rotation을 하고 나면 모두 다음 과정을 수행한다.
+- **R을 black으로 recoloring**
+
+2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
+A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
+
+|P의 색깔|recoloring|
+|:---:|:---:|
+|Red|A와 P를 모두 black으로 칠한다.|
+|Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
+
+3) **S**가 red인 경우
+S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
+
+|S의 위치|rotation|
+|:---:|:---:|
+|Left|P에 대해 right rotation|
+|Right|P에 대해 left rotation|
+
+Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
+- **P를 red, S를 black으로 recoloriredng**
+- **P와 A를 black으로 칠해 double black 제거**
+
+**2-3.** **X**가 root: X를 black으로 칠한다.
   
 
 <br/>
