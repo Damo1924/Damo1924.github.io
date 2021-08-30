@@ -156,7 +156,7 @@ Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모�
 
 노드를 삭제하는 과정은 다음과 같다.
 
-**1. standard BST delete를 수행**
+##### 1. standard BST delete를 수행
 
 |삭제할 노드의 자식 노드 수|삭제 방법|
 |:---:|:---:|
@@ -168,14 +168,16 @@ Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모�
 - **Inorder predecessor**: 해당 노드의 왼쪽 서브트리에 있는 노드 중 값이 가장 큰 것
 
 
-**2.** 해당하는 케이스를 수행한다. 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
+##### 2. 해당하는 케이스를 수행한다.
 
-  **2-1.** **A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
+이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
+
+###### 2-1. **A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
 
 이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
   
-  **2-2.** **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
-    1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
+**2-2.** **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
+1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
 S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 어느 쪽 자식인지에 따라서 케이스를 나눌 수 있다.
 
 |Case|S의 위치|R의 위치|rotation|
@@ -188,7 +190,7 @@ S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 �
 Rotation을 하고 나면 모두 다음 과정을 수행한다.
 - **R을 black으로 recoloring**
 
-    2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
+2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
 A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 
 |P의 색깔|recoloring|
@@ -196,7 +198,7 @@ A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 |Red|A와 P를 모두 black으로 칠한다.|
 |Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
 
-    3) **S**가 red인 경우
+3) **S**가 red인 경우
 S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
 
 |S의 위치|rotation|
@@ -208,7 +210,7 @@ Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
 - **P를 red, S를 black으로 recoloriredng**
 - **P와 A를 black으로 칠해 double black 제거**
 
-  **2-3.** **X**가 root: X를 black으로 칠한다.
+**2-3.** **X**가 root: X를 black으로 칠한다.
   
 
 <br/>
