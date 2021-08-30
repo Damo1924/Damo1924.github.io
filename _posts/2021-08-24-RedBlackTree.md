@@ -149,32 +149,13 @@ Rebalancing이 제대로 이루어졌는지 알아보기 위해서는 red-black 
 Root부터 leaf까지의 경로에서 등장하는 black node의 숫자가 모두 동일하다는 것을 확인하기 위해서는 서브 트리의 루트부터 시작해서 각 노드까지 등장한 black node의 개수가 같아야한다. 예를 들어 2번 케이스는 서브 트리의 루트인 G부터 A, S, U 까지의 경로에서 등장하는 black node의 개수가 전부 1개씩 증가하게 된다. 개수가 달라지긴 했지만, 결국 모든 경로에 대해 1개씩 동일하게 증가한 것이므로 조건5를 만족하게 된다. 이처럼 3, 4번 케이스에 대해서도 확인해보면 모두 조건5를 만족한다는 것을 알 수 있다.
 
 ## 2-3. Deletion
-Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 까다롭다.
-
-노드를 삭제하는 과정을 크게 두 부분으로 나눌 수 있다.
-1. **삭제할 노드의 자리에 들어갈 *replacement* 찾기**
-2. **트리를 red-black tree의 조건을 만족하도록 rebalancing**
-
-먼저, replacement를 찾는 방법은 다음과 같다.
-- 삭제한 노드의 자식 노드들이 모두 NIL인 경우: **replacement = NIL**
-- 삭제한 노드의 자식 노드들 중 하나만 NIL인 경우: **replacement = non-NIL child**
-- 삭제한 노드의 자식 노드들 모두 NIL이 아닌 경우: **replacement = leftmost non-NIL node in the right subtree**(삭제한 노드의 오른쪽 서브 트리에 있는 노드 중 NIL을 제외하고 가장 왼쪽에 있는 노드)
-
-이렇게 삭제한 노드 자리에 들어갈 replacement를 선택했다면, 트리를 다시 red-black tree가 되도록 reblancing해 주어야 한다. 각 케이스에 대해 어떻게 트리를 수정해야하는지 표로 정리하였다.
-
-|Case|Deleted node|Replacement|Rebalancing|
-|:---:|:---:|:---:|:---:|
-|1|Red|Red or NIL|**Done**|
-|2|Red|Black|Color the replacement Red, and proceed to the appropriate case|
-|3|Black|Red|Color the replacement Black|
-|4|Black|Black or NIL|Proceed to the appropriate case|
-
 
 노드를 삭제하는 과정도 삽입과 마찬가지로 **recoloring**과 **tree rotation**을 통해 이루어진다. 삽입 과정에서는 **Uncle node(U)**의 색깔에 따라서 경우를 나누었다면, 삭제는 **Sibling node(S)**의 색깔에 따라서 경우를 나눈다.
 
 노드를 삭제하는 과정은 상당히 복잡하고 처음에는 이해하기 어렵다. 이해를 돕기 위해 **double black** 표기를 사용하는데, black node가 삭제되고 black child로 대체되는 경우에 해당 child를 double black으로 표시한다. 그렇다면 우리의 목표는 double black을 single black으로 만드는 것이라고 할 수 있다.
 
 노드를 삭제하는 과정은 다음과 같다.
+
 **1. standard BST delete를 수행**
 
 |삭제할 노드의 자식 노드 수|삭제 방법|
@@ -189,25 +170,25 @@ Red-black tree에서 노드를 삭제하는 것은 삽입하는 과정보다도 
 
 **2.** 해당하는 케이스를 수행한다. 이때, 삭제할 노드를 **A**, 삭제된 노드를 대체할 노드를 **X**, 삭제할 노드의 형제 노드를 **S**라고 하자.
 
-**2-1.** **A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
+  **2-1.** **A** 또는 **X**가 **Red**: A를 삭제하고 X를 black으로 칠한다.
 
 이렇게 하면 삭제된 노드를 지나는 경로에 있는 black node의 개수가 일정하므로 조건5를 만족하게 된다. (A와 X는 부모-자식 관계이므로 둘 다 red node일 수는 없다.)
   
-**2-2.** **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
-1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
+  **2-2.** **A**와 **X**가 모두 **Black**: A를 삭제하고 X를 double black으로 칠한다.
+    1) **S**가 black, **S**의 자식 노드 중 적어도 하나가 red인 경우
 S의 red child를 **R**이라고 하자. 그러면 다음과 같이 S와 R이 어느 쪽 자식인지에 따라서 케이스를 나눌 수 있다.
 
-|S의 위치|R의 위치|Case|rotation|
+|Case|S의 위치|R의 위치|rotation|
 |:---:|:---:|:---:|:---:|
-|Left|Left or Both children of s are red|LL|P에 대해 right rotation|
-|Left|Right|LR|S에 대해 left rotation + P에 대해 right rotation|
-|Right|Right or Both children of s are red|RR|P에 대해 left rotation|
-|Right|Left|RL|S에 대해 right rotation + P에 대해 left rotation|
+|LL|Left|Left or Both children of s are red|P에 대해 right rotation|
+|LR|Left|Right|S에 대해 left rotation + P에 대해 right rotation|
+|RR|Right|Right or Both children of s are red|P에 대해 left rotation|
+|RL|Right|Left|S에 대해 right rotation + P에 대해 left rotation|
 
 Rotation을 하고 나면 모두 다음 과정을 수행한다.
 - **R을 black으로 recoloring**
 
-2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
+    2) **S**가 black, **S**의 모든 자식 노드가 black인 경우
 A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 
 |P의 색깔|recoloring|
@@ -215,7 +196,7 @@ A의 부모 노드 P에 대해서 다음과 같이 나눌 수 있다.
 |Red|A와 P를 모두 black으로 칠한다.|
 |Black|A를 black, P를 double black으로 칠하고 new A = P 로 한 뒤 double black이 없어질 때까지 재귀적으로 반복한다.|
 
-3) **S**가 red인 경우
+    3) **S**가 red인 경우
 S가 어느 쪽 자식인지에 따라 케이스를 나눌 수 있다.
 
 |S의 위치|rotation|
@@ -227,7 +208,7 @@ Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
 - **P를 red, S를 black으로 recoloriredng**
 - **P와 A를 black으로 칠해 double black 제거**
 
-**2-3.** **X**가 root: X를 black으로 칠한다.
+  **2-3.** **X**가 root: X를 black으로 칠한다.
   
 
 <br/>
