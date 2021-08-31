@@ -265,7 +265,7 @@ int main(){
 }
 ```
 또한, 생성자로 함수의 일종이므로 **함수 오버로딩(function overloading)**이 가능하다. 전달한 인자의 개수나 자료형에 따라서 생성자의 기능을 다르게 정의할 수 있다. 예를 들어 다음과 같이 **default constructor**를 정의해서 사용할 수 있다.
-```
+```cpp
 #include <iostream>
 using namespace std;
 
@@ -318,7 +318,9 @@ public:
 ```
 다음 세 코드는 멤버 변수들을 초기화하는 동일한 기능을 한다.
 > `Rectangle(int _w, int _h) { w = _w; h = _h; }`
+> 
 > `Rectangle(int _w, int _h) : w(_w) { h = _h; }`
+> 
 > `Rectangle(int _w, int _h) : w(_w), h(_h) {}`
 
 이처럼 멤버 초기화를 이용한 생성자는 상속한 클래스의 변수들을 초기화할 때 사용된다.
@@ -458,8 +460,56 @@ public:
 ```
 
 ## 2-5. Friend
-클래스에서는 `friend` 키워드를 사용해서 **다른 클래스 또는 함수에서 해당 클래스의 private member에 접근할 수 있도록 만들 수 있다.**
+클래스에서는 `friend` 키워드를 사용해서 **다른 클래스 또는 함수에서 해당 클래스의 private / protected member에 접근할 수 있도록 만들 수 있다.**
+```cpp
+#include <iostream>
+#include <string>
+using namespace std;
 
+class A {
+private:
+    int a;
+public:
+    A(int _a): a(_a) {}
+    friend class B;
+    friend void printInfo(A&);
+};
+
+class B {
+public:
+    void printInfo(A& _A) {
+        cout << "a = " << _A.a << endl; // 다른 클래스에서 A 클래스의 private 멤버 변수에 접근이 가능하다.
+    }
+};
+
+void printInfo(A& _A) {
+    cout << "a = " << _A.a << endl; // 클래스 외부의 함수에서 클래스의 private 멤버 변수에 접근이 가능하다.
+}
+
+int main()
+{
+    A _A(10);
+    B _B;
+    _B.printInfo(_A);
+    
+    printInfo(_A);
+}
+```
+```
+a = 10
+a = 10
+```
+
+friend 클래스와 함수는 다음과 같은 특징을 가지고 있다.
+1. private / protected data를 가진 클래스에서 `friend`를 너무 많이 사용하게 되면 객체지향 프로그래밍(OOP)의 주요 목적 중 하나인 **캡슐화(encapsulation)**가 의미를 잃어버리게 된다.
+
+  > 캡슐화는 객체 지향 프로그래밍에서 다음과 같은 의미를 갖는다.
+  > 
+  > 1) 객체의 속성(data fields)과 행위(methods)를 하나로 묶는다.
+  > 2) 실제 구현 내용 일부를 외부에 감추어 은닉한다.
+
+2. `friend`로 선언한 관계는 쌍방향이 아니다. 즉, 클래스 A가 B의 friend라고해서 B가 A의 friend가 되는 것은 아니다.
+3. `friend`는 상속되지 않는다.
 
 
 <br/>
@@ -470,9 +520,9 @@ public:
 [4] [Stack Overflow, 'Structure Padding'](https://stackoverflow.com/questions/29813803/structure-padding)  
 [5] [Geeksforgeeks, 'Structure Member Alignment, Padding and Data Packing'](https://www.geeksforgeeks.org/structure-member-alignment-padding-and-data-packing/)  
 [6] [cplusplus, 'Classes'](http://www.cplusplus.com/doc/tutorial/classes/)  
-[7] [Geeksforgeeks, 'Structue vs class in C++](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)  
-
-
+[7] [Geeksforgeeks, 'Structue vs class in C++'](https://www.geeksforgeeks.org/structure-vs-class-in-cpp/)  
+[8] [Geeksforgeeks, 'Friend class and function in C++'](https://www.geeksforgeeks.org/friend-class-function-cpp/)  
+[9] [WIKIPEDIA, 'Encapsulation'](https://en.wikipedia.org/wiki/Encapsulation)  
 
 
 
