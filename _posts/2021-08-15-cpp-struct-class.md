@@ -457,6 +457,10 @@ public:
 };
 ```
 
+## 2-5. Friend
+클래스에서는 `friend` 키워드를 사용해서 **다른 클래스 또는 함수에서 해당 클래스의 private member에 접근할 수 있도록 만들 수 있다.**
+
+
 
 <br/>
 # References
