@@ -21,17 +21,52 @@ Counting sort는 작은 범위의 정수들을 $O(n)$의 시간복잡도로 정�
 
 # 2. C++로 counting sort 구현하기
 Counting sort는 다음과 같이 구현한다.
-1. 입력으로 주어질 수 있는 범위만큼의 배열을 만들고 각 입력이 들어올 때마다 count.
-2. 위 배열을 앞에서부터 누적합을 한 배열 생성
-3. 기존 배열을 뒤에서부터 순회하면서 각 숫자를 알맞은 위치에 저장(이때 2번에서 만든 배열의 값이 알맞은 위치 
+1. 입력으로 주어질 수 있는 범위만큼의 배열(count)을 만들고 각 입력(k)이 들어올 때마다 `count[k]++`
+2. 위 배열을 앞에서부터 누적합을 한 배열(countSum) 생성
+3. 기존 배열을 순회하면서 각 숫자(k)를 알맞은 위치(--countSum[k])에 저장
+
+각 과정이 배열을 한 번 순회하므로 시간복잡도는 $O(n + m)$가 된다. 이때 **n**은 배열의 길이, **m**은 배열의 최댓값이다.
 
 ```cpp
 #include <iostream>
-#include <
+#include <cstring>
+using namespace std;
 
+int maxNum = 100, maxLen = 10000;
+
+void countingSort (int *arr, int n) {
+    int count[maxNum+1];
+    memset(count, 0, sizeof(count));
+    for (int i = 0; i < n; i++)
+        count[*(arr+i)]++;
+    
+    int countSum[maxNum+1];
+    countSum[0] = count[0];
+    for (int i = 1; i < maxNum+1; i++)
+        countSum[i] = count[i] + countSum[i-1];
+    
+    int sorted[n];
+    for (int i = 0; i < n; i++)
+        sorted[--countSum[*(arr+i)]] = *(arr+i);
+    
+    for (int i = 0; i < n; i++)
+        *(arr+i) = sorted[i];
+}
+
+int main()
+{
+    int n, arr[maxLen];
+    cin >> n;
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+    
+    countingSort(arr, n);
+    for (int i = 0; i < n; i++)
+        cout << arr[i] << " ";
+}
 ```
 
 
+<
 # References
 [1] [Geeksforgeeks, 'Counting sort'](https://www.geeksforgeeks.org/counting-sort/)  
-[2] 
