@@ -228,6 +228,9 @@ Rotation을 하고 나면 두 케이스 모두 다음 과정을 수행한다.
 
 ---
 
+이처럼 red-black tree는 그 과정이 매우 복잡하다는 단점이 있지만, 원소의 삽입과 삭제를 모두 tree rotation과 recoloring으로 $O(\log n)$ 내에 할 수 있다는 장점을 가진 자료구조이다.
+
+
 <br/>
 # References
 [1] [WIKIPEDIA, 'Red-black tree'](https://en.m.wikipedia.org/wiki/Red%E2%80%93black_tree)  
