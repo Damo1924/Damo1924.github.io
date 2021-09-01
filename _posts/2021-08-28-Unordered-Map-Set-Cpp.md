@@ -50,7 +50,7 @@ Hashing은 hash function과 hash table로 이루어져있다.
 **2. Hash Table**: key에 대응되는 value가 저장된 곳의 포인터를 저장하는 배열을 의미한다.
 
 
-
+<br/>
 # 2. unordered_set, unordered_map
 ## 2-1. unordered_set, unordered_map 선언하기
 각각 `<unordered_set>`과 `<unordered_map>` 헤더 파일에 정의되어 있으며, 다음과 같이 선언할 수 있다.
@@ -58,10 +58,11 @@ Hashing은 hash function과 hash table로 이루어져있다.
 #include <unordered_set>
 #include <unordered_map>
 #include <string>
+using namespace std;
 int main()
 {
-    std::unordered_set<int> hashSet;
-    std::unordered_map<int, std::string> hashMap;
+    unordered_set<int> hashSet;
+    unordered_map<int, string> hashMap;
 }
 ```
 
@@ -74,7 +75,6 @@ unordered_set<string> hashSet3 (hashSet2); // 다른 unordered_set 복사
 unordered_set<string> hashSet4 (hashSet3.begin(), hashSet3.end()); // 반복자를 이용해서 초기화(range)
     
 unordered_map<int, string> hashMap ( { {14, "Percy"}, {16, "Will"}, {13, "Harry"} } ); // unordered_map도 동일하게 초기화가 가능하다.
-}
 ```
 
 operator `=`를 이용해서 초기화를 할 수도 있다.
@@ -83,12 +83,56 @@ hashSet1 = {"red", "green", "blue"};
 hashSet2 = hashSet1;
 
 hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
-}
 ```
 
-## 2-3. 
+## 2-3. Iterators: begin(), end()
+**1) begin()**: 자료구조의 첫 번째 원소를 가리키는 반복자를 반환
+**2) end()**: 자료구조의 마지막 원소의 다음 원소를 가리키는 반복자를 반환
+```cpp
+for (unordered_map<int, string>::iterator it = hashMap.begin(); it != hashMap.end(); it++)
+    cout << "Number: " << it->first << ", Name: " << it->second << endl;
+```
+```
+Number: 13, Name: Harry
+Number: 16, Name: Will
+Number: 14, Name: Percy
+```
+기존 Map이나 Set의 경우, 원소들이 정렬되어 있었기 때문에 첫 번째 원소와 마지막 원소가 정해져 있었지만, 이 경우에는 어느 원소가 첫 번째로 올지 정해져 있지 않다. 그러므로 unordered_map이나 unordered_set에서 `begin()`과 `end()`는 자료구조 전체를 순회할 때만 의미를 가진다. 
+
+## 2-3. Element lookup: find(), count(), eqaul_range()
+**1) find(k)**: k를 key로 갖는 원소가 존재하면 해당 원소를 가리키는 반복자를 반환, 없으면 `end()`와 동일한 결과를 반환
+**2) count(k)**: k를 key로 갖는 원소의 개수를 반환
+**3) equal_range(k)**: k를 key로 갖는 원소의 범위를 `pair<iterator, iterator>` 형태로 반환
+모두 set과 map에도 존재하는 멤버함수로, unordered_set과 unordered_map은 중복 원소를 허용하지 않기 때문에 `count()`가 0 또는 1을 반환한다.
+
+```cpp
+cout << hashMap.find(14)->second << endl;
+cout << hashMap.count(100) << endl;
+```
+```
+Percy
+0
+```
+
+## 2-4. Modifiers: insert(), erase(), clear()
+**1) insert()**: 새로운 원소를 삽입, 만약 동일한 key를 가진 원소가 존재하면 삽입하지 않는다.
+**2) erase()**: 반복자 또는 key를 전달받아 해당 원소를 삭제한다.
+**3) clear()**: 모든 원소들을 삭제
+```cpp
+hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
+hashMap.insert( {15, "Annabeth"} );
+
+hashMap.erase( hashMap.begin() ); // 반복자로 원소 삭제 (삭제한 원소의 다음 원소를 가리키는 반복자를 반환)
+hashMap.erase( 14 ); // key로 원소 삭제 (삭제된 원소의 개수 반환)
+hashMap.erase( hashMap.begin(), hashMap.end() ); // 반복자로 범위에 해당하는 원소들 삭제, hashMap.clear()와 동일
+```
+
+`hashMap.erase(k)`는 k를 key로 가지는 원소를 삭제하는데, 만약 해당 원소가 없다면 0을 반환하므로 조건문에서 활용할 수 있다.
+
+## 2-5. Buckets: bucket_count(), bucket_size(), bucket()
 
 
+<br/>
 # References
 [1] [Geeksforgeeks, 'Hashing|Set1(Introduction)'](https://www.geeksforgeeks.org/hashing-set-1-introduction/)  
 [2] [WIKIPEDIA, 'Hash function'](https://en.m.wikipedia.org/wiki/Hash_function)  
