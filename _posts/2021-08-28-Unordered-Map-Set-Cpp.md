@@ -47,8 +47,11 @@ Hashing은 hash function과 hash table로 이루어져있다.
 - 계산이 복잡하지 않아야한다.(efficiently computable)
 - Key가 균일하게 분포하도록 해야한다.(should uniformly distribute the keys)
 
+또, hash function을 통해 얻을 값을 **해시값(Hash value)**라고 부른다.
+
 **2. Hash Table**: key에 대응되는 value가 저장된 곳의 포인터를 저장하는 배열을 의미한다.
 
+Bucket: 
 
 <br/>
 # 2. unordered_set, unordered_map
@@ -86,7 +89,7 @@ hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
 ```
 
 ## 2-3. Iterators: begin(), end()
-**1) begin()**: 자료구조의 첫 번째 원소를 가리키는 반복자를 반환
+**1) begin()**: 자료구조의 첫 번째 원소를 가리키는 반복자를 반환  
 **2) end()**: 자료구조의 마지막 원소의 다음 원소를 가리키는 반복자를 반환
 ```cpp
 for (unordered_map<int, string>::iterator it = hashMap.begin(); it != hashMap.end(); it++)
@@ -100,9 +103,10 @@ Number: 14, Name: Percy
 기존 Map이나 Set의 경우, 원소들이 정렬되어 있었기 때문에 첫 번째 원소와 마지막 원소가 정해져 있었지만, 이 경우에는 어느 원소가 첫 번째로 올지 정해져 있지 않다. 그러므로 unordered_map이나 unordered_set에서 `begin()`과 `end()`는 자료구조 전체를 순회할 때만 의미를 가진다. 
 
 ## 2-3. Element lookup: find(), count(), eqaul_range()
-**1) find(k)**: k를 key로 갖는 원소가 존재하면 해당 원소를 가리키는 반복자를 반환, 없으면 `end()`와 동일한 결과를 반환
-**2) count(k)**: k를 key로 갖는 원소의 개수를 반환
+**1) find(k)**: k를 key로 갖는 원소가 존재하면 해당 원소를 가리키는 반복자를 반환, 없으면 `end()`와 동일한 결과를 반환  
+**2) count(k)**: k를 key로 갖는 원소의 개수를 반환  
 **3) equal_range(k)**: k를 key로 갖는 원소의 범위를 `pair<iterator, iterator>` 형태로 반환
+
 모두 set과 map에도 존재하는 멤버함수로, unordered_set과 unordered_map은 중복 원소를 허용하지 않기 때문에 `count()`가 0 또는 1을 반환한다.
 
 ```cpp
@@ -115,8 +119,8 @@ Percy
 ```
 
 ## 2-4. Modifiers: insert(), erase(), clear()
-**1) insert()**: 새로운 원소를 삽입, 만약 동일한 key를 가진 원소가 존재하면 삽입하지 않는다.
-**2) erase()**: 반복자 또는 key를 전달받아 해당 원소를 삭제한다.
+**1) insert()**: 새로운 원소를 삽입, 만약 동일한 key를 가진 원소가 존재하면 삽입하지 않는다.  
+**2) erase()**: 반복자 또는 key를 전달받아 해당 원소를 삭제한다.  
 **3) clear()**: 모든 원소들을 삭제
 ```cpp
 hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
@@ -127,9 +131,17 @@ hashMap.erase( 14 ); // key로 원소 삭제 (삭제된 원소의 개수 반환)
 hashMap.erase( hashMap.begin(), hashMap.end() ); // 반복자로 범위에 해당하는 원소들 삭제, hashMap.clear()와 동일
 ```
 
-`hashMap.erase(k)`는 k를 key로 가지는 원소를 삭제하는데, 만약 해당 원소가 없다면 0을 반환하므로 조건문에서 활용할 수 있다.
+`hashMap.erase(k)`는 k를 key로 가지는 원소를 삭제하는데, 만약 해당 원소가 없다면 0을 반환하므로 조건문에서 활용할 수 있다는 점을 기억해두자.
 
 ## 2-5. Buckets: bucket_count(), bucket_size(), bucket()
+> Bucket is a slot in the container's internal hash table to which elements are assigned based on the hash value of their key.
+
+**1) bucket_count()**: 컨테이너에 있는 bucket의 개수를 반환  
+**2) bucket_size(n)**: bucket n에 있는 원소의 개수를 반환  
+**3) bucket(k)**: k를 key로 하는 원소가 들어 있는 bucket의 번호를 반환(Bucket은 배열처럼 0부터 번호를 붙인다.)
+```cpp
+hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"}, {15, "Annabeth"} }
+```
 
 
 <br/>
