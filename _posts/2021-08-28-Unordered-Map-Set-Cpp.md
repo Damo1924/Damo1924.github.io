@@ -37,7 +37,7 @@ Python의 set과 dictionary과 같다고 볼 수 있다. 이들은 **Hashing**�
 
 마지막 4번은 굉장히 극단적인 방법이라고 할 수 있는데, 각 작업을 $O(1)$로 수행할 수 있다는 점에서 매우 뛰어나지만 학번의 자릿수가 많아질수록 필요한 배열의 크기가 매우 커진다는 문제가 있다. 학번이 $n$ 자리이면 table이 $O(m \times 10^{n})$의 공간을 필요로 하게 된다. 이때 $m$은 학생의 정보를 가리키는 포인터의 크기이다. 이러한 이유로 direct access table을 항상 사용할 수는 없기 때문에 등장한 것이 바로 **Hashing**이다.
 
-Hashing에는 hash function과 hash table로 이루어져있다.
+Hashing은 hash function과 hash table로 이루어져있다.
 > *Hashing is an improvement over Direct Access Table. The idea is to use **hash function** that converts a given key to a smaller number and uses the small number as index in a table called **hash table**.*
 
 **1. Hash function**: Hash table의 인덱스로 사용하기에 너무 큰 값이나 인덱스로 사용할 수 없는 문자열 등을 작은 정수로 바꾸어줌으로써 인덱스로 사용할 수 있도록 만들어주는 함수이다.
@@ -53,6 +53,43 @@ Hashing에는 hash function과 hash table로 이루어져있다.
 
 # 2. unordered_set, unordered_map
 ## 2-1. unordered_set, unordered_map 선언하기
-각각 `<unordered_set>`
+각각 `<unordered_set>`과 `<unordered_map>` 헤더 파일에 정의되어 있으며, 다음과 같이 선언할 수 있다.
+```cpp
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
+int main()
+{
+    std::unordered_set<int> hashSet;
+    std::unordered_map<int, std::string> hashMap;
+}
+```
+
+## 2-2. (constructor), operator =
+생성자를 이용하면 선언과 동시에 초기화가 가능하다.
+```cpp
+unordered_set<string> hashSet1; // 비어있는 unordered_set 생성
+unordered_set<string> hashSet2 ( {"red", "green", "blue"} ); // 초기화 리스트 이용해서 초기화
+unordered_set<string> hashSet3 (hashSet2); // 다른 unordered_set 복사
+unordered_set<string> hashSet4 (hashSet3.begin(), hashSet3.end()); // 반복자를 이용해서 초기화(range)
+    
+unordered_map<int, string> hashMap ( { {14, "Percy"}, {16, "Will"}, {13, "Harry"} } ); // unordered_map도 동일하게 초기화가 가능하다.
+}
+```
+
+operator `=`를 이용해서 초기화를 할 수도 있다.
+```cpp
+hashSet1 = {"red", "green", "blue"};
+hashSet2 = hashSet1;
+
+hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
+}
+```
+
+## 2-3. 
 
 
+# References
+[1] [Geeksforgeeks, 'Hashing|Set1(Introduction)'](https://www.geeksforgeeks.org/hashing-set-1-introduction/)  
+[2] [WIKIPEDIA, 'Hash function'](https://en.m.wikipedia.org/wiki/Hash_function)  
+[3] [cplusplus, 'unordered_set'](https://www.cplusplus.com/reference/unordered_set/unordered_set/)  
