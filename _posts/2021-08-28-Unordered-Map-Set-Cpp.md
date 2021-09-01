@@ -107,8 +107,6 @@ Number: 14, Name: Percy
 **2) count(k)**: k를 key로 갖는 원소의 개수를 반환  
 **3) equal_range(k)**: k를 key로 갖는 원소의 범위를 `pair<iterator, iterator>` 형태로 반환
 
-모두 set과 map에도 존재하는 멤버함수로, unordered_set과 unordered_map은 중복 원소를 허용하지 않기 때문에 `count()`가 0 또는 1을 반환한다.
-
 ```cpp
 cout << hashMap.find(14)->second << endl;
 cout << hashMap.count(100) << endl;
@@ -117,6 +115,8 @@ cout << hashMap.count(100) << endl;
 Percy
 0
 ```
+
+모두 set과 map에도 존재하는 멤버함수로, unordered_set과 unordered_map은 중복 원소를 허용하지 않기 때문에 `count()`가 0 또는 1을 반환한다.
 
 ## 2-4. Modifiers: insert(), erase(), clear()
 **1) insert()**: 새로운 원소를 삽입, 만약 동일한 key를 가진 원소가 존재하면 삽입하지 않는다.  
@@ -170,9 +170,9 @@ for (unordered_map<int, string>::iterator it = hashMap.begin(); it != hashMap.en
 
 ## 2-7. Hash Policy: load_factor(), rehash(), reserve()
 **1) load_factor()**: 컨테이너의 load factor를 float 형태로 반환한다.
-> **load factor** is the ratio between the number of elements in the container and the number of buckets.
+> ***load factor** is the ratio between the number of elements in the container and the number of buckets.*
 > 
-> $load_factor = size \div bucket_count$
+> $load factor = size \div bucket count$
 
 **2) rehash(n)**: 컨테이너의 최대 bucket의 개수를 n 또는 그 이상으로 설정한다.  
 **3) reserve()**: 컨테이너의 bucket의 개수를 최소 n개의 원소들을 저장할 수 있는 적절한 개수로 설정
@@ -190,8 +190,11 @@ cout << "size = " << hashSet.size() << endl;
 cout << "bucket_count = " << hashSet.bucket_count() << endl;
 cout << "load_factor = " << hashSet.load_factor() << endl;
 ```
-input: 1 2 3 4 5 6 7 8 9 1  
-output:
+**input:**
+```
+1 2 3 4 5 6 7 8 9 1
+```
+**output:**
 ```
 size = 9
 bucket_count = 11
