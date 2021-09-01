@@ -133,7 +133,19 @@ hashMap.erase( hashMap.begin(), hashMap.end() ); // 반복자로 범위에 해�
 
 `hashMap.erase(k)`는 k를 key로 가지는 원소를 삭제하는데, 만약 해당 원소가 없다면 0을 반환하므로 조건문에서 활용할 수 있다는 점을 기억해두자.
 
-## 2-5. Buckets: bucket_count(), bucket_size(), bucket()
+## 2-5. Capacity: empty(), size()
+**1) empty()**: 컨테이너가 비어있으면 true, 아니면 false를 반환
+**2) size()**: 컨테이너에 있는 원소의 개수를 반환
+```cpp
+hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
+if (!hashMap.empty())
+    cout << hashMap.size() << endl;
+```
+```
+3
+```
+
+## 2-6. Buckets: bucket_count(), bucket_size(), bucket()
 > ***Bucket** is a slot in the container's internal hash table to which elements are assigned based on the hash value of their key.*
 
 **1) bucket_count()**: 컨테이너에 있는 bucket의 개수를 반환  
@@ -156,24 +168,64 @@ for (unordered_map<int, string>::iterator it = hashMap.begin(); it != hashMap.en
 (14, Percy) -> Bucket #4
 ```
 
-## 2-6. Hash Policy: load_factor(), rehash(), reserve()
+## 2-7. Hash Policy: load_factor(), rehash(), reserve()
 **1) load_factor()**: 컨테이너의 load factor를 float 형태로 반환한다.
 > **load factor** is the ratio between the number of elements in the container and the number of buckets.
 > 
 > $load_factor = size \div bucket_count$
 
-**2) rehash(n)**: 컨테이너의 최대 bucket의 개수를 n 또는 그 이상으로 설정한다. 
+**2) rehash(n)**: 컨테이너의 최대 bucket의 개수를 n 또는 그 이상으로 설정한다.  
 **3) reserve()**: 컨테이너의 bucket의 개수를 최소 n개의 원소들을 저장할 수 있는 적절한 개수로 설정
+```cpp
+unordered_set<int> hashSet;
+hashSet.reserve(10); // 10개의 입력을 받아 저장할 것이므로 미리 10개의 원소를 저장할 수 있도록 설정
 
+for(int i = 0; i < 10; i++) {
+    int temp;
+    cin >> temp;
+    hashSet.insert(temp);
+}
 
-
+cout << "size = " << hashSet.size() << endl;
+cout << "bucket_count = " << hashSet.bucket_count() << endl;
+cout << "load_factor = " << hashSet.load_factor() << endl;
+```
+input: 1 2 3 4 5 6 7 8 9 1  
+output:
+```
+size = 9
+bucket_count = 11
+load_factor = 0.818182
+```
 컨테이너에 원소를 계속 추가해서 `load_factor`가 컨테이너의 `max_load_factor`를 넘어서려고 하면 자동적으로 rehash를 해서 최대 bucket의 개수를 늘린다. 이 과정에서 모든 원소들이 새로운 bucket에 재할당되는데, 이는 $O(n)$의 시간복잡도를 가지는 작업이므로 만약 컨테이너에 삽입될 원소의 최대 개수를 알고 있다면 `rehash()` 또는 `reserve()`를 통해 불필요한 rehash를 줄일 수 있다.
 
+## 2-8. Observers: hash_function(), key_eq()
+**1) hash function()**: hash function을 반환(**::hasher**)
+```cpp
+hashMap = { {"Percy", "Jackson"}, {"Will", "Treaty"}, {"Harry", "Potter"}, {"Annabeth", "Chase"} };
+unordered_map<string, string>::hasher fn = hashMap.hash_function();
+cout << "fn("Percy") = " << fn("Percy") << endl;
+cout << "fn("Will") = " << fn("Will") << endl;
+```
+```
+fn("Percy") = 14185119579773389234
+fn("Will") = 10725321351515508676
+```
+이처럼 hash function은 문자열을 정수로 변환해서 저장한다.
 
-## 2-7. Observers: hash_function(), key_eq()
-**1) hash function()**: 
-**2) key_eq()**: 
+**2) key_eq()**: key equality를 비교하는 객체를 반환
+```cpp
+unordered_set<string> hashSet;
 
+bool case_insensitive = hashSet.key_eq()("checking", "CHECKING");
+
+cout << "hashSet.key_eq() is ";
+cout << (case_insensitive ? "case insensitive" : "case sensitive") << endl;
+```
+```
+hashSet.key_eq() is case sensitive
+```
+문자열 key를 받았을 때 대문자와 소문자를 구분하는지 확인해본 결과, `case_insensitive`가 false를 반환하였으므로 대소문자를 구분한다는 사실을 알 수 있다.
 
 
 <br/>
