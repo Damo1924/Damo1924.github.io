@@ -9,6 +9,8 @@ use_math: true
 
 ---
 
+
+<br/>
 C++의 **unordered_set**과 **unordered_map**은 원소들이 정렬된 상태로 저장되어있지 않는 set과 map이다.
 
 > *containers that store unique elements in no particular order.*
@@ -35,16 +37,22 @@ Python의 set과 dictionary과 같다고 볼 수 있다. 이들은 **Hashing**�
 
 마지막 4번은 굉장히 극단적인 방법이라고 할 수 있는데, 각 작업을 $O(1)$로 수행할 수 있다는 점에서 매우 뛰어나지만 학번의 자릿수가 많아질수록 필요한 배열의 크기가 매우 커진다는 문제가 있다. 학번이 $n$ 자리이면 table이 $O(m \times 10^{n})$의 공간을 필요로 하게 된다. 이때 $m$은 학생의 정보를 가리키는 포인터의 크기이다. 이러한 이유로 direct access table을 항상 사용할 수는 없기 때문에 등장한 것이 바로 **Hashing**이다.
 
-Hashing에는 hash function과 hash table
+Hashing에는 hash function과 hash table로 이루어져있다.
 > *Hashing is an improvement over Direct Access Table. The idea is to use **hash function** that converts a given key to a smaller number and uses the small number as index in a table called **hash table**.*
 
-**Hash function**: Hash table의 인덱스로 사용하기에 너무 큰 값이나 인덱스로 사용할 수 없는 문자열 등을 작은 정수로 바꾸어줌으로써 인덱스로 사용할 수 있도록 만들어주는 함수이다.
+**1. Hash function**: Hash table의 인덱스로 사용하기에 너무 큰 값이나 인덱스로 사용할 수 없는 문자열 등을 작은 정수로 바꾸어줌으로써 인덱스로 사용할 수 있도록 만들어주는 함수이다.
 
 좋은 hash function은 다음과 같은 조건을 만족해야한다.
 
 - 계산이 복잡하지 않아야한다.(efficiently computable)
 - Key가 균일하게 분포하도록 해야한다.(should uniformly distribute the keys)
 
-**Hash Table**: key에 대응되는 value가 저장된 곳의 포인터를 저장하는 배열을 의미한다.
+**2. Hash Table**: key에 대응되는 value가 저장된 곳의 포인터를 저장하는 배열을 의미한다.
+
+
+
+# 2. unordered_set, unordered_map
+## 2-1. unordered_set, unordered_map 선언하기
+각각 `<unordered_set>`
 
 
