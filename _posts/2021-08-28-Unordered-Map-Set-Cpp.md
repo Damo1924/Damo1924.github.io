@@ -76,31 +76,21 @@ Chaining을 이용했을 때 각 작업의 시간복잡도를 구해보자.
 검색은 조금 다르다. 만약 모든 원소들이 균일하게 분포해서 각 bucket에 k개씩 저장되어 있다고 가정하면,
 1. Hash value를 구하기 - $O(1)$
 2. 연결 리스트에서 원소를 검색 - $O(k)$
+
 이므로 원소를 검색하는데 $O(1+k)$가 걸린다.
 
 하지만, 최악의 경우에는 하나의 bucket에 모든 원소가 저장되어 있으므로 연결 리스트에서 원소를 검색하는데 $O(n)$이 필요하다. 즉, worst-case의 시간복잡도는 $O(n)$이 된다.
 
 삭제는 결국 해당 key를 가지는 원소를 검색한 다음 연결 리스트에서 삭제가 이루어지는 것이기 때문에 검색과 마찬가지로 average-case는 $O(1+k)$, worst-case는 $O(n)$이다.
 
-**Chaining의 장점**
-
-**1)** 구현이 간단하다.  
-**2)** 아무리 같은 hash value를 가지는 원소가 계속 삽입되어도 노드를 연결하면 되기 때문에 원소 개수의 제한이 없다.  
-**3)** Open addressing에 비해 hash function이나 load factors에 영향을 덜 받는다.  
-
-**Chaining의 단점**
-
-**1)** 메모리 낭비  
-**2)** 최악의 경우 검색(find), 삭제(erase)에 $O(n)$이 걸린다.
-
 ### 1-3-2. Open addressing (Closed hashing)
-오픈 주소법(open addressing)은 hash collision이 발생했을 때 해당 원소에 대해 **rehashing**을 수행하여 빈 bucket을 찾아 저장하는 방법이다. 한 bucket 당 하나의 원소가 저장되므로 hash table의 크기가 사용되는 key의 개수보다 더 커야한다.
+오픈 주소법(open addressing)은 hash collision이 발생했을 때 해당 원소를 저장할 빈 bucket을 찾아 저장하는 방법이다. 이 방법은 한 bucket 당 하나의 원소가 저장되므로 hash table의 크기가 사용되는 key의 개수보다 더 커야한다.
 
-Rehashing를 할 때 사용하는 함수는 자유롭게 정할 수 있는데, 예를 들어 key를 13으로 나눈 나머지를 hash value로 사용하는 자료구조가 있다고 하자. 충돌이 발생하면 key에 1을 더해(**Linear Probing**) 13으로 나눈 나머지를 hash value로 rehash하도록 정하였다. 이 컨테이너에 key가 1인 원소가 들어있다면, key가 14인 원소를 삽입할려면 hash value가 둘 다 1로 같기 때문에 hash collision이 발생한다. 미리 정해둔 rehash function을 이용해서 hash value를 구하면 (14 + 1) % 13 = 2이므로 해당하는 bucket에 저장하면 collision이 해결됨을 알 수 있다.
+빈 bucket을 찾을 때 사용하는 함수는 자유롭게 정할 수 있는데, 예를 들어 key를 13으로 나눈 나머지를 hash value로 사용하는 자료구조가 있다고 하자. 충돌이 발생하면 key에 1을 더해(**Linear Probing**) 13으로 나눈 나머지를 hash value로 갖도록 정하였다. 이 컨테이너에 key가 1인 원소가 들어있는 상태에서 key가 14인 원소를 삽입할려면 hash value가 둘 다 1로 같기 때문에 hash collision이 발생한다. 미리 정해둔 함수을 이용해서 새로운 hash value를 구하면 `(14 + 1) % 13 = 2`이므로 해당하는 bucket에 저장하면 collision이 해결됨을 알 수 있다.
 
 이처럼 비어있는 bucket을 찾을 때까지 계속 rehash해서 원소를 삽입할 수 있다. 검색도 비슷한 원리로 원하는 값을 찾거나 빈 슬롯을 만날 때까지 계속해서 rehash를 하면 된다.
 
-특이한 부분은 바로 원소를 삭제하는 방법인데, 단순히 원소를 삭제하게 되면 삭제한 원소와 겹쳐 rehash를 한 원소들을 검색할 수 없게 된다. 위의 예시에서 key가 1, 14, 27인 원소를 순서대로 삽입하면 세 원소는 hash value가 각각 1, 2, 3가 된다. 이 상태에서 key가 14인 원소를 단순히 삭제해버리면 key가 27인 원소를 검색할 수 없게 된다. 그래서 오픈 주소법에서 원소를 삭제할 때는 반드시 **deleted**되었다는 표시를 해야한다. 이 **deleted** 표시가 된 슬롯에는 원소의 삽입은 가능하지만, 검색할 때는 해당 슬롯에서 멈추지 않고 검색을 이어나간다.
+특이한 부분은 바로 원소를 삭제하는 방법인데, **단순히 원소를 삭제하게 되면 삭제한 원소와 겹쳐 일부 원소들을 검색할 수 없게 된다.** 앞선 예시에서 key가 1, 14, 27인 원소를 순서대로 삽입하면 세 원소는 hash value가 각각 1, 2, 3가 된다. 이 상태에서 key가 14인 원소를 단순히 삭제해버리면 key가 27인 원소를 검색할 수 없게 된다. 그래서 오픈 주소법에서 원소를 삭제할 때는 반드시 **deleted**되었다는 표시를 해야한다. 이 **deleted** 표시가 된 슬롯에는 원소의 삽입은 가능하지만, 검색할 때는 해당 슬롯에서 멈추지 않고 검색을 이어나간다.
 
 ### 1-3-3. Chaining vs. Open addressing
 다음은 hash collision을 해결하는 두 가지 방법의 차이점을 정리한 표이다.
@@ -113,10 +103,13 @@ Rehashing를 할 때 사용하는 함수는 자유롭게 정할 수 있는데, �
 |4. Cache performance|연결 리스트에 저장되어있어 캐시 성능이 떨어진다.|Hash table에 직접 저장되어있어 캐시 성능이 뛰어나다.|
 |5. Wastage of Space|메모리 낭비가 심하다.|메모리 낭비가 적다.|
 
+<br/>
 다음은 두 방법의 시간복잡도를 정리한 표이다.
 - **m** = Number of slots in the hash table
 - **n** = Number of keys to be inserted in the hash table
 - **a** = Load factor = n / m ($a < 1$ when using open addressing)
+
+라고 할 때, 시간복잡도는 다음과 같다.
 
 |Task|Time complexity of Chaining|Time complexity of Open Addressing|
 |:---:|:---:|:---:|
@@ -305,6 +298,7 @@ hashSet.key_eq() is case sensitive
 
 <br/>
 # References
-[1] [Geeksforgeeks, 'Hashing|Set1(Introduction)'](https://www.geeksforgeeks.org/hashing-set-1-introduction/)  
+[1] [Geeksforgeeks, 'Hashing data structure'](https://www.geeksforgeeks.org/hashing-data-structure/)  
 [2] [WIKIPEDIA, 'Hash function'](https://en.m.wikipedia.org/wiki/Hash_function)  
 [3] [cplusplus, 'unordered_set'](https://www.cplusplus.com/reference/unordered_set/unordered_set/)  
+[4] [cplusplus, 'unordered_map'](https://www.cplusplus.com/reference/unordered_map/unordered_map/)  
