@@ -200,7 +200,7 @@ hashMap.erase( hashMap.begin(), hashMap.end() ); // 반복자로 범위에 해�
 `hashMap.erase(k)`는 k를 key로 가지는 원소를 삭제하는데, 만약 해당 원소가 없다면 0을 반환하므로 조건문에서 활용할 수 있다는 점을 기억해두자.
 
 ## 2-5. Capacity: empty(), size()
-**1) empty()**: 컨테이너가 비어있으면 true, 아니면 false를 반환
+**1) empty()**: 컨테이너가 비어있으면 true, 아니면 false를 반환  
 **2) size()**: 컨테이너에 있는 원소의 개수를 반환
 ```cpp
 hashMap = { {14, "Percy"}, {16, "Will"}, {13, "Harry"} };
