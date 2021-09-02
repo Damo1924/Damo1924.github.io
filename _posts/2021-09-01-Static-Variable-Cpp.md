@@ -29,6 +29,8 @@ use_math: true
 
 + Heap과 Stack 영역은 메모리 상의 같은 공간을 공유하는데, Heap은 메모리 위쪽 주소부터 할당되고 Stack은 메모리 아래쪽부터 할당된다. 그러다보면 각 영역이 상대 영역을 침범하는 일이 발생할 수 있는데, 이를 각각 **Heap Overflow**, **Stack overflow**라고 부른다.
 
+
+<br/>
 # 2. 지역(Local) 변수 & 전역(Global) 변수
 ## 2-1. 지역 변수(Local variable)
 지역 변수란 **블록** 내에서 선언된 변수를 의미하며, 다음과 같은 특징을 갖는다. 이때 블록(block)이란 중괄호 영역을 뜻한다.
@@ -45,12 +47,49 @@ use_math: true
 - 데이터 영역에 저장되기 때문에 **프로그램이 종료되어야 메모리에서 소멸**된다.
 - 전역 변수는 직접 초기화하지 않아도 **0으로 자동적으로 초기화**된다.
 
+프로그램이 여러 개의 파일로 구성된 경우에는 `extern` 키워드를 사용해서 다른 파일에 정의된 전역 변수를 현재 위치에서도 사용할 수 있다.
+
+아래 코드를 통해 지역 변수와 전역 변수의 차이점에 대해서 간단히 확인해 보았다.
+```cpp
+#include <iostream>
+using namespace std;
+
+int g_var;
+
+void func()
+{
+    int var = 10;
+    g_var = 10;
+}
+
+int main()
+{
+    int var;
+    
+    cout << g_var << endl;
+    cout << var << endl;
+    
+    func();
+    cout << g_var << endl;
+    cout << var << endl;
+}
+```
+```
+0 // 전역 변수는 자동으로 0으로 초기화
+48 // 지역 변수는 쓰레기값으로 초기화
+10 // 전역 변수는 어느 곳에서나 접근 가능
+48 // 지역 변수는 해당 블록 내에서만 유효
+```
 
 
+<br/>
 # 3. 정적(Static) 변수
-`static`은 C 언어와 C++ 등의 프로그래밍 언어의 키워드로서, 변수나 클래스의 멤버를 static으로 선언하여 사용할 수 있다. static
+`static`은 C 언어와 C++ 등의 프로그래밍 언어의 키워드로서, 변수나 클래스의 멤버를 static으로 선언하여 사용할 수 있다. static으로 선언된 변수를 **정적 변수(static variable)**이라고 부르며 다음과 같은 특징을 갖는다.
 
+- 정적 변수는 전역 변수처럼 프로그램 실행 전반에 걸쳐 변수의 수명이 유지된다.
+- 힙 영역에 동적 할당되는 객체와 반대의 개념으로, 
 
 # References
 [1] [TCPschool, '메모리의 구조'](http://tcpschool.com/c/c_memory_structure)  
 [2] 
+[3] [WIKIPEDIA, '정적 변수'](https://ko.m.wikipedia.org/wiki/%EC%A0%95%EC%A0%81_%EB%B3%80%EC%88%98)  
