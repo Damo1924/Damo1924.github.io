@@ -27,7 +27,7 @@ use_math: true
 
 (그림)
 
-+ Heap과 Stack 영역은 메모리 상의 같은 공간을 공유하는데, Heap은 메모리 위쪽 주소부터 할당되고 Stack은 메모리 아래쪽부터 할당된다. 그러다보면 각 영역이 상대 영역을 침범하는 일이 발생할 수 있는데, 이를 각각 **Heap Overflow**, **Stack overflow**라고 부른다.
+Heap과 Stack 영역은 메모리 상의 같은 공간을 공유하는데, Heap은 메모리 위쪽 주소부터 할당되고 Stack은 메모리 아래쪽부터 할당된다. 그러다보면 각 영역이 상대 영역을 침범하는 일이 발생할 수 있는데, 이를 각각 **Heap Overflow**, **Stack overflow**라고 부른다.
 
 
 <br/>
