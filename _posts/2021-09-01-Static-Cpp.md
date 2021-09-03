@@ -1,5 +1,5 @@
 ---
-title: "Static"
+title: "static in C++"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -130,7 +130,7 @@ static으로 선언한 전역 변수는 같은 프로그램 내의 다른 파일
 - 실제로는 **객체 외부에 존재하는 변수로, 객체는 해당 변수에 접근할 수 있는 권한이 주어진 것**
 - 전역 변수처럼 프로그램이 종료되어야 소멸
 
-정적 멤버 변수는 **객체가 생성될 때 동시에 생성되는 변수가 아닌, 이미 메모리 할당이 이루어진 변수이므로 클래스 내부에서 초기화하지 않고 반드시 전역 범위에서 초기화를 해야 한다.**
+정적 멤버 변수는 **객체가 생성될 때 동시에 생성되는 변수가 아닌, 이미 메모리 할당이 이루어진 변수이므로 클래스 내부에서 초기화하지 않고 반드시 전역 범위에서 초기화를 해야 한다.** 이 경우에는 설령 private이더라도 클래스 외부에서 정의가 가능하도록 되어있다.
 
 ```cpp
 #include <iostream>
@@ -214,9 +214,30 @@ private:
 };
 ```
 
+## 3-5. static 멤버 변수를 클래스 내부에서 초기화하는 방법
+클래스 내부에 또다른 클래스를 정의한 뒤, 그 클래스의 생성자 내부에서 정적 멤버 변수를 초기화할 수 있다.
+```cpp
+class className {
+public:
+    // 내부 클래스 정의
+    class _init {
+    public:
+        _init() {
+            var = 10; // 생성자를 통한 정적 멤버 변수 초기화
+        }
+    };
 
+private:
+    static int var;
+    static _init s_initializer; // 내부 클래스의 객체 생성은 static으로!
+};
+```
+
+
+<br/>
 # References
 [1] [TCPschool, '메모리의 구조'](http://tcpschool.com/c/c_memory_structure)  
-[2] 
+[2] [TCPschool, '변수의 유효 범위'](http://tcpschool.com/c/c_function_variableScope)  
 [3] [WIKIPEDIA, '정적 변수'](https://ko.m.wikipedia.org/wiki/%EC%A0%95%EC%A0%81_%EB%B3%80%EC%88%98)  
 [4] [WikiDocs, C++ 언어, '06-03. C++에서의 static'](https://wikidocs.net/21186)  
+[5] [ansohxxn.github.io, 'C++ Chapter 8.10: 정적 멤버 변수'](https://ansohxxn.github.io/cpp/chapter8-10/)  
