@@ -126,25 +126,79 @@ static으로 선언한 전역 변수는 같은 프로그램 내의 다른 파일
 - 클래스 당 하나씩만 생성
 - 해당 클래스의 모든 객체들이 공유하는 변수
 - 생성된 객체의 개수와 관계없이 메모리 공간에 한 번만 할당
-- 실제로는 객체 외부에 존재하는 변수로, 객체는 해당 변수에 접근할 수 있는 권한이 주어진 것
+- 실제로는 **객체 외부에 존재하는 변수로, 객체는 해당 변수에 접근할 수 있는 권한이 주어진 것**
 - 전역 변수처럼 프로그램이 종료되어야 소멸
+
+정적 멤버 변수는 **객체가 생성될 때 동시에 생성되는 변수가 아닌, 이미 메모리 할당이 이루어진 변수이므로 클래스 내부에서 초기화하지 않고 반드시 전역 범위에서 초기화를 해야 한다.**
 
 ```cpp
 #include <iostream>
 using namespace std;
 
 class className {
-private:
-    static int var;
+public:
+    static int var; // static 멤버 변수 선언
+    
+    void printInfo() { cout << var << endl; }
 };
 
-int className::var = 10;
+int className::var = 10; // static 멤버 변수 정의: 반드시 전역 범위에서 초기화해야한다!!
 
 int main()
+{
+    // int className::var = 10; 오류발생! - 정적 멤버 변수는 전역 범위에서 초기화
+
+    cout << className::var << endl; // 10
+    cout << &className::var << endl; // 0x30000bb008
+    
+    className c1;
+    className c2;
+    
+    cout << c1.var << endl; // 10
+    cout << &c1.var << endl; // 0x30000bb008
+    
+    cout << c2.var << endl; // 10
+    cout << &c2.var << endl; // 0x30000bb008
+    
+    c1.var = 20;
+    
+    cout << c1.var << endl; // 20
+    cout << c2.var << endl; // 20
+    cout << className::var << endl; // 20
+}
 ```
+위 코드의 결과를 통해 다음을 확인할 수 있다.
+- 클래스 자체로 직접 접근하던, 각 객체를 통해 접근하던 정적 멤버 변수는 모두 같은 주소값을 가진다.
+- 즉, 객체와는 독립적으로 존재하는 유일한 변수이다.
+
+## 3-3. 정적 멤버 함수
+정적 멤버 함수도 정적 멤버 변수와 동일한 특성을 가진다.
+
+객체의 멤버로 존재하는 것이 아니기 때문에 다음과 같은 코드는 에러를 발생시킨다.
+```cpp
+#include <iostream>
+using namespace std;
+
+class className {
+private:
+    int num1;
+    static int num2;
+public:
+    className(int n): num1(n) { }
+    static void Adder(int n) {
+        num1 += n; // Error!!
+        num2 += n;
+    }
+};
+
+int className::num2 = 0;
+
+int main()
+{
+    cout << "No error" << endl;
+}
 ```
 
-```
 
 # References
 [1] [TCPschool, '메모리의 구조'](http://tcpschool.com/c/c_memory_structure)  
