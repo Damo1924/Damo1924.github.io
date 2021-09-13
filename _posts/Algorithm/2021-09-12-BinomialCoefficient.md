@@ -177,8 +177,8 @@ a^{\phi (n)} \equiv 1 \pmod{n}
 음이 아닌 정수 $n$과 $r$, 소수 $p$에 대해서 $n$과 $r$을 $p$진법으로 나타내면 다음과 같다.
 
 \begin{align\*}
-n = n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0 \\\\  
-r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
+n &= n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0 \\\\  
+r &= r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
 \end{align\*}
 
 이때 뤼카의 정리에 의해 다음이 성립한다.
@@ -209,7 +209,19 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 (1+x)^{p^n} \equiv 1 + x^{p^n} \pmod p
 \end{align}
 
+수식 (3), (4)로부터 다음을 얻을 수 있다.
 
+\begin{align}
+\prod_{i=0}^k \\{(1+x)^{p_i}\\}^{n_i} \equiv \prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} \pmod p \\\\  
+\end{align}
+
+우변의 식을 이항정리를 이용해서 전개한 후 정리하면,
+
+\begin{align}
+\prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} &= \prod_{i=0}^k \\{ \sum_{r_i = 0}^{n_i} \binom{n_i}{r_i} x^{r_i p^i} \\} \\\\  
+&= \left(\binom{n_0}{0} x^0 + \binom{n_0}{1} x^{p^0} + \dots + \binom{n_0}{n_0} x^{n_0 p^0} \right) \left(\binom{n_1}{0} x^0 + \binom{n_1}{1} x^{p^1} + \dots + \binom{n_1}{n_1} x^{n_1 p^1} \right) \dots \left(\binom{n_k}{0} x^0 + \binom{n_k}{1} x^{p^k} + \dots + \binom{n_k}{n_k} x^{n_k p^k} \right) \\\\  
+&= \sum_{r=0}^n \\{ \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r \\}
+\end{align}
 
 
 <br/>
