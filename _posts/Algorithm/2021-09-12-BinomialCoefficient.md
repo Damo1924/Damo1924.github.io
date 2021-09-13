@@ -31,23 +31,40 @@ $\binom{n}{r} = \frac{n!}{r!(n-r)!}$
 파스칼 삼각형의 k번째 줄은 $(a + b)^{k-1}$을 전개한 다항식의 각 항의 계수와 동일하다는 특징을 가지고 있는데, 이는 이항 계수의 대표적인 성질로부터 기인한다.
 
 \begin{align\*}
-$\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}
+\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}
 \end{align\*}
 
-**-proof 1 (수학적 귀납법)**
-
-1) $r = 1$인 경우
-
-$\binom{n}{1} = n$, $\binom{n-1}{1} + \binom{n-1}{0} = (n-1) + 1 = n$이므로 성립한다.
-
-2) $r = k$일 때 성립한다고 가정하자.
+**[proof 1]**
 
 \begin{align\*}
-\binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + \frac{(n-1)!}{k!(n-k-1)!} \\\\  
-&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right) \\\\  
-&= \frac{n!}{(k+1)!(n-k-1)!} \\\\  
-&= \binom{n}{k+1}
+\binom{n-1}{r} + \binom{n-1}{r-1} &= \frac{(n-1)!}{r!(n-r-1)!} + \frac{(n-1)!}{(r-1)!(n-r)!} \\\\  
+&= (n-1)!\times\left(\frac{n-r}{r!(n-r)!} + \frac{r}{r!(n-r)!}\right) \\\\  
+&= \frac{n!}{r!(n-r)!} \\\\  
+&= \binom{n}{r}
 \end{align\*}
 
-$\therefore$ 1), 2)로부터 수학적 귀납법에 의해 $\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}$가 성립한다. **Q.E.D**
+**[proof 2]**
+
+$(1+x)^{n+1} = (1+x)\times(1+x)^n$가 항등식임을 이용하자.
+
+먼저 좌변의 경우,
+
+\begin{align\*}
+(1+x)^{n+1} = \dots + \binom{n+1}{r}x^r + \dots
+\end{align\*}
+
+과 같이 전개했을 때 $x^r$의 계수가 $\binom{n+1}{r}$이다.
+
+우변의 경우,
+
+\begin{align\*}
+(1+x)\times(1+x)^n &= (1+x)\left(\dots + \binom{n}{r-1}x^{r-1} + \binom{n}{r}x^r + \dots\right) \\\\  
+&= \dots + \left(\binom{n}{r-1} + \binom{n}{r}\right)x^r + \dots
+\end{align\*}
+
+이므로, 양변의 $x^r$의 계수가 동일하다는 점을 통해 증명이 완료된다.
+
+
+<br/>
+# 3. 파스칼의 소정리 & 오일러 정리
 
