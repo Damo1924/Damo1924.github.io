@@ -102,7 +102,7 @@ $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라�
 
 {% raw %}
 \begin{align\*}
-A = \{ x \mid x = ia, i \in B \} , B = \{ 1, 2, \dots, p-1 \}
+A = \\{ x \mid x = ia, i \in B \\} , B = \\{ 1, 2, \dots, p-1 \\}
 \end{align\*}
 {% endraw %}
 
@@ -257,13 +257,15 @@ $a^{p-2}$도 마찬가지로 분할 정복을 이용해서 빠르게 계산해�
 #include <iostream>
 using namespace std;
 
+const int mod = 1000000007;
+
 // 분할 정복을 이용해서 이항 계수의 분모, 분자 계산
 int mul(int x, int y)
 {
     if (x == y) return x;
 
     int mid = (x + y) / 2;
-    return (int)((long long)mul(x, mid) * mul(mid + 1, y) % 1000000007);
+    return (int)((long long)mul(x, mid) * mul(mid + 1, y) % mod);
 }
 
 // 분할 정복을 이용해서 x^y 계산
@@ -271,8 +273,8 @@ int pow(int x, int y)
 {
     if (y == 1) return x;
     int temp = pow(x, y / 2);
-    if (y % 2 == 0) return (int)((long long)temp * temp % 1000000007);
-    return (int)(((long long)temp * temp % 1000000007) * x % 1000000007);
+    if (y % 2 == 0) return (int)((long long)temp * temp % mod);
+    return (int)(((long long)temp * temp % mod) * x % mod);
 }
 
 int main()
@@ -289,7 +291,7 @@ int main()
     if (k == 0) cout << 1;
     else {
         int a = mul(n - k + 1, n), b = mul(1, k);
-        cout << (long long)a * pow(b, 1000000005) % 1000000007;
+        cout << (long long)a * pow(b, mod - 2) % mod;
     }
 }
 ```
