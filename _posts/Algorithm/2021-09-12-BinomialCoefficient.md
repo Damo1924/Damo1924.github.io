@@ -88,15 +88,15 @@ a^{p-1} \equiv 1 \pmod{p}
 
 **Lemma 1.** $a$와 서로소인 소수 $p$에 대해 $a, 2a, 3a, \dots, (p-1)a$들을 $p$로 나누었을 때 나머지는 모두 다르다.
 
-어떤 두 수 $i, j(0 < i < j < p)$가 존재해서 $ia$와 $ja$를 $p$로 나눈 나머지가 같다고 하자.
-
-그러면 $(j-i)a$는 $p$로 나누어 떨어진다. 이때 $0 < j-i < p$이므로 $j-i$는 $p$의 배수가 아니다.
-
-즉, 이는 $a$가 $p$와 서로소라는 가정에 모순이므로 귀류법에 의해 증명된다.
+> 어떤 두 수 $i, j(0 < i < j < p)$가 존재해서 $ia$와 $ja$를 $p$로 나눈 나머지가 같다고 하자.
+>
+> 그러면 $(j-i)a$는 $p$로 나누어 떨어진다. 이때 $0 < j-i < p$이므로 $j-i$는 $p$의 배수가 아니다.
+>
+> 즉, 이는 $a$가 $p$와 서로소라는 가정에 모순이므로 귀류법에 의해 증명된다.
 
 **Lemma 2.** $0 < i < p$인 $i$에 대해 $ia$는 $p$의 배수가 아니다.
 
-$i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
+> $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
 
 이제 페르마의 소정리를 증명하자.
 
@@ -224,7 +224,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 
 \begin{align}
 \prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} &= \prod_{i=0}^k \\{ \sum_{r_i = 0}^{n_i} \binom{n_i}{r_i} x^{r_i p^i} \\} \\\\  
-&= \left(\binom{n_0}{0} x^0 + \binom{n_0}{1} x^{p^0} + \dots + \binom{n_0}{n_0} x^{n_0 p^0} \right) \left(\binom{n_1}{0} x^0 + \binom{n_1}{1} x^{p^1} + \dots + \binom{n_1}{n_1} x^{n_1 p^1} \right) \dots \left(\binom{n_k}{0} x^0 + \binom{n_k}{1} x^{p^k} + \dots + \binom{n_k}{n_k} x^{n_k p^k} \right) \\\\  
+&= \left(\binom{n_0}{0} x^0 + \binom{n_0}{1} x^{p^0} + \dots + \binom{n_0}{n_0} x^{n_0 p^0} \right) \dots \left(\binom{n_k}{0} x^0 + \binom{n_k}{1} x^{p^k} + \dots + \binom{n_k}{n_k} x^{n_k p^k} \right) \\\\  
 &= \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
 \end{align}
 
@@ -237,7 +237,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 식 (9)는 항등식이므로 $x^r$의 계수는 동일하다.
 
 \begin{align\*}
-\binom{n}{r} = \prod_{i=0}^k \binom{n_i}{r_i}
+\therefore \binom{n}{r} = \prod_{i=0}^k \binom{n_i}{r_i}
 \end{align\*}
 
 **Q.E.D**
@@ -264,8 +264,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 분모에 있는 $p$의 개수는 $r$과 $n-r$ 각각에 대한 개수를 더해줌으로써 구할 수 있다.
 
 \begin{align\*}
-\left[ \frac{r}{p} \right] &+ \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] \\\\  
-&+ \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \\\\  
+\left[ \frac{r}{p} \right] + \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] + \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \\\\  
 = \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right)
 \end{align\*}
 
@@ -281,7 +280,9 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \leq \left[ \frac{n}{p^i} \right]
 \end{align\*}
 
-$\therefore$ \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right) \leq \sum_{i=1}^k \left[ \frac{n}{p^i} \right]
+\begin{align\*}
+\therefore \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right) \leq \sum_{i=1}^k \left[ \frac{n}{p^i} \right]
+\end{align\*}
 
 **Q.E.D**
 
@@ -291,7 +292,19 @@ $\therefore$ \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r
 
 이 부분도 직관적이지 않은 것 같아서 이해를 돕기 위해 추가하였다.
 
+식 (7)은 $i$가 0부터 $k$까지, 즉 $k+1$개의 다항식의 곱이다. 이를 전개한 결과는 각 다항식에서 하나씩 선택해서 곱한 것들을 모두 합한 것이다.
 
+\begin{align\*}
+(7) = \sum_{i = 0, 0 \leq r_i \leq n_i}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k}
+\end{align\*}
+
+위 식에서 $x$의 지수 $r_0 p^0 + r_1 p^1 + \dots + r_k p^k$는 뤼카 정리를 소개하면서 $r$을 $p$진법으로 나타낸 식과 동일하다는 것을 알 수 있다. 정수 $i$가 $0 \leq i \leq k$, 각 $r_i$가 $0 \leq r_i \leq n_i$의 범위에서 움직일 때, $r = r_0 p^0 + r_1 p^1 + \dots + r_k p^k$은 $0$부터 $n$까지의 정수를 나타낸다. 그러므로 위 식은 다음과 같이 쓸 수 있다.
+
+\begin{align\*}
+\sum_{i = 0, 0 \leq r_i \leq n_i}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k} = \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
+\end{align\*}
+
+---
 
 <br/>
 ## 5. Algorithms to calculate Binomial Coefficients
