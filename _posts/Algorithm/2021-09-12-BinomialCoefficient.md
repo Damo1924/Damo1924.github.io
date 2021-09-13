@@ -170,6 +170,12 @@ a^{\phi (n)} \equiv 1 \pmod{n}
 
 이때 $\phi (n)$은 오일러 파이 함수라고 불리며, $n$과 서로소인 1부터 $n$까지의 정수의 개수와 같다.
 
+
+<br/>
+## 4. Lucas Theorem
+
+음이 아닌 정수 $n$과 $r$, 소수 $p$에 대해서 $n$과 $r$을 $p$진법으로 나타내면 다음과 같다.
+
 \begin{align\*}
 n = n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0 \\\\  
 r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
@@ -190,13 +196,6 @@ r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
 &= (1+x)^{n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0} \\\\  
 &= \prod_{i=0}^k [(1+x)^{p_i}]^{n_i}
 \end{align\*}
-
-
-
-<br/>
-## 4. Lucas Theorem
-
-음이 아닌 정수 $n$과 $r$, 소수 $p$에 대해서 $n$과 $r$을 $p$진법으로 나타내면 다음과 같다.
 
 
 
