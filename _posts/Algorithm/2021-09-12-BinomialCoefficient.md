@@ -100,9 +100,11 @@ $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라�
 
 집합 $A, B$를 다음과 같이 정의하자.
 
+{% raw %}
 \begin{align\*}
 A = \{ x \mid x = ia, i \in B \} , B = \{ 1, 2, \dots, p-1 \}
 \end{align\*}
+{% endraw %}
 
 Lemma 1에 의해 집합 $A, B$의 크기는 같다. 즉, 다음 합동식이 성립한다.
 
@@ -175,3 +177,7 @@ a^{\phi (n)} \equiv 1 \pmod{n}
 이제 앞서 다룬 내용들을 이용해서 이항 계수를 빠르게 구하는 알고리즘들에 대해 알아보자.
 
 ## 4-1. Algorithm using Pascal triangle
+
+
+
+
