@@ -264,7 +264,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 분모에 있는 $p$의 개수는 $r$과 $n-r$ 각각에 대한 개수를 더해줌으로써 구할 수 있다.
 
 \begin{align\*}
-\left[ \frac{r}{p} \right] + \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] + \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \\\\  
+\left( \left[ \frac{r}{p} \right] + \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] \right) + \left( \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \right) \\\\  
 = \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right)
 \end{align\*}
 
@@ -298,7 +298,11 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 (7) = \sum_{i = 0, 0 \leq r_i \leq n_i}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k}
 \end{align\*}
 
-위 식에서 $x$의 지수 $r_0 p^0 + r_1 p^1 + \dots + r_k p^k$는 뤼카 정리를 소개하면서 $r$을 $p$진법으로 나타낸 식과 동일하다는 것을 알 수 있다. 정수 $i$가 $0 \leq i \leq k$, 각 $r_i$가 $0 \leq r_i \leq n_i$의 범위에서 움직일 때, $r = r_0 p^0 + r_1 p^1 + \dots + r_k p^k$은 $0$부터 $n$까지의 정수를 나타낸다. 그러므로 위 식은 다음과 같이 쓸 수 있다.
+위 식에서 $x$의 지수 $r_0 p^0 + r_1 p^1 + \dots + r_k p^k$는 뤼카 정리를 소개하면서 $r$을 $p$진법으로 나타낸 식과 동일하다는 것을 알 수 있다.
+
+정수 $i$가 $0 \leq i \leq k$, 각 $r_i$가 $0 \leq r_i \leq n_i$의 범위에서 움직일 때, $r = r_0 p^0 + r_1 p^1 + \dots + r_k p^k$은 $0$부터 $n$까지의 정수를 나타낸다.
+
+그러므로 위 식은 다음과 같이 쓸 수 있다.
 
 \begin{align\*}
 \sum_{i = 0, 0 \leq r_i \leq n_i}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k} = \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
@@ -349,6 +353,8 @@ int main()
 이때 `dp[i][j]`는 $\binom{i}{j}$를 10,007로 나눈 값을 의미한다.
 
 그러나 이 방법은 시간과 공간 복잡도가 $O(nr)$로, N이 100,00 이상부터는 재귀 깊이(recursion depth)가 커지면서 시간이 상당히 소요된다. 그렇기 때문에 더 큰 N에 대해서는 다음 방법을 이용한다.
+
+---
 
 ### 5-2. Algorithm using Fermat's little theorem
 
@@ -432,6 +438,8 @@ int main()
 ```
 
 이 방법으로 이항 계수를 구하면 시간복잡도 $O(n \log p)$가 걸리게 된다.
+
+---
 
 ### 5-3. Algorithm using Lucas Theorem
 
