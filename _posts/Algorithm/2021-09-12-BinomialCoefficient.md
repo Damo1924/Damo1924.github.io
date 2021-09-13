@@ -191,11 +191,11 @@ r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
 
 이항정리로부터 다음과 같이 쓸 수 있다.
 
-\begin{align\*}
+\begin{align}
 \sum_{r=0}^{n} \binom{n}{r} x^r &= (1 + x)^n \\\\  
 &= (1+x)^{n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0} \\\\  
 &= \prod_{i=0}^k \\{(1+x)^{p_i}\\}^{n_i}
-\end{align\*}
+\end{align}
 
 이때 $(1+x)^{p^n}$은 이항정리에 의해 다음을 만족한다.
 
@@ -203,7 +203,11 @@ r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
 (1+x)^{p^n} = \binom{p^n}{0} x^0 + \binom{p^n}{1} x^1 + \dots + \binom{p^n}{p^n} x^{p^n}
 \end{align\*}
 
-$p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{i}$는 $p$로 나누어 떨어진다.
+$p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{i}$는 $p$로 나누어 떨어지므로 다음이 성립한다.
+
+\begin{align}
+(1+x)^{p^n} \equiv 1 + x^{p^n} \pmod p
+\end{align}
 
 
 
