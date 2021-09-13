@@ -101,14 +101,13 @@ $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라�
 집합 $A, B$를 다음과 같이 정의하자.
 
 \begin{align\*}
-A = \{x \mid x = ia, i \in B\} \\\\  
-B = \{1, 2, \dots, p-1\}
+A = \{ x \mid x = ia, i \in B \} , B = \{ 1, 2, \dots, p-1 \}
 \end{align\*}
 
 Lemma 1에 의해 집합 $A, B$의 크기는 같다. 즉, 다음 합동식이 성립한다.
 
 \begin{align\*}
-a \times 2a \times 3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots \times (p-1) \not\equiv \pmod{p}
+a \times 2a \times 3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots \times (p-1) \not\equiv 0 \pmod{p}
 \end{align\*}
 
 양변을 $(p-1)!$을 나누면 다음을 얻는다.
@@ -137,6 +136,11 @@ $0^p \equiv 0 \pmod{p}$이므로 성립한다.
 
 \begin{align\*}
 \binom{p}{i} k^i \equiv 0 \pmod{p} \\\\  
+\end{align\*}
+
+이를 이용하면 다음이 성립한다는 사실을 알 수 있다.
+
+\begin{align\*}
 (k+1)^p \equiv k^p + 1 \pmod{p}
 \end{align\*}
 
@@ -161,6 +165,8 @@ a^{b-1} \equiv 1 \pmod{b}
 \begin{align\*}
 a^{\phi (n)} \equiv 1 \pmod{n}
 \end{align\*}
+
+이때 $\phi (n)$은 오일러 파이 함수라고 불리며, $n$과 서로소인 1부터 $n$까지의 정수의 개수와 같다.
 
 
 <br/>
