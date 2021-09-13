@@ -37,8 +37,8 @@ comments: true
 2) $r = k$일 때 성립한다고 가정하자.
 
 \begin{align\*}
-\binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + \frac{(n-1)!}{k!(n-k-1)!} \\
-&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right) \\
-&= \frac{n!}{(k+1)!(n-k-1)!} \\
+\binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + \frac{(n-1)!}{k!(n-k-1)!} \\\\  
+&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right) \\\\
+&= \frac{n!}{(k+1)!(n-k-1)!} \\\\
 &= \binom{n}{k+1}
 \end{align\*}
