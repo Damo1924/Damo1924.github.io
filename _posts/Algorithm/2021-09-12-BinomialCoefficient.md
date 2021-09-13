@@ -43,6 +43,8 @@ comments: true
 &= \binom{n}{r}
 \end{align\*}
 
+**Q.E.D**
+
 **[proof 2]**
 
 $(1+x)^{n+1} = (1+x)\times(1+x)^n$가 항등식임을 이용하자.
@@ -62,7 +64,7 @@ $(1+x)^{n+1} = (1+x)\times(1+x)^n$가 항등식임을 이용하자.
 &= \dots + \left(\binom{n}{r-1} + \binom{n}{r}\right)x^r + \dots
 \end{align\*}
 
-이므로, 양변의 $x^r$의 계수가 동일하다는 점을 통해 증명이 완료된다.
+이므로, 양변의 $x^r$의 계수가 동일하다는 점을 통해 증명이 완료된다. **Q.E.D**
 
 
 <br/>
@@ -118,6 +120,8 @@ a \times 2a \times 3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots 
 a^{p-1} \equiv 1 \pmod{p}
 \end{align\*}
 
+**Q.E.D**
+
 **[proof 2]**
 
 수학적 귀납법을 이용하자.
@@ -146,7 +150,7 @@ $0^p \equiv 0 \pmod{p}$이므로 성립한다.
 (k+1)^p \equiv k^p + 1 \pmod{p}
 \end{align\*}
 
-$\therefore$ 1, 2로부터 수학적 귀납법에 의해 임의의 정수 $a$에 대해 $a^p \equiv a \pmod{p}$가 성립한다.
+$\therefore$ 1, 2로부터 수학적 귀납법에 의해 임의의 정수 $a$에 대해 $a^p \equiv a \pmod{p}$가 성립한다. **Q.E.D**
 
 ---
 
@@ -170,6 +174,7 @@ a^{\phi (n)} \equiv 1 \pmod{n}
 
 이때 $\phi (n)$은 오일러 파이 함수라고 불리며, $n$과 서로소인 1부터 $n$까지의 정수의 개수와 같다.
 
+---
 
 <br/>
 ## 4. Lucas Theorem
@@ -220,8 +225,72 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 \begin{align}
 \prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} &= \prod_{i=0}^k \\{ \sum_{r_i = 0}^{n_i} \binom{n_i}{r_i} x^{r_i p^i} \\} \\\\  
 &= \left(\binom{n_0}{0} x^0 + \binom{n_0}{1} x^{p^0} + \dots + \binom{n_0}{n_0} x^{n_0 p^0} \right) \left(\binom{n_1}{0} x^0 + \binom{n_1}{1} x^{p^1} + \dots + \binom{n_1}{n_1} x^{n_1 p^1} \right) \dots \left(\binom{n_k}{0} x^0 + \binom{n_k}{1} x^{p^k} + \dots + \binom{n_k}{n_k} x^{n_k p^k} \right) \\\\  
-&= \sum_{r=0}^n \\{ \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r \\}
+&= \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
 \end{align}
+
+를 얻을 수 있고, 수식 (3), (8)로부터 원하는 결과를 얻을 수 있다.
+
+\begin{align}
+\sum_{r=0}^{n} \binom{n}{r} x^r = \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
+\end{align}
+
+식 (9)는 항등식이므로 $x^r$의 계수는 동일하다.
+
+\begin{align\*}
+\binom{n}{r} = \prod_{i=0}^k \binom{n_i}{r_i}
+\end{align\*}
+
+**Q.E.D**
+
+---
+**Lemma 1.** $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{i}$는 $p$로 나누어 떨어진다.
+
+매우 자명해 보여서 넘어갈려 했으나 증명을 좀 더 엄밀하게 하기 위해 추가하였다.
+
+\begin{align\*}
+\binom{n}{r} = \frac{n!}{r!(n-r)!}
+\end{align\*}
+
+위 공식에서 분자($n!$)과 분모($r!(n-r)!$)를 소인수분해 했을 때 $p$의 개수가 분자가 $1 \leq r \leq n-1$일 때 항상 많다는 것을 보이면 된다.
+
+먼저 분자에 있는 $p$의 개수는 다음과 같다.
+
+\begin{align\*}
+\left[ \frac{n}{p} \right] + \left[ \frac{n}{p^2} \right] + \dots + \left[ \frac{n}{p^k} \right] = \sum_{i=1}^k \left[ \frac{n}{p^i} \right]
+\end{align\*}
+
+이때 $k$는 $p^k \leq n$을 만족하는 가장 큰 정수이다.
+
+분모에 있는 $p$의 개수는 $r$과 $n-r$ 각각에 대한 개수를 더해줌으로써 구할 수 있다.
+
+\begin{align\*}
+\left[ \frac{r}{p} \right] &+ \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] \\\\  
+&+ \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \\\\  
+= \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right)
+\end{align\*}
+
+정수 $a, b, m (a \leq b)$에 대해 가우스 기호는 다음 부등식을 만족한다.
+
+\begin{align\*}
+\left[ \frac{a}{m} \right] + \left[ \frac{b-a}{m} \right] \leq \left[ \frac{b}{m} \right]
+\end{align\*}
+
+이를 적용하면 $1 \leq i \leq k$를 만족하는 정수 $i$에 대해 다음 부등식이 성립한다.
+
+\begin{align\*}
+\left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \leq \left[ \frac{n}{p^i} \right]
+\end{align\*}
+
+$\therefore$ \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right) \leq \sum_{i=1}^k \left[ \frac{n}{p^i} \right]
+
+**Q.E.D**
+
+---
+
+**수식 (7)에서 (8) 유도하기**
+
+이 부분도 직관적이지 않은 것 같아서 이해를 돕기 위해 추가하였다.
+
 
 
 <br/>
