@@ -38,7 +38,10 @@ comments: true
 
 \begin{align\*}
 \binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + \frac{(n-1)!}{k!(n-k-1)!} \\\\  
-&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right) \\\\
-&= \frac{n!}{(k+1)!(n-k-1)!} \\\\
+&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right)  
+&= \frac{n!}{(k+1)!(n-k-1)!}  
 &= \binom{n}{k+1}
 \end{align\*}
+
+$\therefor$ 1), 2)로부터 수학적 귀납법에 의해 $\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}$가 성립한다. **Q.E.D**
+
