@@ -30,14 +30,15 @@ comments: true
 
 <center>$\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}$</center>
 
-**proof 1 (수학적 귀납법)**
+**-proof 1 (수학적 귀납법)**
 
-\1) $r = 1$이면 $\binom{n}{1} = n$, $\binom{n-1}{1} + \binom{n-1}{0} = (n-1) + 1 = n$이므로 성립한다.
+1) $r = 1$이면 $\binom{n}{1} = n$, $\binom{n-1}{1} + \binom{n-1}{0} = (n-1) + 1 = n$이므로 성립한다.
 
-\2) $r = k$일 때 성립한다고 가정하자.
+2) $r = k$일 때 성립한다고 가정하자.
 
-\begin{align}
-\binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + frac{(n-1)!}{k!(n-k-1)!} \\
-&= (n-1)!\times(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}) \\
-&= \frac{n!}{(k+1)!(n-k-1)!}
-\end{align}
+\begin{align\*}
+\binom{n-1}{k+1} + \binom{n-1}{k} &= \frac{(n-1)!}{(k+1)!(n-k-2)!} + \frac{(n-1)!}{k!(n-k-1)!} \\\\
+&= (n-1)!\times\left(\frac{n-k-1}{(k+1)!(n-k-1)!} + \frac{k+1}{(k+1)!(n-k-1)!}\right) \\\\
+&= \frac{n!}{(k+1)!(n-k-1)!} \\\\
+&= binom{n}{k+1}
+\end{align\*}
