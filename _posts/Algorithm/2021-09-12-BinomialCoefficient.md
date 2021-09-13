@@ -170,13 +170,43 @@ a^{\phi (n)} \equiv 1 \pmod{n}
 
 이때 $\phi (n)$은 오일러 파이 함수라고 불리며, $n$과 서로소인 1부터 $n$까지의 정수의 개수와 같다.
 
+\begin{align\*}
+n = n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0 \\\\  
+r = r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
+\end{align\*}
+
+이때 뤼카의 정리에 의해 다음이 성립한다.
+
+\begin{align\*}
+\binom{n}{r} \equiv \prod_{i=0}^k \binom{n_i}{r_i} \pmod p
+\end{align\*}
+
+**[proof]**
+
+이항정리로부터 다음과 같이 쓸 수 있다.
+
+\begin{align\*}
+\sum_{r=0}^{n} \binom{n}{r} x^r &= (1 + x)^n \\\\  
+&= (1+x)^{n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0} \\\\  
+&= \prod_{i=0}^k [(1+x)^{p_i}]^{n_i}
+\end{align\*}
+
+
 
 <br/>
-## 4. Algorithms to calculate Binomial Coefficients
+## 4. Lucas Theorem
+
+음이 아닌 정수 $n$과 $r$, 소수 $p$에 대해서 $n$과 $r$을 $p$진법으로 나타내면 다음과 같다.
+
+
+
+
+<br/>
+## 5. Algorithms to calculate Binomial Coefficients
 
 이제 앞서 다룬 내용들을 이용해서 이항 계수를 빠르게 구하는 알고리즘들에 대해 알아보자.
 
-### 4-1. Algorithm using Pascal triangle
+### 5-1. Algorithm using Pascal triangle
 
 먼저, $\binom{n}{r} = \binom{n-1}{r} + \binom{n-1}{r-1}$을 이용해서 재귀적으로 문제를 해결할 수 있다.
 
@@ -215,7 +245,7 @@ int main()
 
 그러나 이 방법은 시간과 공간 복잡도가 $O(nr)$로, N이 100,00 이상부터는 재귀 깊이(recursion depth)가 커지면서 시간이 상당히 소요된다. 그렇기 때문에 더 큰 N에 대해서는 다음 방법을 이용한다.
 
-### 4-2. Algorithm using Fermat's little theorem
+### 5-2. Algorithm using Fermat's little theorem
 
 이 방법을 이용하면 $N$이 100,0000 정도일 때까지 빠르게 이항계수를 구할 수 있다.
 
@@ -297,3 +327,6 @@ int main()
 ```
 
 이 방법으로 이항 계수를 구하면 시간복잡도 $O(n \log p)$가 걸리게 된다.
+
+### 5-3. Algorithm using Lucas Theorem
+
