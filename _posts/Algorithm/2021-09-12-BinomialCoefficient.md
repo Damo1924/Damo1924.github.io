@@ -14,7 +14,7 @@ comments: true
 이항 계수(binomial coefficient)는 $(a + b)^{n}$을 전개하였을 때 $a^{r} b^{n-r} (0 \leq r \leq n)$의 계수를 의미하며, 다음과 같이 구할 수 있다.
 
 \begin{align\*}
-$\binom{n}{r} = \frac{n!}{r!(n-r)!}$
+\binom{n}{r} = \frac{n!}{r!(n-r)!}
 \end{align\*}
 
 위 공식은 수학적 귀납법이나 조합을 이용해서 증명할 수 있다.
@@ -84,7 +84,7 @@ a^{p-1} \equiv 1 \pmod{p}
 
 **[proof 1]**
 
-[Lemma 1] $a$와 서로소인 소수 $p$에 대해 $a, 2a, 3a, \dots, (p-1)a$들을 $p$로 나누었을 때 나머지는 모두 다르다.
+**Lemma 1.** $a$와 서로소인 소수 $p$에 대해 $a, 2a, 3a, \dots, (p-1)a$들을 $p$로 나누었을 때 나머지는 모두 다르다.
 
 어떤 두 수 $i, j(0 < i < j < p)$가 존재해서 $ia$와 $ja$를 $p$로 나눈 나머지가 같다고 하자.
 
@@ -92,7 +92,7 @@ a^{p-1} \equiv 1 \pmod{p}
 
 즉, 이는 $a$가 $p$와 서로소라는 가정에 모순이므로 귀류법에 의해 증명된다.
 
-[Lemma 2] $0 < i < p$인 $i$에 대해 $ia$는 $p$의 배수가 아니다.
+**Lemma 2.** $0 < i < p$인 $i$에 대해 $ia$는 $p$의 배수가 아니다.
 
 $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
 
@@ -101,14 +101,14 @@ $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라�
 집합 $A, B$를 다음과 같이 정의하자.
 
 \begin{align\*}
-A = {x\midx = ia, i \in B} \\\\  
-B = {1, 2, \dots, p-1}
+A = \{x \mid x = ia, i \in B\} \\\\  
+B = \{1, 2, \dots, p-1\}
 \end{align\*}
 
 Lemma 1에 의해 집합 $A, B$의 크기는 같다. 즉, 다음 합동식이 성립한다.
 
 \begin{align\*}
-a \times 2a \times \3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots \times (p-1) \not\equiv \pmod{p}
+a \times 2a \times 3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots \times (p-1) \not\equiv \pmod{p}
 \end{align\*}
 
 양변을 $(p-1)!$을 나누면 다음을 얻는다.
@@ -127,13 +127,23 @@ $0^p \equiv 0 \pmod{p}$이므로 성립한다.
 
 2) $a = k$일 때 성립한다고 가정
 
+이항정리에 의해 다음과 같이 쓸 수 있다.
+
 \begin{align\*}
-(k+1)^p = 
+(k+1)^p = \displaystyle\sum_{i=0}^{p} \binom{p}{i} k^i
 \end{align\*}
 
+이때 $\binom{p}{i} = \frac{p!}{i!(p-i)!}$이고, $p$가 소수이므로 $1 \leq i \leq p-1$인 $i$에 대해서는 다음이 성립한다.
+
+\begin{align\*}
+\binom{p}{i} k^i \equiv 0 \pmod{p} \\\\  
+(k+1)^p \equiv k^p + 1 \pmod{p}
+\end{align\*}
+
+$\therefore$ 1, 2로부터 수학적 귀납법에 의해 임의의 정수 $a$에 대해 $a^p \equiv a \pmod{p}$가 성립한다.
 
 
-
+<br/>
 다만, 페르마의 소정리는 모든 소수가 만족시키는 필요조건이지만, 충분조건은 아니다.
 
 \begin{align\*}
@@ -142,3 +152,20 @@ a^{b-1} \equiv 1 \pmod{b}
 
 위 합동식을 만족시키면서 소수가 아닌 숫자 $b$를 **카마이클 수(Carmichael number)**라고 부르며, 무한히 많이 존재한다고 한다.
 
+
+<br/>
+페르마의 소정리를 일반화한 것이 바로 **오일러 정리**이다.
+
+임의의 정수 $a$와 $n$이 서로소일 때, 오일러 정리에 따라 다음이 성립한다.
+
+\begin{align\*}
+a^{\phi (n)} \equiv 1 \pmod{n}
+\end{align\*}
+
+
+<br/>
+# 4. Algorithms to calculate Binomial Coefficients
+
+이제 앞서 다룬 내용들을 이용해서 이항 계수를 빠르게 구하는 알고리즘들에 대해 알아보자.
+
+## 4-1. Algorithm using Pascal triangle
