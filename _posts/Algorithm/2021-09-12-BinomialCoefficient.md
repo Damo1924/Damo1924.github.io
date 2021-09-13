@@ -66,5 +66,79 @@ $(1+x)^{n+1} = (1+x)\times(1+x)^n$가 항등식임을 이용하자.
 
 
 <br/>
-# 3. 파스칼의 소정리 & 오일러 정리
+# 3. Fermat's little theorem & Euler's theorem
+
+$p$가 소수이고, $a$가 정수일 때, 페르마의 소정리는 다음과 같다.
+
+\begin{align\*}
+a^p \equiv a \pmod{p}
+\end{align\*}
+
+위 합동식은 $p \mid a$일 때 자명하게 성립하며, $p \nmid a$이면 다음과 같이 쓸 수 있다.
+
+\begin{align\*}
+a^{p-1} \equiv 1 \pmod{p}
+\end{align\*}
+
+이 경우에 대한 증명은 다음과 같다.
+
+**[proof 1]**
+
+[Lemma 1] $a$와 서로소인 소수 $p$에 대해 $a, 2a, 3a, \dots, (p-1)a$들을 $p$로 나누었을 때 나머지는 모두 다르다.
+
+어떤 두 수 $i, j(0 < i < j < p)$가 존재해서 $ia$와 $ja$를 $p$로 나눈 나머지가 같다고 하자.
+
+그러면 $(j-i)a$는 $p$로 나누어 떨어진다. 이때 $0 < j-i < p$이므로 $j-i$는 $p$의 배수가 아니다.
+
+즉, 이는 $a$가 $p$와 서로소라는 가정에 모순이므로 귀류법에 의해 증명된다.
+
+[Lemma 2] $0 < i < p$인 $i$에 대해 $ia$는 $p$의 배수가 아니다.
+
+$i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
+
+이제 페르마의 소정리를 증명하자.
+
+집합 $A, B$를 다음과 같이 정의하자.
+
+\begin{align\*}
+A = {x\midx = ia, i \in B} \\\\  
+B = {1, 2, \dots, p-1}
+\end{align\*}
+
+Lemma 1에 의해 집합 $A, B$의 크기는 같다. 즉, 다음 합동식이 성립한다.
+
+\begin{align\*}
+a \times 2a \times \3a \times \dots \times (p-1)a \equiv 1 \times 2 \times \dots \times (p-1) \not\equiv \pmod{p}
+\end{align\*}
+
+양변을 $(p-1)!$을 나누면 다음을 얻는다.
+
+\begin{align\*}
+a^{p-1} \equiv 1 \pmod{p}
+\end{align\*}
+
+**[proof 2]**
+
+수학적 귀납법을 이용하자.
+
+1) $a = 0$인 경우
+
+$0^p \equiv 0 \pmod{p}$이므로 성립한다.
+
+2) $a = k$일 때 성립한다고 가정
+
+\begin{align\*}
+(k+1)^p = 
+\end{align\*}
+
+
+
+
+다만, 페르마의 소정리는 모든 소수가 만족시키는 필요조건이지만, 충분조건은 아니다.
+
+\begin{align\*}
+a^{b-1} \equiv 1 \pmod{b}
+\end{align\*}
+
+위 합동식을 만족시키면서 소수가 아닌 숫자 $b$를 **카마이클 수(Carmichael number)**라고 부르며, 무한히 많이 존재한다고 한다.
 
