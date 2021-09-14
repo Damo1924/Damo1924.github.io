@@ -96,7 +96,7 @@ a^{p-1} \equiv 1 \pmod{p}
 
 **Lemma 2.** $0 < i < p$인 $i$에 대해 $ia$는 $p$의 배수가 아니다.
 
-> $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
+> $p$의 배수인 $ia$가 존재한다고 가정하면 $i$는 $p$의 배수가 아니므로 마찬가지로 $a$가 $p$와 서로소라는 가정에 모순이므로 참이다.
 
 이제 페르마의 소정리를 증명하자.
 
@@ -251,7 +251,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 \binom{n}{r} = \frac{n!}{r!(n-r)!}
 \end{align\*}
 
-위 공식에서 분자($n!$)과 분모($r!(n-r)!$)를 소인수분해 했을 때 $p$의 개수가 분자가 $1 \leq r \leq n-1$일 때 항상 많다는 것을 보이면 된다.
+위 공식에서 분자($n!$)과 분모($r!(n-r)!$)를 소인수분해 했을 때 분자의 $p$의 개수가 항상 많다는 것을 보이면 된다. ($r = 0, n$인 경우 제외)
 
 먼저 분자에 있는 $p$의 개수는 다음과 같다.
 
@@ -300,12 +300,10 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 
 위 식에서 $x$의 지수 $r_0 p^0 + r_1 p^1 + \dots + r_k p^k$는 뤼카 정리를 소개하면서 $r$을 $p$진법으로 나타낸 식과 동일하다는 것을 알 수 있다.
 
-정수 $i$가 $0 \leq i \leq k$, 각 $r_i$가 $0 \leq r_i \leq n_i$의 범위에서 움직일 때, $r = r_0 p^0 + r_1 p^1 + \dots + r_k p^k$은 $0$부터 $n$까지의 정수를 나타낸다.
-
 그러므로 위 식은 다음과 같이 쓸 수 있다.
 
 \begin{align\*}
-\sum_{i = 0, 0 \leq r_i \leq n_i}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k} = \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
+\sum_{i = 0}^{k} \binom{n}{r_0} \dots \binom{n}{r_k} x^{r_0 p^0 + r_1 p^1 + \dots + r_k p^k} = \sum_{r=0}^n \left(\prod_{i=0}^k \binom{n_i}{r_i} \right) x^r
 \end{align\*}
 
 ---
@@ -420,13 +418,8 @@ int pow(int x, int y)
 
 int main()
 {
-    // Fast I/O
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
     int n, k;
-    cin >> n >> k; // 1 <= n <= 4,000,000
+    cin >> n >> k;
     if (k > n / 2) k = n - k;
 
     if (k == 0) cout << 1;
@@ -443,3 +436,67 @@ int main()
 
 ### 5-3. Algorithm using Lucas Theorem
 
+$n$의 값이 엄청 크고 비교적 소수 $p$의 크기가 작을 때에는 뤼카 정리를 이용한 알고리즘을 통해 매우 빠르게 이항계수를 계산할 수 있다.
+
+[백준 11402. 이항 계수 4 문제 링크](https://www.acmicpc.net/problem/11402)
+
+뤼카 정리를 적용하기 위해 $n, r$를 $p$진법으로 나타낸 것의 각 자리 숫자를 구하고, 그에 대한 이항계수는 페르마의 소정리를 이용한 알고리즘으로 구해준다.
+
+코드를 구현하는 것은 비교적 간단하지만, $n_i < r_i$인 경우를 따로 처리해주어야 한다는 것을 파악하지 못해 좀 오래걸렸다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int mul (int x, int y, int p)
+{
+    if (x == y) return x;
+    
+    int mid = (x+y)/2;
+    return mul(x, mid, p) * mul(mid+1, y, p) % p;
+}
+
+int pow (int x, int y, int p)
+{
+    if (y == 1) return x;
+    int temp = pow(x, y/2, p);
+    if (y % 2 == 0) return temp * temp % p;
+    return (temp * temp % p) * x % p;
+}
+
+int main()
+{
+    // Fast I/O
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    long long n, r;
+    int p;
+    cin >> n >> r >> p;
+    if (r > n/2) r = n - r;
+    
+    int ans = 1;
+    while (r != 0)
+    {
+        int N = n % p, R = r % p;
+        n /= p;
+        r /= p;
+        if (R == 0) continue;
+        else if (N < R)
+        {
+            ans = 0;
+            break;
+        }
+        ans = (mul(N - R + 1, N, p) * pow(mul(1, R, p), p - 2, p) % p) * ans % p;
+    }
+    
+    cout << ans;
+}
+```
+
+
+<br/>
+# References
+[1] [Rebro의 코딩 일기장, 'PS를 위한 정수론 - (4) 이항 계수 (nCr mod p) 구하는 다양한 방법](https://rebro.kr/107?category=449699)  
+[2] [위키백과, '페르마의 소정리'](https://ko.m.wikipedia.org/wiki/%ED%8E%98%EB%A5%B4%EB%A7%88%EC%9D%98_%EC%86%8C%EC%A0%95%EB%A6%AC)  
