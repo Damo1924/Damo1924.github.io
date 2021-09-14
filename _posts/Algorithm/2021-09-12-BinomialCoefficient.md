@@ -461,16 +461,11 @@ int pow (int x, int y, int p)
     if (y == 1) return x;
     int temp = pow(x, y/2, p);
     if (y % 2 == 0) return temp * temp % p;
-    return (temp * temp % p) * x % p;
+    return temp * temp % p * x % p;
 }
 
 int main()
 {
-    // Fast I/O
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
     long long n, r;
     int p;
     cin >> n >> r >> p;
@@ -482,18 +477,90 @@ int main()
         int N = n % p, R = r % p;
         n /= p;
         r /= p;
+        
         if (R == 0) continue;
         else if (N < R)
         {
             ans = 0;
             break;
         }
-        ans = (mul(N - R + 1, N, p) * pow(mul(1, R, p), p - 2, p) % p) * ans % p;
+        ans = mul(N - R + 1, N, p) * pow(mul(1, R, p), p - 2, p) % p * ans % p;
     }
     
     cout << ans;
 }
 ```
+
+### 5-4. Algorithm using Seive of Eratosthenes
+
+위의 두 방법은 이항계수를 소수로 나눈 나머지를 빠르게 구할 수 있는 방법이었다.
+
+그렇다면 소수가 아닌 임의의 자연수로 나눈 나머지는 어떻게 구해야할까?
+
+[백준 11439. 이항 계수 5 문제 링크](https://www.acmicpc.net/problem/11439)
+
+위 문제는 $n$의 범위가 1부터 4,000,000일 때 이항계수를 주어진 임의의 자연수 $m$로 나눈 나머지를 구하는 문제이다.
+
+이 경우에는 어쩔 수 없이 이항계수 식에서 분모와 분자에 각 소수가 몇 개씩 있는지 세어줌으로써 직접 이항계수를 구해야한다.
+
+그 과정은 다음과 같다.
+
+1. 에라토스테네스의 체를 이용해 $1$부터 $n$까지의 모든 소수를 구한다.
+2. 이항계수를 소인수분해했을 때, 각 소수가 몇 개 포함되어 있는지 구한다.
+3. 소수를 하나씩 곱해가며 주어진 $m$으로 나눈 나머지를 구한다.
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+
+const int maxN = 4000000;
+
+bool isNotPrime[maxN+1];
+
+int primeCnt (int x, int p)
+{
+    int cnt = 0;
+    while (x != 0)
+    {
+        cnt += x / p;
+        x /= p;
+    }
+    return cnt;
+}
+
+long long pow(int x, int y, int m)
+{
+    if (y == 0) return 1;
+    if (y == 1) return x;
+    long long temp = pow(x, y/2, m);
+    if (y % 2) return temp * temp % m * x % m;
+    return temp * temp % m;
+}
+
+int main()
+{
+    int n, k, m;
+    cin >> n >> k >> m;
+    if (k > n/2) k = n - k;
+    
+    long long res = 1;
+    for (int i = 2; i <= n; i++)
+        if (!isNotPrime[i])
+        {
+            for (int j = 2; j*i <= n; j++)
+                isNotPrime[j*i] = 1;
+            
+            int j = primeCnt(n, i) - primeCnt(k, i) - primeCnt(n - k, i);
+            res = res * pow(i, j, m) % m;
+            if (res == 0) break;
+        }
+
+    cout << res;
+}
+```
+
+이 문제는 '이항 계수 3' 문제와 동일한 범위 조건을 가지고 있는데, 이 방법(28ms)으로 해결할 경우 페르마의 소정리를 이용한 방법(12ms)보다 오래걸린다.
 
 
 <br/>
