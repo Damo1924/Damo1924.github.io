@@ -564,6 +564,6 @@ int main()
 
 
 <br/>
-# References
+## References
 [1] [Rebro의 코딩 일기장, 'PS를 위한 정수론 - (4) 이항 계수 (nCr mod p) 구하는 다양한 방법](https://rebro.kr/107?category=449699)  
 [2] [위키백과, '페르마의 소정리'](https://ko.m.wikipedia.org/wiki/%ED%8E%98%EB%A5%B4%EB%A7%88%EC%9D%98_%EC%86%8C%EC%A0%95%EB%A6%AC)  
