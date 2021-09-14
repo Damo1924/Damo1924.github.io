@@ -147,20 +147,20 @@ $0^p \equiv 0 \pmod{p}$이므로 성립한다.
 이를 이용하면 다음이 성립한다는 사실을 알 수 있다.
 
 \begin{align\*}
-(k+1)^p \equiv k^p + 1 \pmod{p}
+(k+1)^p \equiv k^p + 1 \equiv k + 1 \pmod{p}
 \end{align\*}
 
 $\therefore$ 1, 2로부터 수학적 귀납법에 의해 임의의 정수 $a$에 대해 $a^p \equiv a \pmod{p}$가 성립한다. **Q.E.D**
 
 ---
 
-다만, 페르마의 소정리는 모든 소수가 만족시키는 필요조건이지만, 충분조건은 아니다.
+페르마의 소정리는 모든 소수가 만족하는 필요조건이지만, 충분조건은 아니다.
 
 \begin{align\*}
 a^{b-1} \equiv 1 \pmod{b}
 \end{align\*}
 
-위 합동식을 만족시키면서 소수가 아닌 숫자 $b$를 **카마이클 수(Carmichael number)**라고 부르며, 무한히 많이 존재한다고 한다.
+위 합동식을 만족시키면서 소수가 아닌 숫자 $b$를 **카마이클 수(Carmichael number)**라고 부르며, 이는 무한히 많이 존재한다고 알려져 있다.
 
 ---
 
@@ -199,7 +199,7 @@ r &= r_k p^k + r_{k-1} p^{k-1} + r_{k-2} p^{k-2} + \dots + r_1 p + r_0
 \begin{align}
 \sum_{r=0}^{n} \binom{n}{r} x^r &= (1 + x)^n \\\\  
 &= (1+x)^{n_k p^k + n_{k-1} p^{k-1} + n_{k-2} p^{k-2} + \dots + n_1 p + n_0} \\\\  
-&= \prod_{i=0}^k \\{(1+x)^{p_i}\\}^{n_i}
+&= \prod_{i=0}^k \\{(1+x)^{p^i}\\}^{n_i}
 \end{align}
 
 이때 $(1+x)^{p^n}$은 이항정리에 의해 다음을 만족한다.
@@ -217,7 +217,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 수식 (3), (4)로부터 다음을 얻을 수 있다.
 
 \begin{align}
-\prod_{i=0}^k \\{(1+x)^{p_i}\\}^{n_i} \equiv \prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} \pmod p \\\\  
+\prod_{i=0}^k \\{(1+x)^{p^i}\\}^{n_i} \equiv \prod_{i=0}^k \\{1+x^{p^i}\\}^{n_i} \pmod p \\\\  
 \end{align}
 
 우변의 식을 이항정리를 이용해서 전개한 후 정리하면,
@@ -264,8 +264,7 @@ $p$가 소수이므로 모든 $1 \leq i \leq p^n - 1$에 대해서 $\binom{p^n}{
 분모에 있는 $p$의 개수는 $r$과 $n-r$ 각각에 대한 개수를 더해줌으로써 구할 수 있다.
 
 \begin{align\*}
-\left( \left[ \frac{r}{p} \right] + \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] \right) + \left( \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \right) \\\\  
-= \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right)
+\left( \left[ \frac{r}{p} \right] + \left[ \frac{r}{p^2} \right] + \dots + \left[ \frac{r}{p^k} \right] \right) + \left( \left[ \frac{n-r}{p} \right] + \left[ \frac{n-r}{p^2} \right] + \dots + \left[ \frac{n-r}{p^k} \right] \right) = \sum_{i=1}^k \left( \left[ \frac{r}{p^i} \right] + \left[ \frac{n-r}{p^i} \right] \right)
 \end{align\*}
 
 정수 $a, b, m (a \leq b)$에 대해 가우스 기호는 다음 부등식을 만족한다.
@@ -350,19 +349,19 @@ int main()
 
 이때 `dp[i][j]`는 $\binom{i}{j}$를 10,007로 나눈 값을 의미한다.
 
-그러나 이 방법은 시간과 공간 복잡도가 $O(nr)$로, N이 100,00 이상부터는 재귀 깊이(recursion depth)가 커지면서 시간이 상당히 소요된다. 그렇기 때문에 더 큰 N에 대해서는 다음 방법을 이용한다.
+그러나 이 방법은 시간과 공간 복잡도가 $O(nr)$로, N이 10,000 이상부터는 재귀 깊이(recursion depth)가 커지면서 시간이 상당히 소요된다. 그렇기 때문에 더 큰 N에 대해서는 다음 방법을 이용한다.
 
 ---
 
 ### 5-2. Algorithm using Fermat's little theorem
 
-이 방법을 이용하면 $N$이 100,0000 정도일 때까지 빠르게 이항계수를 구할 수 있다.
+이 방법을 이용하면 $N$이 1,000,000 정도일 때까지 빠르게 이항계수를 구할 수 있다.
 
 다만, 페르마의 소정리를 이용하기 때문에 나누는 수가 반드시 소수여야한다.
 
 [백준 11401. 이항 계수 3 문제 링크](https://www.acmicpc.net/problem/11401)
 
-위 문제는 $N$이 400,0000까지 들어올 수 있을 때, 이항계수를 1,000,000,007로 나눈 나머지를 구하는 문제이다.
+위 문제는 $N$이 4,000,000까지 들어올 수 있을 때, 이항계수를 1,000,000,007로 나눈 나머지를 구하는 문제이다.
 
 이렇게 큰 $N$에 대해서는 이항계수를 직접 계산해서 구해야한다.
 
@@ -511,7 +510,6 @@ int main()
 
 ```cpp
 #include <iostream>
-#include <vector>
 using namespace std;
 
 const int maxN = 4000000;
