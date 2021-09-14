@@ -399,21 +399,21 @@ using namespace std;
 const int mod = 1000000007;
 
 // 분할 정복을 이용해서 이항 계수의 분모, 분자 계산
-int mul(int x, int y)
+long long mul(int x, int y)
 {
     if (x == y) return x;
 
     int mid = (x + y) / 2;
-    return (int)((long long)mul(x, mid) * mul(mid + 1, y) % mod);
+    return mul(x, mid) * mul(mid + 1, y) % mod;
 }
 
 // 분할 정복을 이용해서 x^y 계산
-int pow(int x, int y)
+long long pow(int x, int y)
 {
     if (y == 1) return x;
-    int temp = pow(x, y / 2);
-    if (y % 2 == 0) return (int)((long long)temp * temp % mod);
-    return (int)(((long long)temp * temp % mod) * x % mod);
+    long long temp = pow(x, y / 2);
+    if (y % 2 == 0) return temp * temp % mod;
+    return temp * temp % mod * x % mod;
 }
 
 int main()
@@ -424,8 +424,8 @@ int main()
 
     if (k == 0) cout << 1;
     else {
-        int a = mul(n - k + 1, n), b = mul(1, k);
-        cout << (long long)a * pow(b, mod - 2) % mod;
+        long long a = mul(n - k + 1, n), b = mul(1, k);
+        cout << a * pow(b, mod - 2) % mod;
     }
 }
 ```
