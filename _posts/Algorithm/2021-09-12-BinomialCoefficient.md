@@ -1,5 +1,5 @@
 ---
-title: "Various Algorithms to Calculate Binomial Coefficients"
+title: "이항계수 구하기(페르마 소정리, 뤼카의 정리)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
