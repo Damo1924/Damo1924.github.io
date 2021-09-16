@@ -121,15 +121,16 @@ s_{i+1}a + t_{i+1}b &= (s_{i-1}a + t_{i-1}b) - (s_i a + t_i b) q_{i-1} \\\\
 을 얻을 수 있고, 다음 점화식을 얻을 수 있다.
 
 \begin{align\*}
-s_{i+1} = s_{i-1} - s_i q_{i-1} \\\\  
-t_{i+1} = t_{i-1} - t_i q_{i-1} \\\\  
-q_{i} = \left[ \frac{r_0}{r_1} \right]
+s_{i+1} = s_{i-1} - s_i q_{i-1}, t_{i+1} = t_{i-1} - t_i q_{i-1}, q_{i} = \left[ \frac{r_i}{r_{i+1}} \right]
 \end{align\*}
 
 $r_i, s_i, t_i$의 초기값은 다음과 같다.
 
 \begin{align\*}
-a = r_0 = 1 \times a + 0 \times b, s_0 = 1, t_0 = 0 \\\\  
+a = r_0 = 1 \times a + 0 \times b, s_0 = 1, t_0 = 0
+\end{align\*}
+
+\begin{align\*}
 b = r_1 = 0 \times a + 1 \times b, s_1 = 0, t_1 = 1
 \end{align\*}
 
