@@ -96,9 +96,9 @@ a &= bq_0 + r_2 \\\\
 b &= r_2 q_1 + r_3 \\\\  
 r_2 &= r_3 q_2 + r_4 \\\\  
 \dots \\\\  
-r_{i-1} &= r_i q_i + r_{i+1} \\\\  
+r_{i-1} &= r_i q_{i-1} + r_{i+1} \\\\  
 \dots \\\\  
-r_{n-1} &= r_n q_n + r_{n+1}
+r_{n-1} &= r_n q_{n-1} + r_{n+1}
 \end{align\*}
 
 유클리드 호제법은 $r_{n+1} = 0$이 되는 순간 종료되며, 이때 $r_n = gcd(a, b) = g$가 성립한다.
@@ -111,18 +111,19 @@ r_{n-1} &= r_n q_n + r_{n+1}
 r_i = s_i a + t_i b
 \end{align\*}
 
-이때, $r_{i+1} = r_{i-1} - r_i q_i$으로부터
+이때, $r_{i+1} = r_{i-1} - r_i q_{i-1}$으로부터
 
 \begin{align\*}
-s_{i+1}a + t_{i+1}b &= (s_{i-1}a + t_{i-1}b) - (s_i a + t_i b) q_i \\\\  
-&= (s_{i-1} - s_i q_i)a + (t_{i-1} - t_i q_i}b
+s_{i+1}a + t_{i+1}b &= (s_{i-1}a + t_{i-1}b) - (s_i a + t_i b) q_{i-1} \\\\  
+&= (s_{i-1} - s_i q_{i-1})a + (t_{i-1} - t_i q_{i-1})b
 \end{align\*}
 
 을 얻을 수 있고, 다음 점화식을 얻을 수 있다.
 
 \begin{align\*}
-s_{i+1} = s_{i-1} - s_i q_i \\\\  
-t_{i+1} = t_{i-1} - t_i q_i
+s_{i+1} = s_{i-1} - s_i q_{i-1} \\\\  
+t_{i+1} = t_{i-1} - t_i q_{i-1} \\\\  
+q_{i} = \left[ \frac{r_0}{r_1} \right]
 \end{align\*}
 
 $r_i, s_i, t_i$의 초기값은 다음과 같다.
