@@ -1,5 +1,5 @@
 ---
-title: "Algorithms to find the Longest Increasing Subsequence(LIS)"
+title: "최장 증가 부분 수열(Longest Increasing Subsequence, LIS)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
