@@ -166,7 +166,7 @@ int solve (int a, int b, int &s, int &t)
         r1 = tmp;
     }
     
-    s = s2, t = t2;
+    s = s1, t = t1;
     return r1;
 }
 ```
