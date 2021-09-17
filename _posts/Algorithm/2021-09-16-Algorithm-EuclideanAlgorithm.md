@@ -77,6 +77,8 @@ int GCD (int a, int b)
 
 $a$가 $b$로 나누어떨어질 때까지 반복해서 유클리드 호제법을 적용하는 재귀함수로 구현할 수 있다.
 
+
+<br/>
 ## 2. Extended Euclidean Algorithm
 
 확장 유클리드 호제법은 유클리드 호제법을 확장시켜 부정방정식의 해를 구하는 알고리즘을 의미한다.
@@ -184,7 +186,8 @@ s_i a_i + t_i b_i = \gcd(a_i, b_i) = G
 이때 $a_i, b_i$는 유클리드 호제법을 거꾸로 따라갔을 때 나오는 숫자들로, $\gcd(a_i, b_i)$는 모두 같은 값을 갖는다.
 
 \begin{align\*}
-a_{i+1} = k_{i+1} a_i + b_i, b_{i+1} = a_i
+a_{i+1} &= k_{i+1} a_i + b_i \\\\  
+b_{i+1} &= a_i
 \end{align\*}
 
 이를 이용해서 점화식을 풀면 다음과 같다.
@@ -203,13 +206,18 @@ s_i a_i + t_i b_i &= G \\\\
 이를 정리하면 다음을 얻을 수 있다.
 
 \begin{align\*}
-t_{i+1} = s_i - s_{i+1} k_{i+1} = s_i - k_{i+1} t_i \\\\  
-s_{i+1} = t_i
+t_{i+1} = s_i - s_{i+1} k_{i+1} = s_i - k_{i+1} t_i, s_{i+1} = t_i
 \end{align\*}
 
 이때 $a_{i+1} = k_{i+1} a_i + b_i$이므로, $k_{i+1} = \left[ \frac{a_{i+1}}{a_i} \right]$이다.
 
-이는 재귀함수로 구현할 수 있다.
+초기값은 유클리드 호제법이 종료되는 시점인 $b_0 = 0$일 때이므로 다음과 같다.
+
+\begin{align\*}
+a_0 = G, b_0 = 0, s_0 = 1, t_0 = 0
+\end{align\*}
+
+이는 재귀함수로 다음과 같이 구현할 수 있다.
 
 ```cpp
 int solve (int a, int b, int& s, int& t)
@@ -230,3 +238,27 @@ int solve (int a, int b, int& s, int& t)
     return gcd;
 }
 ```
+
+---
+
+
+<br/>
+## 3. Modular Multiplicative Inverse
+
+모듈러 연산의 곱셈의 역원을 구하는 것은 확장 유클리드 호제법을 이용하는 대표적인 케이스이다.
+
+\begin{align\*}
+ax \equiv 1 \pmod n
+\end{align\*}
+
+위 합동식을 만족하는 $x$를 찾는 것은 다음 방정식의 정수해 $(x, y)$를 구하는 것과 동일하다.
+
+\begin{align\*}
+ax + ny = 1
+\end{align\*}
+
+만약 $\gcd(a, n)$이 1이 아니라면 위 방정식이 정수해를 갖지 않으므로 역원도 존재하지 않는다.
+
+$\gcd(a, n) = 1$이면 방정식의 정수해가 존재하고, 그러므로 확장 유클리드 호제법을 통해 역원을 찾을 수 있다.
+
+
