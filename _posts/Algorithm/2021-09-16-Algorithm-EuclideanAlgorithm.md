@@ -261,4 +261,63 @@ ax + ny = 1
 
 $\gcd(a, n) = 1$이면 방정식의 정수해가 존재하고, 그러므로 확장 유클리드 호제법을 통해 역원을 찾을 수 있다.
 
+### [백준] 14565. 역원(Inverse) 구하기
 
+[백준 14565. 역원(Inverse) 구하기](https://www.acmicpc.net/problem/14565)
+
+위 문제는 자연수 $n, a(2 \leq n \leq 10^12, 1 \leq a < n)$가 주어질 때, $\pmod n$에 대한 $a$의 덧셈역과 곱셈역을 구하는 문제이다.
+
+덧셈역은 $n - a$를 통해 구할 수 있고, 곱셈역은 확장 유클리드 호제법을 통해 얻은 값 중 $a$의 계수를 출력하면 된다.
+
+이때, 곱셈역이 음수이거나 $n$보다 크거나 같다면 추가적인 연산을 통해 범위 내에 들어오도록 해준다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+typedef long long ll;
+
+ll solve (ll a, ll b, ll &s, ll &t)
+{
+    ll r1 = a, s1 = 1, t1 = 0;
+    ll r2 = b, s2 = 0, t2 = 1;
+
+    ll tmp;
+    while (r2)
+    {
+        tmp = s2;
+        s2 = s1 - (r1 / r2) * s2;
+        s1 = tmp;
+        
+        tmp = t2;
+        t2 = t1 - (r1 / r2) * t2;
+        t1 = tmp;
+        
+        tmp = r2;
+        r2 = r1 % r2;
+        r1 = tmp;
+    }
+
+    s = s1, t = t1;
+    return r1;
+}
+
+int main()
+{
+    long long n, a;
+    cin >> n >> a;
+    
+    ll s = 0, t = 0;
+    int gcd = solve(n, a, s, t);
+    
+    if (gcd == 1)
+    {
+        while (t < 0)
+            t += n;
+        t %= n;
+    }
+    else t = -1; // 곱셈역이 없는 경우
+    
+    cout << n - a << " " << t;
+}
+```
