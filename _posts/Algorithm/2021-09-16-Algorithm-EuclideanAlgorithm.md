@@ -241,6 +241,91 @@ int solve (int a, int b, int& s, int& t)
 
 ---
 
+### [백준] 3955. 캔디 분배
+
+[백준 3955. 캔디 분배](https://www.acmicpc.net/problem/3955)
+
+대표적인 확장 유클리드 호제법 문제를 풀어보자.
+
+파티에 $K$명이 참가할 때, 모두에게 공평하게 $X$개의 사탕을 나누어 주려고 한다.
+
+한 아이가 사탕을 잃어버리는 것을 고려해서 총 $KX + 1$개의 사탕을 사려고 한다.
+
+사탕 한 봉지에는 사탕이 $C$개가 들어있으며, 이때 사야하는 사탕 봉지의 개수 $N$을 구해야 한다.
+
+즉, $KX + 1 = CN$이므로 다음과 같은 부정방정식을 얻을 수 있다.
+
+\begin{align\*}
+CN - KX = 1
+\end{align\*}
+
+단, 최대로 살 수 있는 사탕 봉지는 $10^9$개이다.
+
+위에서 소개한 두 방법 중 첫 번째 방법을 사용하였는데, 그 이유는 재귀함수는 함수 호출에 시간이 추가적으로 소요되기 때문이다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+typedef long long ll;
+
+ll solve(ll a, ll b, ll& s, ll& t)
+{
+    ll r1 = a, s1 = 1, t1 = 0;
+    ll r2 = b, s2 = 0, t2 = 1;
+
+    ll tmp;
+    while (r2)
+    {
+        tmp = s2;
+        s2 = s1 - (r1 / r2) * s2;
+        s1 = tmp;
+
+        tmp = t2;
+        t2 = t1 - (r1 / r2) * t2;
+        t1 = tmp;
+
+        tmp = r2;
+        r2 = r1 % r2;
+        r1 = tmp;
+    }
+
+    s = s1, t = t1;
+    return r1;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int t;
+    cin >> t;
+
+    while (t--)
+    {
+        int k, c;
+        cin >> k >> c;
+
+        ll x, n;
+        if (solve(k, c, x, n) != 1) cout << "IMPOSSIBLE\n"; // 만족하는 정수해가 없는 경우 = k, c의 최대공약수가 1이 아닌 경우
+        else
+        {
+            while (x >= 0 || n <= 0) // 문제 조건에 의해 x는 음수, n은 양수
+            {
+                x -= c;
+                n += k;
+            }
+            if (n <= 1000000000) cout << n << "\n";
+            else cout << "IMPOSSIBLE\n"; // 최대로 살 수 있는 봉지보다 많은 경우
+        }
+    }
+}
+```
+
+---
+
 
 <br/>
 ## 3. Modular Multiplicative Inverse
@@ -260,6 +345,8 @@ ax + ny = 1
 만약 $\gcd(a, n)$이 1이 아니라면 위 방정식이 정수해를 갖지 않으므로 역원도 존재하지 않는다.
 
 $\gcd(a, n) = 1$이면 방정식의 정수해가 존재하고, 그러므로 확장 유클리드 호제법을 통해 역원을 찾을 수 있다.
+
+---
 
 ### [백준] 14565. 역원(Inverse) 구하기
 
