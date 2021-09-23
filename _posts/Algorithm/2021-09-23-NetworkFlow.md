@@ -1,5 +1,5 @@
 ---
-title: "네트워크 플로우(Network Flow) 문제"
+title: "최대 유량(Maximum Flow) 문제"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -38,7 +38,9 @@ comments: true
 
 그렇다면, 이를 해결할 수 있는 알고리즘에 대해 알아보자.
 
-## 1-1. Ford-Fulkerson Algorithm
+
+<br/>
+## 2. Ford-Fulkerson Algorithm
 
 포드-풀커슨 알고리즘은 다음과 같다.
 
@@ -64,7 +66,9 @@ comments: true
 
 BFS를 사용하는 알고리즘을 Edmonds-Karp Algorithm이라고 부른다.
 
-## 1-2. Edmonds-Karp Algorithm & Implementation
+
+<br/>
+## 3. Edmonds-Karp Algorithm & Implementation
 
 에드몬드-카프 알고리즘은 포드-풀커슨 알고리즘에서 증가 경로를 찾는 방법만을 제시한 것이므로 알고리즘 자체는 동일하다.
 
@@ -150,8 +154,22 @@ void maxFlow (int start, int end)
 }
 ```
 
-## Time complexity of Edmond-Karp Algorithm
-
 앞에서 언급했듯이, 에드몬드-카프 알고리즘의 시간복잡도는 $O(VE^2)$으로 알려져 있다.
 
-BFS 이를 증명하기 위해서는 증가 경로를 많아야 $VE$번 찾는다는 사실을 보이면 된다.
+BFS를 이용해서 소스에서 싱크까지의 경로를 찾는데 $O(E)$이므로 위 사실을 증명하기 위해서는 증가 경로를 많아야 $VE$번 찾는다는 사실을 보이면 된다.
+
+어떤 그래프의 최단 경로의 길이를 $D$라고 하자.
+
+최단 경로를 하나 탐색하면 적어도 하나의 간선은 해당 간선의 유량이 용량과 같아지게 되며, 더 이상 최단 경로가 $D$인 경로 중에는 해당 간선을 통과하는 경로가 존재하지 않게 된다.
+
+만약 길이가 $D$이면서 해당 간선의 반대 방향으로 지나는 경로가 존재한다고 가정하면, $D-1$인 경로가 존재하게 되어 최단 경로가 $D$라는 전제에 모순이다.
+
+그러므로 최단 경로의 길이가 $D$인 동안은 최대 $E$번 증가 경로를 찾게 된다.
+
+최단 경로의 길이는 1부터 $V$까지 가능하므로 위의 과정이 최대 $VE$번 반복된다.
+
+따라서 에드몬드-카프 알고리즘의 시간복잡도는 $O(VE^2)$이다.
+
+
+<br/>
+## 4. 
