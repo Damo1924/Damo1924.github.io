@@ -44,6 +44,8 @@ comments: true
 
 포드-풀커슨 알고리즘은 다음과 같다.
 
+---
+
 1) 소스에서 싱크까지 모든 간선의 용량이 0보다 큰 경로를 구한다.
 
 > 이러한 경로를 **증가 경로**라고 부른다.
@@ -55,6 +57,8 @@ comments: true
 4) 해당 간선들의 반대 방향 간선들을 지나는 유량에 f를 뺀다.
 
 5) 위 과정(1 ~ 4)를 더 이상 증가 경로가 존재하지 않을 때까지 반복한다.
+
+---
 
 문제는, 이 알고리즘은 증가 경로를 찾는 방법에 대해 제시하지 않았다는 점이다.
 
@@ -74,6 +78,8 @@ BFS를 사용하는 알고리즘을 Edmonds-Karp Algorithm이라고 부른다.
 
 다만, 이번에는 코드를 구현하는 관점에서 알고리즘을 정리해보았다.
 
+---
+
 1) BFS를 통해 시작 지점에서 도착 지점까지 이어지는 경로를 하나 찾고, 배열을 하나 선언하여 경로를 저장한다.
 
 2) 위에서 찾은 경로를 따라가면서 해당 경로로 지나갈 수 있는 최대 유량을 구한다.
@@ -92,67 +98,7 @@ BFS를 사용하는 알고리즘을 Edmonds-Karp Algorithm이라고 부른다.
 
 5) 위 과정(1 ~ 4)를 더 이상 시작 지점에서 끝 지점으로 가는 새로운 경로가 없을 때까지 반복한다.
 
-이를 코드로 구현해보면 다음과 같이 나타낼 수 있다.
-
-```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-using namespace std;
-
-#define Max = 100;
-#define Inf = 1000000000;
-
-int n, maxFlow;
-
-int p[Max]; // path
-int c[Max][Max]; // capacity
-int f[Max][Max]; // flow
-
-vector<int> g[Max]; // graph
-
-void maxFlow (int start, int end)
-{
-    while (1)
-    {
-        fill(p, p + Max, -1); // 경로를 -1로 초기화
-        
-        queue<int> q;
-        q.push(start);
-        while (!q.empty())
-        {
-            int x = q.front();
-            q.pop();
-            for (int i = 0; i < g[x].size(); i++)
-            {
-                int y = g[x][i];
-            
-                // 방문하지 않은 노드 중 용량이 남은 경우
-                if (c[x][y] - f[x][y] > 0 && p[y] == -1)
-                {
-                    q.push(y);
-                    p[y] = x; // 경로 저장
-                    if (y == end) break; // 도착 지점에 도달
-                }
-            }
-        }
-        
-        if (p[end] == -1) break; // 더 이상 도착 지점에 도달하는 경로가 없는 경우
-        
-        int flow = Inf; // 찾은 경로를 지나는 최대 유량
-        for (int i = end; i != start; i = p[i])
-            flow = min(flow, c[p[i]][i] - f[p[i]][i]);
-        
-        for (int i = end; i != start; i = p[i])
-        {
-            f[p[i]][i] += flow;
-            f[i][p[i]] -= flow;
-        }
-        maxFlow += flow;
-    }
-}
-```
+---
 
 앞에서 언급했듯이, 에드몬드-카프 알고리즘의 시간복잡도는 $O(VE^2)$으로 알려져 있다.
 
@@ -169,6 +115,112 @@ BFS를 이용해서 소스에서 싱크까지의 경로를 찾는데 $O(E)$이�
 최단 경로의 길이는 1부터 $V$까지 가능하므로 위의 과정이 최대 $VE$번 반복된다.
 
 따라서 에드몬드-카프 알고리즘의 시간복잡도는 $O(VE^2)$이다.
+
+이를 이용해서 간단한 문제 하나를 풀어보도록 하자.
+
+### [백준] 6086. 최대 유량
+
+[백준 6086. 최대 유량 문제 링크](https://www.acmicpc.net/problem/6086)
+
+첫 줄에 간선의 개수 N($1 \leq N \leq 700$)이 주어지고 둘째 줄부터 각 간선의 정보가 주어진다.
+
+각 노드의 이름은 알파벳 소문자(a ~ z)와 대문자(A ~ Z)이며, 간선의 용량은 1000 이하의 자연수이다.
+
+이때 A에서 Z까지의 최대 유량을 구하는 문제로, Edward-Karp Algorithm을 이용하면 시간 내에 해결할 수 있다.
+
+Edward-Karp Algorithm을 이용해서 최대 유량을 반환하는 함수 `maxFlow()`와 노드의 이름이 문자로 주어지므로 이를 0 ~ 51의 정수로 변환해주는 `index()` 함수를 구현하였다.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+using namespace std;
+
+const int Max = 52, Inf = 1000000000;
+
+int n;
+
+int p[Max]; // path
+int c[Max][Max]; // capacity
+int f[Max][Max]; // flow
+
+vector<int> g[Max]; // graph
+
+int maxFlow(int start, int end)
+{
+    int ans = 0;
+
+    while (1)
+    {
+        fill(p, p + Max, -1); // 경로를 -1로 초기화
+
+        queue<int> q;
+        q.push(start);
+        while (!q.empty() && p[end] == -1)
+        {
+            int x = q.front();
+            q.pop();
+            for (int i = 0; i < g[x].size(); i++)
+            {
+                int y = g[x][i];
+
+                // 방문하지 않은 노드 중 용량이 남은 경우
+                if (c[x][y] - f[x][y] > 0 && p[y] == -1)
+                {
+                    q.push(y);
+                    p[y] = x; // 경로 저장
+                }
+            }
+        }
+
+        if (p[end] == -1) break; // 더 이상 도착 지점에 도달하는 경로가 없는 경우
+
+        int flow = Inf; // 찾은 경로를 지나는 최대 유량
+        for (int i = end; i != start; i = p[i])
+            flow = min(flow, c[p[i]][i] - f[p[i]][i]);
+
+        for (int i = end; i != start; i = p[i])
+        {
+            f[p[i]][i] += flow;
+            f[i][p[i]] -= flow;
+        }
+        ans += flow;
+    }
+
+    return ans;
+}
+
+int index(char c)
+{
+    if (c >= 'a') return c - 71;
+    else return c - 65;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        char a, b;
+        int tmp, A, B;
+        cin >> a >> b >> tmp;
+        A = index(a);
+        B = index(b);
+
+        g[A].push_back(B);
+        g[B].push_back(A);
+        c[A][B] += tmp;
+        c[B][A] += tmp;
+    }
+
+    cout << maxFlow(0, 25);
+}
+```
 
 
 <br/>
