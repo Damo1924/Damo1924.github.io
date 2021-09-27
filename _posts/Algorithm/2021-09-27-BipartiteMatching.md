@@ -22,7 +22,7 @@ A 집단이 B 집단을 선택하는 경우의 수는 다양하지만, 그 중 �
 
 두 정점 집단을 각각 A, B라고 하면 우리는 다음과 같은 그래프를 그릴 수 있다.
 
-<img src="https://user-images.githubusercontent.com/88201512/134833829-bda6493a-0293-47bc-9682-7c482d03fbdb.jpg" width="80%" height="80%">
+<center><img src="https://user-images.githubusercontent.com/88201512/134833829-bda6493a-0293-47bc-9682-7c482d03fbdb.jpg" width="80%" height="70%"></center>
 
 A, B에 속하는 정점 이외에 소스(source)와 싱크(sink)의 역할을 할 두 정점을 추가하고, 소스와 A에 속하는 정점들을 모두 연결하고 싱크와 B에 속하는 정점들을 모두 연결한 뒤, 모든 간선들의 용량을 1로 설정해준다.
 
@@ -36,4 +36,11 @@ A, B에 속하는 정점 이외에 소스(source)와 싱크(sink)의 역할을 �
 이 그래프에 대해 DFS/BFS와 Ford-Fulkerson Algorithm을 이용하면 $O(fE)$의 시간복잡도로 해결이 가능하다.
 
 이때 모든 간선의 용량이 1이기 때문에 $f < V$이고, $O(VE)$에 해결이 가능하다는 것을 알 수 있다.
+
+만약 이를 Edmond-Karp Algorithm처럼 BFS로 구현하면 다음과 같은 순서대로 경로를 탐색하게 된다. (소스를 S, 싱크를 T라고 하자)
+
+1. S - A1 - B1 - T (최단 경로)
+2. S - A1 - B1 - A2 - B2 - T (음의 유량이 흐르는 경로를 포함한 경로)
+3. S - A1 - B1 - A2 - B2 - A3 - B3 - T
+4. ...
 
