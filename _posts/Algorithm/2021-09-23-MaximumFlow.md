@@ -503,3 +503,6 @@ int main()
 }
 ```
 
+## References
+[1] [구사과, '유량 관련 알고리즘 증명'](https://koosaga.com/133)  
+[2] [WIKIPEDIA, 'Dinic's algorithm'](https://en.m.wikipedia.org/wiki/Dinic%27s_algorithm)  
