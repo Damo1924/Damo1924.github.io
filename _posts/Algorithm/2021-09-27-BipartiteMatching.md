@@ -179,19 +179,19 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 ---
 
-**Konig's Theorem**
+### Konig's Theorem
 
-\: 이분 그래프의 Minimum Vertex Cover의 크기와 Maximum Matching의 크기는 동일하다.
+> **이분 그래프의 Minimum Vertex Cover의 크기와 Maximum Matching의 크기는 동일하다.**
+
+증명을 하기 전에, 증명에 필요한 몇 가지 개념들에 대해 정리해보았다.
+
+- **Matching**\: 어느 두 간선도 끝점을 공유하지 않는 그래프에 있는 간선들의 부분집합으로, 어떤 정점이 매칭되었다는 것은 matching에 있는 간선들 중에 해당 정점을 끝점으로 하는 간선이 존재한다는 것을 의미한다.
+
+- **Alternaing path**\: 그래프 상에 존재하는 경로들 중 matching에 포함되는 간선들과 matching에 포함되지 않는 간선들이 번갈아 나타나는 경로
+
+- **Augmenting path**\: 양쪽 끝 정점이 모두 매칭되지 않은 alternating path
 
 **proof**
-
-위 정리에 대한 증명을 하기 전에, 증명에 필요한 몇 가지 개념들에 대해 정리해보았다.
-
-**Matching**\: 어느 두 간선도 끝점을 공유하지 않는 그래프에 있는 간선들의 부분집합으로, 어떤 정점이 매칭되었다는 것은 matching에 있는 간선들 중에 
-
-**Alternaing path**\: 그래프 상에 존재하는 경로들 중 matching에 포함되는 간선들과 matching에 포함되지 않는 간선들이 번갈아 나타나는 경로
-
-**Augmenting path**\: 양쪽 끝 정점이 모두 매칭되지 않은 alternating path
 
 **Lemma 1.** 이분 그래프에서 Minimum Vertex Cover의 크기는 Maximum Matching의 크기보다 크거나 같다.
 
@@ -199,13 +199,51 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 > 
 > 그러면 적어도 하나의 매칭은 해당 매칭의 두 정점이 모두 Vertex Cover에 속하지 않을 것이다.
 > 
-> $\therefore$ Maximum Matching의 크기 $\leq$ Minimum Vertex Cover의 크기
+> $\therefore$ Maximum Matching의 크기 $\leq$ Minimum Vertex Cover의 크기 **Q.E.D**
 
-**Lemma 2.** 
+Lemma 1에 의해 만약 maximum matching의 크기와 같은 크기를 갖는 vertex cover가 존재한다면, 그것이 minimum vertex cover가 된다는 것을 알 수 있다.
 
-> 이분 그래프에서의 최대 매칭 문제를 최대 유량 문제로 바꾸어서 최대 유량을 구하면, 이 값은 최대 매칭의 크기와 동일하다.
-> 1
-> 또, Max-Flow Min-Cut Theorem에 의해 최대 유량의 크기는 Minimum Cut의 크기와 같
+**Lemma 2 (Berge's lemma).** Maximum matching들은 augmenting path를 가지지 않는다.
+
+> Augmenting path를 가지는 matching이 존재한다고 가정하자.
+> 
+> Augmenting path에 있는 각 간선들에 대해, matching에 포함되면 matching에서 제거하고 matching에 포함되지 않으면 matching에 추가하는 작업을 수행하자.
+> 
+> Augmenting path는 alternating path의 특징을 만족하므로, 위 과정을 거쳐도 matching에는 여전히 끝점을 공유하는 간선이 존재하지 않게 된다.
+> 
+> 그런데 Augmenting path는 양끝 간선이 모두 matching에 포함되지 않으므로 우리는 기존 matching보다 크기가 1 큰 matching을 얻게 된다.
+> 
+> $\therefore$ Augmenting path를 가지는 matching은 maximum matching이 아니다.
+> 
+> 참인 명제의 대우도 참. **Q.E.D**
+
+다음과 같이 정의하자.
+
+$G(V, E)$: bipartite graph (V: vertices, E: edges)
+
+이분그래프 $G$의 두 정점들의 부분집합을 각각 $X, Y$라고 한다.
+
+$M$: Maximum matching of $G$
+
+$U$: $X$의 정점들 중 $M$에 대해 매칭되지 않은 정점들의 집합
+
+$Z$: $U$의 정점들로부터 $M$에 대한 alternating path를 통해 접근이 가능한 정점들의 집합
+
+$S = Z \cap X$, $T = Z \cap Y$
+
+$N(S)$: $S$의 정점들에 인접한 정점들의 집합
+
+**Lemma 3.** $U$의 정점에서 $S$의 정점까지의 alternating path는 $M$에 포함된 간선으로 끝나고, $U$의 정점에서 $T$의 정점까지의 alternating path는 $M$에 포함되지 않은 간선으로 끝난다.
+
+> $U$의 정점에서 시작하는 alternating path의 첫 번째 간선은 $M$에 포함되지 않는다.
+> 
+> $X$의 임의의 정점에서 $X$의 다른 정점까지의 경로의 길이는 짝수이고, $X$의 임의의 정점에서 $Y$의 어떤 정점까지의 경로의 길이는 홀수이다.
+> 
+> 이로부터 $U$부터 $S$까지의 경로의 길이는 짝수이고, $T$까지의 경로의 길이는 홀수임을 알 수 있다.
+> 
+> 경로의 길이가 짝수면 첫 번째와 마지막 간선의 $M$에 대한 포함관계가 다르고, 경로의 길이가 홀수면 동일한 포함관계를 갖기 때문에 명제가 증명된다. **Q.E.D**
+
+**Lemma 4.** 
 
 ## References
 
