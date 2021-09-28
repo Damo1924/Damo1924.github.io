@@ -191,6 +191,8 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 - **Augmenting path**\: 양쪽 끝 정점이 모두 매칭되지 않은 alternating path
 
+---
+
 **proof**
 
 **Lemma 1.** 이분 그래프에서 Minimum Vertex Cover의 크기는 Maximum Matching의 크기보다 크거나 같다.
@@ -271,10 +273,46 @@ $X$의 정점들 중 매칭되지 않은 정점들은 모두 $U$에 포함되므
 
 그러므로 $K \cap X = X \setminus S$의 모든 정점들은 $M$에 대해 매칭된다는 것을 알 수 있다.
 
+반대로 $K \cap Y = T$의 정점들 중 매칭되지 않은 정점이 존재한다면, $U$부터 해당 정점까지의 alternating path가 양끝 간선이 모두 matching에 포함되지 않기 때문에 augumenting path가 된다.
+
+그러나 이는 Lemma 2에 의해 모순이므로 $K \cap Y = T$의 모든 정점들도 $M$에 대해 매칭되었음을 알 수 있다.
+
+$\therefore$ $K$의 모든 정점은 $M$에 대해 매칭되었다. $\dots (1)$
+
+만약 어떤 간선 $e \in M$의 양 끝점이 모두 집합 $K$에 속해있다면 반드시 한 끝점 $u$는 $K \cap X$에 속하고, 다른 끝점 $v$는 $K \cap Y$에 속해있을 것이다.
+
+$K \cap Y = T$이므로 Lemma 3에 의해 $v$까지의 alternating path는 matching에 포함되지 않은 간선으로 끝난다는 것을 알 수 있다.
+
+이때 위 alternating path는 간선 $e$를 통해 $u$로 연장될 수 있는데, 그럼 $u$는 $U$로부터 alternating path로 연결될 수 있는 정점이므로 $u \in S$이고, 이는 $u \in X \setminus S$에 대해 모순이다.
+
+$\therefore$ $M$의 모든 간선들 중 양 끝점이 모두 $K$에 속한 간선은 존재하지 않는다. $\dots (2)$
+
+(1), (2)에 의해 $\left\vert K \right\vert = \left\vert M \right\vert$가 되고, Lemma 1로부터 $K$가 minimum vertex cover가 증명된다.
+
+---
+
+증명이 꽤나 복잡하고 한 번에 이해하기 어렵기는 하지만, 정리 자체는 매우 간단하고 적용하기 쉽다.
+
+단순히 이분 그래프에서 minimum vertex cover의 크기를 구하는 문제는 최대 유량의 크기를 구하는 문제로 생각하고 풀면 된다.
+
+다음 문제는 아주 대표적인 minimum vertex cover의 크기를 구하는 문제이다.
+
+---
+
+### [백준] 1867. 돌멩이 제거
+
+[백준 1867. 돌멩이 제거 문제 링크](https://www.acmicpc.net/problem/1867)
+
+n행 n열 격자에 k개의 돌멩이를 격자 당 최대 하나씩 올려두었다.
+
+돌멩이를 전부 제거하려고 하는데, 한 번에 한 행이나 한 열에 있는 돌멩이를 모두 제거할 수 있다.
+
+이때 돌멩이를 모두 제거하는데 필요한 횟수를 구하는 문제이다.
+
 
 
 ## References
 
 [1] [안경잡이개발자, '이분 매칭(Bipartite Matching)'](https://blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221240613074)  
 [2] [구사과, '유량 관련 알고리즘 증명'](https://koosaga.com/133)  
-[3] 
+[3] [CODEFORCES, BessieTheCow's blog, 'Konig's Theorem'](https://codeforces.com/blog/entry/78255)  
