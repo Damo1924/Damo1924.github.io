@@ -197,7 +197,9 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 **Lemma 2.** 이분 그래프에서 Maximum Matching의 크기와 동일한 크기를 갖는 Vertex Cover가 존재한다.
 
-> 이분 그래프의 두 정점 집합을 L, R, 그리
+> 이분 그래프에서의 최대 매칭 문제를 최대 유량 문제로 바꾸어서 최대 유량을 구하면, 이 값은 최대 매칭의 크기와 동일하다.
+> 1
+> 또, Max-Flow Min-Cut Theorem에 의해 최대 유량의 크기는 Minimum Cut의 크기와 같
 
 ## References
 
