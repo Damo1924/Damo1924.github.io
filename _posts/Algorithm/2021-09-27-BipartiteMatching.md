@@ -243,7 +243,35 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 > 
 > 경로의 길이가 짝수면 첫 번째와 마지막 간선의 $M$에 대한 포함관계가 다르고, 경로의 길이가 홀수면 동일한 포함관계를 갖기 때문에 명제가 증명된다. **Q.E.D**
 
-**Lemma 4.** 
+**Lemma 4.** $N(S) = T$
+
+> $U$의 정점부터 정점 $u \in T$까지의 alternating path에서 $u$의 바로 전 정점은 $S$에 포함된다는 사실로부터 $N(S) \subseteq T$이다.
+> 1
+> 정점 $u \in N(S)$가 $M$에 포함되지 않는 간선에 의해 정점 $v \in S$와 연결되었다면, $v$까지의 alternating path는 $u$까지 연장될 수 있다. 그러므로 $u \in T$이다.
+> 1
+> 반대로 정점 $u \in N(S)$가 $M$에 포함되는 간선에 의해 정점 $v \in S$와 연결되었다면, $u$는 $v$까지의 alternating path에 반드시 포함된다.
+> 1
+> Lemma 3에 의해 $v$까지의 alternating path는 반드시 $M$에 포함되는 간선으로 끝나므로 $u$는 $v$까지의 alternating path에 있는 정점이다. 즉, $u \in T$이다.
+> 1
+> 이로부터 $T \subseteq N(S)$이고, $N(S) \subseteq T$도 성립하므로 $N(S) = T$이다. **Q.E.D**
+
+집합 $K = (X \setminus S) \cup T$라고 하자.
+
+$u \in X$, $v \in Y$, $u, v \notin K$인 정점 $u, v$에 대해 간선 $e = (u, v)$가 존재한다고 가정하자.
+
+그러면 $u \in S$, $v \notin T$인데, 이는 Lemma 4에 의해 $v \in N(S)$이지만 $v \notin T$이므로 모순이다.
+
+그러므로 모든 간선들은 적어도 하나의 끝점이 $K$에 포함된다.
+
+$\therefore$ $K$는 vertex cover이다.
+
+이제 $K$의 모든 정점들이 $M$에 의해 매칭되고, $M$의 어떤 간선도 $K$의 두 정점을 연결하지 않는다는 것을 보임으로써 $\left\vert K \right\vert = \left\vert M \right\vert$임을 증명하자.
+
+$X$의 정점들 중 매칭되지 않은 정점들은 모두 $U$에 포함되므로, $S$에도 포함된다.
+
+그러므로 $K \cap X = X \setminus S$의 모든 정점들은 $M$에 대해 매칭된다는 것을 알 수 있다.
+
+
 
 ## References
 
