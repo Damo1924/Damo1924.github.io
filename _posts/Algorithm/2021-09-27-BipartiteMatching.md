@@ -185,7 +185,13 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 **proof**
 
-위 정리를 증명하기 위해 두 가지 Lemma를 먼저 증명해야한다.
+위 정리에 대한 증명을 하기 전에, 증명에 필요한 몇 가지 개념들에 대해 정리해보았다.
+
+**Matching**\: 어느 두 간선도 끝점을 공유하지 않는 그래프에 있는 간선들의 부분집합으로, 어떤 정점이 매칭되었다는 것은 matching에 있는 간선들 중에 
+
+**Alternaing path**\: 그래프 상에 존재하는 경로들 중 matching에 포함되는 간선들과 matching에 포함되지 않는 간선들이 번갈아 나타나는 경로
+
+**Augmenting path**\: 양쪽 끝 정점이 모두 매칭되지 않은 alternating path
 
 **Lemma 1.** 이분 그래프에서 Minimum Vertex Cover의 크기는 Maximum Matching의 크기보다 크거나 같다.
 
@@ -195,7 +201,7 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 > 
 > $\therefore$ Maximum Matching의 크기 $\leq$ Minimum Vertex Cover의 크기
 
-**Lemma 2.** 이분 그래프에서 Maximum Matching의 크기와 동일한 크기를 갖는 Vertex Cover가 존재한다.
+**Lemma 2.** 
 
 > 이분 그래프에서의 최대 매칭 문제를 최대 유량 문제로 바꾸어서 최대 유량을 구하면, 이 값은 최대 매칭의 크기와 동일하다.
 > 1
