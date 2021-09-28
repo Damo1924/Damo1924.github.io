@@ -164,4 +164,36 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 차단 용량을 구하는 과정이 $\sqrt{V}$번만 반복되므로 $O(E \sqrt{V})$의 시간복잡도를 가지며, 이를 **Hopcroft-Karp Algorithm**이라고 부른다.
 
 
+<br/>
+## 3. Minimum Vertex Cover & Konig's Theorem
+
+**Vertec Cover**란 다음 조건을 만족하는 정점들의 부분집합을 의미한다.
+
+> **그래프의 모든 간선은 Vertex Cover의 정점 중 하나 이상에 인접해야 한다.
+
+이 중 크기가 가장 작은 부분집합을 **Minimum Vertex Cover**라고 부른다.
+
+일반적인 그래프의 Minimum Vertex Cover는 다항시간 내에 풀 수 없다고 알려져 있다.
+
+하지만 이분 그래프에서는 **쾨닉의 정리(Konig's Theorem)**을 이용하여 이를 해결할 수 있다.
+
+**Konig's Theorem**
+
+\: 이분 그래프의 Minimum Vertex Cover의 크기와 Maximum Matching의 크기는 동일하다.
+
+**proof**
+
+
+> Maximum Matching보다 작은 Vertex Cover가 존재한다고 가정하자.
+> 1
+> 그러면 적어도 하나의 매칭은 해당 매칭의 두 정점이 모두 Vertex Cover에 속하지 않을 것이다.
+> 1
+> 
+
+
+
 ## References
+
+[1] [안경잡이개발자, '이분 매칭(Bipartite Matching)'](https://blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221240613074)  
+[2] [구사과, '유량 관련 알고리즘 증명'](https://koosaga.com/133)  
+[3] 
