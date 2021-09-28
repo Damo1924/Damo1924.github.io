@@ -169,13 +169,15 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 **Vertec Cover**란 다음 조건을 만족하는 정점들의 부분집합을 의미한다.
 
-> **그래프의 모든 간선은 Vertex Cover의 정점 중 하나 이상에 인접해야 한다.
+> **그래프의 모든 간선은 Vertex Cover의 정점 중 하나 이상에 인접해야 한다.**
 
 이 중 크기가 가장 작은 부분집합을 **Minimum Vertex Cover**라고 부른다.
 
 일반적인 그래프의 Minimum Vertex Cover는 다항시간 내에 풀 수 없다고 알려져 있다.
 
-하지만 이분 그래프에서는 **쾨닉의 정리(Konig's Theorem)**을 이용하여 이를 해결할 수 있다.
+하지만 이분 그래프에서는 **쾨닉의 정리(Konig's Theorem)**을 이용하여 이를 해결할 수 있는데, 이에 대해 알아보도록 하자.
+
+---
 
 **Konig's Theorem**
 
@@ -183,14 +185,19 @@ Dinic's Algorithm을 이용한다면 더 효과적인 시간복잡도로 최대 
 
 **proof**
 
+위 정리를 증명하기 위해 두 가지 Lemma를 먼저 증명해야한다.
+
+**Lemma 1.** 이분 그래프에서 Minimum Vertex Cover의 크기는 Maximum Matching의 크기보다 크거나 같다.
 
 > Maximum Matching보다 작은 Vertex Cover가 존재한다고 가정하자.
-> 1
-> 그러면 적어도 하나의 매칭은 해당 매칭의 두 정점이 모두 Vertex Cover에 속하지 않을 것이다.
-> 1
 > 
+> 그러면 적어도 하나의 매칭은 해당 매칭의 두 정점이 모두 Vertex Cover에 속하지 않을 것이다.
+> 
+> $\therefore$ Maximum Matching의 크기 $\leq$ Minimum Vertex Cover의 크기
 
+**Lemma 2.** 이분 그래프에서 Maximum Matching의 크기와 동일한 크기를 갖는 Vertex Cover가 존재한다.
 
+> 이분 그래프의 두 정점 집합을 L, R, 그리
 
 ## References
 
