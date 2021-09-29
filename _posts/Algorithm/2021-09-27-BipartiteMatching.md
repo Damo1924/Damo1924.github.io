@@ -248,13 +248,13 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 **Lemma 4.** $N(S) = T$
 
 > $U$의 정점부터 정점 $u \in T$까지의 alternating path에서 $u$의 바로 전 정점은 $S$에 포함된다는 사실로부터 $N(S) \subseteq T$이다.
-> 1
+> 
 > 정점 $u \in N(S)$가 $M$에 포함되지 않는 간선에 의해 정점 $v \in S$와 연결되었다면, $v$까지의 alternating path는 $u$까지 연장될 수 있다. 그러므로 $u \in T$이다.
-> 1
+> 
 > 반대로 정점 $u \in N(S)$가 $M$에 포함되는 간선에 의해 정점 $v \in S$와 연결되었다면, $u$는 $v$까지의 alternating path에 반드시 포함된다.
-> 1
+> 
 > Lemma 3에 의해 $v$까지의 alternating path는 반드시 $M$에 포함되는 간선으로 끝나므로 $u$는 $v$까지의 alternating path에 있는 정점이다. 즉, $u \in T$이다.
-> 1
+> 
 > 이로부터 $T \subseteq N(S)$이고, $N(S) \subseteq T$도 성립하므로 $N(S) = T$이다. **Q.E.D**
 
 집합 $K = (X \setminus S) \cup T$라고 하자.
@@ -287,7 +287,7 @@ $K \cap Y = T$이므로 Lemma 3에 의해 $v$까지의 alternating path는 match
 
 $\therefore$ $M$의 모든 간선들 중 양 끝점이 모두 $K$에 속한 간선은 존재하지 않는다. $\dots (2)$
 
-(1), (2)에 의해 $\left\vert K \right\vert = \left\vert M \right\vert$가 되고, Lemma 1로부터 $K$가 minimum vertex cover가 증명된다.
+(1), (2)에 의해 $\left\vert K \right\vert = \left\vert M \right\vert$가 되고, Lemma 1로부터 $K$가 minimum vertex cover이라는 것이 증명된다.
 
 ---
 
@@ -307,7 +307,37 @@ n행 n열 격자에 k개의 돌멩이를 격자 당 최대 하나씩 올려두�
 
 돌멩이를 전부 제거하려고 하는데, 한 번에 한 행이나 한 열에 있는 돌멩이를 모두 제거할 수 있다.
 
-이때 돌멩이를 모두 제거하는데 필요한 횟수를 구하는 문제이다.
+이때 돌멩이를 모두 제거하는데 필요한 최소 횟수를 구하는 문제이다.
+
+n개의 행을 하나의 정점 집합, n개의 열을 다른 정점 집합이라 하고, (i, j)에 돌멩이가 있으면 i행과 j열을 연결해준다.
+
+그렇다면 모든 돌멩이를 제거하는 최소 횟수는 minimum vertex cover의 크기가 된다.
+
+Konig's Theorem에 의해 이분 그래프에서 minimum vertex cover의 크기는 maximum matching의 크기와 같으므로 매칭의 크기를 구해 출력하면 된다.
+
+---
+
+
+<br/>
+## 4. Maximum Independent Set
+
+**Independent Set**이란 집합 내의 어떤 두 정점도 하나의 간선으로 연결되지 않는 정점들의 부분집합을 말한다.
+
+그 중 집합의 크기가 가장 큰 것을 **Maximum Independent Set**이라고 부른다.
+
+Minimum Vertex Cover와 마찬가지로 일반적인 그래프에서 Maximum Independent Set을 구하는 것은 다항시간 안에 풀 수 없다.
+
+하지만 이분 그래프의 Maximum Independent Set은 Minimum Vertex Cover의 여집합이다.
+
+Vertex Cover는 모든 간선들의 끝점을 적어도 하나는 포함하고 있는 집합이므로 Vertex Cover의 여집합에서는 어떤 두 정점을 선택해도 두 정점을 연결하는 간선이 존재하지 않음을 알 수 있다.
+
+그러므로 어떤 Vertex Cover의 여집합은 Independent Set이다.
+
+반대로 어떤 Independent Set의 여집합은 Independent Set의 원소들을 끝점으로 가지는 간선을 모두 포함하므로 Vertex Cover라고 할 수 있다.
+
+즉, 이분 그래프의 정점 개수를 $V$, Minimum Vertex Cover를 $C$, Maximum Independent Set을 $S$라고 하면 다음이 성립한다.
+
+$V = \left\vert C \right\vert + \left\vert S \right\vert$
 
 
 
