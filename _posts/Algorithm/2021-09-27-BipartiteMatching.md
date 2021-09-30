@@ -1,5 +1,5 @@
 ---
-title: "이분 매칭(Bipartite Matching) 알고리즘"
+title: "이분 매칭(Bipartite Matching) 알고리즘과 이분 그래프에서의 확장"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -339,10 +339,21 @@ Vertex Cover는 모든 간선들의 끝점을 적어도 하나는 포함하고 �
 
 $V = \left\vert C \right\vert + \left\vert S \right\vert$
 
+---
 
+### [백준] 11014. 컨닝 2
+
+[백준 11014. 컨닝 2 문제 링크](https://www.acmicpc.net/problem/11014)
+
+이 문제는 이분 그래프의 Maximum Independent Set의 크기를 구하는 문제이다.
+
+자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-1014/#2-%EC%9D%B4%EB%B6%84-%EB%A7%A4%EC%B9%AD%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%92%80%EC%9D%B4)를 참고하자.
+
+---
 
 ## References
 
 [1] [안경잡이개발자, '이분 매칭(Bipartite Matching)'](https://blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221240613074)  
 [2] [구사과, '유량 관련 알고리즘 증명'](https://koosaga.com/133)  
 [3] [CODEFORCES, BessieTheCow's blog, 'Konig's Theorem'](https://codeforces.com/blog/entry/78255)  
+[4] [Samsung Software Membership, Acka1357, '최대 이분 매칭에 관한 몇 가지 정리'](http://www.secmem.org/blog/2019/12/15/theorem-about-bipartite-matching/#minimum-vertex-cover)  
