@@ -347,10 +347,14 @@ $V = \left\vert C \right\vert + \left\vert S \right\vert$
 
 이 문제는 이분 그래프의 Maximum Independent Set의 크기를 구하는 문제이다.
 
+이러한 문제들은 이분 그래프 문제인 것을 알고 어떻게 그래프를 그려야하는지 알아내는 것이 중요하다.
+
 자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-1014/#2-%EC%9D%B4%EB%B6%84-%EB%A7%A4%EC%B9%AD%EC%9D%84-%EC%9D%B4%EC%9A%A9%ED%95%9C-%ED%92%80%EC%9D%B4)를 참고하자.
 
 ---
 
+
+<br/>
 ## References
 
 [1] [안경잡이개발자, '이분 매칭(Bipartite Matching)'](https://blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221240613074)  
