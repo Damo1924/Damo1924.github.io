@@ -53,4 +53,12 @@ while (start <= end)
 }
 ```
 
-##
+### [관련 문제]
+
+**[백준] 
+
+<br/>
+## 2. Parametric Search
+
+
+
