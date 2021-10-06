@@ -55,11 +55,78 @@ while (start <= end)
 
 
 <br/>
-## 2. 관련 문제
+## 2. lower_bound, upper_bound
 
-다음 문제들은 이분 탐색을 응용해서 해결할 수 있는 대표적인 문제들이다.
+이분 탐색 알고리즘이 사용되는 대표적인 예시로 정렬된 배열에서 **lower_bound, upper_bound**를 구하는 문제를 들 수 있다.
 
-이 문제들을 풀면서 사용할 이분 탐색의 응용을 Parametric Search라고도 하는데, 이는 최댓값이나 최솟값을 구하는 문제에서 유용하게 사용될 수 있다.
+이는 `<algorithm>` 헤더 파일에 `std::lower_bound`와 `std::upper_bound`라는 함수로 정의되어 있다.
+
+또, `map`과 `set`은 `lower_bound`와 `upper_bound`라는 멤버 함수를 통해 원하는 원소의 위치를 찾을 수 있다.
+
+이 두 가지 함수를 직접 구현해보며 그 원리에 대해 알아보도록 하자.
+
+`lower_bound(k)`는 `arr[i-1] < k <= arr[i]`인 `i`를 찾는 함수, `upper_bound(k)`는 `arr[i-1] <= k < arr[i]`인 `i`를 찾는 함수이다.
+
+바꿔 말하면, lower_bound는 `k <= arr[i]`를 만족하는 `i` 중 최솟값을, upper_bound는 `k < arr[i]`인 `i` 중 최솟값을 반환한다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int _lower_bound(const vector<int>& v, int x)
+{
+    const int n = v.size();
+    int start = -1, end = n;
+    while (start + 1 < end)
+    {
+        int mid = (start + end) / 2;
+        if (v[mid] >= x) end = mid;
+        else start = mid;
+    }
+    return end;
+}
+
+int _upper_bound(const vector<int>& v, int x)
+{
+    const int n = v.size();
+    int start = -1, end = n;
+    while (start + 1 < end)
+    {
+        int mid = (start + end) / 2;
+        if (v[mid] > x) end = mid;
+        else start = mid;
+    }
+    return end;
+}
+
+int main()
+{
+    vector<int> v(10);
+    for (int i = 0; i < 10; i++) cin >> v[i];
+    cout << _lower_bound(v, 3) << endl;
+    cout << _upper_bound(v, 3) << endl;
+}
+```
+```
+1 2 2 3 3 3 3 4 5 6
+```
+```
+3
+7
+```
+
+추가적으로 어떤 값 k에 대해 `upper_bound(k) - lower_bound(k)`의 값은 해당 리스트에 존재하는 k의 개수를 의미한다.
+
+
+
+<br/>
+## 3. 관련 문제
+
+다음은 이분 탐색 알고리즘을 이용해서 해결할 수 있는 대표적인 문제들의 종류이다.
+
+1. 이분 탐색 알고리즘을 직접적으로 사용해서 값을 구하는 문제
+2. lower_bound, upper_bound를 이용하는 문제
+3. **Parametric Search**: 최적화 문제, 어떤 조건(check(x))을 만족하는 x의 최댓값이나 최솟값을 구하는 문제
 
 ---
 
@@ -136,6 +203,20 @@ int main()
 	cout << n;
 }
 ```
+
+---
+
+### [백준] 12015. 가장 긴 증가하는 부분 수열 2
+
+[백준 12015. 가장 긴 증가하는 부분 수열 2 문제 링크](https://www.acmicpc.net/problem/12015)
+
+수열이 주어질 때, 가장 긴 증가하는 부분 수열을 구하는 아주 유명한 문제이다.
+
+수열의 크기가 작다면 $O(N^2)$으로 해결할 수 있지만, 이 문제처럼 수열의 크기가 큰 경우(1,000,000)에는 $O(N \log N)$의 시간복잡도를 가지는 알고리즘으로 해결해야 한다.
+
+이 알고리즘은 lower_bound를 이용함으로써 빠른 시간 내에 가장 긴 증가하는 부분 수열의 길이를 구할 수 있다.
+
+자세한 풀이는 [이 포스트](https://damo1924.github.io/algorithm/LIS/)에 정리해두었다.
 
 ---
 
