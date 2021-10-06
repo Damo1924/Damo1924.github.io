@@ -42,6 +42,7 @@ void Student::printInfo(){
     cout << "Age: " << age << endl;
     cout << "Height: " << height << endl;
 }
+```
 
 ## 1-3. 구조체 선언하기 
 구조체의 선언은 일반적인 변수들을 선언하듯이 해줄 수 있다.
