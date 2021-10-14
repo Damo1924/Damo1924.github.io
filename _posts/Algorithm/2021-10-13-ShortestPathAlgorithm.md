@@ -41,8 +41,10 @@ comments: true
 다익스트라 알고리즘은 다음과 같다.
 
 1. 큐 `q`에 모든 **미방문 꼭짓점**을 저장해둔다.
-2. 모든 꼭짓점에 대해 현재까지 해당 꼭짓점까지의 최단 거리를 저장할 배열 `dist[i]`를 선언하고, 초기값을 저장한다.
-3. 
+2. 모든 꼭짓점에 대해 현재까지 해당 꼭짓점까지의 최단 거리를 저장할 배열 `dist[i]`를 선언하고, 초기값을 저장한다. 출발하는 꼭짓점은 0, 나머지 꼭짓점은 충분히 큰 값 `INF`로 초기화한다.
+3. 큐를 탐색해서 `dist`에 저장된 값이 가장 작은 꼭짓점 `v`에 대해 연결된 꼭짓점을 탐색한다.
+4. `v`를 거쳐 도달한 경로의 길이가 `dist`에 저장된 길이보다 작으면 `dist`의 값을 갱신한다.
+5. `v`에 연결된 모든 꼭짓점에 대해 4번 작업을 수행했다면, `v`를 큐에서 제거한다.
 
 다익스트라 알고리즘의 구조는 가중치가 없는 그래프에서 BFS로 최단 경로를 찾는 것을 확장시킨 것으로 생각하면 쉽다.
 
@@ -184,6 +186,7 @@ int main()
 
 ```cpp
 #include <iostream>
+#include <vector>
 using namespace std;
 const int INF = 1000000000;
 
@@ -202,6 +205,9 @@ int main()
             map[i][j] = INF;
     
     int path[101][101];
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            path[i][j] = 0;
     
     int a, b, c;
     while(m--)
@@ -214,7 +220,6 @@ int main()
         }
     }
     
-    
     for (int k = 1; k <= n; k++)
         for (int i = 1; i <= n; i++)
             for (int j = 1; j <= n; j++)
@@ -224,6 +229,7 @@ int main()
                     path[i][j] = path[i][k];
                 }
     
+    // 최단 경로 길이 출력
     for (int i = 1; i <= n; i++)
     {
         for (int j = 1; j <= n; j++)
@@ -233,17 +239,27 @@ int main()
         }
         cout << "\n";
     }
-    cout << "\n";
     
-    int u = 2, v = 1;
-    if (path[u][v] == 0) cout << "No Path!";
-    else
+    // 각 최단 경로 출력
+    for (int i = 1; i <= n; i++)
     {
-        cout << u << " ";
-        while (u != v)
+        for (int j = 1; j <= n; j++)
         {
-            u = path[u][v];
-            cout << u << " ";
+            vector<int> v;
+            int u = i;
+            if (u == j || path[u][j] == 0) cout << "0\n";
+            else
+            {
+                v.push_back(u);
+                while (u != j)
+                {
+                    u = path[u][j];
+                    v.push_back(u);
+                }
+                cout << v.size();
+                for (int k = 0; k < v.size(); k++) cout << " " << v[k];
+                cout << "\n";
+            }
         }
     }
 }
