@@ -128,10 +128,93 @@ int main()
 
 ---
 
-즉, 플로이드-워셜 알고리즘은 $N$개의 정점을 가진 그래프에 대해서 삼중 반복문을 사용하므로 $O(N^3)$의 시간복잡도를 가진다.
+### 최단 경로 재현하기
+
+플로이드-워셜 알고리즘은 간단한 변형을 통해 $i$에서 $j$까지의 최단 경로 자체를 구할 수 있다.
+
+이를 위해 다음과 같은 2차원 배열을 정의하자.
+
+> `path[i][j]` = 정점 i에서 j로 가는 최단 경로에서 i 다음에 오는 정점의 번호
+
+초기값은 모든 i, j에 대해 `path[i][j] = 0`으로 두고, 정점 i와 j를 연결하는 간선이 있으면 `path[i][j] = j`를 저장한다.
+
+반복문을 수행하면서 `map[i][j] > map[i][k] + map[k][j]`가 성립하면 map을 갱신함과 동시에 `path[i][j] = path[i][k]`로 갱신한다.
+
+위 과정을 마치면 정점 u, v에 대해 `u != v`일 동안 `u = path[u][v]`로 갱신해가면서 u를 출력하면 u에서 v로 가는 경로를 얻을 수 있다.
+
+다음은 위 문제에서 임의의 u, v에 대해 u에서 v로 가는 최단 경로를 출력하는 코드를 추가한 코드이다.
+
+```cpp
+#include <iostream>
+using namespace std;
+const int INF = 1000000000;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int n, m;
+    cin >> n >> m;
+    
+    int map[101][101];
+    for (int i = 1; i <= n; i++)
+        for (int j = 1; j <= n; j++)
+            map[i][j] = INF;
+    
+    int path[101][101];
+    
+    int a, b, c;
+    while(m--)
+    {
+        cin >> a >> b >> c;
+        if (map[a][b] > c)
+        {
+            map[a][b] = c;
+            path[a][b] = b;
+        }
+    }
+    
+    
+    for (int k = 1; k <= n; k++)
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+                if (map[i][j] > map[i][k] + map[k][j])
+                {
+                    map[i][j] = map[i][k] + map[k][j];
+                    path[i][j] = path[i][k];
+                }
+    
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= n; j++)
+        {
+            if (i == j || map[i][j] == INF) cout << "0 ";
+            else cout << map[i][j] << " ";
+        }
+        cout << "\n";
+    }
+    cout << "\n";
+    
+    int u = 2, v = 1;
+    if (path[u][v] == 0) cout << "No Path!";
+    else
+    {
+        cout << u << " ";
+        while (u != v)
+        {
+            u = path[u][v];
+            cout << u << " ";
+        }
+    }
+}
+```
 
 
-
+<br/>
 ## Reference
 
 [1] [위키백과, '최단 경로 문제'](https://ko.m.wikipedia.org/wiki/%EC%B5%9C%EB%8B%A8_%EA%B2%BD%EB%A1%9C_%EB%AC%B8%EC%A0%9C)  
+[2] [위키백과, '플로이드-워셜 알고리즘'](https://ko.m.wikipedia.org/wiki/%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%9B%8C%EC%85%9C_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
+[3]
