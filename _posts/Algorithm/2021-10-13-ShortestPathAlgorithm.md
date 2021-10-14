@@ -155,7 +155,7 @@ int main()
 
 ---
 
-다익스트라 알고리즘은 이처럼 일반적으로 한 꼭짓점에서 다른 모든 꼭짓점까지의 최단 거리를 구하는데 사용하는데, 
+다익스트라 알고리즘은 이처럼 일반적으로 한 꼭짓점에서 다른 모든 꼭짓점까지의 최단 거리를 구하는데 사용하는데, 주어진 조건에 따라서 변형 가능성이 굉장히 많다.
 
 
 <br/>
@@ -366,5 +366,7 @@ int main()
 ## Reference
 
 [1] [위키백과, '최단 경로 문제'](https://ko.m.wikipedia.org/wiki/%EC%B5%9C%EB%8B%A8_%EA%B2%BD%EB%A1%9C_%EB%AC%B8%EC%A0%9C)  
-[2] [위키백과, '플로이드-워셜 알고리즘'](https://ko.m.wikipedia.org/wiki/%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%9B%8C%EC%85%9C_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
+[2] [위키백과, '데이크스트라 알고리즘'](https://ko.m.wikipedia.org/wiki/%EB%8D%B0%EC%9D%B4%ED%81%AC%EC%8A%A4%ED%8A%B8%EB%9D%BC_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
+[3] [위키백과, ']()  
+[4] [위키백과, '플로이드-워셜 알고리즘'](https://ko.m.wikipedia.org/wiki/%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%9B%8C%EC%85%9C_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
 [3]
