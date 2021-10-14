@@ -62,9 +62,9 @@ comments: true
 
 하지만, 큐를 선형 탐색하는 대신 **우선순위 큐**를 사용하는 방법이 등장하게 되면서 최솟값을 가진 꼭짓점을 찾는 작업이 $O(\left\vert V \right\vert \log \left\vert V \right\vert)$의 시간복잡도를 가지게 됨에 따라 다익스트라 알고리즘의 시간복잡도는 다음과 같이 표현된다.
 
-\begin{align*\}
+\begin{align\*}
 O(\left\vert E \right\vert + \left\vert V \right\vert \log \left\vert V \right\vert)
-\end{align*\}
+\end{align\*}
 
 우선순위 큐를 이용한 다익스트라 알고리즘의 구현은 가중치가 없는 그래프에서 BFS로 최단 경로를 찾는 것과 그 형태가 유사하다.
 
