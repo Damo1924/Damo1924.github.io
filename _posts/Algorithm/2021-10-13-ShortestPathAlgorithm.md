@@ -91,8 +91,71 @@ O(\left\vert E \right\vert + \left\vert V \right\vert \log \left\vert V \right\v
 이후 E개 줄에 걸쳐 각 간선에 대한 정보가 주어질 때, K로부터 V개의 각 꼭짓점들까지의 최단 경로의 길이를 구하는 문제이다.
 
 ```cpp
-a
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+typedef pair<int, int> p;
+const int INF = 1000000000;
+
+vector<p> graph[20001];
+
+int dist[20001];
+
+struct compare {
+    bool operator() (p A, p B) { return A.second > B.second; }
+};
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int V, E, K;
+    cin >> V >> E >> K;
+    
+    for (int i = 1; i <= V; i++) dist[i] = INF; // 출발점은 0, 나머지는 INF로 초기화
+    dist[K] = 0;
+    
+    int u, v, w;
+    while (E--)
+    {
+        cin >> u >> v >> w;
+        graph[u].push_back({v, w});
+    }
+    
+    priority_queue<p, vector<p>, compare> pq; // 거리가 가까운 순서대로 정렬하여 저장하는 우선순위 큐
+    pq.push({K, 0});
+    while (!pq.empty())
+    {
+        int cur = pq.top().first, d = pq.top().second;
+        pq.pop();
+        
+        if (dist[cur] < d) continue; // 배열에 저장된 거리보다 크다면 무시
+        
+        for (int i = 0; i < graph[cur].size(); i++)
+        {
+            int next = graph[cur][i].first, D = d + graph[cur][i].second;
+            if (dist[next] > D) // 연결된 꼭짓점 중 저장된 거리보다 cur를 거쳐서 가는 경로가 더 짧은 경우
+            {
+                dist[next] = D;
+                pq.push({next, D});
+            }
+        }
+    }
+    
+    for (int i = 1; i <= V; i++)
+    {
+        if (dist[i] == INF) cout << "INF\n";
+        else cout << dist[i] << "\n";
+    }
+}
 ```
+
+---
+
+다익스트라 알고리즘은 이처럼 일반적으로 한 꼭짓점에서 다른 모든 꼭짓점까지의 최단 거리를 구하는데 사용하는데, 
 
 
 <br/>
@@ -129,7 +192,11 @@ f(i, j, k) = min\left(f(i, j, k-1), f(i, k, k-1) + f(k, j, k-1)\right)
 
 $f(i, j, 0)$은 $i$에서 $j$까지 가는 경로 중 어떤 정점도 지나지 않는 최단 경로를 의미하므로, $i$와 $j$ 사이의 간선의 가중치임을 알 수 있다.
 
-위 아이디어를 잘 이해하고 있다면 구현은 굉장히 간단하다.
+이를 이용하면 $O(\left\vert V \right\vert^3)$의 시간복잡도로 모든 꼭짓점 쌍 사이의 최단 거리를 구할 수 있다.
+
+> 다익스트라 알고리즘을 모든 꼭짓점에 대해 사용해주어도 모든 꼭짓점 쌍 사이의 최단 거리를 구할 수 있는데, 그 경우 $O(\left\vert V \right\vert \left\vert E \right\vert + \left\vert V \right\vert^2 \log \left\vert E \right\vert)$의 시간복잡도를 가지게 된다.
+> 
+> 그러므로 간선이 많은 밀집 그래프에서 플로이드-워셜 알고리즘을 사용하면 효율적으로 문제를 해결할 수 있음을 알 수 있다.
 
 ---
 
