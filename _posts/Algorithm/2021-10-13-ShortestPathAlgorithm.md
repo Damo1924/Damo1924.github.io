@@ -210,7 +210,60 @@ N개의 도시가 있고, 한 도시에서 출발하여 다른 도시에 도착�
 벨만-포드 알고리즘을 구현함으로써 해결할 수 있다.
 
 ```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+const int INF = 1000000000;
 
+int E[6000][3];
+
+long long dist[501];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N, M;
+    cin >> N >> M;
+    
+    int a, b, c;
+    for(int i = 0; i < M; i++) cin >> E[i][0] >> E[i][1] >> E[i][2];
+    
+    for(int i = 1; i <= N; i++) dist[i] = INF;
+    dist[1] = 0;
+    
+    for(int i = 0; i < N-1; i++)
+    {
+        for(int j = 0; j < M; j++) // 모든 간선에 대해서
+        {
+            if(dist[E[j][0]] == INF) continue; // 간선의 시작점까지의 경로가 존재하지 않는다면 무시
+            if(dist[E[j][1]] > dist[E[j][0]] + E[j][2]) dist[E[j][1]] = dist[E[j][0]] + E[j][2];
+        }
+    }
+    
+    bool flg = 1;
+    for(int j = 0; j < M; j++)
+    {
+        if(dist[E[j][0]] == INF) continue;
+        if(dist[E[j][1]] > dist[E[j][0]] + E[j][2]) // 갱신이 이루어지면 음의 사이클 존재
+        {
+            cout << -1;
+            flg = 0;
+            break;
+        }
+    }
+    
+    if(flg) // 음의 사이클이 없는 경우
+    {
+        for(int i = 2; i <= N; i++)
+        {
+            if(dist[i] == INF) cout << "-1\n";
+            else cout << dist[i] << "\n";
+        }
+    }
+}
 ```
 
 
