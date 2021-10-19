@@ -472,6 +472,5 @@ int main()
 
 [1] [위키백과, '최단 경로 문제'](https://ko.m.wikipedia.org/wiki/%EC%B5%9C%EB%8B%A8_%EA%B2%BD%EB%A1%9C_%EB%AC%B8%EC%A0%9C)  
 [2] [위키백과, '데이크스트라 알고리즘'](https://ko.m.wikipedia.org/wiki/%EB%8D%B0%EC%9D%B4%ED%81%AC%EC%8A%A4%ED%8A%B8%EB%9D%BC_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
-[3] [위키백과, ']()  
+[3] [위키백과, '벨먼-포드 알고리즘'](https://ko.m.wikipedia.org/wiki/%EB%B2%A8%EB%A8%BC-%ED%8F%AC%EB%93%9C_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
 [4] [위키백과, '플로이드-워셜 알고리즘'](https://ko.m.wikipedia.org/wiki/%ED%94%8C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%9B%8C%EC%85%9C_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
-[3]
