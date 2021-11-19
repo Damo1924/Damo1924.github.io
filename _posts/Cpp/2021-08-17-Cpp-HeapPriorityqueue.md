@@ -1,5 +1,5 @@
 ---
-title: "Heap & Priority queue in C++"
+title: "[C++] Heap & Priority queue"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
