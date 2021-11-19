@@ -1,5 +1,5 @@
 ---
-title: "Pointers in C++"
+title: "[C++] Pointers"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
