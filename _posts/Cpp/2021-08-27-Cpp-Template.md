@@ -1,5 +1,5 @@
 ---
-title: "Templates in C++"
+title: "[C++] Templates"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
