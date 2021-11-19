@@ -1,5 +1,5 @@
 ---
-title: "static in C++"
+title: "[C++] static"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
