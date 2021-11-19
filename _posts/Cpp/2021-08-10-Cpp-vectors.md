@@ -1,5 +1,5 @@
 ---
-title: "Vectors in C++"
+title: "[C++] Vectors"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
