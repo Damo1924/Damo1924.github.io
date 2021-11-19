@@ -1,5 +1,5 @@
 ---
-title: "Stream & Buffer & Fast I/O in C++"
+title: "[C++] Stream & Buffer & Fast I/O"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
