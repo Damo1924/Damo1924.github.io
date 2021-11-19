@@ -1,5 +1,5 @@
 ---
-title: "Queue & Stack in C++"
+title: "[C++] Queue & Stack"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
