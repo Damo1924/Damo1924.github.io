@@ -1,5 +1,5 @@
 ---
-title: "References in C++"
+title: "[C++] References"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
