@@ -1,5 +1,5 @@
 ---
-title: "unordered_set/map in C++ (Hashmap)"
+title: "[C++] unordered_set/map (Hashmap)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
