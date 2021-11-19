@@ -20,6 +20,8 @@ comments: true
 
 # 1. Bitset
 
+---
+
 `std::bitset`은 간단히 말해 비트들을 저장하는 클래스이다.
 
 bool 원소들로 이루어진 배열과 같은 역할을 하면서도 사용하는 메모리 공간에 대해 최적화가 되어있기 때문에 각 원소가 오직 1 bit만을 차지한다.
@@ -74,6 +76,8 @@ C = 0000000010110001
 
 또한 정수(B)나 문자열(C)를 이용해서 생성하면 가장 오른쪽 비트들부터 값이 저장된다.
 
+---
+
 ### 1-2-2. Bit access: operator[], count, size, any, none, all
 
 **1) operator[]: 해당 비트의 참조형을 반환한다.**  
@@ -100,6 +104,8 @@ int main()
 
 이때 주의할 점은 **bitset의 인덱스는 가장 오른쪽 비트가 0이라는 것**이다.
 
+---
+
 ### 1-2-3. Bit operations: set, reset, flip
 
 **1) set: 전체 비트의 값을 1로 만든다.**  
@@ -124,6 +130,8 @@ int main()
 ```
 
 이 세 가지 멤버 함수는 인덱스를 인자로 입력하면 해당 비트 하나에만 작업을 수행한다.
+
+---
 
 ### 1-2-4. Bitset operations: to_string, to_ulong, to_ullong
 
@@ -170,6 +178,8 @@ int main()
     cout << (A != B) << "\n"; // 1 (true)
 }
 ```
+
+<br/>
 
 # References
 
