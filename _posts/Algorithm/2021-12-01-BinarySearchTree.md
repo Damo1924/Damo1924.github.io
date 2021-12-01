@@ -36,8 +36,6 @@ comments: true
 
 C+=의 class와 pointer를 이용해서 직접 이진 탐색 트리를 구현해보자.
 
----
-
 ### 2-1. 노드(node) 구현하기
 
 먼저 이진 탐색 트리를 구성하는 각 노드는 해당 노드의 값(value), 왼쪽 자식 노드(leftChild), 오른쪽 자식 노드(rightChild)에 대한 정보를 담고 있어야 한다.
@@ -133,17 +131,126 @@ void insertNode (Node* root, Node* node)
 
 그럼 자식 노드의 개수가 0개, 1개, 2개일 때 각각에 대해 삭제 방법을 알아보자.
 
-**1. 삭제할 노드의 자식 노드의 개수 = 0개**
+> **1. 삭제할 노드의 자식 노드의 개수 = 0개**
+>
+> 삭제할 노드가 리프 노드이면 그냥 부모 노드와의 연결을 끊으면 된다.
+>
+> **2. 삭제할 노드의 자식 노드의 개수 = 1개**
+>
+> 삭제할 노드의 자식 노드가 한 개이면 삭제할 노드의 위치에 자식 노드를 연결하면 된다.
+> 
+> **3. 삭제할 노드의 자식 노드의 개수 = 2개**
+>
+> 이전의 두 케이스는 간단하게 처리할 수 있었지만 자식 노드의 개수가 두 개이면 조금 복잡해진다.
+>
+> 삭제할 노드의 위치에 올 노드를 정해야하는데, 삭제될 노드의 왼쪽 서브트리보단 크고 오른쪽 서브트리보단 작은 값을 가진 노드여야한다.
+>
+> 이 조건을 만족하는 노드는 딱 두 개가 있다.
+>
+> - 삭제할 노드의 오른쪽 서브트리에서 가장 왼쪽에 있는 노드
+> - 삭제할 노드의 왼쪽 서브트리에서 가장 오른쪽에 있는 노드
+>
+> 나는 왼쪽 서브트리의 가장 오른쪽에 있는 노드를 선택하는 쪽으로 코드를 작성하였다.
 
-삭제할 노드가 리프 노드이면 그냥 부모 노드와의 연결을 끊으면 된다.
+노드를 삭제하는 함수 `removeNode`를 구현하기 전에, 어떤 노드의 왼쪽 서브트리에서 가장 오르쪽에 있는 노드를 반환하는 함수 `searchMaxNode`를 구현하였다.
 
-**2. 삭제할 노드의 자식 노드의 개수 = 1개**
+```cpp
+Node* searchMaxNode (Node* node)
+{
+    if (node->right == NULL) return node; // 가장 오른쪽 노드이면 해당 노드를 반환
+    else return searchMaxNode(node->right); // 오른쪽 자식 노드가 있으면 재귀적으로 탐색
+}
+```
 
-삭제한 노드의 자식 노드가 한 개이면 4가지 케이스로 나누어서 처리해준다.
+다음은 노드를 삭제하는 함수의 코드이다.
+
+```cpp
+Node* removeNode (Node* root, Node* parent, int v)
+{
+    if (tree == NULL) return NULL;
+    
+    Node* removedNode = NULL; // 삭제된 노드를 반환하기 위함.
+    
+    // 삭제할 노드를 탐색
+    if (root->value > v) removedNode = removeNode(root->left, root, v);
+    else if (root->value < v) removedNode = removeNode(root->right, root, v);
+    else // 찾았으면 노드를 삭제한다.
+    {
+        removedNode = root;
+        
+        // 자식 노드 = 0개
+        if (root->leftChild == NULL && root->rightChild == NULL)
+        {
+            if (parent->leftChild == root) parent->leftChild = NULL;
+            if (parent->rightChild == root) parent->rightChild = NULL;
+        }
+        
+        // 자식 노드 = 1개
+        else if (root->leftChild == NULL)
+        {
+            if (parent->leftChild == root) parent->leftChild = root->rightChild;
+            else parent->rightChild = root->rightChild;
+        }
+        else if (root->rightChild == NULL)
+        {
+            if (parent->leftChild == root) parent->leftChild = root->leftChild;
+            else parent->rightChild = root->leftChild;
+        }
+        
+        // 자식 노드 = 2개
+        else
+        {
+            Node* replaceNode = removeNode(root, NULL, searchMaxNode(root->left)->value); // 삭제할 노드 자리에 들어갈 노드를 찾고, 해당 노드를 삭제
+            root->data = replaceNode->data; // 삭제할 노드의 값을 대체할 노드의 값으로 갱신한다.
+        }
+    }
+    
+    return removedNode;
+}
+```
+
+### 2-5. 순회 구현하기
+
+전위 순회, 중위 순회, 후위 순회를 각각 구현해보자.
+
+**1. 전위 순회 (preorder)**
+
+```cpp
+void preOrder (Node* root, vector<int>& vec)
+{
+    if (root == NULL) return;
+    vec.push_back(root->value);
+    preOrder(root->leftChild, vec);
+    preOrder(root->rightChild, vec);
+}
+```
+
+**2. 중위 순회 (inorder)**
+
+```cpp
+void inOrder (Node* root, vector<int>& vec)
+{
+    if (root == NULL) return;
+    inOrder(root->leftChild, vec);
+    vec.push_back(root->data);
+    inOrder(root->rightChild, vec);
+}
+```
+
+**3. 후위 순회 (postorder)**
+
+```cpp
+void postOrder (Node* root, vector<int>& vec)
+{
+    if (root == NULL) return;
+    postOrder(root->leftChild, vec);
+    postOrder(root->rightChild, vec);
+    vec.push_back(root->data);
+}
+```
 
 
 
-**3. 삭제할 노드의 자식 노드의 개수 = 2개**
 
 
 
