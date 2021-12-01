@@ -26,15 +26,13 @@ comments: true
 3. 노드를 비교적 쉽게 삽입할 수 있다.
 4. 구조가 단순하다.
 
-이러한 특징들로 인해 이진 탐색 트리는 다양한 알고리즘에 이용된다.
+이러한 특징들로 인해 이진 탐색 트리는 다양한 알고리즘에 이용되는데, 이를 C+=의 class와 pointer를 이용해서 직접 구현해보자.
 
 ---
 
 <br/>
 
 ## 2. C++로 이진 탐색 트리 구현하기
-
-C+=의 class와 pointer를 이용해서 직접 이진 탐색 트리를 구현해보자.
 
 ### 2-1. 노드(node) 구현하기
 
@@ -209,6 +207,8 @@ Node* removeNode (Node* root, Node* parent, int v)
 }
 ```
 
+---
+
 ### 2-5. 순회 구현하기
 
 전위 순회, 중위 순회, 후위 순회를 각각 구현해보자.
@@ -248,15 +248,5 @@ void postOrder (Node* root, vector<int>& vec)
     vec.push_back(root->data);
 }
 ```
-
-
-
-
-
-
-
-
-
-
 
 
