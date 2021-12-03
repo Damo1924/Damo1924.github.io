@@ -36,3 +36,74 @@ comments: true
 
 ## 2. Union-Find Implementation
 
+C++를 통해 유니온 파인드를 구현해보자.
+
+이때 `parent[i]`는 노드 i의 부모 노드를 저장하는 배열을 의미한다.
+
+위 배열의 초기 상태는 자기 자신을 가리키도록 `parent[i] = i`와 같이 설정해준다.
+
+### 2-1. 루트 노드 찾는 함수: find
+
+어떤 노드를 입력받아 해당 노드가 속한 트리의 루트 노드를 찾아 반환하는 함수를 구현해보자.
+
+```cpp
+int find (int x)
+{
+    if (parent[x] == x) return x; // 루트 노드를 발견하면 반환
+    return find(parent[x]); // 루트 노드가 아니면 부모 노드를 재귀적으로 탐색
+}
+```
+
+하지만 트리가 한쪽으로 치우쳐진 경우, 검색 효율이 떨어지기 때문에 루트 노드를 찾아 `parent[x]`의 값을 루트 노드로 바꾸어줌으로써 효율을 개선할 수 있다.
+
+```cpp
+int find (int x)
+{
+    if (parent[x] == x) return x; // 루트 노드를 발견하면 반환
+    return parent[x] = find(parent[x]); // 루트 노드를 찾아 부모 노드를 루트 노드로 만들어준다.
+}
+```
+
+### 2-2. 노드를 합치는 함수: union
+
+두 노드를 연결하는 함수를 구현해보자.
+
+```cpp
+void union (int x, int y)
+{
+    x = find(x);
+    y = find(y);
+    if (x == y) return;
+    parent[y] = x;
+}
+```
+
+두 노드를 연결하는 방법은 각 노드가 속한 트리의 루트 노드를 찾아 루트 노드를 연결해주는 것이다.
+
+### 2-3. 두 노드가 연결되어 있는지 판별하는 함수: isUnion
+
+```cpp
+bool isUnion (int x, int y)
+{
+    x = find(x);
+    y = find(y);
+    if (x == y) return true;
+    return false;
+}
+```
+
+<br/>
+
+## 3. 
+
+하지만 단순히 `x`를 합친 트리의 루트 노드로 해버리면, 높이가 높은 트리가 높이가 낮은 트리 밑으로 들어갈 수 있는데, 이로 인해 트리의 높이가 계속 커질 수 있다.
+
+
+
+
+
+
+
+
+
+
