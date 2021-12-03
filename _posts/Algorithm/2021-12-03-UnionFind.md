@@ -54,16 +54,6 @@ int find (int x)
 }
 ```
 
-하지만 트리가 한쪽으로 치우쳐진 경우, 검색 효율이 떨어지기 때문에 루트 노드를 찾아 `parent[x]`의 값을 루트 노드로 바꾸어줌으로써 효율을 개선할 수 있다.
-
-```cpp
-int find (int x)
-{
-    if (parent[x] == x) return x; // 루트 노드를 발견하면 반환
-    return parent[x] = find(parent[x]); // 루트 노드를 찾아 부모 노드를 루트 노드로 만들어준다.
-}
-```
-
 ### 2-2. 노드를 합치는 함수: union
 
 두 노드를 연결하는 함수를 구현해보자.
@@ -94,15 +84,80 @@ bool isUnion (int x, int y)
 
 <br/>
 
-## 3. 
+## 3. Weighted Union
 
-하지만 단순히 `x`를 합친 트리의 루트 노드로 해버리면, 높이가 높은 트리가 높이가 낮은 트리 밑으로 들어갈 수 있는데, 이로 인해 트리의 높이가 계속 커질 수 있다.
+앞서 구현한 `union` 함수를 이용하면 높이가 높은 트리가 높이가 낮은 트리 밑으로 들어갈 수 있다.
 
+이로 인해 트리의 높이가 계속 커지면, `find`와 `union`의 실행시간이 증가하게 된다.
 
+이를 해결하기 위한 방법 중 하나는 항상 높이가 더 낮은 트리를 높이가 더 큰 트리 밑에 집어넣는 것이다.
 
+이 방법을 **Weighted Union**이라고 부르며, 다음과 같은 배열을 사용한다.
 
+> `rank[i]` = 노드 i를 루트로 하는 서브트리의 높이
 
+하나의 노드로 이루어진 트리의 `rank` 값은 0이 된다.
 
+```cpp
+void union (int x, int y)
+{
+    x = find(x);
+    y = find(y);
+    if (rank[x] > rank[y]) parent[y] = x;
+    else parent[x] = y;
+    if (rank[x] == rank[y]) rank[y]++;
+}
+```
+
+만약 두 트리의 높이가 동일한 경우에는 합쳤을 때 트리의 높이가 1 증가하기 때문에 이를 구현해주어야 한다.
+
+이렇게 구현하면, 높이 1인 트리를 만드는데는 최소 2개의 노드가, 높이 2인 트리를 만드는데는 최소 4개의 노드가 필요함을 알 수 있다.
+
+높이가 H인 트리를 만들기 위해서는 적어도 높이가 (H-1)인 트리가 두 개 필요하므로 귀납법에 의해 **높이가 H인 트리는 적어도** $2^H$**개의 노드를 포함하고 있음**을 알 수 있다.
+
+트리에 있는 노드의 개수를 N이라 할 때, $2^H \leq N$ 이므로 $H \leq \log N$ 이 성립한다.
+
+이때 `find`와 `union` 함수의 시간복잡도는 트리의 높이에 비례하므로 $O(\log N)$가 된다.
+
+<br/>
+
+## 4. Path Compression
+
+Weight Union이 노드를 연결하는 과정에서 최적화를 한다면, 탐색 과정에서 최적화를 하는 방법도 있다.
+
+2-1의 `find` 함수에서 `parent[x]`의 값을 루트 노드로 바꾸어줌으로써 효율을 개선할 수 있다.
+
+```cpp
+int find (int x)
+{
+    if (parent[x] == x) return x; // 루트 노드를 발견하면 반환
+    return parent[x] = find(parent[x]); // 루트 노드를 찾아 부모 노드를 루트 노드로 만들어준다.
+}
+```
+
+<br/>
+
+## 5. Weighted Union with Path Compression
+
+앞서 소개한 두 가지 최적화 방법을 모두 적용한 경우, $n$개의 노드에 대해 Union-Find를 $m$번 수행했을 때 worst-case 시간 복잡도는 $O(m \log^* n)$이다.
+
+이때 $\log^* n$은 $n$에 $\log$를 $k$번 적용할 때 1 이하가 된다는 의미이다.
+
+이는 **inverse Ackermann function**이라고 불리는 함수에 의해 bounded되어 있는데, 우리가 일반적으로 다루는 모든 수에 대해 5보다 작다고 한다. (사실상 상수 시간)
+
+다음은 각 알고리즘에 대한 `union`, `find` 함수의 시간복잡도를 표로 나타낸 것이다.
+
+| algorithm | union | find |
+|:---:|:---:|:---:|
+| union | $O(H)$ | $O(H)$ |
+| weighted union | $O(\log N)$ | $O(\log N)$ |
+| weighted union with path compression | $O(1)$ | $O(1)$ |
+
+<br/>
+
+## Reference
+
+[1] [Robert Sedgewick, Kevin Wayne, Algorithms,  4th Edition, "Case Study: Union-Find"](https://algs4.cs.princeton.edu/15uf/)
 
 
 
