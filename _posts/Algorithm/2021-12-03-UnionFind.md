@@ -155,6 +155,159 @@ int find (int x)
 
 <br/>
 
+## 6. 관련 문제
+
+### 6-1. [백준] 1717. 집합의 표현
+
+[백준 1717. 집합의 표현 문제 링크](https://www.acmicpc.net/problem/1717)
+
+0부터 n까지 (n + 1)개의 원소가 있을 때, 다음의 두 연산을 수행하려고 한다.
+
+1. a와 b의 합집합 연산: a가 포함되어 있는 집합과 b가 포함되어 있는 집합을 합친다.
+2. a와 b가 같은 집합에 포함되어 있는지를 확인하는 연산: 맞으면 YES, 아니면 NO를 출력한다.
+
+초기에는 0부터 n까지의 원소들이 각각 다른 집합에 속해있다.
+
+입력된 연산을 수행하는 프로그램을 작성하면 된다.
+
+**[Solution]**
+
+첫 번째 연산은 앞서 구현한 `union` 함수를 실행하면 되고, 두 번째 연산은 `isUnion` 함수를 실행하면 된다.
+
+---
+
+### 6-2. [백준] 4195. 친구 네트워크
+
+[백준 4195. 친구 네트워크 문제 링크](https://www.acmicpc.net/problem/4195)
+
+친구 관계인 두 사람의 이름이 주어질 때마다 두 사람의 친구 네트워크에는 몇 명이 있는지 출력하면 된다.
+
+**[Solution]**
+
+먼저, 문자열로 입력받은 이름들을 숫자에 대응시키기 위해 `unordered_map`을 사용한다.
+
+이름들을 숫자에 대응시킨 후, Union-Find를 통해 친구 네트워크를 구현한다.
+
+이 문제의 특징은 **각 친구 네트워크에 있는 사람의 수**를 구해야한다는 것이다.
+
+이를 해결할 수 있는 방법은 크게 두 가지가 있다.
+
+> 1) `parent` 외에 새로운 배열 `cnt`를 선언하여 사용하는 방법
+> 
+> **:** `parent[i] == i`가 참인 루트 노드 i에 대해서 `cnt[i]`는 해당 트리에 속한 노드의 개수를 저장한다.
+> 
+> `cnt` 배열의 초기 상태는 모두 1이고, `union` 함수에 `cnt` 관련 코드를 추가해주면 된다.
+> 
+> 2) `parent`에 두 가지 정보를 모두 저장하는 방법
+> 
+> : 위 방법에 대해 생각해보면, `cnt` 배열에서 의미있는 값은 루트 노드의 값 뿐이다.
+> 
+> 그러므로 루트 노드에 대해서는 `parent` 배열에 해당 트리에 속한 노드의 개수를 저장하고, 나머지 노드에 대해서는 해당 노드의 부모 노드를 그대로 저장하면 하나의 배열로 문제를 해결할 수 있다.
+> 
+> 하지만 저장된 값이 트리의 노드 개수인지, 부모 노드의 번호인지 알 수 없기 때문에 **트리의 노드 개수는 - 부호를 붙여서 저장**한다.
+> 
+> `parent[i]`의 초기 상태를 i가 아니라 -1로 설정하면 된다.
+> 
+> 이러면 `parent[i]`가 음수이면 노드 i는 루트 노드이고, `-parent[i]`는 해당 트리에 속한 노드의 개수가 된다.
+
+나는 첫 번째 방법을 택해서 해결하였고, 소스 코드는 다음과 같다.
+
+<details>
+<summary>소스 코드</summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <unordered_map>
+#include <vector>
+using namespace std;
+
+unordered_map<string, int> name; // 이름 -> 인덱스 변환
+
+vector<int> parent, cnt; // 각각 부모노드의 번호, 트리에 있는 노드의 개수를 저장
+
+int find(int x)
+{
+    if (parent[x] == x) return x;
+    return parent[x] = find(parent[x]);
+}
+
+void _union(int x, int y)
+{
+    x = find(x);
+    y = find(y);
+    if (x == y) return;
+    parent[y] = x; // x가 루트 노드가 되도록 합쳤으니
+    cnt[x] += cnt[y]; // cnt[x]에 cnt[y]를 더해준다.
+}
+
+bool isUnion(int x, int y)
+{
+    x = find(x);
+    y = find(y);
+    if (x == y) return true;
+    return false;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int T;
+    cin >> T;
+    while (T--)
+    {
+        parent = {0};
+        cnt = {0};
+        name.clear();
+        
+        int F;
+        cin >> F;
+        
+        int idx = 1;
+        string A, B;
+        while (F--)
+        {
+            cin >> A >> B;
+            if (name[A] == 0) // 처음 입력된 이름인 경우, 이름과 인덱스를 매칭시켜준다.
+            {
+                name[A] = idx;
+                parent.push_back(idx);
+                cnt.push_back(1);
+                idx++;
+            }
+            if (name[B] == 0)
+            {
+                name[B] = idx;
+                parent.push_back(idx);
+                cnt.push_back(1);
+                idx++;
+            }
+            
+            _union(name[A], name[B]); // 친구 관계 맺어준다.
+            cout << cnt[find(name[A])] << "\n"; // 해당 친구 네트워크에 있는 사람들의 숫자를 출력
+        }
+    }
+}
+```
+
+</div>
+</details>
+
+---
+
+### 6-3. [백준] 2162. 선분 그룹
+
+교차하는 선분들끼리 하나의 그룹으로 묶고, 각 그룹에 속한 선분의 개수를 구해야하는 문제이다.
+
+선분끼리 만나는지 만나지 않는지 판별하는 것을 구현하는 것이 포인트이다.
+
+자세한 풀이는 [이 포스트]() 참고.
+
+<br/>
+
 ## Reference
 
 [1] [Robert Sedgewick, Kevin Wayne, Algorithms,  4th Edition, "Case Study: Union-Find"](https://algs4.cs.princeton.edu/15uf/)
