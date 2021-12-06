@@ -296,3 +296,12 @@ defaults:
       related: true
       classes: wide
       sidebar_main: true
+
+tipue_search: 
+     include: 
+         pages: false 
+         collections: [] 
+     exclude: 
+         files: [search.html, index.html, tags.html] 
+         categories: [] 
+         tags: []
