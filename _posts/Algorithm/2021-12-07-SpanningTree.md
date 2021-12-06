@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags`: Spanning Tree, Prim Algorithm, Kruskal Algorithm
+
 ## 1. Spanning Tree
 
 신장 트리(spanning tree)는 연결 그래프의 모든 정점을 최소한의 간선으로 연결하는 부분 그래프이다.
