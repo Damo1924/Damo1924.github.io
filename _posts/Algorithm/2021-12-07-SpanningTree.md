@@ -140,7 +140,7 @@ $E \leq V^2$ 이므로 프림 알고리즘의 최종 시간복잡도는 $O(E \lo
 
 이때 중요한 것은 **사이클을 형성하지 않도록 선택**해야한다는 것이다.
 
-크루스칼 알고리즘을 구현하기 위해 Union-Find Algorithm을 이용한다.
+크루스칼 알고리즘을 구현하기 위해 [Union-Find Algorithm]()을 이용한다.
 
 > 현재 간선으로 연결된 두 정점이 속한 트리의 루트 노드가 같으면 이미 두 정점은 같은 트리에 속해있으므로 간선을 선택하면 사이클이 생기게 된다.
 >
@@ -156,9 +156,87 @@ N개의 별이 2차원 평면 위에 놓여 있을 때, 별을 일직선으로 �
 
 두 별을 연결하는데에 두 별 사이의 거리만큼의 비용이 들 때, N개의 별을 모두 이어서 하나의 별자리를 만드는 최소 비용을 구하는 문제이다.
 
+좌표를 입력받아 모든 간선의 가중치(두 점 사이의 거리)를 계산하고, 간선들을 가중치에 대해 오름차순으로 정렬한다.
 
+이후 가중치가 작은 것부터 같은 트리에 속하지 않은 두 정점을 `union`해주면서 가중치의 합을 구한다.
 
+전체 코드는 다음과 같다.
 
+```cpp
+#include <iostream>
+#include <vector>
+#include <math.h>
+#include <algorithm>
+using namespace std;
+
+double x[100], y[100], edge[100][100]; // 별의 x, y 좌표와 두 별 사이의 거리를 저장
+
+int parent[100]; // Union-Find에 필요한 부모 노드를 저장하는 배열
+
+bool compare (pair<int, int> A, pair<int, int> B) // 간선들을 가중치에 대한 오름차순으로 정렬하기 위한 비교함수
+{
+    return edge[A.first][A.second] < edge[B.first][B.second];
+}
+
+// Union-Find
+int find (int x)
+{
+    if (parent[x] == x) return x;
+    return parent[x] = find(parent[x]);
+}
+
+bool _union (int x, int y) // union 함수가 true를 반환할 때만 가중치를 더해준다.
+{
+    x = find(x);
+    y = find(y);
+    if (x == y) return false;
+    parent[x] = y;
+    return true;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N;
+    cin >> N;
+    
+    vector<pair<int, int>> vec;
+    vec.reserve(10000);
+    for (int i = 0; i < N; i++) cin >> x[i] >> y[i];
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = i + 1; j < N; j++)
+        {
+            vec.push_back({i, j});
+            edge[i][j] = sqrt((x[i] - x[j]) * (x[i] - x[j]) + (y[i] - y[j]) * (y[i] - y[j]));
+        }
+    }
+    
+    sort(vec.begin(), vec.end(), compare);
+    
+    for (int i = 0; i < N; i++) parent[i] = i;
+    double ans = 0;
+    for (int i = 0; i < vec.size(); i++)
+    {
+        if (_union(vec[i].first, vec[i].second))
+            ans += edge[vec[i].first][vec[i].second];
+    }
+    cout << ans;
+}
+```
+
+간선들을 정렬하는데 $O(E \log E)$, 그리고 각 간선에 대해 'union' 해주는데 $O(1)$이 걸린다.
+
+따라서 Kruskal Algorithm의 시간복잡도는 $O(E \log E) + O(1) \times E$가 되고, 이를 정리하면 $O(E \log V)$를 얻을 수 있다.
+
+이는 앞서 살펴본 Prim Algorithm과 동일하다.
+
+> `union` 작업이 $O(1)$의 시간복잡도를 가지기 위해서는 Weighted Union with Path Compression을 사용해야한다.
+> 
+> 위 코드는 단순히 Path Compression만을 적용한 것으로, 트리의 높이에 비례하는 시간복잡도를 갖는다.
 
 
 
