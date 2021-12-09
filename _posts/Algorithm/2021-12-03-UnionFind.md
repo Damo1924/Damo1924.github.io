@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags`  Union-Find, Weighted Union, Path Compression, Ackermann function
+
 ## 1. Union-Find Algorithm
 
 유니온 파인드 알고리즘은 그래프 알고리즘의 일종으로, **두 노드가 같은 그래프에 속하는지 판별하는 알고리즘**이다.
