@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags`: MST, Minimum Spanning Tree, Prim Algorithm, Kruskal Algorithm
+`Tags`  MST, Minimum Spanning Tree, Prim Algorithm, Kruskal Algorithm
 
 ## 1. Spanning Tree
 
