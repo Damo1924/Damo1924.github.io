@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Two Pointer Algorithm
+
 ## Two Pointer Algorithm
 
 투 포인터 알고리즘은 두 개의 포인터를 이용해서 리스트를 탐색하는 알고리즘이다.
@@ -24,7 +26,7 @@ comments: true
 
 ## [백준] 3273. 두 수의 합
 
-[백준 3273. 두 수의 합](https://www.acmicpc.net/problem/3273)
+[백준 3273. 두 수의 합 문제 링크](https://www.acmicpc.net/problem/3273)
 
 **[PROBLEM]**
 
@@ -146,7 +148,7 @@ $a_i$의 최댓값이 1,000,000이므로 `bitset`을 이용해서 메모리의 �
 
 ## [백준] 2470. 두 용액
 
-[백준 2470. 두 용액](https://www.acmicpc.net/problem/2470)
+[백준 2470. 두 용액 문제 링크](https://www.acmicpc.net/problem/2470)
 
 앞 문제와 거의 비슷한 문제이기 때문에 문제에 대한 설명을 생략하겠다.
 
@@ -203,7 +205,7 @@ int main()
 
 ## [백준] 1806. 부분합
 
-[백준 1806. 부분합](https://www.acmicpc.net/problem/1806)
+[백준 1806. 부분합 문제 링크](https://www.acmicpc.net/problem/1806)
 
 **[PROBLEM]**
 
