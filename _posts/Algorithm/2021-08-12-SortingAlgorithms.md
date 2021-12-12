@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Bubble sort, Insertion sort, Merge sort, Quick sort
+
 # 0. What is Sorting?
 정렬(sorting)은 computer science에서 가장 많이 연구된 알고리즘 중 하나로, 값(value)의 대소 관계에 따라 데이터 집합을 일정한 순서로 바꾸는 것을 말한다. 적절한 정렬 알고리즘을 이용한다면, 더 효과적이고 효율적인 코드를 작성할 수 있다.  
 대표적으로 다음과 같은 문제들에서 정렬 알고리즘을 사용할 수 있다.
