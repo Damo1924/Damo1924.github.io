@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Bipartite Matching, Maximum Flow problem, Minimum Vertex Cover, Konig's theorem, Maximum Independent Set
+
 ## 1. Bipartite Matching 
 
 정점을 두 개의 집단으로 나누었을 때, 존재하는 모든 간선의 양 끝 정점이 서로 다른 집단에 속하는 그래프를 **이분 그래프(Bipartite Graph)**라고 부른다.
