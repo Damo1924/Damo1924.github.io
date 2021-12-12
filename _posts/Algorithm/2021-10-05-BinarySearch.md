@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Binary Search, lower_bound, upper_bound
+
 ## 1. Binary Search Algorithm
 
 이분 탐색 알고리즘은 정렬된 리스트에서 탐색 범위를 절반씩 줄여나가며 데이터를 탐색하는 알고리즘이다.
