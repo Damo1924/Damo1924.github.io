@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Ford-Fulkerson algorithm, Edmonds-Karp algorithm, Dinic's algorithm, 포드-풀커슨, 에드몬드-카프, 디닉
+
 ## 1. Maximum Flow Problem
 
 최대 유량(Maximum Flow) 문제는 그래프의 두 지점 사이를 지날 수 있는 최대 유량을 구하는 문제이다.
