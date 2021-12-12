@@ -10,6 +10,8 @@ comments: true
 
 ---
 
+`Tags` Euclidean algorithm, Extended Euclidean, Modular Multiplicative Inverse, 모듈러 연산의 곱셈의 역원
+
 ## 1. Euclidean Algorithm
 
 유클리드 호제법은 두 자연수의 최대공약수를 구하는 알고리즘이다.
