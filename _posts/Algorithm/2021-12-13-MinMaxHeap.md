@@ -27,7 +27,9 @@ Min-max heap은 다음을 만족하는 트리 구조를 가진다.
 
 <center><img src="https://user-images.githubusercontent.com/88201512/145772828-9abdbc31-3fce-4683-8b1a-03a48741544a.jpg" width="60%" height="60%"></center>
 
-<center>(출처: [WIKIPEDIA, 'Min-max heap'](https://en.m.wikipedia.org/wiki/Min-max_heap))</center>
+<center>(출처: Reference [1])</center>
+
+<br/>
 
 위 조건으로 인해 다음과 같은 특징들이 얻어진다.
 
@@ -63,11 +65,8 @@ void swap(int& a, int& b)
 ```
 
 - `<cmath>`: 인덱스를 통해 해당 노드의 레벨을 구하기 위해 `floor()`와 `log2()` 함수를 사용하였다.
-- 
 - `INF`: 32-비트 정수로 표현할 수 있는 최대값
-- 
 - `MMH[]`: Min-max-heap을 저장할 배열, **루트 노드의 인덱스는 1이다**.
-- 
 - `L`: Min-max-heap의 길이 (= Min-max-heap의 마지막 원소의 인덱스)
 
 ---
@@ -106,7 +105,7 @@ void pushDown(int idx)
 
 이때 입력으로 받은 노드의 인덱스를 `idx`, 최솟값에 해당하는 노드의 인덱스를 `m_idx`라고 하자.
 
-> **2-1. `m_idx` = `idx`의 손자 노드**
+> **2-1.** `m_idx` = `idx`의 손자 노드
 > 
 > `m_idx`와 `idx` 둘 다 min level의 노드이므로, 둘 중 더 작은 값이 `idx` 위치에 가야한다.
 > 
@@ -120,10 +119,10 @@ void pushDown(int idx)
 > 
 > 적절한 `swap()`을 해주었다면, 이제 위 과정을 `m_idx`에 대해 반복함으로써 min-max heap의 형태로 만든다.
 
-> **2-2. `m_idx` = `idx`의 자식 노드**
-> 1
+> **2-2.** `m_idx` = `idx`의 자식 노드
+> 
 > `m_idx`가 `idx`의 자식 노드이면, `m_idx`는 자식 노드가 없다는 것을 의미한다.
-> 1
+> 
 > 그러므로 `m_idx`와 `idx`의 크기를 비교해서 더 큰 값이 `m_idx`에 오게 해주면 끝난다.
 
 함수 코드는 다음과 같다.
@@ -363,6 +362,60 @@ void deleteMax()
     }
 }
 ```
+
+혹시라도 이해가 어려운 부분이 있다면 Reference [1]의 링크를 참고하면 된다.
+
+<br/>
+
+## [백준] 7662. 이중 우선순위 큐
+
+다양한 해법이 있는 문제이지만, min-max heap을 구현하여 해결하는 방법이 최적의 풀이이다.
+
+위에서 구현한 함수들을 바탕으로 다음과 같이 입력과 출력을 구현하면 된다.
+
+```cpp
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    int T;
+    cin >> T;
+    while (T--)
+    {
+        L = 0;
+
+        int k;
+        cin >> k;
+        while (k--)
+        {
+            char c;
+            int n;
+            cin >> c >> n;
+
+            if (c == 'I') pushUp(n);
+            else if (n == 1)
+            {
+                if (L == 0) continue;
+                deleteMax();
+            }
+            else
+            {
+                if (L == 0) continue;
+                deleteMin();
+            }
+        }
+
+        if (L == 0) cout << "EMPTY\n";
+        else cout << findMax() << " " << findMin() << "\n";
+    }
+}
+```
+
+다른 풀이가 궁금하다면 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-7662/)를 참고하면 된다.
+
+<br/>
 
 ## Reference
 
