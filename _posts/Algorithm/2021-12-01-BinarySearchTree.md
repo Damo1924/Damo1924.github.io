@@ -277,6 +277,238 @@ C++의 STL에는 `set`, `multiset`, `map`라는 이름으로 Red-Black Tree가 �
 
 ## 4. 관련 문제 풀어보기
 
-마지막으로 이진 검색 트리를 이용하는 문제들을 풀어보자.
+마지막으로 이진 검색 트리를 이용해서 풀 수 있는 문제들을 풀어보면서 언제 BST를 사용하는지 익히자.
 
-### [백준] 
+아래에 있는 문제들은 [BaaaaaaaaaaarkingDog](https://www.acmicpc.net/user/BaaaaaaaaaaarkingDog) 님이 만드신 백준 문제집 [0x16강 - 이진 검색 트리](https://www.acmicpc.net/workbook/view/9346)에 있는 문제들이다.
+
+### [백준] 23326. 홍익 투어리스트
+
+[백준 23326. 홍익 투어리스트 문제 링크](https://www.acmicpc.net/problem/23326)
+
+BST를 이용하면 아주 쉽게 해결할 수 있는 문제이다.
+
+`set`에 **명소인 구역의 번호**를 저장하면 새로운 명소를 추가, 기존의 명소를 삭제, 현재 위치부터 다음 명소까지의 거리를 구하는 작업 모두 로그 시간복잡도로 수행할 수 있게 된다.
+
+```cpp
+#include <iostream>
+#include <set>
+using namespace std;
+
+int main()
+{
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+	cout.tie(NULL);
+
+	int N, Q;
+	cin >> N >> Q;
+
+	set<int> s;
+	int A;
+	for (int i = 1; i <= N; i++)
+	{
+		cin >> A;
+		if (A) s.insert(i);
+	}
+
+	int pos = 1; // 도현이의 위치
+	int a, b;
+	while (Q--)
+	{
+		cin >> a;
+		if (a == 1)
+		{
+			cin >> b;
+			if (s.count(b)) s.erase(b);
+			else s.insert(b);
+		}
+		else if (a == 2)
+		{
+			cin >> b;
+			pos = (pos + b) % N;
+			if (pos == 0) pos = N;
+		}
+		else
+		{
+			if (s.empty())
+			{
+				cout << "-1\n";
+				continue;
+			}
+
+			auto it = s.lower_bound(pos);
+			if (it == s.end()) cout << *s.begin() + N - pos << "\n";
+			else cout << *it - pos << "\n";
+		}
+	}
+}
+```
+
+### [백준] 21939. 문제 추천 시스템 Version 1
+
+[백준 21939. 문제 추천 시스템 Version 1 문제 링크](https://www.acmicpc.net/problem/21939)
+
+각 문제마다 문제 번호와 난이도가 주어질 때, "추천 문제 리스트"에 문제를 추가, 삭제하는 명령과 "추천 문제 리스트"에서 가장 어려운(또는 쉬운) 문제를 출력하는 명령을 구현하는 문제이다.
+
+마찬가지로 원소를 삽입, 삭제, 검색하는 작업을 로그 시간에 할 수 있는 이진 검색 트리를 이용하면 해결할 수 있다.
+
+이 경우에는 `set`에 '난이도, 문제 번호'를 묶은 `pair<int, int>`를 저장함으로써 쉽게 가장 어려운/쉬운 문제를 찾을 수 있다.
+
+> 이때 가장 어려운 문제는 `<iterator>` 헤더 파일에 있는 `prev()` 함수를 이용하여 출력해야한다.
+
+```cpp
+#include <iostream>
+#include <set>
+#include <iterator>
+using namespace std;
+typedef pair<int, int> p;
+
+set<p> LP;
+
+int L[100001];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N;
+    cin >> N;
+    
+    int p, l;
+    for (int i = 0; i < N; i++)
+    {
+        cin >> p >> l;
+        L[p] = l;
+        LP.insert({l, p});
+    }
+    
+    int M;
+    cin >> M;
+    
+    string s;
+    int a, b;
+    for (int i = 0; i < M; i++)
+    {
+        cin >> s >> a;
+        if (s == "recommend")
+        {
+            if (a == 1) cout << (*prev(LP.end())).second << "\n";
+            else cout << (*LP.begin()).second << "\n";
+        }
+        else if (s == "add")
+        {
+            cin >> b;
+            LP.insert({b, a});
+            L[a] = b;
+        }
+        else
+        {
+            LP.erase({L[a], a});
+        }
+    }
+}
+```
+
+### [백준] 21944. 문제 추천 시스템 Version 2
+
+[백준 21944. 문제 추천 시스템 Version 2 문제 링크](https://www.acmicpc.net/problem/21944)
+
+앞선 Version 1을 조금 더 복잡하게 바꾸어 놓은 문제이다.
+
+각 명령을 구현하기 위해 필요한 `set`을 적절히 선언하고, 명령의 세부적인 부분까지 잘 고려해야한다.
+
+그렇게 어려운 문제는 아니니 꼭 한 번 직접 구현해보는 것을 추천한다.
+
+```cpp
+#include <iostream>
+#include <set>
+#include <iterator>
+using namespace std;
+typedef pair<int, int> p;
+
+set<pair<p, int>> LPG, GLP;
+
+int L[100001], G[100001];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N;
+    cin >> N;
+    
+    int p, l, g;
+    for (int i = 0; i < N; i++)
+    {
+        cin >> p >> l >> g;
+        L[p] = l;
+        G[p] = g;
+        LPG.insert({{l, p}, g});
+        GLP.insert({{g, l}, p});
+    }
+    
+    int M;
+    cin >> M;
+    
+    string s;
+    int a, b, c;
+    for (int i = 0; i < M; i++)
+    {
+        cin >> s >> a;
+        if (s == "recommend")
+        {
+            cin >> b;
+            if (b == 1) cout << (*prev(GLP.lower_bound({{a, 101}, 0}))).second << "\n";
+            else cout << (*GLP.lower_bound({{a, 0}, 0})).second << "\n";
+        }
+        else if (s == "recommend2")
+        {
+            if (a == 1) cout << (*prev(LPG.end())).first.second << "\n";
+            else cout << (*LPG.begin()).first.second << "\n";
+        }
+        else if (s == "recommend3")
+        {
+            cin >> b;
+            auto it = LPG.lower_bound({{b, 0}, 0});
+            if (a == 1)
+            {
+                if (it == LPG.end()) cout << "-1\n";
+                else cout << (*LPG.lower_bound({{b, 0}, 0})).first.second << "\n";
+            }
+            else
+            {
+                if (it == LPG.begin()) cout << "-1\n";
+                else cout << (*prev(LPG.lower_bound({{b, 0}, 0}))).first.second << "\n";
+            }
+        }
+        else if (s == "add")
+        {
+            cin >> b >> c;
+            LPG.insert({{b, a}, c});
+            GLP.insert({{c, b}, a});
+            L[a] = b;
+            G[a] = c;
+        }
+        else
+        {
+            LPG.erase({{L[a], a}, G[a]});
+            GLP.erase({{G[a], L[a]}, a});
+        }
+    }
+}
+```
+
+### [백준] 7662. 이중 우선순위 큐
+
+자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-7662/) 참고.
+
+### [백준] 1202. 보석 도둑
+
+자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-1202/) 참고.
+
+
+
