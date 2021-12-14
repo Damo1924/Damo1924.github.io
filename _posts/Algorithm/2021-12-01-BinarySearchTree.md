@@ -447,8 +447,8 @@ int main()
         cin >> p >> l >> g;
         L[p] = l;
         G[p] = g;
-        LPG.insert({ {l, p}, g});
-        GLP.insert({ {g, l}, p});
+        LPG.insert({ {l, p}, g });
+        GLP.insert({ {g, l}, p });
     }
     
     int M;
@@ -462,8 +462,8 @@ int main()
         if (s == "recommend")
         {
             cin >> b;
-            if (b == 1) cout << (*prev(GLP.lower_bound({ {a, 101}, 0}))).second << "\n";
-            else cout << (*GLP.lower_bound({ {a, 0}, 0})).second << "\n";
+            if (b == 1) cout << (*prev(GLP.lower_bound({ {a, 101}, 0 }))).second << "\n";
+            else cout << (*GLP.lower_bound({ {a, 0}, 0 })).second << "\n";
         }
         else if (s == "recommend2")
         {
@@ -473,30 +473,30 @@ int main()
         else if (s == "recommend3")
         {
             cin >> b;
-            auto it = LPG.lower_bound({ {b, 0}, 0});
+            auto it = LPG.lower_bound({ {b, 0}, 0 });
             if (a == 1)
             {
                 if (it == LPG.end()) cout << "-1\n";
-                else cout << (*LPG.lower_bound({ {b, 0}, 0})).first.second << "\n";
+                else cout << (*LPG.lower_bound({ {b, 0}, 0 })).first.second << "\n";
             }
             else
             {
                 if (it == LPG.begin()) cout << "-1\n";
-                else cout << (*prev(LPG.lower_bound({ {b, 0}, 0}))).first.second << "\n";
+                else cout << (*prev(LPG.lower_bound({ {b, 0}, 0 }))).first.second << "\n";
             }
         }
         else if (s == "add")
         {
             cin >> b >> c;
-            LPG.insert({ {b, a}, c});
-            GLP.insert({ {c, b}, a});
+            LPG.insert({ {b, a}, c });
+            GLP.insert({ {c, b}, a });
             L[a] = b;
             G[a] = c;
         }
         else
         {
-            LPG.erase({ {L[a], a}, G[a]});
-            GLP.erase({ {G[a], L[a]}, a});
+            LPG.erase({ {L[a], a}, G[a] });
+            GLP.erase({ {G[a], L[a]}, a });
         }
     }
 }
