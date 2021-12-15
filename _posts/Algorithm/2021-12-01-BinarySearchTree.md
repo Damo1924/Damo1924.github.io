@@ -598,5 +598,7 @@ int main()
 
 자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-1202/) 참고.
 
+### [백준] 1539. 이진 검색 트리
 
+자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-1539/) 참고
 
