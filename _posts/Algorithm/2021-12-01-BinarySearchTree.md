@@ -289,6 +289,10 @@ BST를 이용하면 아주 쉽게 해결할 수 있는 문제이다.
 
 `set`에 **명소인 구역의 번호**를 저장하면 새로운 명소를 추가, 기존의 명소를 삭제, 현재 위치부터 다음 명소까지의 거리를 구하는 작업 모두 로그 시간복잡도로 수행할 수 있게 된다.
 
+<details>
+<summary>소스 코드</summary>
+<div markdown="1">
+
 ```cpp
 #include <iostream>
 #include <set>
@@ -343,6 +347,9 @@ int main()
 	}
 }
 ```
+  
+</div>
+</details>
 
 ### [백준] 21939. 문제 추천 시스템 Version 1
 
@@ -355,6 +362,10 @@ int main()
 이 경우에는 `set`에 '난이도, 문제 번호'를 묶은 `pair<int, int>`를 저장함으로써 쉽게 가장 어려운/쉬운 문제를 찾을 수 있다.
 
 > 이때 가장 어려운 문제는 `<iterator>` 헤더 파일에 있는 `prev()` 함수를 이용하여 출력해야한다.
+
+<details>
+<summary>소스 코드</summary>
+<div markdown="1">
 
 ```cpp
 #include <iostream>
@@ -411,6 +422,9 @@ int main()
 }
 ```
 
+</div>
+</details>
+
 ### [백준] 21944. 문제 추천 시스템 Version 2
 
 [백준 21944. 문제 추천 시스템 Version 2 문제 링크](https://www.acmicpc.net/problem/21944)
@@ -420,6 +434,10 @@ int main()
 각 명령을 구현하기 위해 필요한 `set`을 적절히 선언하고, 명령의 세부적인 부분까지 잘 고려해야한다.
 
 그렇게 어려운 문제는 아니니 꼭 한 번 직접 구현해보는 것을 추천한다.
+
+<details>
+<summary>소스 코드</summary>
+<div markdown="1">
 
 ```cpp
 #include <iostream>
@@ -501,6 +519,9 @@ int main()
     }
 }
 ```
+
+</div>
+</details>
 
 ### [백준] 7662. 이중 우선순위 큐
 
