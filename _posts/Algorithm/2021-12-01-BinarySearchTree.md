@@ -307,7 +307,7 @@ int main()
 	int N, Q;
 	cin >> N >> Q;
 
-	set<int> s;
+	set<int> s; // 명소인 구역의 번호를 저장
 	int A;
 	for (int i = 1; i <= N; i++)
 	{
@@ -315,7 +315,7 @@ int main()
 		if (A) s.insert(i);
 	}
 
-	int pos = 1; // 도현이의 위치
+	int pos = 1; // 현재 도현이의 위치
 	int a, b;
 	while (Q--)
 	{
@@ -330,7 +330,7 @@ int main()
 		{
 			cin >> b;
 			pos = (pos + b) % N;
-			if (pos == 0) pos = N;
+			if (pos == 0) pos = N; // 0번째 구역이 아니라 N번째 구역으로 바꾸어주자.
 		}
 		else
 		{
@@ -341,7 +341,7 @@ int main()
 			}
 
 			auto it = s.lower_bound(pos);
-			if (it == s.end()) cout << *s.begin() + N - pos << "\n";
+			if (it == s.end()) cout << *s.begin() + N - pos << "\n"; // 현재 위치에서 구역 N까지 명소가 없으면 가장 번호가 작은 명소가 가장 가까운 명소이다.
 			else cout << *it - pos << "\n";
 		}
 	}
@@ -374,9 +374,9 @@ int main()
 using namespace std;
 typedef pair<int, int> p;
 
-set<p> LP;
+set<p> LP; // 추천 문제 리스트를 set으로 구현: {난이도, 문제번호}를 저장
 
-int L[100001];
+int L[100001]; // 리스트에서 문제를 삭제할 때 문제 번호만 주어지기 때문에 문제번호를 통해 난이도를 알 수 있도록 저장해둠.
 
 int main()
 {
@@ -446,8 +446,11 @@ int main()
 using namespace std;
 typedef pair<int, int> p;
 
+// LPG: {난이도, 문제번호, 분류}, GLP: {분류, 난이도, 문제번호} 순서로 저장하는 이진 검색 트리
+// LPG로 recommend2, recommend3을, GLP로 recommend를 구현할 것이다.
 set<pair<p, int>> LPG, GLP;
 
+// 리스트에서 문제를 삭제할 때 문제 번호를 통해 난이도와 분류를 알아야해서 각각을 저장할 배열을 사용
 int L[100001], G[100001];
 
 int main()
@@ -517,6 +520,70 @@ int main()
             GLP.erase({ {G[a], L[a]}, a });
         }
     }
+}
+```
+
+</div>
+</details>
+
+### [백준] 19700. 수업
+
+[백준 19700. 수업 문제 링크](https://www.acmicpc.net/problem/19700)
+
+조건을 만족하면서 수강생들을 최대한 적은 그룹으로 나누는 문제이다.
+
+앞의 세 문제는 단순히 각 명령들을 구현하는 문제였다면, 이 문제는 **학생들을 그룹에 배치하는 그리디한 방법**을 떠올려야 해결할 수 있다.
+
+**Hint**
+
+> 키가 큰 사람부터 그룹에 배치하면 키는 고려할 필요가 없어지고, 각 그룹에 몇 명의 사람이 있는지만 알면 된다.
+> 
+> 그러므로 **각 그룹에 몇 명의 사람이 있는지에 대한 이진 검색 트리**를 사용하면 된다.
+>
+> 그룹에 있는 사람의 수는 중복될 수 있으므로 `multiset`을 이용하자.
+
+<details>
+<summary>소스 코드</summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <set>
+#include <iterator>
+#include <algorithm>
+using namespace std;
+
+pair<int, int> HK[500000]; // HK[i] = {h_i, k_i}
+
+multiset<int> group; // 각 그룹에 있는 사람의 수를 저장하는 이진 검색 트리
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N;
+    cin >> N;
+    for (int i = 0; i < N; i++) cin >> HK[i].first >> HK[i].second;
+    
+    sort(HK, HK + N); // 키에 대한 오름차순으로 정렬
+    
+    for (int i = N - 1; i >= 0; i--) // 키가 큰 사람부터 그룹에 배치한다.
+    {
+        auto it = group.lower_bound(HK[i].second);
+        if (it == group.begin()) // 모든 그룹의 사람 수가 학생 i의 한계보다 많을 때는 새로운 그룹을 만든다.
+        {
+            group.insert(1);
+            continue;
+        }
+        
+        it = prev(it); // 학생 i의 한계보다 적은 수의 사람이 있는 그룹 중 가장 사람이 많은 그룹
+        int k = *it + 1;
+        group.erase(it); // set은 값 변경이 불가능하므로 기존 그룹에 있는 사람 수를 제거하고 1을 더한 값을 삽입한다.
+        group.insert(k);
+    }
+    cout << group.size(); // 그룹의 최소 개수를 출력한다.
 }
 ```
 
