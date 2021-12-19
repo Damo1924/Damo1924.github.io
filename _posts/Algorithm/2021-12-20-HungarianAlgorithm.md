@@ -1,5 +1,5 @@
 ---
-title: "헝가리안 알고리즘(Hungarian Algorithm)"
+title: "할당 문제(Assignment problem)과 헝가리안 알고리즘(Hungarian algorithm)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -38,15 +38,31 @@ comments: true
 
 이때 직원의 수가 더 많다면 각 직원이 작업을 하는데 필요한 비용이 0인 작업을 (N-M)개 더 추가하고, 작업의 수가 더 많다면 모든 작업을 비용 0으로 수행할 수 있는 직원 (M-N)명을 추가하자.
 
-<img src="" width="70%" height="70%">
+<img src="https://user-images.githubusercontent.com/88201512/146673091-19b467b3-8842-4fdc-9040-ccf55278a803.jpg" width="70%" height="70%">
 
 이렇게 직원의 수와 일의 수를 동일하게 만들 수 있으므로, 위 문제는 다음과 같이 일반화가 가능하다.
 
 > 직원의 집합을 I, 작업의 집합을 J라고 하자. ($\left\vert I \right\vert = \left\vert J \right\vert$)
 > 
-> 어떤 노동자 $i$
+> 어떤 직원 $i \in I$가 작업 $j \in J$를 처리할 때 필요한 비용을 $c(i, j)$라고 한다.
+> 
+> **I에서 J로 가는 일대일 대응(bijection)** $f: I \to J$ 중 필요한 비용의 합이 가장 작은 것을 구하여라.
+
+즉, $\sum_{i \in I} c(i, f(i))$가 최소가 되는 $f$를 구하는 문제가 된다.
+
+앞서 본 그림과 같이 이분 그래프(bipartite graph)로 생각하면, 모든 직원이 모든 작업을 할 수 있으므로 **완전 이분 그래프(complete bipartite graph**가 된다.
+
+이때 직원의 수와 작업의 수가 동일하므로 우리는 **완전 이분 그래프에서 비용의 합이 최소가 되는 Perfect Matching을 찾는 문제**라고 할 수 있다.
+
+<br/>
+
+## 2. Solving with MCMF
+
+앞서 이야기했듯이, 할당 문제는 MCMF 문제로 바꾸어서 해결할 수 있다.
 
 
+
+<br/>
 
 ## References
 
