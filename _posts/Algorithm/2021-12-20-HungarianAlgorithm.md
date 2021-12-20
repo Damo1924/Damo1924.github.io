@@ -114,7 +114,7 @@ Big-O notation의 성질을 이용하면 할당 문제에 대한 MCMF 알고리�
 
 우리는 0의 값을 가지는 직원-작업 쌍만으로 매칭을 구성하고 싶으므로 그러한 직원과 작업 노드를 잇는 간선만 존재하는 이분 그래프를 그리면 다음과 같다.
 
-<center><img src="" width="70%" height="70%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/146701677-3fcb1c2d-8853-4870-86df-0fcd015ec9b4.jpg" width="70%" height="70%"></center>
 
 위 그래프는 표시된 것처럼 크기가 2인 Minimum Vertex Cover를 갖는다는 것을 알 수 있고, 이는 0의 값을 가지는 쌍만으로 perfect matching을 하는 것은 불가능함을 의미한다.
 
