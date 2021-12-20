@@ -66,6 +66,8 @@ comments: true
 
 이렇게 만들어진 그래프의 간선에 조건에 맞게 흐를 수 있는 유량과 비용을 정해주면 된다.
 
+<img src="https://user-images.githubusercontent.com/88201512/146697253-ea2c238f-0b80-4ddf-8fca-522ae6c3a7ac.jpg" width="70%" height="70%">
+
 다음 링크에서는 할당 문제인 [백준 11408. 열혈강호 5](https://damo1924.github.io/algorithm/MCMF/#2-%EB%B0%B1%EC%A4%80-11408-%EC%97%B4%ED%98%88%EA%B0%95%ED%98%B8-5)를 MCMF 알고리즘으로 해결하는 과정을 확인할 수 있다.
 
 MCMF 알고리즘의 시간복잡도는 $O(fVE)$이며, 앞서 그린 그래프는 다음을 만족한다.
@@ -77,6 +79,14 @@ MCMF 알고리즘의 시간복잡도는 $O(fVE)$이며, 앞서 그린 그래프�
 Big-O notation의 성질을 이용하면 할당 문제에 대한 MCMF 알고리즘의 시간복잡도는 $O(N^4)$가 된다.
 
 <br/>
+
+## 3. Hungarian Algorithm
+
+이제 헝가리안 알고리즘이 어떤 과정을 통해 이루어지는지 알아보자.
+
+3명의 직원 $i_1$, $i_2$, $i_3$와 3개의 작업 $j_1$, $j_2$, $j_3$이 있고, 직원들이 작업을 할 때 필요한 비용이 다음과 같은 행렬로 주어졌다고 하자.
+
+
 
 ## References
 
