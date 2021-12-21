@@ -63,17 +63,29 @@ $I$, $J$의 원소들과 $E_c$에 속하는 간선들로 이루어진 이분 그
 
 **[목표]** $G$의 Minimum vertex cover의 크기
 
-현재 매칭을 $M \subseteq E_c$이라고 할 때, 다음의 그래프 $G$의 정점들의 부분집합들을 정의하자.
+그래프 $G$의 Maximum matching을 $M_{max} \subseteq E_c$이라고 하자.
 
-$U$: $I$의 원소 중 $M$에 대해 매칭되지 않은 정점들의 집합
+$U$: $I$의 원소 중 $M_{max}$에 대해 매칭되지 않은 정점들의 집합
 
-$Z$: $U$의 정점들로부터 $M$에 대한 alternating path를 통해 접근이 가능한 정점들의 집합
+$Z$: $U$의 정점들로부터 $M_{max}$에 대한 alternating path를 통해 접근이 가능한 정점들의 집합
 
 $S = Z \cap X$
 
 $T = Z \cap Y$
 
 $N(S)$: $S$의 정점들에 인접한 정점들의 집합
+
+> **[Konig's Theorem]** 이분 그래프의 Minimum vertex cover의 크기와 Maximum matching의 크기는 동일하다.
+>
+> **[Berge's Lemma]** 그래프의 어떤 매칭이 Maximum matching이기 위한 필요충분조건은 매칭에 대한 Augmenting path가 존재하지 않는 것이다.
+>
+> **[Lemma 1]** $U$의 정점에서 $S$의 정점까지의 alternating path는 $M_{max}$에 포함된 간선으로 끝나고, $U$의 정점에서 $T$의 정점까지의 alternating path는 $M$에 포함되지 않은 간선으로 끝난다.
+>
+> **[Lemma 2]** $N(S) = T$
+>
+> **[Lemma 3]** 집합 $K = (X \setminus S) \cup T$는 그래프 $G$의 Minimum vertex cover이다.
+
+위 정리들에 대한 증명은 [이 포스트](https://damo1924.github.io/algorithm/BipartiteMatching/#3-minimum-vertex-cover--konigs-theorem)를 참고.
 
 <br/>
 
@@ -96,7 +108,7 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
   - 현재 매칭의 크기가 $N$이면 반복문을 종료하고 결과를 반환한다.
   - 현재 매칭의 크기가 $N$보다 작다면 반복문을 수행한다.
 
-이제 주어진 매칭에 대해서 augmenting path를 찾을 수 있다면, 이분 그래프의 minimum vertex cover도 구할 수 있어졌다.
+따라서 주어진 매칭에 대해서 augmenting path를 찾을 수 있다면, 이분 그래프의 minimum vertex cover도 구할 수 있다.
 
 <br/>
 
@@ -104,7 +116,16 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 
 주어진 매칭 $M$에 대한 augmenting path를 구하는 과정에 대해 알아보자.
 
-**1) 집합 $U$에서 임의의 정점 $u$를 선택한다.
+**1)** $I$에서 매칭되지 않은 정점 $u$를 선택하여 집합 $S = \{u\}$, $T = \empty$이라 한다.
+
+> 집합 $S$는 augmenting path에 포함된 $I$의 정점들, 집합 $T$는 augmenting path에 포함된 $J$의 정점들을 의미한다.
+
+**2)** $N(S) \neq T$을 만족할 때, $j \in N(S) - T$인 정점 $j$를 하나 선택한다.
+
+> $N(S) = T$이면 현재까지 구한 Augmenting path에서 더 늘리는 것이 불가능하므로 1번 과정으로 돌아간다.
+
+**2-1)** 만약 
+4. 
 
 Augmenting path의 양 끝 간선은 매칭에 포함되지 않는 간선이므로 
 
