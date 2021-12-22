@@ -57,7 +57,7 @@ Edmond-Karp 알고리즘의 시간복잡도는 $O(VE)$으로, 직원과 작업�
 
 위 알고리즘의 5번 과정을 반복하고 있는 상황을 생각하자.
 
-현재 행렬을 $c$라고 할 때, $c_{ij} = 0$을 만족하는 직원 $i$와 작업 $j$를 잇는 간선들의 집합을 $E_c$라고 정의하자.
+현재 행렬을 $C$라고 할 때, $C_{ij} = 0$을 만족하는 직원 $i$와 작업 $j$를 잇는 간선들의 집합을 $E_c$라고 정의하자.
 
 $I$, $J$의 원소들과 $E_c$에 속하는 간선들로 이루어진 이분 그래프를 $G$라고 한다.
 
@@ -69,9 +69,9 @@ $U$: $I$의 원소 중 $M_{max}$에 대해 매칭되지 않은 정점들의 집�
 
 $Z$: $U$의 정점들로부터 $M_{max}$에 대한 alternating path를 통해 접근이 가능한 정점들의 집합
 
-$S = Z \cap X$
+$S = Z \cap I$
 
-$T = Z \cap Y$
+$T = Z \cap J$
 
 $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 
@@ -83,7 +83,7 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 >
 > **[Lemma 2]** $N(S) = T$
 >
-> **[Lemma 3]** 집합 $K = (X \setminus S) \cup T$는 그래프 $G$의 Minimum vertex cover이다.
+> **[Lemma 3]** 집합 $V = (I \setminus S) \cup T$는 그래프 $G$의 Minimum vertex cover이다.
 
 위 정리들에 대한 증명은 [이 포스트](https://damo1924.github.io/algorithm/BipartiteMatching/#3-minimum-vertex-cover--konigs-theorem)를 참고.
 
@@ -132,7 +132,7 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 
 <br/>
 
-## 5. Improving
+## 5. How to change the Matrix after finding the Minimum Vertex Cover
 
 마지막으로 더 이상 매칭의 크기를 늘리지 못할 때 행렬에 어떤 연산을 적용해주어야 하는지 알아보자.
 
@@ -141,7 +141,7 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 해당 augmenting path 위의 정점들을 $s_1, \dots, s_k \in S$, $t_1, \dots, t_k, t_{k+1} \in T$라고 하면, augmenting path는 다음과 같은 순서대로 정점을 지나게 된다.
 
 \begin{aligned}
-$u, t_1, s_1, t_2, s_2, \dots, t_k, s_k, t_{k+1}$
+u, t_1, s_1, t_2, s_2, \dots, t_k, s_k, t_{k+1}
 \end{aligned}
 
 이때 자연수 $p$($1 \leq p \leq k$)에 대해 $t_p$과 $s_p$를 잇는 간선은 매칭에 속하며, 나머지 간선들은 매칭에 속하지 않는다.
@@ -158,7 +158,9 @@ $u, t_1, s_1, t_2, s_2, \dots, t_k, s_k, t_{k+1}$
 
 다음과 같은 $u$에서 출발한 alternating path를 생각하자.
 
-$u, t_1, s_1, t_2, s_2, \dots, t_k, s_k$
+\begin{aligned}
+u, t_1, s_1, t_2, s_2, \dots, t_k, s_k
+\end{aligned|
 
 집합 $S = \\{u, s_1, \dots, s_k\\}$와 $T = \\{t_1, \dots, t_k\\}$에 대해서 $N(S) = T$인 상황이다.
 
@@ -181,11 +183,60 @@ Augmenting path를 만들기 위해서는 아직 매칭에 포함되지 않은 �
 
 이분 그래프 $G$의 Minimum vertex cover를 $V$라고 하면, $I'$과 $J'$은 다음과 같다.
 
+\begin{aligned}
+I' = V \cap I, J' = V \cap J
+\end{aligned}
 
+이때 **Lemma 3**에 의해 Minimum vertex cover $V = K = (I \setminus S) \cup T$이다.
 
+그러므로 $I' = I \setminus S$이고, $J' = T$가 된다.
 
+위 사실을 이용하면 알고리즘의 **5)** 부분을 다음과 같이 쓸 수 있다.
 
+> - $i \in S$, $j \notin T$를 만족하는 $(i, j)$ 쌍에 대해 $C_{ij}$의 최솟값을 $m$이라 한다.
+> - $S$에 속하는 행들의 각 원소에서 $m$을 뺀다.
+> - $T$에 속하는 열들의 각 원소에 $m$을 더한다.
+> - 갱신된 행렬에 대해 다시 $S$와 $T$를 구한다.
 
+<br/>
+
+## 6. Some neat methods to Improve Time Complexity
+
+**1) Labeling**
+
+각 행과 열에 Labeling을 한다는 것은 해당 행이나 열에 빼준 값을 저장해주는 것이다.
+
+> `L_x[i]` = i행의 원소들에 공통적으로 빼준 값  
+> `L_y[i]` = i열의 원소들에 공통적으로 빼준 값
+
+원래는 행렬을 업데이트할 때마다 모든 원소에 특정 값을 빼거나 더해야한다.
+
+하지만 Labeling을 하면 굳이 모든 원소에 값을 더하거나 빼는 대신 `L_x`와 `L_y`에만 더하거나 빼주면 된다.
+
+$O(N^2)$이 걸리는 작업을 $O(N)$으로 처리할 수 있게 된다.
+
+**2) Calculating Minimum** $m$ **in** $O(N)$
+
+행렬을 업데이트하기 위해서는 조건을 만족하는 값들 중 최솟값 $m$을 구해야한다.
+
+마찬가지로 이 작업도 행렬의 모든 원소를 체크하면서 조건을 만족하는 값을 구해야하기 때문에 $O(N^2)$의 시간복잡도를 가진다.
+
+다음 두 배열을 추가적으로 이용하면 $O(N)$의 시간복잡도로 최솟값을 구할 수 있다.
+
+> `slack[j]` = $i \in S$에 대해 `c[i][j] - L_x[i] - L_y[j]`의 최솟값을 저장  
+> `slack_x[j]` = `slack[j]`에 저장된 최솟값에 해당하는 $i \in S$를 저장
+
+집합 $S$에 새로운 원소가 추가될 때마다 `slack`을 더 작은 값으로 갱신시켜주면, `slack` 배열을 탐색하여 최솟값을 구할 수 있게 된다.
+
+<br/>
+
+## 7. C++ Implementation of Hungarian Algorithm
+
+지금까지 공부한 내용을 토대로 헝가리안 알고리즘을 구현해보자.
+
+```cpp
+
+```
 
 ## Reference
 
