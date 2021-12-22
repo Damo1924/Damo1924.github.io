@@ -160,7 +160,7 @@ u, t_1, s_1, t_2, s_2, \dots, t_k, s_k, t_{k+1}
 
 \begin{aligned}
 u, t_1, s_1, t_2, s_2, \dots, t_k, s_k
-\end{aligned|
+\end{aligned}
 
 집합 $S = \\{u, s_1, \dots, s_k\\}$와 $T = \\{t_1, \dots, t_k\\}$에 대해서 $N(S) = T$인 상황이다.
 
@@ -214,6 +214,8 @@ I' = V \cap I, J' = V \cap J
 하지만 Labeling을 하면 굳이 모든 원소에 값을 더하거나 빼는 대신 `L_x`와 `L_y`에만 더하거나 빼주면 된다.
 
 $O(N^2)$이 걸리는 작업을 $O(N)$으로 처리할 수 있게 된다.
+
+---
 
 **2) Calculating Minimum** $m$ **in** $O(N)$
 
