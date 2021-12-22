@@ -1,5 +1,5 @@
 ---
-title: "헝가리안 알고리즘(Hungarian algorithm) 구현하기(with. Augmenting path)"
+title: "헝가리안 알고리즘의 구현(with. C++)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -140,7 +140,9 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 
 해당 augmenting path 위의 정점들을 $s_1, \dots, s_k \in S$, $t_1, \dots, t_k, t_{k+1} \in T$라고 하면, augmenting path는 다음과 같은 순서대로 정점을 지나게 된다.
 
+\begin{aligned}
 $u, t_1, s_1, t_2, s_2, \dots, t_k, s_k, t_{k+1}$
+\end{aligned}
 
 이때 자연수 $p$($1 \leq p \leq k$)에 대해 $t_p$과 $s_p$를 잇는 간선은 매칭에 속하며, 나머지 간선들은 매칭에 속하지 않는다.
 
@@ -170,12 +172,14 @@ Augmenting path를 만들기 위해서는 아직 매칭에 포함되지 않은 �
 
 다음은 헝가리안 알고리즘의 일부분이다.
 
-> 4. $I$, $J$의 원소들을 노드로 하고, $C_{ij} = 0$인 $(i, j)$를 잇는 간선을 그린 이분 그래프를 생각한다. 이 이분 그래프의 Minimum Vertex Cover를 $I' + J'$이라고 하자.
-> 5. $\left\vert I' \right\vert + \left\vert J' \right\vert = N$일 때까지 아래 과정을 반복한다.
->   - $i \notin I'$, $j \notin J'$을 만족하는 $(i, j)$ 쌍에 대해 $C_{ij}$의 최솟값을 $m$이라고 하자.
->   - $I'$에 속하지 않은 행들의 각 원소에서 $m$을 뺀다.
->   - $J'$에 속하는 열들의 각 원소에 $m$을 더한다.
->   - 갱신된 행렬에 대해 다시 $I'$과 $J'$를 구한다.
+> **4)** $I$, $J$의 원소들을 노드로 하고, $C_{ij} = 0$인 $(i, j)$를 잇는 간선을 그린 이분 그래프를 생각한다. 이 이분 그래프의 Minimum Vertex Cover를 $I' + J'$이라고 하자.
+> **5)** $\left\vert I' \right\vert + \left\vert J' \right\vert = N$일 때까지 아래 과정을 반복한다.
+> - $i \notin I'$, $j \notin J'$을 만족하는 $(i, j)$ 쌍에 대해 $C_{ij}$의 최솟값을 $m$이라고 하자.
+> - $I'$에 속하지 않은 행들의 각 원소에서 $m$을 뺀다.
+> - $J'$에 속하는 열들의 각 원소에 $m$을 더한다.
+> - 갱신된 행렬에 대해 다시 $I'$과 $J'$를 구한다.
+
+이분 그래프 $G$의 Minimum vertex cover를 $V$라고 하면, $I'$과 $J'$은 다음과 같다.
 
 
 
