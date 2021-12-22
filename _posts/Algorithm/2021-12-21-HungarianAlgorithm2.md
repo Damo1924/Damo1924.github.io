@@ -240,6 +240,10 @@ $O(N^2)$이 걸리는 작업을 $O(N)$으로 처리할 수 있게 된다.
 
 ```
 
+위 코드는 Reference [1]의 글을 참조해서 작성하였다.
+
+<br/>
+
 ## Reference
 
 [1] [Samsung Softwarer Membership, '헝가리안 알고리즘'](http://www.secmem.org/blog/2021/04/18/hungarian-algorithm/)  
