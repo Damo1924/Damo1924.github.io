@@ -62,7 +62,7 @@ bool dfs (int x) // 매칭을 늘리는데 성공하면 true, 아니면 fasle를
 {
     for (int i = 0; i < graph[x].size(); i++)
     {
-        int y = cow[x][i]; // A_x와 연결된 B의 정점 B_y
+        int y = graph[x][i]; // A_x와 연결된 B의 정점 B_y
         
         if (visited[y]) continue; // 방문했었다면 다음 정점으로
         visited[y] = 1;
