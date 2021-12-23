@@ -129,6 +129,8 @@ $N(S)$: $S$의 정점들에 인접한 정점들의 집합
 **3-2)** $j$가 매칭된 정점이면, 현재 경로에 $j$와 $j$와 매칭된 정점 $k$를 추가하고 2번으로 돌아간다.
 
 > $S = S \cup \\{k\\}$, $T = T \cup \\{j\\}$
+> 
+> 이때 저장되는 augmenting path는 일자 경로가 아니라 트리의 형태이다.
 
 <br/>
 
@@ -236,8 +238,184 @@ $O(N^2)$이 걸리는 작업을 $O(N)$으로 처리할 수 있게 된다.
 
 지금까지 공부한 내용을 토대로 헝가리안 알고리즘을 구현해보자.
 
-```cpp
+### [백준] 14216. 할 일 정하기 2
 
+[백준 14216. 할 일 정하기 2 문제 링크](https://www.acmicpc.net/problem/14216)
+
+할 일 정하기 1 문제는 N의 범위가 20까지여서 DP로 풀 수 있었지만, 이 문제는 N의 범위가 500까지 주어진다.
+
+헝가리안 알고리즘의 시간복잡도는 $O(N^3)$이므로 충분히 해결 가능하다.
+
+```cpp
+#include <iostream>
+using namespace std;
+const int maxN = 500;
+const int INF = 1000000000;
+
+int N;
+
+int c[maxN][maxN]; // 행렬값
+
+int L_x[maxN], L_y[maxN]; // 각 행, 각 열에 빼준 값을 저장
+
+int match_x[maxN], match_y[maxN]; // 매칭 정보를 저장
+
+int augPath_x[maxN], augPath_y[maxN]; // Augmenting path에서 인접한 노드를 저장
+
+bool inS[maxN], inT[maxN]; // S, T에 포함되면 true, 아니면 false
+
+int slack[maxN], slack_x[maxN]; // 각 열의 최솟값과 최솟값이 위치하고 있는 행을 저장
+
+int hungarian()
+{
+    for (int i = 0; i < N; i++) match_x[i] = match_y[i] = -1;
+
+    // 각 행에서 최솟값 제거 O(N^2)
+    for (int i = 0; i < N; i++)
+    {
+        int tmp = INF;
+        for (int j = 0; j < N; j++) tmp = min(tmp, c[i][j]);
+        L_x[i] += tmp;
+    }
+    // 각 열에서 최솟값 제거 O(N^2)
+    for (int i = 0; i < N; i++)
+    {
+        int tmp = INF;
+        for (int j = 0; j < N; j++) tmp = min(tmp, c[j][i] - L_x[j]);
+        L_y[i] += tmp;
+    }
+
+    int M = 0; // 매칭의 크기
+    while (M != N) // 매칭의 크기가 N이 될 때까지 최대 N번 반복
+    {
+        // augmenting path, 집합 S, T 초기화
+        for (int i = 0; i < N; i++)
+        {
+            augPath_x[i] = augPath_y[i] = -1;
+            inS[i] = inT[i] = 0;
+        }
+
+        // 아직 매칭이 되지 않은 I의 원소 u를 찾아 집합 S에 넣는다.
+        int u;
+        for (int i = 0; i < N; i++)
+        {
+            if (match_x[i] == -1)
+            {
+                inS[i] = 1;
+                u = i;
+                break;
+            }
+        }
+        // 집합 S에 u가 삽입되었으므로 slack을 u행으로 초기화해준다.
+        for (int i = 0; i < N; i++)
+        {
+            slack[i] = c[u][i] - L_x[u] - L_y[i];
+            slack_x[i] = u;
+        }
+
+        // augmenting path를 찾아 매칭의 크기를 증가시킨다. O(N^2)
+        while (true)
+        {
+            // N(S) - T 의 원소 중 임의의 원소를 선택
+            int j = -1;
+            for (int i = 0; i < N; i++)
+                if (slack[i] == 0 && !inT[i]) j = i;
+
+            // 0. N(S) = T인 경우 - 행렬 업데이트하기
+            // slack[j] = S에 속하는 행 i에 대해 c[i][j] - L_x[i] - L_y[j]의 최솟값
+            // 그러므로 j가 T에 속하지 않는다는 조건을 만족하는 slack[j] 중 최솟값 m을 찾으면 된다.
+            if (j == -1)
+            {
+                int m = INF;
+                for (int i = 0; i < N; i++)
+                    if (!inT[i]) m = min(m, slack[i]);
+
+                // S에 속하는 행들에 m을 빼고, T에 속하는 행들에 m을 더해준다.
+                for (int i = 0; i < N; i++)
+                {
+                    if (inS[i]) L_x[i] += m;
+                    if (inT[i]) L_y[i] -= m;
+                }
+
+                // 행렬을 업데이트했으므로 새로운 간선으로 연결된 J - T의 원소 v를 찾는다.
+                for (int i = 0; i < N; i++)
+                {
+                    if (!inT[i])
+                    {
+                        slack[i] -= m; // 동일하게 m을 빼주었으므로 slack에 저장된 값들에 m을 빼준 것이 여전히 최솟값이다.
+                        if (slack[i] == 0) j = i; // v
+                    }
+                }
+            }
+
+            // 1. 경로에 추가할 j가 매칭이 되지 않은 free vertex인 경우
+            // 경로에 j를 추가하면 해당 경로는 augmenting path가 된다.
+            // 매칭에 있는 간선은 매칭에서 삭제하고 매칭에 없는 간선은 매칭에 추가함으로써 매칭의 크기를 1 증가시킨다.
+            if (match_y[j] == -1)
+            {
+                augPath_y[j] = slack_x[j]; // slack[j] == 0인 j가 S의 어떤 원소에 연결되었는지 경로를 저장
+                while (j != -1) // 경로를 역추적하면서 매칭 정보를 수정
+                {
+                    int i = augPath_y[j];
+                    match_y[j] = i;
+                    int next_j = match_x[i];
+                    match_x[i] = j;
+                    j = next_j;
+                }
+                // augPath: next_j - i - j
+                // 기존에 매칭에 속한 (next_j, i) 대신 (i, j)를 매칭에 넣는다.
+
+                M++; // 매칭의 크기 증가
+                break; // 새로운 매칭에 대해 augmenting path를 처음부터 찾는다.
+            }
+
+            // 2. 경로에 추가할 j가 매칭이 된 정점인 경우
+            else
+            {
+                int k = match_y[j]; // j가 매칭된 정점
+                // 경로에 두 정점을 추가: (기존 경로) + (j - k)
+                augPath_x[k] = j;
+                augPath_y[j] = slack_x[j];
+                // S에 k 추가, T에 j 추가
+                inS[k] = 1;
+                inT[j] = 1;
+
+                // S에 새로운 원소 k가 추가되었으므로 slack을 작은 값으로 갱신
+                for (int i = 0; i < N; i++)
+                {
+                    if (c[k][i] - L_x[k] - L_y[i] < slack[i])
+                    {
+                        slack[i] = c[k][i] - L_x[k] - L_y[i];
+                        slack_x[i] = k;
+                    }
+                }
+            }
+        }
+    }
+
+    // 최소 비용은 행렬의 각 행과 열에서 공통으로 빼준 값을 모두 더한 것이다.
+    int res = 0;
+    for (int i = 0; i < N; i++)
+    {
+        res += L_x[i];
+        res += L_y[i];
+    }
+    return res;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> N;
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            cin >> c[i][j];
+
+    cout << hungarian();
+}
 ```
 
 위 코드는 Reference [1]의 글을 참조해서 작성하였다.
