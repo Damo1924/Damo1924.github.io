@@ -26,7 +26,7 @@ comments: true
 이분 매칭 알고리즘은 N개의 정점에 대해 크기가 M인 `visited` 배열을 초기화하고, DFS를 수행하므로 시간복잡도는 다음과 같다.
 
 \begin{aligned}
-$O(NM) + O(N(V + E)) = O(VE)$
+O(NM) + O(N(V + E)) = O(VE)
 \end{aligned}
 
 주어진 이분 그래프에 소스와 싱크를 추가하여 최대 유량 문제로 변환하였다.
@@ -34,7 +34,7 @@ $O(NM) + O(N(V + E)) = O(VE)$
 이때 Edmond-Karp 알고리즘을 사용할 때의 시간복잡도는 다음과 같다.
 
 \begin{aligned}
-$O(fE) = O(VE)$
+O(fE) = O(VE)
 \end{aligned}
 
 이때 $f$는 최대 유량인데, 이 경우에는 최대 유량이 전체 정점의 개수 V보다 작기 때문에 위와 같이 표현할 수 있다.
@@ -76,7 +76,7 @@ Hopcroft-Karp Algorithm은 다음과 같다.
 
 이제, 알고리즘의 타당성을 증명해보고, 시간복잡도를 어떻게 구하는지 살펴보자.
 
-</br>
+<br/>
 
 ## 3. 알고리즘의 타당성 증명
 
@@ -87,7 +87,29 @@ Hopcroft-Karp Algorithm은 다음과 같다.
 - **Alternating Path**: 그래프 상에 존재하는 경로들 중 매칭에 포함되는 간선들과 매칭에 포함되지 않은 간선들이 번갈아 나타나는 경로
 - **Augmenting Path**: 양 끝 정점이 모두 매칭되지 않은 alternating path
 
-**[Berge's Lemma]** 어떤 매칭 $M$이 최대 매칭일 필요충분조건은 $M$에 대한 augmenting path가 존재하지 않는 것이다.
+**[Lemma 1]**(Berge's Lemma) 매칭 $M$이 최대 매칭일 필요충분조건은 $M$에 대한 augmenting path가 존재하지 않는 것이다.
+
+> ***Proof.***
+> 
+
+**[Lemma 2]** 매칭 $M$에 대한 augmenting path $P$가 주어졌을 때, $M \oplus P$는 $M$보다 크기가 1 더 큰 매칭이다.
+
+> ***Proof.***
+> 
+
+**[Lemma 3]** 그래프 $G$의 최대 매칭을 $M_{max}$라고 할 때, $G$의 임의의 매칭 $M(M \neq M_{max})$에 대해 길이가 $L$을 넘지 않는 augmenting path가 존재한다.
+
+\begin{aligned}
+L = 2 \lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\vert - \left\vert M \right\vert} \rfloor + 1
+\end{aligned}
+
+> ***Proof.***
+> 
+
+**[Lemma 4]** 매칭 $M$에 대한 augmenting path 중 길이가 가장 짧은 것을 $P$라고 하자. 새로운 매칭 $M \oplus P$에 대한 임의의 augmenting path $P'$에 대해 $\left\vert P' \right\vert \geq \left\vert P \right\vert + 2 \left\vert P \cap P' \right\vert$이 성립한다.
+
+> ***Proof.***
+> 
 
 혹시라도 위 내용에 대한 증명이나 자세한 설명을 원한다면, 아래 두 포스팅을 참고하길 바란다.
 
