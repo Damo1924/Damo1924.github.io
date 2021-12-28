@@ -161,7 +161,9 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 
 > $P_i$는 그래프 $G$의 매칭 $M$에 대한 augmenting path이고, 이러한 경로들 중 서로 정점을 공유하지 않는 경로들의 집합을 $P = \\{P_1, P_2, \dots, P_k\\}$라고 하면 다음이 성립한다.
 > 
-> $\left\vert M' \right\vert - \left\vert M \right\vert \leq \left\vert P \right\vert$
+> \begin{aligned}
+> \left\vert M' \right\vert - \left\vert M \right\vert \leq \left\vert P \right\vert
+> \end{aligned}
 > 
 > 비둘기집 원리에 의해 어떤 $P_i \in P$는 $M$에 포함된 간선 $\left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\vert - \left\vert M \right\vert} \right\rfloor$개 포함하고 있음을 알 수 있다.
 > 
