@@ -103,9 +103,9 @@ Hopcroft-Karp Algorithm은 다음과 같다.
 > 
 > 또한, 차수가 2인 정점에 연결된 두 간선들은 반드시 하나는 $M$, 다른 하나는 $M'$에 속한다.
 > 
-> 즉, 그래프 위의 모든 사이클과 경로는 $M$에 속하는 간선들과 $M'$에 속하는 간선들이 번갈아 나타나게 된다.(alternates between M & M')
+> 즉, 그래프 위의 모든 사이클과 경로는 $M$에 속하는 간선들과 $M'$에 속하는 간선들이 번갈아 나타나게 된다.
 > 
-> 사이클의 경우, $M$과 $M'$에 속하는 간선들의 개수가 같아야 위 조건을 만족하므로 길이가 반드시 짝수이다.(even cycle)
+> 사이클의 경우, $M$과 $M'$에 속하는 간선들의 개수가 같아야 위 조건을 만족하므로 길이가 반드시 짝수이다.
 
 ---
 
@@ -179,7 +179,9 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 
 > 새로운 매칭 $M'$을 다음과 같이 정의하자.
 > 
+> \begin{aligned}
 > $M' := M \oplus P \oplus P'$
+> \end{aligned}
 > 
 > $M'$은 $M$에서 augmenting path의 간선들을 매칭에 더하고 빼는 작업을 두 번 수행한 매칭이므로 $\left\vert M' \right\vert = \left\vert M \right\vert + 2$이다.
 > 
@@ -191,15 +193,21 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 
 > 이때 $P$는 $M$에 대한 augmenting path 중 가장 짧은 것이므로 $M$과 $M'$의 대칭차 $M \oplus M'$에 대해 다음이 성립한다.
 > 
-> (1) $\left\vert M \oplus M' \right\vert \geq 2 \left\vert P \right\vert$
+> \begin{aligned}
+> \left\vert M \oplus M' \right\vert \geq 2 \left\vert P \right\vert \dots (1)
+> \end{aligned}
 > 
-> $M' = M \oplus P \oplus P'라는 사실을 이용하면, $M \oplus M'$는 다음과 같이 정리된다.
+> $M' = M \oplus P \oplus P'$라는 사실을 이용하면, $M \oplus M'$는 다음과 같이 정리된다.
 > 
-> $M \oplus M' = M \oplus M \oplus P \oplus P' = P \oplus P$
+> \begin{aligned}
+> M \oplus M' = M \oplus M \oplus P \oplus P' = P \oplus P
+> \end{aligned}
 > 
 > 이를 이용하면 다음을 얻을 수 있다.
 > 
-> (2) $\left\vert M \oplus M' \right\vert = \left\vert P \oplus P' \right\vert = \left\vert P \right\vert + \left\vert P' \right\vert - 2 \left\vert P \cup P' \right\vert$
+> \begin{aligned}
+> \left\vert M \oplus M' \right\vert = \left\vert P \oplus P' \right\vert = \left\vert P \right\vert + \left\vert P' \right\vert - 2 \left\vert P \cup P' \right\vert \dots (2)
+> \end{aligned}
 > 
 > 식 (1)과 (2)를 이용하면 $\left\vert P' \right\vert \geq \left\vert P \right\vert + 2 \left\vert P \cap P' \right\vert$가 된다.
 
@@ -229,17 +237,23 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 > 
 > 상수 $t$를 다음과 같이 정의하자.
 > 
-> $t := \lfloor k - \sqrt{k} \rfloor$
+> \begin{aligned}
+> t := \lfloor k - \sqrt{k} \rfloor
+> \end{aligned}
 > 
 > 매칭 $M_i$의 정의에 의해 $\left\vert M_t \right\vert = t$이고, **Lemma 3**에 의해
 > 
-> $\left\vert P_{t+1} \right\vert \leq 2 \left\lfloor \frac{t}{k - t} \right\rfloor + 1 \leq 2 \lfloor \sqrt{k} \rfloor + 1$
+> \begin{aligned}
+> \left\vert P_{t+1} \right\vert \leq 2 \left\lfloor \frac{t}{k - t} \right\rfloor + 1 \leq 2 \lfloor \sqrt{k} \rfloor + 1
+> \end{aligned}
 > 
 > 을 얻을 수 있다.
 > 
 > **Lemma 4**의 따름정리에 의해 다음이 성립한다.
 > 
-> $\left\vert P_1 \right\vert \leq \left\vert P_2 \right\vert \leq \dots \leq \left\vert P_t \right\vert \leq \left\vert P_{t + 1} \right\vert \leq 2 \lfloor \sqrt{k} \rfloor + 1$
+> \begin{aligned}
+> \left\vert P_1 \right\vert \leq \left\vert P_2 \right\vert \leq \dots \leq \left\vert P_t \right\vert \leq \left\vert P_{t + 1} \right\vert \leq 2 \lfloor \sqrt{k} \rfloor + 1
+> \end{aligned}
 > 
 > $P_1, P_2, \dots P_{t+1}$은 모두 augmenting path이므로 길이가 홀수이다.
 > 
@@ -247,7 +261,9 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 > 
 > $\left\vert P_{t+1} \right\vert, \dots, \left\vert P_{k} \right\vert$들은 최대 $k - t = \lceil k \rceil$개의 서로 다른 숫자들로 이루어질 수 있기 때문에 전체 $\left\vert P_1 \right\vert, \left\vert P_2 \right\vert, \dots, \left\vert P_k \right\vert$ 중 서로 다른 숫자의 개수의 최댓값은 다음과 같다.
 > 
-> $\lfloor \sqrt{k} \rfloor + 1 + \lceil k \rceil \leq 2 \lfloor \sqrt{k} \rfloor + 2$
+> \begin{aligned}
+> \lfloor \sqrt{k} \rfloor + 1 + \lceil k \rceil \leq 2 \lfloor \sqrt{k} \rfloor + 2
+> \end{aligned}
 
 ---
 
