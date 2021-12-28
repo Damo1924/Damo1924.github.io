@@ -161,32 +161,99 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 
 > $P_i$는 그래프 $G$의 매칭 $M$에 대한 augmenting path이고, 이러한 경로들 중 서로 정점을 공유하지 않는 경로들의 집합을 $P = \\{P_1, P_2, \dots, P_k\\}$라고 하면 다음이 성립한다.
 > 
-> $\left\vert M' \right\vert - $\left\vert M \right\vert \leq $\left\vert P \right\vert$
+> $\left\vert M' \right\vert - \left\vert M \right\vert \leq \left\vert P \right\vert$
 > 
 > 비둘기집 원리에 의해 어떤 $P_i \in P$는 $M$에 포함된 간선 $\left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\vert - \left\vert M \right\vert} \right\rfloor$개 포함하고 있음을 알 수 있다.
 > 
 > $P_i$는 $M$에 대한 augmenting path이므로 $P_i$의 길이는 $L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\vert - \left\vert M \right\vert} \right\rfloor + 1$이 된다.
-> 1
+> 
 > $\therefore$ $M$이 최대 매칭이 아닐 때, 조건을 만족하는 $M$에 대한 augmenting path가 존재한다.
 
-
+---
 
 **[Lemma 4]** 매칭 $M$에 대한 augmenting path 중 길이가 가장 짧은 것을 $P$라고 하자. 새로운 매칭 $M \oplus P$에 대한 임의의 augmenting path $P'$에 대해 $\left\vert P' \right\vert \geq \left\vert P \right\vert + 2 \left\vert P \cap P' \right\vert$이 성립한다.
 
 > ***Proof.***
 > 
-
-혹시라도 위 내용에 대한 증명이나 자세한 설명을 원한다면, 아래 두 포스팅을 참고하길 바란다.
-
-> [쾨니그의 정리(Konig's Theorem)와 증명](https://damo1924.github.io/algorithm/BipartiteMatching/#konigs-theorem)
+> 새로운 매칭 $M'$을 다음과 같이 정의하자.
 > 
-> [Augmenting Path를 이용한 헝가리안 알고리즘의 구현](https://damo1924.github.io/algorithm/HungarianAlgorithm2/)
+> $M' := M \oplus P \oplus P'$
+> 
+> $M'$은 $M$에서 augmenting path의 간선들을 매칭에 더하고 빼는 작업을 두 번 수행한 매칭이므로 $\left\vert M' \right\vert = \left\vert M \right\vert + 2$이다.
+> 
+> $M$과 $M'$의 대칭차집합에 속한 간선들로 구성된 그래프 $D$를 생각하자.
+> 
+> **Lemma 1**에 의해 $D$에는 $M$과 $M'$에 속하는 간선들이 번갈아 나타나는 경로가 존재하고, 이 경로는 $M$에 대한 augmenting path이다.
+> 
+> $\left\vert M' \right\vert = \left\vert M \right\vert + 2$이므로 서로 정점을 공유하지 않는 $M$에 대한 augmenting path가 적어도 두 개 존재한다.
+> 
+> 이때 $P$는 $M$에 대한 augmenting path 중 가장 짧은 것이므로 $M$과 $M'$의 대칭차 $M \oplus M'$에 대해 다음이 성립한다.
+> 
+> (1) $\left\vert M \oplus M' \right\vert \geq 2 \left\vert P \right\vert$
+> 
+> $M' = M \oplus P \oplus P'라는 사실을 이용하면, $M \oplus M'$는 다음과 같이 정리된다.
+> 
+> $M \oplus M' = M \oplus M \oplus P \oplus P' = P \oplus P$
+> 
+> 이를 이용하면 다음을 얻을 수 있다.
+> 
+> (2) $\left\vert M \oplus M' \right\vert = \left\vert P \oplus P' \right\vert = \left\vert P \right\vert + \left\vert P' \right\vert - 2 \left\vert P \cup P' \right\vert$
+> 
+> 식 (1)과 (2)를 이용하면 $\left\vert P' \right\vert \geq \left\vert P \right\vert + 2 \left\vert P \cap P' \right\vert$가 된다.
 
+---
 
+그래프 $G(V, E)$의 매칭 $M_i \subseteq E$를 생각하자.
 
+$M_i$의 augmenting path 중 길이가 가장 짧은 것을 $P_i$라고 하자.
 
+이때 $M_{i+1}$는 $M_i \oplus P_i$로 정의한다.
 
+$M_0$을 공집합으로 정의한다면, 모든 $i = 0, \dots, k$에 대해 $\left\vert M_i \right\vert = i$를 만족한다.
 
+$k$는 그래프 $G$의 최대 매칭의 크기가 된다.
+
+아래는 **Lemma 4**의 따름정리이다.
+
+---
+
+**[Corollary]** 모든 $i = 1, \dots k-1$에 대해 $\left\vert P_i \right\vert \leq \left\vert P_{i+1} \right\vert$이다.
+
+---
+
+**[Lemma 5]** $\left\vert P_1 \right\vert, \left\vert P_2 \right\vert, \dots, \left\vert P_k \right\vert$ 중 서로 다른 숫자의 개수는 $2 \lfloor \sqrt{k} \rfloor + 2$보다 작거나 같다.
+
+> ***Proof.***
+> 
+> 상수 $t$를 다음과 같이 정의하자.
+> 
+> $t := \lfloor k - \sqrt{k} \rfloor$
+> 
+> 매칭 $M_i$의 정의에 의해 $\left\vert M_t \right\vert = t$이고, **Lemma 3**에 의해
+> 
+> $\left\vert P_{t+1} \right\vert \leq 2 \left\lfloor \frac{t}{k - t} \right\rfloor + 1 \leq 2 \lfloor \sqrt{k} \rfloor + 1$
+> 
+> 을 얻을 수 있다.
+> 
+> **Lemma 4**의 따름정리에 의해 다음이 성립한다.
+> 
+> $\left\vert P_1 \right\vert \leq \left\vert P_2 \right\vert \leq \dots \leq \left\vert P_t \right\vert \leq \left\vert P_{t + 1} \right\vert \leq 2 \lfloor \sqrt{k} \rfloor + 1$
+> 
+> $P_1, P_2, \dots P_{t+1}$은 모두 augmenting path이므로 길이가 홀수이다.
+> 
+> 그러므로 $\left\vert P_1 \right\vert, \leq \left\vert P_2 \right\vert, \dots, \left\vert P_t \right\vert$는 $2 \lfloor \sqrt{k} \rfloor + 1$보다 작거나 같은 $\lfloor \sqrt{k} \rfloor + 1$개의 홀수 중 하나이다.
+> 
+> $\left\vert P_{t+1} \right\vert, \dots, \left\vert P_{k} \right\vert$들은 최대 $k - t = \lceil k \rceil$개의 서로 다른 숫자들로 이루어질 수 있기 때문에 전체 $\left\vert P_1 \right\vert, \left\vert P_2 \right\vert, \dots, \left\vert P_k \right\vert$ 중 서로 다른 숫자의 개수의 최댓값은 다음과 같다.
+> 
+> $\lfloor \sqrt{k} \rfloor + 1 + \lceil k \rceil \leq 2 \lfloor \sqrt{k} \rfloor + 2$
+
+---
+
+**[Lemma 6]** 서로 다른 $i, j$에 대해서 $\left\vert P_i \right\vert = \left\vert P_j \right\vert$이면, $P_i$와 $P_j$는 서로 정점을 공유하지 않는다.
+
+> ***Proof.***
+> 
+> 
 
 
 Hopcroft-Karp 알고리즘은 크게 두 가지 방법으로 설명이 가능하다.
