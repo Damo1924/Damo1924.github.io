@@ -269,25 +269,47 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 
 우리는 **Lemma 5**를 통해 Hopcroft-Karp 알고리즘의 시간복잡도를 구할 수 있다.
 
-DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$($i > j$)를 만족하는 augmenting path를 구하는 과정은 $O(V + E)$의 시간복잡도를 갖는다.
+DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$($i < j$)를 만족하는 augmenting path를 구하는 과정은 $O(V + E)$의 시간복잡도를 갖는다.
 
 마지막에 직접 알고리즘을 구현할 때 다루겠지만, Augmenting path를 구하기 위해서는 BFS로 그래프 전체를 탐색할 필요가 있는데, 이 과정도 $O(V + E)$의 시간복잡도를 갖는다.
 
-이제 위 과정을 최대 몇 번이나 반복하는지를 구하면 되는데, **Lemma 5**에 의해 
+이제 위 과정을 최대 몇 번이나 반복하는지를 구하면 되는데, **Lemma 5**에 의해 $\left\vert P_i \right\vert$가 가질 수 있는 값의 개수는 $2 \lfloor \sqrt{k} \rfloor + 2$ 이하이다.
+
+그러므로 반복되는 횟수는 $O(\sqrt{V})$라고 할 수 있고, Hopcroft-Karp algorithm의 시간복잡도는 $O(E \sqrt{V})$가 된다.
+
+
 
 ---
 
-**[Corollary 2]** 모든 $i = 0, 1, \dots, k-1$에 대해서 $\left\vert P_i \right\vert = \left\vert P_{i+1} \right\vert$이면, $P_i$와 $P_{i+1}$은 서로 간선을 공유하지 않는다.
+**[Lemma 6]** 모든 $i = 0, 1, \dots, k-1$에 대해서 $\left\vert P_i \right\vert = \left\vert P_{i+1} \right\vert$이면, $P_i$와 $P_{i+1}$은 서로 간선과 정점을 공유하지 않는다.
 
 > ***Proof.***
 > 
-> **Lemma 4**에 의해 $\left\vert P_{i+1} \right\vert \geq \left\vert P_i \right\vert$ + 2 \left\vert P_i \cap P_{i+1} \right\vert이므로 다음을 얻을 수 있다.
+> \left\vert P_{i+1} \right\vert = \left\vert P_i \right\vert$이면, **Lemma 4**에 의해 다음을 얻을 수 있다.
 > 
 > \begin{aligned}
 > \left\vert P_i \cap P_{i+1} \right\vert = 0
 > \end{aligned}
 > 
-> $\therefore$ $P_i$와 $P_{i+1}$은 서로 간선을 공유하지 않는다.
+> 즉, $P_i$와 $P_{i+1}$은 서로 간선을 공유하지 않는다.
+> 
+> 이때 $P_i$와 $P_{i+1}$이 어떤 정점 $v \in V$를 공유한다고 가정하자.
+> 
+> i) $v$가 $P_i$의 양 끝점인 경우
+> 
+> $P_i$ 위에 있으면서 $v$에 연결된 간선을 $e$라고 하면, $M_{i+1} = M_i \oplus P_i$이므로 $e \in M_{i+1}$이다.
+> 
+> $M_{i+1}$에 대한 augmenting path $P_{i+1}$이 정점 $v$를 지나야하므로 반드시 간선 $e$를 포함해야한다.
+> 
+> ii) $v$가 $P_i$의 양 끝점이 아닌 경우
+> 
+> $P_i$ 위에 있으면서 $v$에 연결된 간선 중 $M_i$에 속하는 간선을 $e$라고 하자.
+> 
+> 위와 마찬가지로 $e \in M_{i+1}$이므로 $P_i$는 반드시 간선 $e$를 포함해야한다.
+> 
+> i), ii) 두 경우 모두 $P_i$와 $P_{i+1}$이 간선을 공유하지 않는다는 것에 모순인 결과가 얻었다.
+> 
+> $\therefore$ $P_i$와 $P_{i+1}$은 서로 정점을 공유하지 않는다.
 
 ---
 
