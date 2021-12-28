@@ -285,7 +285,7 @@ DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$(
 
 > ***Proof.***
 > 
-> \left\vert P_{i+1} \right\vert = \left\vert P_i \right\vert$이면, **Lemma 4**에 의해 다음을 얻을 수 있다.
+> $\left\vert P_{i+1} \right\vert = \left\vert P_i \right\vert$이면, **Lemma 4**에 의해 다음을 얻을 수 있다.
 > 
 > \begin{aligned}
 > \left\vert P_i \cap P_{i+1} \right\vert = 0
@@ -309,11 +309,9 @@ DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$(
 > 
 > i), ii) 두 경우 모두 $P_i$와 $P_{i+1}$이 간선을 공유하지 않는다는 것에 모순인 결과가 얻었다.
 > 
-> $\therefore$ $P_i$와 $P_{i+1}$은 서로 정점을 공유하지 않는다.
+> $\therefore$ 수학적 귀납법에 의해 $P_i$와 $P_{i+1}$은 서로 정점을 공유하지 않는다.
 
 ---
-
-
 
 Hopcroft-Karp 알고리즘은 크게 두 가지 방법으로 설명이 가능하다.
 
@@ -364,4 +362,8 @@ Dinic's algorithm은 그래프의 각 간선에 흐를 수 있는 최대 유량�
 
 [1] [WIKIPEDIA, 'Berge's lemma'](https://en.m.wikipedia.org/wiki/Berge%27s_lemma)  
 [2] [WIKIPEDIA, 'Hopcroft-Karp algorithm'](https://en.m.wikipedia.org/wiki/Hopcroft%E2%80%93Karp_algorithm)  
+[3] [Gazelle and Computer Science, '호프크로프트-카프 알고리즘(Hopcroft-Karp Algorithm)'](https://gazelle-and-cs.tistory.com/35)  
+
+
+
 
