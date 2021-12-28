@@ -267,20 +267,6 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 
 ---
 
-우리는 **Lemma 5**를 통해 Hopcroft-Karp 알고리즘의 시간복잡도를 구할 수 있다.
-
-DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$($i < j$)를 만족하는 augmenting path를 구하는 과정은 $O(V + E)$의 시간복잡도를 갖는다.
-
-마지막에 직접 알고리즘을 구현할 때 다루겠지만, Augmenting path를 구하기 위해서는 BFS로 그래프 전체를 탐색할 필요가 있는데, 이 과정도 $O(V + E)$의 시간복잡도를 갖는다.
-
-이제 위 과정을 최대 몇 번이나 반복하는지를 구하면 되는데, **Lemma 5**에 의해 $\left\vert P_i \right\vert$가 가질 수 있는 값의 개수는 $2 \lfloor \sqrt{k} \rfloor + 2$ 이하이다.
-
-그러므로 반복되는 횟수는 $O(\sqrt{V})$라고 할 수 있고, Hopcroft-Karp algorithm의 시간복잡도는 $O(E \sqrt{V})$가 된다.
-
-
-
----
-
 **[Lemma 6]** 모든 $i = 0, 1, \dots, k-1$에 대해서 $\left\vert P_i \right\vert = \left\vert P_{i+1} \right\vert$이면, $P_i$와 $P_{i+1}$은 서로 간선과 정점을 공유하지 않는다.
 
 > ***Proof.***
@@ -312,6 +298,42 @@ DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$(
 > $\therefore$ 수학적 귀납법에 의해 $P_i$와 $P_{i+1}$은 서로 정점을 공유하지 않는다.
 
 ---
+
+다음은 **Lemma 6**의 따름정리이다.
+
+---
+
+**[Corollary 2]** 서로 다른 $i, j$에 대해 $\left\vert P_i \right\vert = \left\vert P_j \right\vert$이면 $P_i$와 $P_j$는 정점을 공유하지 않는다.
+
+> ***Proof.***
+> 
+> 일반성을 잃지 않고 $i < j$라고 하자.
+> 
+> $P_i$와 $P_j$가 정점을 공유한다고 가정하면, $i \leq s < j$를 만족하는 어떤 $s$에 대해 $P_s$와 $P_{s+1}$이 정점을 공유한다.
+> 
+> **Lemma 4**의 따름정리에 의해 $\left\vert P_s \right\vert = \left\vert P_{s+1} \right\vert$이다.
+> 
+> **Lemma 6**에 의해 $P_s$와 $P_{s+1}$은 서로 정점을 공유하지 않는다.
+> 
+> 이는 가정에 모순이므로 수학적 귀납법에 의해 $P_i$와 $P_j$는 정점을 공유하지 않는다.
+
+---
+
+우리는 **Lemma 5**를 통해 Hopcroft-Karp 알고리즘의 시간복잡도를 구할 수 있다.
+
+DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$($i < j$)를 만족하는 augmenting path를 구하는 과정은 $O(V + E)$의 시간복잡도를 갖는다.
+
+마지막에 직접 알고리즘을 구현할 때 다루겠지만, Augmenting path를 구하기 위해서는 BFS로 그래프 전체를 탐색할 필요가 있는데, 이 과정도 $O(V + E)$의 시간복잡도를 갖는다.
+
+이때 **Lemma 6의 따름정리**에 의해 길이가 같은 경로들은 서로 정점을 공유하지 않기 때문에 여러 개의 경로들을 한 번에 구할 수 있음을 알 수 있다.
+
+이제 위 과정을 최대 몇 번이나 반복하는지를 구하면 되는데, **Lemma 5**에 의해 $\left\vert P_i \right\vert$가 가질 수 있는 값의 개수는 $2 \lfloor \sqrt{k} \rfloor + 2$ 이하이다.
+
+그러므로 반복되는 횟수는 $O(\sqrt{V})$라고 할 수 있고, Hopcroft-Karp algorithm의 시간복잡도는 $O(E \sqrt{V})$가 된다.
+
+<br/>
+
+## 4. 최대 유량 문제로 변환 & Dinic's Algorithm
 
 Hopcroft-Karp 알고리즘은 크게 두 가지 방법으로 설명이 가능하다.
 
