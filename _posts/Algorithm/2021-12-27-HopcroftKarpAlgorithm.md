@@ -78,9 +78,9 @@ Hopcroft-Karp Algorithm은 다음과 같다.
 
 <br/>
 
-## 3. 알고리즘의 타당성 증명
+## 3. 알고리즘의 시간복잡도 구하기 & 타당성 증명
 
-알고리즘의 타당성을 증명해보기 위해 이전 포스팅들에서 다루었던 그래프 관련 개념들과 정리들을 사용할 것이다.
+다음은 그래프 이론에서 사용하는 용어들이다.
 
 - **Matching**: 끝점을 공유하지 않는 간선들의 집합
 - **Matched / Exposed**: 어떤 정점이 matched 되었다는 것은 Matching에 있는 간선들 중 해당 정점을 끝점으로 하는 간선이 존재한다는 것이고, 그렇지 않다면 그 정점이 exposed 되었다고 표현한다.
@@ -180,7 +180,7 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 새로운 매칭 $M'$을 다음과 같이 정의하자.
 > 
 > \begin{aligned}
-> $M' := M \oplus P \oplus P'$
+> M' := M \oplus P \oplus P'
 > \end{aligned}
 > 
 > $M'$은 $M$에서 augmenting path의 간선들을 매칭에 더하고 빼는 작업을 두 번 수행한 매칭이므로 $\left\vert M' \right\vert = \left\vert M \right\vert + 2$이다.
@@ -206,7 +206,7 @@ L = 2 \left\lfloor \frac{\left\vert M \right\vert}{\left\vert M_{max} \right\ver
 > 이를 이용하면 다음을 얻을 수 있다.
 > 
 > \begin{aligned}
-> \left\vert M \oplus M' \right\vert = \left\vert P \oplus P' \right\vert = \left\vert P \right\vert + \left\vert P' \right\vert - 2 \left\vert P \cup P' \right\vert \dots (2)
+> \left\vert M \oplus M' \right\vert = \left\vert P \oplus P' \right\vert = \left\vert P \right\vert + \left\vert P' \right\vert - 2 \left\vert P \cap P' \right\vert \dots (2)
 > \end{aligned}
 > 
 > 식 (1)과 (2)를 이용하면 $\left\vert P' \right\vert \geq \left\vert P \right\vert + 2 \left\vert P \cap P' \right\vert$가 된다.
@@ -227,7 +227,7 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 
 ---
 
-**[Corollary]** 모든 $i = 1, \dots k-1$에 대해 $\left\vert P_i \right\vert \leq \left\vert P_{i+1} \right\vert$이다.
+**[Corollary 1]** 모든 $i = 1, \dots k-1$에 대해 $\left\vert P_i \right\vert \leq \left\vert P_{i+1} \right\vert$이다.
 
 ---
 
@@ -267,11 +267,30 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 
 ---
 
-**[Lemma 6]** 서로 다른 $i, j$에 대해서 $\left\vert P_i \right\vert = \left\vert P_j \right\vert$이면, $P_i$와 $P_j$는 서로 정점을 공유하지 않는다.
+우리는 **Lemma 5**를 통해 Hopcroft-Karp 알고리즘의 시간복잡도를 구할 수 있다.
+
+DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$($i > j$)를 만족하는 augmenting path를 구하는 과정은 $O(V + E)$의 시간복잡도를 갖는다.
+
+마지막에 직접 알고리즘을 구현할 때 다루겠지만, Augmenting path를 구하기 위해서는 BFS로 그래프 전체를 탐색할 필요가 있는데, 이 과정도 $O(V + E)$의 시간복잡도를 갖는다.
+
+이제 위 과정을 최대 몇 번이나 반복하는지를 구하면 되는데, **Lemma 5**에 의해 
+
+---
+
+**[Corollary 2]** 모든 $i = 0, 1, \dots, k-1$에 대해서 $\left\vert P_i \right\vert = \left\vert P_{i+1} \right\vert$이면, $P_i$와 $P_{i+1}$은 서로 간선을 공유하지 않는다.
 
 > ***Proof.***
 > 
+> **Lemma 4**에 의해 $\left\vert P_{i+1} \right\vert \geq \left\vert P_i \right\vert$ + 2 \left\vert P_i \cap P_{i+1} \right\vert이므로 다음을 얻을 수 있다.
 > 
+> \begin{aligned}
+> \left\vert P_i \cap P_{i+1} \right\vert = 0
+> \end{aligned}
+> 
+> $\therefore$ $P_i$와 $P_{i+1}$은 서로 간선을 공유하지 않는다.
+
+---
+
 
 
 Hopcroft-Karp 알고리즘은 크게 두 가지 방법으로 설명이 가능하다.
