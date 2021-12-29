@@ -307,11 +307,11 @@ $k$는 그래프 $G$의 최대 매칭의 크기가 된다.
 
 > ***Proof.***
 > 
-> 일반성을 잃지 않고 $i < j$라고 하자.
+> 일반성을 잃지 않고 $i < j$ 라고 할 수 있다.
 > 
-> $P_i$와 $P_j$가 정점을 공유한다고 가정하면, $i \leq s < j$를 만족하는 어떤 $s$에 대해 $P_s$와 $P_{s+1}$이 정점을 공유한다.
+> $P_i$와 $P_j$가 정점을 공유한다고 가정하면, $i \leq s < j$ 를 만족하는 어떤 $s$에 대해 $P_s$와 $P_{s+1}$이 정점을 공유한다.
 > 
-> **Lemma 4**의 따름정리에 의해 $\left\vert P_s \right\vert = \left\vert P_{s+1} \right\vert$이다.
+> **Lemma 4**의 따름정리에 의해 $\left\vert P_s \right\vert = \left\vert P_{s+1} \right\vert$ 이다.
 > 
 > **Lemma 6**에 의해 $P_s$와 $P_{s+1}$은 서로 정점을 공유하지 않는다.
 > 
@@ -333,48 +333,29 @@ DFS를 통해 $\left\vert P_i \right\vert = \dots = \left\vert P_j \right\vert$(
 
 <br/>
 
-## 4. 최대 유량 문제로 변환 & Dinic's Algorithm
+## 4. 최대 유량 문제로 변환 & Dinic's Algorithm 적용
 
-Hopcroft-Karp 알고리즘은 크게 두 가지 방법으로 설명이 가능하다.
-
-1. Hungarian algorithm처럼 **Augmenting Path**를 이용하는 방법
-2. 최대 유량 문제로 바꾸어서 **Dinic's Algorithm**을 이용하는 방법
-
-두 가지 방법으로 알고리즘을 이해해보도록 하자.
-
----
-
-### 2-1. Using Augmenting Path
-
-> Augmenting Path를 이용한 방법은 **Hungarian Algorithm**과 동일한 원리이다.
-> 
-> [할당 문제와 헝가리안 알고리즘](https://damo1924.github.io/algorithm/HungarianAlgorithm1/)
-> 
-> [헝가리안 알고리즘의 구현](https://damo1924.github.io/algorithm/HungarianAlgorithm2/)
-> 
-> 만약 자세한 설명이나 증명을 원한다면 두 번째 포스팅을 참고!
-
-Augmenting Path는 다음과 같은 특징을 가지고 있다.
-
-**1) 그래프의 어떤 매칭이 Maximum matching이기 위한 필요충분조건은 매칭에 대한 Augmenting path가 존재하지 않는 것이다.**
-
-**2) Augmenting Path를 이용하면 현재 매칭보다 크기가 1 커진 매칭을 얻을 수 있다.**
-
-그러므로 **현재 매칭에 대한 Augmenting Path를 찾고, 해당 경로를 이용해서 매칭의 크기를 늘려가면 최대 매칭을 구할 수 있을 것이다.**
-
----
-
-### 2-2. Using Dinic's Algorithm
+이분 그래프의 최대 매칭 문제는 최대 유량 문제로 변환하여 해결할 수 있다.
 
 주어진 이분 그래프에 소스와 싱크를 추가해서 최대 유량 문제로 바꾸면 Dinic's algorithm을 사용할 수 있게 된다.
 
 > Dinic's algorithm에 대한 설명은 [이 포스팅](https://damo1924.github.io/algorithm/MaximumFlow/#4-dinics-algorithm)을 참고
 
-Dinic's algorithm은 그래프의 각 간선에 흐를 수 있는 최대 유량이 주어져 있을 때, 소스(source)에서 싱크(sink)로 흐를 수 있는 최대 유량을 구하는 문제를 해결하는데 사용하는 알고리즘이다.
-
-일반적인 그래프에 대한 시간복잡도는 $O(V^2 E)$인데, 특히 모든 간선의 용량이 1인 경우에는 $O(\min(V^{2/3}, E^{1/2})E)$가 된다.
+Dinic's algorithm의 일반적인 그래프에 대한 시간복잡도는 $O(V^2 E)$인데, 특히 모든 간선의 용량이 1인 경우에는 $O(\min(V^{2/3}, E^{1/2})E)$가 된다.
 
 지금 다루고 있는 **이분 그래프에 소스와 싱크를 추가한 그래프**에 대해서는 $O(E \sqrt{V})$의 시간복잡도를 갖는다.
+
+알고리즘에 대해 간략히 설명하면 다음과 같다.
+
+> BFS를 통해 각 정점에 **레벨**을 부여하고, DFS로 **차단 유량(blocking flow)**을 구하는 작업을 반복하는 알고리즘
+
+이를 앞에서 공부한 augmenting path의 관점으로 바라보면,
+
+- BFS를 통해 각 정점에 레벨을 부여하는 것: Augmenting path 찾기
+- DFS로 차단 유량을 구하는 것: 각 augmenting path를 탐색하면서 매칭을 업데이트
+
+로 생각할 수 있다.
+
 
 
 
