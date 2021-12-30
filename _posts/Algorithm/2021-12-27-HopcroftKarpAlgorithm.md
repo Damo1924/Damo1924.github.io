@@ -406,6 +406,119 @@ Dinic's algorithm의 일반적인 그래프에 대한 시간복잡도는 $O(V^2 
 
 ## 5. 알고리즘 구현하기
 
+Hopcroft-Karp algorithm은 실제로 Dinic's algorithm과 매우 비슷하게 구현할 수 있다.
+
+BFS를 통해 레벨을 부여하고, DFS로 매칭을 시도해주면 된다.
+
+직접 이분 매칭 문제를 풀어보자.
+
+### [백준] 11375. 열혈강호
+
+[백준 11375. 열혈강호 문제 링크](https://www.acmicpc.net/problem/11375)
+
+N명의 직원과 M개의 일이 있고, 각 직원이 할 수 있는 일이 주어질 때 최대 몇 개의 일을 할 수 있는지 구하는 문제이다.
+
+Hopcroft-Karp algorithm으로 구현해보자.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int N, M; // 직원의 수 N, 일의 개수 M
+
+int maxWork = 0; // 최대로 할 수 있는 일의 개수
+
+vector<int> graph[1001]; // 직원 - 할 수 있는 일
+
+int level[1001]; // bfs를 통해 구할 각 직원의 레벨
+
+int A[1001], B[1001]; // 매칭된 정점의 번호
+
+void bfs()
+{
+    queue<int> q;
+    for (int i = 1; i <= N; i++) // 각 정점에 대해,
+    {
+        if (A[i] == 0) // 아직 매칭이 안된 정점의 레벨을 0으로 초기화
+        {
+            level[i] = 0;
+            q.push(i);
+        }
+        else level[i] = -1; // 매칭된 정점의 레벨은 -1로 초기화
+    }
+    
+    while (!q.empty()) // BFS로 이분 그래프를 탐색하면서 레벨을 부여한다.
+    {
+        int x = q.front();
+        q.pop();
+        for (int i = 0; i < graph[x].size(); i++)
+        {
+            int y = graph[x][i];
+            if (B[y] != 0 && level[B[y]] == -1)
+            {
+                level[B[y]] = level[x] + 1;
+                q.push(B[y]);
+            }
+        }
+    }
+}
+
+bool dfs(int x) // 이분 매칭 알고리즘의 원리를 이용
+{
+    for (int i = 0; i < graph[x].size(); i++)
+    {
+        int y = graph[x][i];
+        if (B[y] == 0 || (level[B[y]] == level[x] + 1 && dfs(B[y]))) // 매칭되지 않았거나, 매칭을 변경할 수 있는 경우
+        {
+            A[x] = y;
+            B[y] = x;
+            return true;
+        }
+    }
+    return false;
+}
+
+void solve()
+{
+    while (true)
+    {
+        bfs(); // O(V + E)
+        
+        int match = 0;
+        for (int i = 1; i <= N; i++)
+            if (A[i] == 0 && dfs(i)) match++; // 
+        
+        if (match == 0) break; // 더 이상 매칭이 불가능하면 break;
+        maxWork += match;
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    cin >> N >> M;
+    
+    int a, b;
+    for (int i = 1; i <= N; i++)
+    {
+        cin >> a;
+        while (a--)
+        {
+            cin >> b;
+            graph[i].push_back(b);
+        }
+    }
+
+    solve();
+    cout << maxWork;
+}
+```
+
 ## References
 
 [1] [WIKIPEDIA, 'Berge's lemma'](https://en.m.wikipedia.org/wiki/Berge%27s_lemma)  
