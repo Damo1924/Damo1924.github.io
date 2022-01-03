@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Bipartite graph, Maximum Matching, Dinic's algorithm, Berge's lemma
+`Tags` Bipartite graph, Maximum Matching, Dinic's algorithm
 
 ## 1. 이분 그래프의 최대 매칭을 구하는 방법들
 
