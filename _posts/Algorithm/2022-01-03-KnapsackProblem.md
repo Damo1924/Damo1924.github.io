@@ -232,14 +232,50 @@ int main()
 \begin{aligned}
 dp[i][w] =
 \begin{cases}
-\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq W \\\\  
-dp[i-1][w], & \mbox{if } w_i > W
+\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq w \\\\  
+dp[i-1][w], & \mbox{if } w_i > w
 \end{cases}
 \end{aligned}
 
+우리가 구하고자 하는 값은 $N$번째 물건까지 전부 탐색했을 때 가방에 담긴 물건들의 무게가 $K$ 이하인 경우이므로 `dp[N][K]`이다.
 
+반복문을 통해 dp 배열의 값들을 채워주면 된다.
 
+```cpp
+#include <iostream>
+using namespace std;
 
+int dp[101][100001];
+
+int N, K;
+
+int W[101], V[101];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> N >> K;
+    for (int i = 1; i <= N; i++) cin >> W[i] >> V[i];
+    
+    for (int i = 1; i <= N; i++)
+    {
+        for (int j = 1; j <= K; j++)
+        {
+            if (j >= W[i]) dp[i][j] = max(dp[i - 1][j], V[i] + dp[i - 1][j - W[i]]);
+            else dp[i][j] = dp[i - 1][j];
+        }
+    }
+    
+    cout << dp[N][K];
+}
+```
+
+---
+
+### 2-2. Improved DP
 
 
 
