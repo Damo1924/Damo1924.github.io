@@ -48,7 +48,7 @@ Knapsack problem은 $x_i$의 범위에 따라 다음과 같이 구분한다.
 
 DFS로 탐색하면서 백트래킹을 적용하는 방법이 있다.
 
-백트래킹의 경우, 최악의 경우에는 모든 경우를 전부 탐색하게 되므로 시간복잡도는 $O(2^n)@이다.
+백트래킹의 경우, 최악의 경우에는 모든 경우를 전부 탐색하게 되므로 시간복잡도는 $O(2^n)$이다.
 
 ### 1-1. Easy backtracking
 
@@ -232,7 +232,7 @@ int main()
 \begin{aligned}
 dp[i][w] =
 \begin{cases}
-\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq W \\\\
+\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq W \\  
 dp[i-1][w], & \mbox{if } w_i > W
 \end{cases}
 \end{aligned}
