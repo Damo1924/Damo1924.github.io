@@ -50,11 +50,13 @@ DFS로 탐색하면서 백트래킹을 적용하는 방법이 있다.
 
 백트래킹의 경우, 최악의 경우에는 모든 경우를 전부 탐색하게 되므로 시간복잡도는 $O(2^n)$이다.
 
-### 1-1. Easy backtracking
+### 1-1. Backtracking
 
-모든 경우를 탐색하면서 가방에 담긴 무게가 $K$보다 큰 경우만 제거해주자.
+모든 경우를 탐색하면서 가방에 담긴 무게가 $K$보다 큰 경우를 제거해주자.
 
 각 물건을 선택하거나 선택하지 않는 경우로 나눌 수 있으므로 DFS를 사용하면 쉽게 전체 경우를 살펴볼 수 있다.
+
+시간복잡도는 $O(2^N)$이다.
 
 ```cpp
 #include <iostream>
@@ -91,9 +93,114 @@ int main()
 }
 ```
 
+<br/>
+
+## 2. Dynamic Programming
+
+두 번째 풀이는 동적계획법을 사용하는 것이다.
+
+배낭 문제의 가장 대표적인 풀이라고 할 수 있다.
+
+물건이 $n$개 있고, 가방의 최대 용량이 $K$이면, 시간복잡도는 $O(nK)$이다.
+
+### 2-1. Easy DP
+
+다음과 같은 dp 배열을 생각하자.
+
+> `dp[i][w]` = i번째 물건까지 탐색한 상황에서 배낭에 담긴 물건들의 무게가 w보다 작거나 같을 때의 최댓값
+
+이때 `dp[i][w]`는 다음과 같이 구할 수 있다.
+
+\begin{aligned}
+dp[i][w] =
+\begin{cases}
+\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq w \\\\  
+dp[i-1][w], & \mbox{if } w_i > w
+\end{cases}
+\end{aligned}
+
+우리가 구하고자 하는 값은 $N$번째 물건까지 전부 탐색했을 때 가방에 담긴 물건들의 무게가 $K$ 이하인 경우이므로 `dp[N][K]`이다.
+
+반복문을 통해 dp 배열의 값들을 채워주면 된다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int dp[101][100001];
+
+int N, K;
+
+int W[101], V[101];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> N >> K;
+    for (int i = 1; i <= N; i++) cin >> W[i] >> V[i];
+    
+    for (int i = 1; i <= N; i++)
+    {
+        for (int j = 1; j <= K; j++)
+        {
+            if (j >= W[i]) dp[i][j] = max(dp[i - 1][j], V[i] + dp[i - 1][j - W[i]]);
+            else dp[i][j] = dp[i - 1][j];
+        }
+    }
+    
+    cout << dp[N][K];
+}
+```
+
 ---
 
-### 1-2. Improved Backtracking
+### 2-2. Improved DP
+
+이번에는 조금 더 시간적, 공간적으로 효율적인 방식으로 위 풀이를 개선해보자.
+
+위 풀이에서 dp 배열이 어떻게 채워지는지 보자.
+
+`dp[i][j]`를 구하는데 `dp[i-1][j]` 또는 `dp[i-1][j-w]`를 사용한다.
+
+그러므로 굳이 2차원 배열을 사용하지 말고 `j`를 큰 쪽부터 갱신해나가면 된다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int dp[100001]; // 일차원 배열만 사용해도 된다.
+
+int N, K;
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> N >> K;
+    
+    int w, v;
+    for (int i = 0; i < N; i++)
+    {
+        cin >> w >> v;
+        for (int j = K; j >= w; j--) dp[j] = max(dp[j], v + dp[j - w]); // j를 큰 쪽부터 갱신
+    }
+    
+    cout << dp[K];
+}
+```
+
+<br/>
+
+## 3. Branch and Bound
+
+이번에는 분기한정법(branch and bound)를 이용해서 풀어보자.
+
+분기한정법은 DFS, BFS 어느 방법으로도 구현해도 괜찮지만, 백트래킹으로 해결한 것과 같이 DFS를 사용해보았다.
 
 DFS로 탐색할 때, 지금까지의 가방에 담은 물건들의 무게를 $w$, 가치의 합을 $v$라고 하자.
 
@@ -131,6 +238,8 @@ v_{bound} = v + \sum_{j = i + 1}^{m-1} v_j + (K - w_{total}) \times c_m
 \end{aligned}
 
 DFS로 탐색하면서 각 노드에 대해 $v_{bound}$를 계산해서 해당 노드의 유망성을 판단하면 된다.
+
+백트래킹 방식과 마찬가지로 최악의 경우에는 전체 경우의 수를 전부 탐색하게 되므로 $O(2^n)$의 시간복잡도를 갖는다.
 
 ```cpp
 #include <iostream>
@@ -215,67 +324,15 @@ int main()
 
 <br/>
 
-## 2. Dynamic Programming
+## 4. Analysis
 
-두 번째 풀이는 동적계획법을 사용하는 것이다.
+백트래킹 방법과 분기한정법은 $O(2^n)$, 동적계획법은 $O(nK)$의 시간복잡도를 갖는다.
 
-배낭 문제의 가장 대표적인 풀이라고 할 수 있다.
+Knapsack problem은 아직까지 해결할 수 있는 polynomial algorithm이 알려져 있지 않다.
 
-### 2-1. Easy DP
 
-다음과 같은 dp 배열을 생각하자.
 
-> `dp[i][w]` = i번째 물건까지 탐색한 상황에서 배낭에 담긴 물건들의 무게가 w보다 작거나 같을 때의 최댓값
 
-이때 `dp[i][w]`는 다음과 같이 구할 수 있다.
-
-\begin{aligned}
-dp[i][w] =
-\begin{cases}
-\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq w \\\\  
-dp[i-1][w], & \mbox{if } w_i > w
-\end{cases}
-\end{aligned}
-
-우리가 구하고자 하는 값은 $N$번째 물건까지 전부 탐색했을 때 가방에 담긴 물건들의 무게가 $K$ 이하인 경우이므로 `dp[N][K]`이다.
-
-반복문을 통해 dp 배열의 값들을 채워주면 된다.
-
-```cpp
-#include <iostream>
-using namespace std;
-
-int dp[101][100001];
-
-int N, K;
-
-int W[101], V[101];
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-    
-    cin >> N >> K;
-    for (int i = 1; i <= N; i++) cin >> W[i] >> V[i];
-    
-    for (int i = 1; i <= N; i++)
-    {
-        for (int j = 1; j <= K; j++)
-        {
-            if (j >= W[i]) dp[i][j] = max(dp[i - 1][j], V[i] + dp[i - 1][j - W[i]]);
-            else dp[i][j] = dp[i - 1][j];
-        }
-    }
-    
-    cout << dp[N][K];
-}
-```
-
----
-
-### 2-2. Improved DP
 
 
 
