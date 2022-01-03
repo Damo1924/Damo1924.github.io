@@ -232,7 +232,7 @@ int main()
 \begin{aligned}
 dp[i][w] =
 \begin{cases}
-\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq W \\  
+\max(dp[i-1][w], v_i + dp[i-1][w-w_i]), & \mbox{if } w_i \leq W \\\\  
 dp[i-1][w], & \mbox{if } w_i > W
 \end{cases}
 \end{aligned}
