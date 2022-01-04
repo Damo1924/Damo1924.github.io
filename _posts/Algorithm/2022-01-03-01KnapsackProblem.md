@@ -1,5 +1,5 @@
 ---
-title: "Knapsack Problem"
+title: "0-1 Knapsack Problem"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -50,13 +50,7 @@ DFS로 탐색하면서 백트래킹을 적용하는 방법이 있다.
 
 백트래킹의 경우, 최악의 경우에는 모든 경우를 전부 탐색하게 되므로 시간복잡도는 $O(2^n)$이다.
 
-### 1-1. Backtracking
-
 모든 경우를 탐색하면서 가방에 담긴 무게가 $K$보다 큰 경우를 제거해주자.
-
-각 물건을 선택하거나 선택하지 않는 경우로 나눌 수 있으므로 DFS를 사용하면 쉽게 전체 경우를 살펴볼 수 있다.
-
-시간복잡도는 $O(2^N)$이다.
 
 ```cpp
 #include <iostream>
@@ -330,12 +324,21 @@ int main()
 
 Knapsack problem은 아직까지 해결할 수 있는 polynomial algorithm이 알려져 있지 않다.
 
+일반적으로 동적계획법이나 분기한정법을 이용하는데, 분기한정법은 $n$이 커질수록 시간복잡도가 크게 증가한다는 단점이 있고, 동적계획법은 가방의 용량이 매우 커질 때 비효율적이라는 단점이 있다.
 
+다만, 백트래킹이나 분기한정법의 경우에는 시간복잡도로 효율성을 판단하기는 어렵다는 점에 주의해야한다.
 
+아래 문제는 $n$이 100까지, $K$가 100,000까지 주어질 수 있는 0-1 knapsack problem이다.
 
+[백준 12865. 평범한 배낭 문제 링크](https://www.acmicpc.net/problem/12865)
 
+$n$이 크기 때문에 분기한정법으로는 시간초과가 발생하지만, 동적계획법으로는 충분히 해결 가능하다.
 
+<br/>
 
+## Reference
+
+[1] [WIKIPEDIA, 'Knapsack problem'](https://en.m.wikipedia.org/wiki/Knapsack_problem)  
 
 
 
