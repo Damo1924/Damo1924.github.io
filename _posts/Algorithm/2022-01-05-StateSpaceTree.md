@@ -24,7 +24,7 @@ comments: true
 
 위 그래프와 인접행렬에 대한 상태공간트리를 그려보면 다음과 같다.
 
-<img src="" width="70%" height="70%">
+<img src="https://user-images.githubusercontent.com/88201512/148084786-fbc484f9-6606-4ad8-8c37-4000d5ae3a4f.jpg" width="70%" height="70%">
 
 만약 이 트리를 완전탐색하면, 모든 경우의 수를 전부 탐색하는 것이므로 $O(N!)$의 시간복잡도를 갖는다.
 
@@ -33,6 +33,7 @@ comments: true
 <br/>
 
 ## 2. Backtracking
+
 
 
 <br/>
