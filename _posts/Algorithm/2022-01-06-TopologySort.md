@@ -69,7 +69,7 @@ N명의 학생들을 키 순서대로 줄을 세우려고 한다.
 
 ---
 
-**[Solution]** 위상 정렬 사용하기
+### [Solution] 위상 정렬
 
 위상 정렬을 사용하면 쉽게 답을 구할 수 있다.
 
@@ -173,13 +173,118 @@ ACM Craft라는 게임에서 어떤 건물을 짓기 위해서는 특정 건물�
 
 ---
 
-**[Solution]**
+ ### [Solution 1] 위상 정렬
 
+마찬가지로 위상 정렬을 이용하면 쉽게 해결할 수 있는 문제이다.
 
+다만, 건물을 동시에 지을 수 있기 때문에 다음과 같은 배열을 추가로 사용하였다.
 
+> `minTime[i]` = i번째 건물을 짓기 시작할 때까지 걸리는 최소 시간
 
+어떤 건물을 짓기 시작할 때까지 걸리는 최소 시간은 해당 건물을 짓기 위해 필요한 다른 건물들을 짓는데까지 걸리는 시간 중 최댓값이다.
 
+그러므로 큐에서 건물 번호를 하나 뽑고 연결된 간선들을 지움과 동시에 간선들을 통해 연결된 다른 정점의 `minTime`을 갱신해주면 된다.
 
+전체 코드는 다음과 같다.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+
+int N, K, W, D[1001];
+
+vector<int> graph[1001];
+
+int deg[1001];
+
+int minTime[1001];
+
+bool topologySort() // 위상 정렬
+{
+    queue<int> q;
+    for (int i = 1; i <= N; i++)
+        if (deg[i] == 0) q.push(i);
+    
+    for (int i = 1; i <= N; i++)
+    {
+        if (q.empty()) return false;
+        
+        int x = q.front();
+        q.pop();
+        
+        for (int j = 0; j < graph[x].size(); j++)
+        {
+            int y = graph[x][j];
+            minTime[y] = max(minTime[y], minTime[x] + D[x]); // 연결된 정점들에 대해 minTime 갱신
+            deg[y]--;
+            if (deg[y] == 0) q.push(y);
+        }
+    }
+    return true;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int T;
+    cin >> T;
+    while (T--)
+    {
+        // 초기화
+        for (int i = 1; i <= 1000; i++)
+        {
+            graph[i].clear();
+            minTime[i] = 0;
+        }
+        
+        // INPUT
+        cin >> N >> K;
+        for (int i = 1; i <= N; i++) cin >> D[i];
+        
+        int a, b;
+        for (int i = 0; i < K; i++)
+        {
+            cin >> a >> b;
+            graph[a].push_back(b);
+            deg[b]++;
+        }
+        
+        topologySort();
+        
+        cin >> W;
+        cout << minTime[W] + D[W] << "\n";
+    }
+}
+```
+
+---
+
+### [Solution 2] 재귀함수 + DP
+
+사실 이 문제는 굳이 위상 정렬을 사용할 필요가 없는 문제이다.
+
+앞 풀이에서 각 건물에 대한 `minTime`을 갱신했던 것처럼 동적계획법을 이용하면 간단히 해결할 수 있다.
+
+아래는 동적계획법을 이용해서 승리하기 위한 건물을 지을 때까지 걸리는 시간을 반환하는 재귀함수이다.
+
+```cpp
+int solve (int w)
+{
+    if (graph[w].empty()) return D[w];
+    if (dp[w] != -1) return dp[w];
+    
+    int res = 0;
+    for (int i = 0; i < graph[w].size(); i++)
+        res = max(res, solve(graph[w][i]));
+    dp[w] = res + D[w];
+    return dp[w];
+}
+```
 
 
 
