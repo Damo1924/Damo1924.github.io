@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 최단 경로 문제, 휴리스틱 알고리즘, Heuristic
+`Tags` 최단 경로 문제, 휴리스틱 알고리즘, Heuristic algorithm, 8-puzzle problem, 1525
 
 ## 1. Introduction to A* search algorithm
 
