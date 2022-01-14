@@ -322,7 +322,11 @@ void cal() {
 
 이 결과, $h_1(n)$을 이용한 코드는 168ms AC, $h_2(n)$을 이용한 코드는 144ms AC를 받았다.
 
+<br/>
 
+## Reference
+
+[1] [Red Blob Games, 'Amit's A* Pages'](http://theory.stanford.edu/~amitp/GameProgramming/)  
 
 
 
