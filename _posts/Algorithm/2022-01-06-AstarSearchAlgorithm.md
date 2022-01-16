@@ -66,12 +66,13 @@ A* 알고리즘은 어떤 휴리스틱 함수를 사용하느냐에 따라 다�
 
 출발 지점에서 노드 $n$까지의 거리는 $g(n)$이다.
 
+|Case|Properties|
 |:---:|:---:|
 |모든 $n$에 대해 $h(n) = 0$| 다익스트라 알고리즘(Dijkstra's algortihm) |
 |모든 $n$에 대해 $h(n) \leq d(n)$| 알고리즘을 통해 최단 경로를 찾을 수 있음이 보장됨. <br/> $h(n)$이 작을수록 더 많은 노드를 탐색. |
 |$h(n) = d(n)$| 매우 빠르게 탐색. |
 |어떤 $n$에 대해 $h(n) > d(n)$| 알고리즘을 통해 최단 경로를 찾을 수 있다는 사실이 보장되지 않음. <br/> 더 빠르게 결과를 도출. |
-|$h(n) >> g(n)$| $h(n)$의 영향만을 받게 되므로 Greedy Best-First Search가 됨. |
+|$h(n) \gg g(n)$| $h(n)$의 영향만을 받게 되므로 Greedy Best-First Search가 됨. |
 
 ---
 
@@ -103,7 +104,7 @@ A* 알고리즘은 어떤 휴리스틱 함수를 사용하느냐에 따라 다�
 
 두 방법 모두 **좀 더 빠르게 경로를 찾기 위해 최적의 경로를 포기**하였음을 알 수 있다.
 
-이처럼 우리는 상황에 맞게 정확성을 포기하더라도 더 빠른 속도를 선택할 수도 있다.
+이처럼 상황에 따라 정확성을 포기하더라도 더 빠른 속도를 선택하는 경우도 있다.
 
 ---
 
@@ -111,15 +112,23 @@ A* 알고리즘은 어떤 휴리스틱 함수를 사용하느냐에 따라 다�
 
 좌표평면에서 최단 경로를 찾는 문제들에 대해 사용하는 대표적인 휴리스틱 함수들은 다음과 같다.
 
-- 4방향으로 이동 가능할 때: Manhattan distance($L_1$)
-- 8방향으로 이동 가능할 때: Chebyshev distance($L_{\infty}$)
-- 모든 방향으로 이동 가능할 때: Euclidean distance($L_2$)
+|Case|Distance for $h(n)$|
+|:---:|:---:|
+|4방향으로 이동 가능할 때|Manhattan distance($L_1$)|
+|8방향으로 이동 가능할 때|Chebyshev distance($L_{\infty}$)|
+|모든 방향으로 이동 가능할 때|Euclidean distance($L_2$)|
 
-이때 $L_p$는 다음과 같다.
+> $n$차원 공간에 대한 $L_p$-metric(거리 측정 기준)는 다음과 같다.
+> 
+> \begin{aligned}
+> \lVert x - y \rVert_p = \left( \sum_{i=1}^n \left\vert x_i - y_i \right\vert^p \right)^{1/p}
+> \end{aligned}
 
-\begin{aligned}
-\left( \sum_{i=1}^n \left\vert x_i - y_i \right\vert^p \right)^{1/p}
-\end{aligned}
+좌표평면($n = 2$) 위의 두 점 $A(x_1, y_1)$, $B(x_2, y_2)$ 사이의 거리는 다음과 같이 표현된다.
+
+- **Manhattan Distance** $=\left\vert x_2 - x_1 \right\vert + \left\vert y_2 - y_1 \right\vert$
+- **Chebyshev Distance** $=\max (\left\vert x_2 - x_1 \right\vert, \left\vert y_2 - y_1 \right\vert$)$
+- **Euclidean Distance** $=\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$
 
 ---
 
@@ -127,11 +136,15 @@ A* 알고리즘은 어떤 휴리스틱 함수를 사용하느냐에 따라 다�
 
 목표 지점이 여러 개이면, 다음과 같은 전략을 사용할 수 있다.
 
-만약 여러 개의 목표 지점 중 하나의 지점까지의 경로를 찾고 싶다면, 각 목표 지점에 대한 휴리스틱 함수의 최솟값을 $h(n)$으로 사용하면 된다.
+만약 여러 개의 목표 지점 중 하나의 지점까지의 경로를 찾고 싶다면, 각 목표 지점 $G_1, G_2, \dots, G_k$에 대한 휴리스틱 함수의 최솟값을 $h(n)$으로 사용하면 된다.
+
+\begin{aligned}
+h(n) = \min (h_1(n), h_2(n), \dots, h_k(n))
+\end{aligned}
 
 또는 목표 지점들과 비용이 0인 간선들로 연결된 새로운 노드를 추가하는 방법도 있다.
 
-만약 모든 목표 지점들까지의 경로를 찾고 싶다면, 차라리 다익스트라 알고리즘을 사용하는 것도 좋은 방법이다.
+만약 모든 목표 지점들까지의 경로를 찾고 싶다면, 다익스트라 알고리즘을 사용하는 것도 좋은 방법이다.
 
 ---
 
@@ -158,7 +171,7 @@ h'(n) = h(n) \times (1 + p)
 이때 $p$는 다음을 만족하는 상수이다.
 
 \begin{aligned}
-p < (minimum cost of taking one step) / (expected maximum path length)
+p < (\mathsf{minimum cost of taking one step}) / (\mathsf{expected maximum path length})
 \end{aligned}
 
 이렇게 휴리스틱 함수의 값을 적절히 늘려주면, 목표 지점에 가까운 곳부터 탐색을 하게 되어 탐색 속도를 늘릴 수 있다.
@@ -323,7 +336,7 @@ void cal() {
 }
 ```
 
-이 결과, $h_1(n)$을 이용한 코드는 168ms AC, $h_2(n)$을 이용한 코드는 144ms AC를 받았다.
+이 결과, $h_1(n)$을 이용한 코드는 168ms, $h_2(n)$을 이용한 코드는 144ms로 AC 받았다.
 
 <br/>
 
