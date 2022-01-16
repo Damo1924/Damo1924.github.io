@@ -171,7 +171,7 @@ h'(n) = h(n) \times (1 + p)
 이때 $p$는 다음을 만족하는 상수이다.
 
 \begin{aligned}
-p < (\mathsf{minimum cost of taking one step}) / (\mathsf{expected maximum path length})
+p < (\mathsf{minimum \, cost \, of \, taking \, one \, step}) / (\mathsf{expected \, maximum \, path \, length})
 \end{aligned}
 
 이렇게 휴리스틱 함수의 값을 적절히 늘려주면, 목표 지점에 가까운 곳부터 탐색을 하게 되어 탐색 속도를 늘릴 수 있다.
