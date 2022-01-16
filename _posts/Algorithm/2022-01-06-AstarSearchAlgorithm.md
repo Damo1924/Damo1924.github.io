@@ -327,7 +327,7 @@ void cal() {
 ## Reference
 
 [1] [WIKIPEDIA, 'A* search algorithm'](https://en.m.wikipedia.org/wiki/A\*_search_algorithm)  
-[2] [[Red Blob Games, 'Amit's A* Pages'](http://theory.stanford.edu/~amitp/GameProgramming/)  
+[2] [Red Blob Games, 'Amit's A* Pages'](http://theory.stanford.edu/~amitp/GameProgramming/)  
 
 
 
