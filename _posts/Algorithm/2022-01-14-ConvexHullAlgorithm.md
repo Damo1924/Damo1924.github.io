@@ -1,5 +1,5 @@
 ---
-title: "Convex Hull Algorithm"
+title: "Convex Hull Algorithm & Rotating Calipers"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 기하 알고리즘, 볼록 다각형, 그레이엄 스캔, Graham's Scan algorithm, CCW, 1708 볼록 껍질
+`Tags` 그레이엄 스캔, Graham's Scan, CCW, 회전하는 캘리퍼스, 가장 먼 두 점, 1708 볼록 껍질, 
 
 ## 1. Convex Hull Algorithm
 
@@ -139,7 +139,45 @@ int main()
 }
 ```
 
+<br/>
 
+## 3. Rotating Calipers
+
+회전하는 캘리퍼스 알고리즘은 **볼록 껍질의 최대 직경**을 구하는 알고리즘이다.
+
+볼록 껍질의 최대 직경은 **볼록 껍질을 구성하는 가장 먼 두 점의 길이**로 정의한다.
+
+이때 볼록 껍질은 좌표평면 상의 모든 점을 포함하는 볼록 다각형이므로, 다음이 성립한다.
+
+> **볼록 껍질의 최대 직경 = 가장 먼 두 점 사이의 거리**
+
+볼록 껍질을 이루는 점의 개수를 $h$라고 하면, 회전하는 캘리퍼스 알고리즘은 $O(h)$의 시간복잡도로 볼록 껍질의 최대 직경을 구할 수 있다.
+
+그러므로 **그레이엄 스캔**과 **회전하는 캘리퍼스** 알고리즘을 이용하면, 좌표평면에 $n$개의 점이 주어졌을 때 가장 멀리 떨어진 두 점 사이의 거리를 $O(n\log n)$의 시간복잡도로 구할 수 있게 된다.
+
+회전하는 캘리퍼스 알고리즘에 대해 공부해보고, 직접 구현까지 해보자.
+
+---
+
+### 3-1. Algorithm
+
+캘리퍼스는 길이를 정밀하게 측정하는 도구로, 아래 그림과 같다.
+
+<center><img src="https://user-images.githubusercontent.com/88201512/149702638-01d8c755-5341-425e-a5e4-c6952b5bb92c.jpg" width="60%" height="60%"></center>
+
+회전하는 캘리퍼스 알고리즘은 말 그대로 캘리퍼스를 볼록 껍질의 주위에서 회전시키며 최대 직경을 구한다.
+
+알고리즘은 다음과 같은 과정을 거쳐 진행된다.
+
+
+
+---
+
+### 3-2. Implementation
+
+
+
+<br/>
 
 ## References
 
