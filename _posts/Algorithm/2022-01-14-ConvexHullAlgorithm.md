@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 기하 알고리즘, 볼록 다각형, 그레이엄 스캔, Graham's Scan algorithm, CCW
+`Tags` 기하 알고리즘, 볼록 다각형, 그레이엄 스캔, Graham's Scan algorithm, CCW, 1708 볼록 껍질
 
 ## 1. Convex Hull Algorithm
 
@@ -38,9 +38,9 @@ comments: true
 2. 선택한 점을 기준으로 다른 점들을 반시계 방향으로 정렬한다.
 3. 볼록 껍질을 구성하는 점들을 저장할 스택(stack)을 만들고, 첫 두 점을 스택에 삽입한다.
 4. 정렬된 순서대로 각 점들을 차례대로 처리한다.
-  - 스택의 마지막 두 점을 각각 A와 B, 그리고 이번에 처리할 점을 C라고 하자.
-  - 점 A, B, C가 반시계 방향을 이루면 C를 스택에 삽입한다.
-  - 점 A, B, C가 시계 방향을 이루면 B는 볼록 껍질에 포함되지 않으므로 B를 스택에서 제거하고 C를 스택에 삽입한다.
+  4-1. 스택의 마지막 두 점을 각각 A와 B, 그리고 이번에 처리할 점을 C라고 하자.
+  4-2. 점 A, B, C가 반시계 방향을 이루면 C를 스택에 삽입한다.
+  4-3. 점 A, B, C가 시계 방향을 이루면 B는 볼록 껍질에 포함되지 않으므로 B를 스택에서 제거하고 4-1로 돌아간다.
 5. 마지막으로 기준점까지 탐색하였다면 알고리즘을 종료한다.
 
 기준점을 선택하는데 $O(n)$, 점들을 정렬하는데 $O(n \log n)$, 점들을 차례대로 처리하는데 $O(n)$이므로 전체 알고리즘의 시간복잡도는 $O(n \log n)$이다.
@@ -57,7 +57,87 @@ comments: true
 
 이제 그레이엄 스캔을 구현해서 볼록 껍질을 구해보자.
 
+[백준 1708. 볼록 껍질 문제 링크](https://www.acmicpc.net/problem/1708)
 
+2차원 평면 위 N개의 점이 주어졌을 때, 볼록 껍질을 이루는 점의 개수를 구하는 문제이다.
+
+N은 3 이상 100,000 이하인 자연수이고, 각 점의 좌표는 절댓값이 40,000을 넘지 않는다.
+
+또한, 모든 점이 같은 직선 상에 위치하는 경우는 입력으로 주어지지 않는다.
+
+**[Solution]**
+
+먼저, 점들을 탐색해서 기준점을 고른다.
+
+이제 선택한 기준점을 중심으로 다른 점들을 반시계 방향으로 정렬해야한다.
+
+점들을 반시계 방향으로 정렬하는 가장 쉬운 방법은 **벡터의 외적**을 이용하는 것이다.
+
+> 기준점 Q와 어떤 두 점 A, B가 주어졌을 때, $\vec{QA} \times \vec{QB} > 0$이면 Q에 대해 A-B는 반시계 방향이다.
+
+세 점이 이루는 방향을 판단하기 위해서는 CCW 알고리즘을 이용하면 된다.
+
+전체 코드는 다음과 같다.
+
+```cpp
+#include <iostream>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct point {
+    long long x, y;
+} P[100000];
+
+bool CCW(point& A, point& B, point& C) // CCW이면 true, 아니면 false를 반환하는 함수
+{
+    return (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y) > 0;
+}
+
+point Q; // 기준점
+bool compare(point& A, point& B) // 반시계 방향으로 정렬
+{
+    long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
+    if (V > 0) return true;
+    if (V < 0) return false;
+    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N;
+    cin >> N;
+    
+    // 1. 입력 & 기준점 찾기
+    int idx = 0;
+    for (int i = 0; i < N; i++)
+    {
+        cin >> P[i].x >> P[i].y;
+        if (P[i].y < P[idx].y) idx = i;
+        else if (P[i].y == P[idx].y && P[i].x < P[idx].x) idx = i;
+    }
+    Q = P[idx];
+    
+    // 2. 점들을 반시계 방향으로 정렬
+    sort(P, P + N, compare);
+    
+    // 3. 점들을 차례대로 탐색하면서 볼록 껍질 구하기
+    vector<point> vec = {P[0], P[1]};
+    for (int i = 2; i < N; i++)
+    {
+        while (vec.size() > 1 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[i]))
+            vec.pop_back();
+        vec.push_back(P[i]);
+    }
+    if (!CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[0])) vec.pop_back();
+    cout << vec.size();
+}
+```
 
 
 
