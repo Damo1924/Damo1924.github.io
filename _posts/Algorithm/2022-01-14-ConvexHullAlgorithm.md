@@ -226,7 +226,7 @@ N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 
 
 내적이나 외적을 이용해서 코사인이나 사인 값을 구하면 된다고 생각할 수도 있겠지만, 기하 알고리즘에서는 **실수 연산을 최대한 피해야 한다.**
 
-입력되는 값의 범위가 작다면 괜찮겠지만, 그렇지 않다면 **실수 비교를 하는 알고리즘은 언제나 반례를 찾을 수 있다.**
+입력되는 값의 범위가 작다면 괜찮겠지만, 일반적으로 **실수 비교를 하는 알고리즘은 얼마든지 반례를 찾을 수 있기 때문이다.**
 
 그러므로 우리는 실수 연산을 하지 않고 캘리퍼스를 얼마나 회전시켜야 하는지 알아내야한다.
 
@@ -292,22 +292,30 @@ int main()
         int n = 2;
         for (int i = 2; i < N; i++)
         {
-            while (n > 1 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[i]))
-                vec.pop_back();
-            vec.push_back(P[i]);
+            while (n > 1 && !CCW(hull[n - 2], hull[n - 1], P[i]))
+            {
+                hull.pop_back();
+                n--;
+            }
+            hull.push_back(P[i]);
+            n++;
         }
-        if (vec.size() != 2 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[0])) vec.pop_back();
+        if (n != 2 && !CCW(hull[n - 2], hull[n - 1], P[0]))
+        {
+            hull.pop_back();
+            n--;
+        }
     
-        int q1 = 0, q2 = 1, n = vec.size();
+        int q1 = 0, q2 = 1; // q1: y좌표가 가장 작은 점, q2: y좌표가 가장 큰 점
         for (int i = 2; i < n; i++)
         {
             if (vec[q2].y < vec[i].y) q2 = i;
             else if (vec[q2].y == vec[i].y && vec[q2].x < vec[i].x) q2 = i;
         }
         
-        point A = vec[q1], B = vec[q2];
-        long long d = dist(vec[q1], vec[q2]);
-        for (int i = 0; i < n; i++)
+        point A = vec[q1], B = vec[q2]; // 가장 먼 두 점
+        long long d = dist(vec[q1], vec[q2]); // 가장 먼 두 점 사이 거리의 제곱(실수 연산을 하지 않기 위함)
+        for (int i = 0; i < n; i++) // 캘리퍼스가 볼록 다각형의 각 변과 한 번씩 맞닿을 동안 반복
         {
             int nq1 = (q1 + 1) % n, nq2 = (q2 + 1) % n;
             long long CP = (vec[nq1].x - vec[q1].x) * (vec[q2].y - vec[nq2].y);
