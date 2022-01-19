@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 그레이엄 스캔, Graham's Scan, CCW, 회전하는 캘리퍼스, 가장 먼 두 점, 1708 볼록 껍질, 
+`Tags` 그레이엄 스캔, Graham's Scan, CCW, 회전하는 캘리퍼스, 가장 먼 두 점, 1708 볼록 껍질, 10254. 고속도로
 
 ## 1. Convex Hull Algorithm
 
