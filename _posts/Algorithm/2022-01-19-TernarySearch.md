@@ -59,7 +59,7 @@ T(n) = T \left( \frac{2n}{3} \right) + 1
 
 만약 구간을 나누는 $p, q$가 모두 기울기가 0인 구간에 포함된다면, 아래 그림처럼 어느 쪽으로 구간을 좁혀야하는지 알 수 없게 된다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/150106671-7671e38a-5ebb-43e1-99d8-69d81a67005c.jpg" width="60%" height="60%"></center>
 
 (물론 기울기가 0인 구간이 최솟값에 해당된다면 상관없다.)
 
@@ -88,6 +88,12 @@ f(d) = \sum_{i = 0}^{N-1} \left\vert id - x_i \right\vert
 \end{aligned}
 
 우리는 $f(d)$를 최소로 만드는 $d$의 값을 구하고자 한다.
+
+함수 $f(d)$의 그래프가 어떤 형태를 가질지 생각해보자.
+
+절댓값 내부가 모두 일차원 함수이므로 그래프는 선분으로 이루어져 있고,
+
+절댓값들의 합으로 이루어진 함수이므로 각 절댓값이 0이 되는 위치에서 함수의 기울기가 변하게 될 것이다.
 
 
 
