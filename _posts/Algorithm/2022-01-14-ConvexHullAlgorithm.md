@@ -35,25 +35,23 @@ comments: true
 알고리즘은 다음과 같은 과정으로 이루어진다.
 
 1. 반드시 볼록 껍질에 포함되는 점인 **y좌표가 가장 작은 점**을 기준점으로 선택한다. 만약 y좌표가 가장 작은 점이 여러 개라면, 그 중 x좌표가 가장 작은 것을 선택한다.
-2. 선택한 점을 기준으로 다른 점들을 반시계 방향으로 정렬한다.
+2. 선택한 점을 기준으로 점들을 **반시계 방향으로 정렬**한다.
 3. 볼록 껍질을 구성하는 점들을 저장할 스택(stack)을 만들고, 첫 두 점을 스택에 삽입한다.
 4. 정렬된 순서대로 각 점들을 차례대로 처리한다.
-  4-1. 스택의 마지막 두 점을 각각 A와 B, 그리고 이번에 처리할 점을 C라고 하자.
-  4-2. 점 A, B, C가 반시계 방향을 이루면 C를 스택에 삽입한다.
-  4-3. 점 A, B, C가 시계 방향을 이루면 B는 볼록 껍질에 포함되지 않으므로 B를 스택에서 제거하고 4-1로 돌아간다.
+  - 스택의 마지막 두 점을 각각 A와 B, 그리고 이번에 처리할 점을 C라고 하자.
+  - 점 A, B, C가 반시계 방향을 이루면 C를 스택에 삽입한다.
+  - 점 A, B, C가 시계 방향을 이루면 B는 볼록 껍질에 포함되지 않으므로 B를 스택에서 제거하고 위 과정을 반복한다.
 5. 마지막으로 기준점까지 탐색하였다면 알고리즘을 종료한다.
 
 아래 그림은 그레이엄 스캔 과정을 보여준다.
 
 <center><img src="https://user-images.githubusercontent.com/88201512/149806393-331fbfee-b908-4a6d-a5e6-1c8ef956075b.jpg"></center>
 
+주황색 선분들은 현재 탐색하고 있는 점들(A, B, C)을 이은 선분들이고, 노란색 선분들은 스택에 포함된 점들을 이은 것들이다.
+
 기준점을 선택하는데 $O(n)$, 점들을 정렬하는데 $O(n \log n)$, 점들을 차례대로 처리하는데 $O(n)$이므로 전체 알고리즘의 시간복잡도는 $O(n \log n)$이다.
 
 만약 점들이 반시계 방향으로 정렬되어 있다면 $O(n)$의 시간복잡도로 볼록 껍질을 구할 수 있다.
-
-이때 세 점이 이루는 방향을 판단하기 위해서는 **CCW(Counter Clock Wise)** 알고리즘을 사용한다.
-
-> CCW에 대한 자세한 내용은 [이 포스팅](https://damo1924.github.io/algorithm/CCW/)에서 다루고 있다.
 
 ---
 
@@ -79,7 +77,9 @@ N은 3 이상 100,000 이하인 자연수이고, 각 점의 좌표는 절댓값�
 
 > 기준점 Q와 어떤 두 점 A, B가 주어졌을 때, $\vec{QA} \times \vec{QB} > 0$이면 Q에 대해 A-B는 반시계 방향이다.
 
-세 점이 이루는 방향을 판단하기 위해서는 CCW 알고리즘을 이용하면 된다.
+세 점이 이루는 방향을 판단하기 위해서는 **CCW(Counter Clock Wise)** 알고리즘을 이용하면 된다.
+
+> CCW에 대한 자세한 내용은 [이 포스팅](https://damo1924.github.io/algorithm/CCW/)에서 다루고 있다.
 
 전체 코드는 다음과 같다.
 
@@ -105,7 +105,7 @@ bool compare(point& A, point& B) // 반시계 방향으로 정렬
     long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
     if (V > 0) return true;
     if (V < 0) return false;
-    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y);
+    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y); // Q-A-B가 일직선 상에 있으면 Q와 가까운 점을 앞에 오도록 정렬한다.
 }
 
 int main()
@@ -131,15 +131,24 @@ int main()
     sort(P, P + N, compare);
     
     // 3. 점들을 차례대로 탐색하면서 볼록 껍질 구하기
-    vector<point> vec = {P[0], P[1]};
+    vector<point> hull = {P[0], P[1]}; // 볼록 껍질을 구성하는 점들
+    int hs = 2; // 볼록 껍질에 포함된 점들의 개수
     for (int i = 2; i < N; i++)
     {
-        while (vec.size() > 1 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[i]))
-            vec.pop_back();
-        vec.push_back(P[i]);
+        while (hs > 1 && !CCW(hull[hs - 2], hull[hs - 1], P[i]))
+        {
+            hull.pop_back();
+            hs--;
+        }
+        hull.push_back(P[i]);
+        hs++;
     }
-    if (!CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[0])) vec.pop_back();
-    cout << vec.size();
+    if (hs > 2 && !CCW(hull[hs - 2], hull[hs - 1], P[0])) // 모든 점이 동일한 직선 위에 있는 경우, hs = 2이므로 hs > 2 조건이 필요하다.
+    {
+        hull.pop_back();
+        hs--;
+    }
+    cout << hs;
 }
 ```
 
@@ -147,7 +156,7 @@ int main()
 
 ## 3. Rotating Calipers
 
-회전하는 캘리퍼스 알고리즘은 **볼록 껍질의 최대 직경**을 구하는 알고리즘이다.
+회전하는 캘리퍼스 알고리즘은 **볼록 껍질의 최대 직경**을 구하는 **Two pointer** 알고리즘이다.
 
 볼록 껍질의 최대 직경은 **볼록 껍질을 구성하는 가장 먼 두 점의 길이**로 정의한다.
 
@@ -169,28 +178,159 @@ int main()
 
 <center><img src="https://user-images.githubusercontent.com/88201512/149702638-01d8c755-5341-425e-a5e4-c6952b5bb92c.jpg" width="60%" height="60%"></center>
 
-회전하는 캘리퍼스 알고리즘은 말 그대로 캘리퍼스를 볼록 껍질의 주위에서 회전시키며 최대 직경을 구한다.
-
-알고리즘은 아래 그림과 같은 과정을 거쳐 진행된다.
+알고리즘을 말로 설명하기 전에, 그림을 통해 이해해보자.
 
 <center><img src="https://user-images.githubusercontent.com/88201512/149804403-521759c6-9e2d-43d5-baa9-25856eec0bb8.jpg"></center>
 
-간단히 정리해보면,
+$Q_1$과 $Q_2$는 우리가 거리를 구해볼 두 점을, 두 개의 평행한 빨간색 직선은 캘리퍼스의 두 턱을 의미한다.
+
+그렇다면 왜 이 알고리즘의 이름이 '회전하는 캘리퍼스'인지 바로 알 수 있을 것이다.
+
+볼록 다각형의 주위로 캘리퍼스를 회전시키면서, 캘리퍼스와 맞닿은 두 점 사이의 거리를 구하기 때문이다.
+
+정리해보면,
 
 1. y좌표가 가장 작은 점과 가장 큰 점을 찾고, 캘리퍼스의 두 집게를 x축에 평행하게 둔다. 직경의 초기값은 찾은 두 점 사이의 거리이다.
-2. 각 점을 포함하는 볼록 다각형의 선분과 캘리퍼스의 집게가 이루는 각도 중 작은 것 만큼 캘리퍼스를 회전시킨다.
+2. 각 점을 포함하는 볼록 다각형의 선분과 캘리퍼스의 집게가 이루는 각도 중 작은 각도만큼 캘리퍼스를 회전시킨다.
 3. 캘리퍼스를 회전시켰을 때 새롭게 캘리퍼스에 닿는 점과 반대편 캘리퍼스에 기존에 닿아 있던 점 사이의 거리를 구해 최댓값을 갱신한다.
 4. 볼록 다각형의 모든 변을 탐색할 때까지 2~3번 과정을 반복한다.
 
-즉, 볼록 다각형의 모든 변을 한 번씩 캘리퍼스의 집게가 맞닿기 때문에 $O(h)$의 시간복잡도를 가진다.($h$: 볼록 껍질을 이루는 점의 개수)
+**볼록 다각형의 모든 변을 한 번씩 캘리퍼스의 집게가 맞닿기 때문**에 $O(h)$의 시간복잡도를 가진다.($h$: 볼록 껍질을 이루는 점의 개수)
 
 ---
 
 ### 3-2. Implementation
 
+회전하는 캘리퍼스 알고리즘을 이용해서 **가장 먼 두 점 사이의 거리**를 구하는 문제를 풀어보자.
 
+[백준 10254. 고속도로 문제 링크](https://www.acmicpc.net/problem/10254)
 
+N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 구하려고 한다.
 
+입력으로 T개의 테스트케이스가 주어진다.
+
+각 테스트케이스는 도시의 개수 N과 각 도시의 좌표 $(x, y)$로 이루어져 있다.
+
+($2 \leq N \leq 200000$, $-10^7 \leq x, y \leq 10^7$)
+
+**[Solution]**
+
+가장 먼 두 점을 구하기 위해서는
+
+1. 그레이엄 스캔으로 볼록 껍질 구하기: $O(n \log n)$
+2. 회전하는 캘리퍼스 알고리즘으로 가장 먼 두 점 찾기: $O(n)$
+
+를 수행하면 되므로, 1번은 앞서 구현한 코드를 그대로 사용하였다.
+
+회전하는 캘리퍼스 알고리즘 구현의 핵심은 **두 각도 중 작은 것을 어떻게 구하느냐**이다.
+
+내적이나 외적을 이용해서 코사인이나 사인 값을 구하면 된다고 생각할 수도 있겠지만, 기하 알고리즘에서는 **실수 연산을 최대한 피해야 한다.**
+
+입력되는 값의 범위가 작다면 괜찮겠지만, 그렇지 않다면 **실수 비교를 하는 알고리즘은 언제나 반례를 찾을 수 있다.**
+
+그러므로 우리는 실수 연산을 하지 않고 캘리퍼스를 얼마나 회전시켜야 하는지 알아내야한다.
+
+아래 그림을 보자.
+
+<center><img src="" width="60%" height="60%"></center>
+
+```cpp
+#include <iostream>
+#include <math.h>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+struct point {
+    long long x, y;
+} P[200000];
+
+bool CCW(point& A, point& B, point& C)
+{
+    return (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y) > 0;
+}
+
+point Q; // 기준점
+bool compare(point& A, point& B)
+{
+    long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
+    if (V > 0) return true;
+    if (V < 0) return false;
+    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y);
+}
+
+long long dist(point& A, point& B)
+{
+    return (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int T;
+    cin >> T;
+    while (T--)
+    {
+        int N;
+        cin >> N;
+    
+        int idx = 0;
+        for (int i = 0; i < N; i++)
+        {
+            cin >> P[i].x >> P[i].y;
+            if (P[i].y < P[idx].y) idx = i;
+            else if (P[i].y == P[idx].y && P[i].x < P[idx].x) idx = i;
+        }
+        Q = P[idx];
+    
+        sort(P, P + N, compare);
+
+        vector<point> hull = {P[0], P[1]};
+        int n = 2;
+        for (int i = 2; i < N; i++)
+        {
+            while (n > 1 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[i]))
+                vec.pop_back();
+            vec.push_back(P[i]);
+        }
+        if (vec.size() != 2 && !CCW(vec[vec.size() - 2], vec[vec.size() - 1], P[0])) vec.pop_back();
+    
+        int q1 = 0, q2 = 1, n = vec.size();
+        for (int i = 2; i < n; i++)
+        {
+            if (vec[q2].y < vec[i].y) q2 = i;
+            else if (vec[q2].y == vec[i].y && vec[q2].x < vec[i].x) q2 = i;
+        }
+        
+        point A = vec[q1], B = vec[q2];
+        long long d = dist(vec[q1], vec[q2]);
+        for (int i = 0; i < n; i++)
+        {
+            int nq1 = (q1 + 1) % n, nq2 = (q2 + 1) % n;
+            long long CP = (vec[nq1].x - vec[q1].x) * (vec[q2].y - vec[nq2].y);
+            CP -= (vec[nq1].y - vec[q1].y) * (vec[q2].x - vec[nq2].x);
+            if (CP > 0) q1 = nq1;
+            else if (CP < 0) q2 = nq2;
+            else
+            {
+                q1 = nq1;
+                q2 = nq2;
+            }
+            
+            long long D = dist(vec[q1], vec[q2]);
+            if (d < D)
+            {
+                d = D;
+                A = vec[q1]; B = vec[q2];
+            }
+        }
+        cout << A.x << " " << A.y << " " << B.x << " " << B.y << "\n";
+    }
+}
+```
 
 <br/>
 
