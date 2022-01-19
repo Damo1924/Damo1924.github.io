@@ -234,7 +234,7 @@ N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 
 
 <center><img src="https://user-images.githubusercontent.com/88201512/150057568-87f9c24c-5edb-4b26-958d-8c862f856039.jpg" width="60%" height="60%"></center>
 
-위 그림과 같이 $Q_1{''}$과 $Q_2{''}$을 정의하면, 다음이 성립한다.
+위 그림과 같이 새로운 점들을 정의하면, 다음이 성립한다.
 
 \begin{aligned}
 \vec{Q_2 Q_1''} \times \vec{Q_2 Q_2''} = \left\vert \vec{Q_2 Q_1''} \right\vert \left\vert \vec{Q_2 Q_2''} \right\vert \sin{\theta_2 - \theta_1}
@@ -361,7 +361,8 @@ int main()
 
 [1] [위키백과, '볼록 껍질 알고리즘'](https://ko.m.wikipedia.org/wiki/%EB%B3%BC%EB%A1%9D_%EA%BB%8D%EC%A7%88_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
 [2] [위키백과, '그레이엄 스캔'](https://ko.m.wikipedia.org/wiki/%EA%B7%B8%EB%A0%88%EC%9D%B4%EC%97%84_%EC%8A%A4%EC%BA%94)  
-
+[3] [WIKIPEDIA, 'Rotating calipers'](https://en.m.wikipedia.org/wiki/Rotating_calipers)  
+[4] [ruz, '회전하는 캘리퍼스 rotating calipers'](https://aruz.tistory.com/entry/rotating-calipers)
 
 
 
