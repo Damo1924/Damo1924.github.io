@@ -232,7 +232,19 @@ N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 
 
 아래 그림을 보자.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/150057568-87f9c24c-5edb-4b26-958d-8c862f856039.jpg" width="60%" height="60%"></center>
+
+위 그림과 같이 $Q_1''$과 $Q_2''$을 정의하면, 다음이 성립한다.
+
+\begin{aligned}
+\vec{Q_2 Q_1''} \times \vec{Q_2 Q_2''} = \left\vert \vec{Q_2 Q_1''} \right\vert \left\vert \vec{Q_2 Q_2''} \right\vert \sin{\theta_2 - \theta_1}
+\end{aligned}
+
+위 외적의 결과값이 양수이면 $\theta_2 > \theta_1$이고, 음수이면 $\theta_2 < \theta_1$임을 알 수 있다.
+
+따라서 실수 연산을 이용하지 않고도 각도 비교가 가능하다.
+
+전체 코드는 다음과 같다.
 
 ```cpp
 #include <iostream>
@@ -250,7 +262,7 @@ bool CCW(point& A, point& B, point& C)
     return (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y) > 0;
 }
 
-point Q; // 기준점
+point Q;
 bool compare(point& A, point& B)
 {
     long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
@@ -287,7 +299,8 @@ int main()
         Q = P[idx];
     
         sort(P, P + N, compare);
-
+        
+        // 1. 볼록 껍질 구하기
         vector<point> hull = {P[0], P[1]};
         int n = 2;
         for (int i = 2; i < N; i++)
@@ -305,7 +318,8 @@ int main()
             hull.pop_back();
             n--;
         }
-    
+        
+        // 2. 캘리퍼스가 x축에 평행할 때, 캘리퍼스와 만나는 두 점 Q1, Q2의 인덱스 구하기
         int q1 = 0, q2 = 1; // q1: y좌표가 가장 작은 점, q2: y좌표가 가장 큰 점
         for (int i = 2; i < n; i++)
         {
@@ -313,8 +327,9 @@ int main()
             else if (vec[q2].y == vec[i].y && vec[q2].x < vec[i].x) q2 = i;
         }
         
-        point A = vec[q1], B = vec[q2]; // 가장 먼 두 점
-        long long d = dist(vec[q1], vec[q2]); // 가장 먼 두 점 사이 거리의 제곱(실수 연산을 하지 않기 위함)
+        // 3. 캘리퍼스를 회전시키며 가장 먼 두 점 구하기
+        point A = vec[q1], B = vec[q2];
+        long long d = dist(vec[q1], vec[q2]); // 거리의 제곱(실수 연산을 하지 않기 위함)
         for (int i = 0; i < n; i++) // 캘리퍼스가 볼록 다각형의 각 변과 한 번씩 맞닿을 동안 반복
         {
             int nq1 = (q1 + 1) % n, nq2 = (q2 + 1) % n;
