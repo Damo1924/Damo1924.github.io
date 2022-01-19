@@ -234,7 +234,7 @@ N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 
 
 <center><img src="https://user-images.githubusercontent.com/88201512/150057568-87f9c24c-5edb-4b26-958d-8c862f856039.jpg" width="60%" height="60%"></center>
 
-위 그림과 같이 $Q_1''$과 $Q_2''$을 정의하면, 다음이 성립한다.
+위 그림과 같이 ${Q_1}''$과 ${Q_2}''$을 정의하면, 다음이 성립한다.
 
 \begin{aligned}
 \vec{Q_2 Q_1''} \times \vec{Q_2 Q_2''} = \left\vert \vec{Q_2 Q_1''} \right\vert \left\vert \vec{Q_2 Q_2''} \right\vert \sin{\theta_2 - \theta_1}
