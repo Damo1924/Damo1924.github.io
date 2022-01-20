@@ -59,7 +59,7 @@ T(n) = T \left( \frac{2n}{3} \right) + 1
 
 만약 구간을 나누는 $p, q$가 모두 기울기가 0인 구간에 포함된다면, 아래 그림처럼 어느 쪽으로 구간을 좁혀야하는지 알 수 없게 된다.
 
-<center><img src="https://user-images.githubusercontent.com/88201512/150106671-7671e38a-5ebb-43e1-99d8-69d81a67005c.jpg" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/150106671-7671e38a-5ebb-43e1-99d8-69d81a67005c.jpg" width="45%" height="45%"></center>
 
 (물론 기울기가 0인 구간이 최솟값에 해당된다면 상관없다.)
 
