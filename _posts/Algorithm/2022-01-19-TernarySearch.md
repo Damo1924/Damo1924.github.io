@@ -102,11 +102,117 @@ f(d) = \sum_{i = 0}^{N-1} \left\vert id - x_i \right\vert
 
 따라서 $f(d)$는 항상 아래로 볼록한 함수로, 삼분 탐색을 적용할 수 있다는 사실을 알 수 있다.
 
+전체 코드는 다음과 같다.
+
+```cpp
+#include <iostream>
+using namespace std;
+typedef long long ll;
+
+int N;
+
+ll X[100000];
+
+ll f(int d)
+{
+    ll sum = 0;
+    for (int i = 0; i < N; i++) sum += abs((ll) i * d - X[i]);
+    return sum;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    cin >> N;
+    for (int i = 0; i < N; i++) cin >> X[i];
+    
+    int s = 0, e = X[N-1];
+    while (s + 2 < e)
+    {
+        int p = (2 * s + e) / 3, q = (s + 2 * e) / 3;
+        if (f(p) > f(q)) s = p;
+        else e = q;
+    }
+    if (s + 1 == e) cout << min(f(s), f(s + 1));
+    else cout << min(f(s), min(f(s + 1), f(s + 2)));
+}
+```
+
+삼분 탐색을 통해 최솟값에 해당하는 $d$를 찾는데 $O(\log N)$, 매번 $f(d)$를 계산하는데 $O(N)$이므로 총 시간복잡도는 $O(N \log N)$이다.
+
+> 이처럼 삼분 탐색을 이용하는 문제의 핵심은 문제에서 **최대/최솟값을 구해야하는 함수가 삼분 탐색을 이용할 수 있는 함수인지 판단**하는 것이 가장 중요하다.
+
+**[Additional Solution]**
+
+다만, 이 문제의 경우에는 반드시 삼분탐색을 이용해서 풀지 않아도 된다.
+
+$f(d)$의 최솟값은 **일차함수의 기울기가 음수에서 양수로 바뀌는 부분**이므로 각 구간의 기울기를 구함으로써 최솟값을 얻을 수 있다.
+
+<center><img src="" width="50%" height="50%"></center>
+
+이를 위해서는 전봇대들을 절댓값 0이 되는 위치에 따라 정렬해주어야 한다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+using namespace std;
+typedef long long ll;
+
+struct utilityPole {
+    ll x; // 초기 x 좌표
+    int k; // x_k
+    double y; // k * d - x_k = 0인 d값 = x_k / k
+} UP[100000];
+
+bool compare(utilityPole A, utilityPole B) { return A.y < B.y; }
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int N, x0;
+    cin >> N;
+    cin >> x0;
+    for (int i = 1; i < N; i++)
+    {
+        cin >> UP[i].x;
+        UP[i].k = i;
+        UP[i].y = (double) UP[i].x / i;
+    }
+    
+    // 1. 구간 순서대로 정렬
+    sort(UP, UP + N, compare);
+    
+    // 2. 최솟값이 포함된 구간 찾기
+    ll co = (ll) N * (N - 1) / 2; // 첫 번째 구간에서의 기울기 * (-1)
+    int i;
+    for (i = 0; i < N; i++)
+    {
+        co -= 2 * UP[i].k; // 구간이 변할 때마다 기울기 갱신
+        if (co <= 0) break; // 부호가 변하면 break
+    }
+    
+    // 3. 최솟값 구하기
+    ll d = (ll) UP[i].y, ans1 = 0, ans2 = 0;
+    for (int j = 0; j < N; j++)
+    {
+        ans1 += abs((ll) UP[j].k * d - UP[j].x);
+        ans2 += abs((ll) UP[j].k * (d + 1) - UP[j].x);
+    }
+    cout << min(ans1, ans2);
+}
+```
 
 
 
 
-이처럼 삼분 탐색을 이용하는 문제의 핵심은 문제에서 **최대/최솟값을 구해야하는 함수가 삼분 탐색을 이용할 수 있는 함수인지 판단**하는 것이 가장 중요하다.
+
+
 
 
 
