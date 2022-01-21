@@ -98,7 +98,7 @@ f(d) = \sum_{i = 0}^{N-1} \left\vert id - x_i \right\vert
 
 즉, 아래 그래프와 같은 형태를 가질 것이다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/149664037-82ff46ee-60c1-4c6a-a804-be06bce56b0a.jpg" width="60%" height="60%"></center>
 
 따라서 $f(d)$는 항상 아래로 볼록한 함수로, 삼분 탐색을 적용할 수 있다는 사실을 알 수 있다.
 
@@ -150,8 +150,6 @@ int main()
 다만, 이 문제의 경우에는 반드시 삼분탐색을 이용해서 풀지 않아도 된다.
 
 $f(d)$의 최솟값은 **일차함수의 기울기가 음수에서 양수로 바뀌는 부분**이므로 각 구간의 기울기를 구함으로써 최솟값을 얻을 수 있다.
-
-<center><img src="" width="50%" height="50%"></center>
 
 이를 위해서는 전봇대들을 절댓값 0이 되는 위치에 따라 정렬해주어야 한다.
 
