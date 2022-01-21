@@ -98,7 +98,7 @@ f(d) = \sum_{i = 0}^{N-1} \left\vert id - x_i \right\vert
 
 즉, 아래 그래프와 같은 형태를 가질 것이다.
 
-<center><img src="https://user-images.githubusercontent.com/88201512/149664037-82ff46ee-60c1-4c6a-a804-be06bce56b0a.jpg" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/150449381-c68093e5-28f6-49e6-bbdd-1a5bbd2b8a3e.jpg" width="60%" height="60%"></center>
 
 따라서 $f(d)$는 항상 아래로 볼록한 함수로, 삼분 탐색을 적용할 수 있다는 사실을 알 수 있다.
 
@@ -205,12 +205,5 @@ int main()
     cout << min(ans1, ans2);
 }
 ```
-
-
-
-
-
-
-
 
 
