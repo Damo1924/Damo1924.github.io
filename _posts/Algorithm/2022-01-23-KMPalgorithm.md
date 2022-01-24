@@ -222,6 +222,45 @@ n_m = \frac{N}{N - pi(N - 1)}
 
 만약 $S$가 **규칙이 없는 문자열**이라면 위 값은 자연수가 아니라 유리수 값을 가지게 된다.
 
+전체 코드는 다음과 같다.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int solve(string& s)
+{
+    int n = s.size(), j = 0;
+    vector<int> pi(n, 0);
+    for (int i = 1; i < n; i++)
+    {
+        while (j > 0 && s[i] != s[j]) j = pi[j - 1];
+        if (s[i] == s[j]) pi[i] = ++j;
+    }
+    
+    int a = n - pi[n - 1];
+    if (n % a == 0) return n / a;
+    else return 1;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    while (true)
+    {
+        string S;
+        getline(cin, S);
+        if (S == ".") break;
+        cout << solve(S) << "\n";
+    }
+}
+```
+
 ## Reference
 
 [1] [WIKIPEDIA, 'Knuth-Morris-Pratt algorithm'](https://en.m.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)  
