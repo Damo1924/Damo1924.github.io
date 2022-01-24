@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` KMP, failure function, 1786 찾기
+`Tags` 문자열 검색 알고리즘, failure function, 1786 찾기, 4354 문자열 제곱
 
 ## 0. String Searching Algorithm
 
@@ -28,7 +28,7 @@ comments: true
 
 텍스트의 길이를 $N$, 패턴의 길이를 $M$이라고 하면, 시간복잡도는 $O(NM)$이다.
 
-이번 포스팅에서는 좀 더 효율적으로 문자열을 검색할 수 있는 알고리즘들에 대해 다루어 볼 것이다.
+이번 포스팅에서는 좀 더 효율적으로 문자열을 검색할 수 있는 KMP 알고리즘에 대해 다루어 볼 것이다.
 
 <br/>
 
@@ -101,7 +101,7 @@ KMP 알고리즘은 다음과 같다.
   
 ---
 
-### 1-3. Implementation
+### 1-3. Implementation: [백준] 1786. 찾기
 
 이제 직접 KMP 알고리즘을 구현해보도록 하자.
 
@@ -171,11 +171,37 @@ int main()
 }
 ```
 
+<br/>
 
+## 2. Failure Function 관련 문제들
+
+Failure function을 이용하면 문자열 검색 외에도 문자열의 규칙을 찾는 문제들을 해결할 수 있다.
+
+### [백준] 4354. 문자열 제곱
+
+[백준 4353 문자열 제곱 문제 링크](https://www.acmicpc.net/problem/4354)
+
+두 문자열 사이의 곱셈의 결과를 두 문자열을 이어붙이는 것으로 정의하면, 문자열의 제곱은 다음과 같이 정의된다.
+
+- $a^0$ = "" (빈 문자열)
+- $a^(n + 1) = a \times a^n$
+
+즉, 문자열 $a$에 대해 $a^n$은 $a$를 $n$번 이어붙인 문자열이다.
+
+입력으로 문자열 S가 주어질 때, 어떤 문자열 $a$에 대해 $S = a^n$을 만족하는 $n$의 최댓값을 구하는 문제이다.
+
+**[Solution]**
+
+어떤 문자열 $a$에 대해, 문자열 $a^n$의 failure function을 떠올려보자.
+
+$a^n$의 접두사와 접미사가 같은 접두사 중 $a^n$이 아니면서 가장 길이가 긴 것은 $a^(n-1)$이다.
+
+주어진 문자열을 $S$, 문자열의 길이를 $n$, fail
 
 ## Reference
 
-
+[1] [WIKIPEDIA, 'Knuth-Morris-Pratt algorithm'](https://en.m.wikipedia.org/wiki/Knuth%E2%80%93Morris%E2%80%93Pratt_algorithm)  
+[2] 이지스 퍼블리싱, Bohyoh Shibata, '자료구조와 함께 배우는 알고리즘 입문'  
 
 
 
