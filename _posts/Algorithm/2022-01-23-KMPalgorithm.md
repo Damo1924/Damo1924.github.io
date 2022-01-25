@@ -304,9 +304,47 @@ a_{T+1} \dots a_N a_1 \dots a_T / a_{T + 1} \dots a_N a_1 \dots a_T / \dots
 
 그러므로 광고판의 끝 부분에만 `L % N`만큼의 짤린 광고 문구가 나타난 것으로 생각해도 된다.
 
+아래 그림을 보자.
 
+<center><img src="" width="60%" height="60%"></center>
 
+입력된 광고판의 상태에 대해 **failure function**을 구하면 광고 문구의 길이 $N$의 최솟값을 구할 수 있음을 알 수 있다.
 
+전체 코드는 다음과 같다.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+int solve(int l, string& s)
+{
+    int j = 0;
+    vector<int> pi(l, 0);
+    for (int i = 1; i < l; i++)
+    {
+        while (j > 0 && s[i] != s[j]) j = pi[j - 1];
+        if (s[i] == s[j]) pi[i] = ++j;
+    }
+    return l - pi[l - 1];
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int L; // 광고판의 크기
+    string S; // 광고판에 나타난 문구
+    cin >> L;
+    cin.ignore(10, '\n');
+    getline(cin, S);
+    
+    cout << solve(L, S);
+}
+```
 
 <br/>
 
