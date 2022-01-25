@@ -306,7 +306,7 @@ a_{T+1} \dots a_N a_1 \dots a_T / a_{T + 1} \dots a_N a_1 \dots a_T / \dots
 
 아래 그림을 보자.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/150909180-11c34191-ec2e-467f-bef9-911fc5b4765a.jpg" width="60%" height="60%"></center>
 
 입력된 광고판의 상태에 대해 **failure function**을 구하면 광고 문구의 길이 $N$의 최솟값을 구할 수 있음을 알 수 있다.
 
