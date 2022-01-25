@@ -143,7 +143,7 @@ A* 알고리즘은 어떤 휴리스틱 함수를 사용하느냐에 따라 다�
 좌표평면($n = 2$) 위의 두 점 $A(x_1, y_1)$, $B(x_2, y_2)$ 사이의 거리는 다음과 같이 표현된다.
 
 - **Manhattan Distance** $=\left\vert x_2 - x_1 \right\vert + \left\vert y_2 - y_1 \right\vert$
-- **Chebyshev Distance** $=\max (\left\vert x_2 - x_1 \right\vert, \left\vert y_2 - y_1 \right\vert$)$
+- **Chebyshev Distance** $=\max (\left\vert x_2 - x_1 \right\vert, \left\vert y_2 - y_1 \right\vert)$
 - **Euclidean Distance** $=\sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$
 
 ---
