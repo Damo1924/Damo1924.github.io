@@ -111,6 +111,80 @@ $p$는 **적당히 큰 소수**, $a$는 $p$의 **원시근**이면서 너무 작
 
 직접 라빈-카프 알고리즘을 사용해서 문제를 풀어보자.
 
+### [백준] 1786. 찾기
+
+[백준 1786. 찾기 문제 링크](https://www.acmicpc.net/problem/1786)
+
+문자열 T, P가 주어질 때, T에 P가 몇 번 나타나는지, 그리고 어느 위치에 나타나는지를 출력하는 문제이다.
+
+**[Solution]**
+
+$p = 1000000007$, $a = 302$로 라빈-카프 알고리즘을 구현하였다.
+
+```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+typedef long long ll;
+const int a = 302;
+const int p = 1000000007;
+
+// h : 문자열 s의 앞부분부터 길이 l만큼의 부분 문자열에 해시 값
+// b : a^(l-1)을 p로 나눈 나머지
+pair<int, int> _hash(string& s, int l)
+{
+    ll h = 0, b = 1;
+    for (int i = l - 1; i > 0; i--)
+    {
+        h = (h + s[i] * b) % p;
+        b = (b * a) % p;
+    }
+    h = (h + s[0] * b) % p;
+    return make_pair(h, b);
+}
+
+vector<int> RabinKarp(string& T, string& P)
+{
+    int N = T.size(), M = P.size();
+    
+    ll H = _hash(P, M).first;
+    
+    pair<int, int> hb = _hash(T, M);
+    ll h = hb.first, b = hb.second;
+    
+    vector<int> res;
+    if (h == H) res.push_back(1);
+    for (int i = 1; i <= N - M; i++)
+    {
+        h = ((h - T[i - 1] * b) * a + T[i + M - 1]) % p;
+        if (h < 0) h += p;
+        
+        if (h == H) res.push_back(i + 1);
+    }
+    return res;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    string T, P;
+    getline(cin, T);
+    getline(cin, P);
+    
+    vector<int> v = RabinKarp(T, P);
+    cout << v.size() << "\n";
+    for (int i = 0; i < v.size(); i++) cout << v[i] << " ";
+}
+```
+
+입력될 수 있는 문자열의 최대 길이가 $10^6$이기 때문에 반례가 충분히 존재하겠지만, 테스트케이스에는 없는 듯 하다.
+
+---
+
 ### [백준] 1605. 반복 부분문자열
 
 
