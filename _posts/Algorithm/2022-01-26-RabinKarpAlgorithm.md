@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 문자열 검색 알고리즘, 라빈-카프 알고리즘, 해시, hash, 원시근, 1786 찾기, 1605 반복 부분문자열
+`Tags` 문자열 검색 알고리즘, 라빈-카프 알고리즘, 해시, Rolling hash, 원시근, 1786 찾기, 1605 반복 부분문자열
 
 ## 1. Introduction
 
@@ -185,7 +185,7 @@ int main()
 
 ---
 
-### [백준] 1605. 반복 부분문자열
+### [백준] 1605. 반복 부분문자열 (Rolling Hash)
 
 [백준 1605. 반복 부분문자열 문제 링크](https://www.acmicpc.net/problem/1605)
 
@@ -205,10 +205,83 @@ int main()
 
 라빈-카프 알고리즘의 시간복잡도가 $O(N + M)$이므로, 입력된 문자열의 길이를 $L$이라고 하면 전체 시간복잡도는 $O(L \log L)$이다.
 
+그런데 앞서 사용한 $a, p$ 값으로는 AC를 받을 수 없었다.(아마 hash를 사용하는 문제라서 충돌을 일으키는 반례가 들어있는 듯 하다.)
 
+그렇기 때문에 이번에는 **해시 값이 같다면 문자열을 직접 비교해보는 방법**으로 코드를 구현하였다.
+
+해시 충돌을 고려하는 코드를 짤 때는 좀 더 작은 $a, p$를 사용한다.
+
+> $a = 29$, $p = 10007$ ($a$는 $p$의 원시근, $a$는 알파벳 소문자의 개수인 26보다 큰 수)
 
 ```cpp
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+typedef long long ll;
+const int a = 29;
+const int p = 10007;
 
+vector<int> v[p]; // v[i]: 해시 값이 i인 부분문자열의 시작 문자의 인덱스를 저장
+
+pair<int, int> _hash(string& s, int l)
+{
+    ll h = 0, b = 1;
+    for (int i = l - 1; i > 0; i--)
+    {
+        h = (h + s[i] * b) % p;
+        b = (b * a) % p;
+    }
+    h = (h + s[0] * b) % p;
+    return make_pair(h, b);
+}
+
+bool strComp(string& s, int a, int b, int x) // a에서 시작하는 부분문자열과 b에서 시작하는 부분문자열을 비교
+{
+    for (int i = 0; i < x; i++)
+        if (s[a + i] != s[b + i]) return false;
+    return true;
+}
+
+bool doRepeat(string& T, int L, int x)
+{
+    pair<int, int> hb = _hash(T, x);
+    int h = hb.first, b = hb.second;
+    
+    for (int i = 0; i < p; i++) v[i].clear();
+    v[h].push_back(0);
+    for (int i = 1; i <= L - x; i++)
+    {
+        h = ((h - T[i - 1] * b) * a + T[i + x - 1]) % p;
+        if (h < 0) h += p;
+        
+        if (!v[h].empty()) // 해시 충돌 발생!
+            for (int j = 0; j < v[h].size(); j++)
+                if (strComp(T, i, v[h][j], x)) return true; // 같은 문자열이면 true를 반환
+        v[h].push_back(i);
+    }
+    return false;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+    int L; cin >> L;
+    string S; cin >> S;
+    
+    // 이분 탐색
+    int s = 0, e = L;
+    while (s < e)
+    {
+        int mid = (s + e + 1) / 2;
+        if (doRepeat(S, L, mid)) s = mid;
+        else e = mid - 1;
+    }
+    cout << s;
+}
 ```
 
 ---
