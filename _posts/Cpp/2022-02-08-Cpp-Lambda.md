@@ -51,7 +51,7 @@ int f(vector<int>& v, int k)
 
 람다는 다음과 같이 4개의 부분으로 구성된다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153008163-1ad90a77-4e4c-4bf2-9023-dbe4504364a5.jpg" width="60%" height="60%"></center>
 
 맨 앞에 있는 대괄호 `[]`는 **개시자(introducer)**라고 부르며, 괄호 사이에 외부 변수를 넣으면 해당 변수를 람다 함수 내부에서 사용할 수 있게 해준다.
 
