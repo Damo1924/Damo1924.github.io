@@ -57,7 +57,7 @@ $A\[i\]$를 $v$로 바꾸는 작업의 시간복잡도가 $O(n)$이 되어 배�
 
 아래 그림은 세그먼트 트리의 각 노드의 인덱스와 저장하고 있는 범위를 나타낸 것이다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153126398-195894ad-e55c-445d-8241-6254f29da5a1.jpg" width="60%" height="60%"></center>
 
 이제 세그먼트 트리를 C++로 구현해보자.
 
