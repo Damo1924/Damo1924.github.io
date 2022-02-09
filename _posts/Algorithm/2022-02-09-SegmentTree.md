@@ -146,6 +146,48 @@ void _update(vector<int>& tree, int n, int s, int e, int i, int diff)
 
 **Lazy propagation**은 구간에 속하는 수들을 하나씩 업데이트하는 것이 아닌, **구간의 대표 노드를 업데이트**해서 $O(\log n)$에 수행하는 방법이다.
 
+---
+
+### 3-1. Algorithm
+
+세그먼트 트리의 어떤 노드 $n$이 나타내는 구간을 $s$부터 $e$라고 하자.
+
+$s$부터 $e$까지의 구간에 어떤 값 $d$가 더해졌다는 정보를 $lazy\[n\] = d$로 표현할 것이다.
+
+이 정보를 처리해서 세그먼트 트리에 저장된 값을 업데이트하는 과정은 다음과 같다.
+
+1. 노드 $n$에 저장된 값인 $tree\[n\]$에는 $(e - s + 1) \times lazy\[n\]$를 더해준다.
+2. 노드 $n$이 리프 노드이면($s = e$) 더 이상 정보를 전파할 곳이 없으므로 종료.
+3. 노드 $n$이 리프 노드가 아니면, 해당 노드의 왼쪽 자식 노드와 오른쪽 자식 노드에 업데이트 정보를 전파해준다.
+4. 업데이트 정보가 여러 번 적용되는 것을 방지하기 위해 $lazy\[n\]$의 값을 0으로 바꾸어준다.
+
+위 과정만 보면, 트리를 DFS로 탐색하면서 업데이트된 구간과 겹치는 모든 노드에 정보를 전파하는 것처럼 보일 것이다.
+
+그런데 해당되는 모든 노드를 업데이트하는 것은 결국 $O(n \log n)$이라서 하나씩 업데이트하는 것과 별반 다르지 않다는 사실을 알 수 있다.
+
+이는 **정보를 게으르게 전파함으로써** 해결할 수 있다.
+
+이게 무슨 말이냐면, 다음을 만족하는 **구간의 대표 노드에게만 정보를 전파**해두라는 의미이다.
+
+> 업데이트한 구간을 $l, r$($l \leq r$), 노드 $n$에 해당하는 구간을 $s, e$($s \leq e$)라고 하면 구간 대표 노드는 다음을 만족한다.
+> 
+> \begin{aligned}
+> l \leq s, e \leq r
+> \end{aligned}
+> 
+> 즉, 업데이트한 구간에 완전히 포함되는 노드를 뜻한다.
+
+그렇다면 이 정보를 **언제** 자식 노드들에 전파할까?
+
+바로 **해당 노드 또는 해당 노드의 자손 노드의 값이 필요할 때** 업데이트를 적용해주면서 전파하게 된다.
+
+예를 들어 아래와 같은 트리에서 
+
+---
+
+### 3-2. Implementation
+
+
 
 
 <br/>
@@ -168,6 +210,9 @@ $a = 1$이면 $b$번째 수를 $c$로 바꾸라는 의미이고, $a = 2$이면 $
 
 앞에서 구현한 세그먼트 트리 코드를 그대로 이용하면 된다.
 
+<details>
+<summary> 전체 코드 </summary>
+<div markdown="1">
 ```cpp
 #include <iostream>
 #include <vector>
@@ -229,6 +274,8 @@ int main()
     }
 }
 ```
+</div>
+</details>
 
 ---
 
@@ -244,6 +291,9 @@ int main()
 
 부분합 대신 최솟값을 저장하는 세그먼트 트리를 구현하면 된다.
 
+<details>
+<summary> 전체 코드 </summary>
+<div markdown="1">
 ```cpp
 #include <iostream>
 #include <vector>
@@ -288,6 +338,8 @@ int main()
     }
 }
 ```
+</div>
+</details>
 
 ---
 
@@ -297,11 +349,102 @@ int main()
 
 하나의 값을 업데이트하는 대신 **구간을 업데이트**한다는 점만 제외하면 2042. 구간 합 구하기 문제와 동일하다.
 
+**[SOLUTION]**
+
 Lazy propagation을 적용한 segment tree를 구현하여 해결할 수 있다.
 
+<details>
+<summary> 전체 코드 </summary>
+<div markdown="1">
 ```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+typedef long long ll;
 
+ll buildSegtree(vector<ll>& A, vector<ll>& tree, int n, int s, int e)
+{
+    if (s == e) return tree[n] = A[s];
+    
+    int m = (s + e) / 2;
+    return tree[n] = buildSegtree(A, tree, 2 * n, s, m) + buildSegtree(A, tree, 2 * n + 1, m + 1, e);
+}
+
+void lazyPropagation(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e)
+{
+    if (lazy[n] != 0)
+    {
+        tree[n] += (e - s + 1) * lazy[n];
+        if (s != e)
+        {
+            lazy[2 * n] += lazy[n];
+            lazy[2 * n + 1] += lazy[n];
+        }
+        lazy[n] = 0;
+    }
+}
+
+ll _sum(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r)
+{
+    lazyPropagation(tree, lazy, n, s, e);
+    
+    if (e < l || r < s) return 0;
+    if (l <= s && e <= r) return tree[n];
+    
+    int m = (s + e) / 2;
+    return _sum(tree, lazy, 2 * n, s, m, l, r) + _sum(tree, lazy, 2 * n + 1, m + 1, e, l ,r);
+}
+
+void _updateRange(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r, ll diff)
+{
+    lazyPropagation(tree, lazy, n, s, e);
+    
+    if (r < s || e < l) return;
+    
+    if (l <= s && e <= r)
+    {
+        lazy[n] = diff;
+        lazyPropagation(tree, lazy, n, s, e);
+        return;
+    }
+    
+    int m = (s + e) / 2;
+    _updateRange(tree, lazy, 2 * n, s, m, l, r, diff);
+    _updateRange(tree, lazy, 2 * n + 1, m + 1, e, l, r, diff);
+    
+    tree[n] = tree[2 * n] + tree[2 * n + 1];
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N, M, K; cin >> N >> M >> K;
+    
+    vector<ll> A(N + 1);
+    for(int i = 1; i <= N; i++) cin >> A[i];
+    
+    int h = (int) ceil(log2(N));
+    vector<ll> tree(1 << (h + 1)), lazy(1 << (h + 1));
+    buildSegtree(A, tree, 1, 1, N);
+    
+    for(int i = 0; i < M + K; i++)
+    {
+        ll a, b, c, d; cin >> a >> b >> c;
+        if (a == 1)
+        {
+            cin >> d;
+            _updateRange(tree, lazy, 1, 1, N, b, c, d);
+        }
+        else cout << _sum(tree, lazy, 1, 1, N, b, c) << "\n";
+    }
+}
 ```
+</div>
+</details>
+
 
 <br/>
 
