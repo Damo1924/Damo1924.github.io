@@ -1,5 +1,5 @@
 ---
-title: "Segment Tree"
+title: "Segment Tree & Lazy Propagation"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -12,7 +12,7 @@ comments: true
 
 `Tags` 
 
-## 1. Introduction
+## 1. Introduction to Segment Tree
 
 길이가 $n$인 배열 $A$에 대해 다음 작업을 $m$번 수행해야하는 문제가 있다.
 
@@ -38,7 +38,7 @@ $A\[i\]$를 $v$로 바꾸는 작업의 시간복잡도가 $O(n)$이 되어 배�
 
 <br/>
 
-## 2. Segment Tree
+## 2. Segment Tree Implementation
 
 세그먼트 트리를 이용하면 주어진 구간의 합을 구하는 작업을 $O(\log n)$, 수를 바꾸는 작업도 $O(\log n)$에 수행할 수 있다.
 
@@ -138,7 +138,19 @@ void _update(vector<int>& tree, int n, int s, int e, int i, int diff)
 
 <br/>
 
-## 3. 관련 문제
+## 3. Lazy Propagation
+
+만약 어떤 하나의 수를 업데이트하는 것이 아니라 **어떤 구간에 속하는 수들을 모두 업데이트**해야한다면 어떻게 될까?
+
+앞서 구현한 방법으로는 하나의 수를 업데이트하는데 $O(\log n)$이기 때문에 구간 업데이트를 한 번 수행하는데 $O(n \log n)$이 걸린다.
+
+**Lazy propagation**은 구간에 속하는 수들을 하나씩 업데이트하는 것이 아닌, **구간의 대표 노드를 업데이트**해서 $O(\log n)$에 수행하는 방법이다.
+
+
+
+<br/>
+
+## 4. Related Problems
 
 세그먼트 트리를 이용해서 문제를 풀어보자.
 
@@ -273,8 +285,21 @@ int main()
 }
 ```
 
+---
+
+### [백준] 10999. 구간 합 구하기 2
+
+하나의 값을 업데이트하는 대신 **구간을 업데이트**한다는 점만 제외하면 2042. 구간 합 구하기 문제와 동일하다.
+
+Lazy propagation을 적용한 segment tree를 구현하여 해결할 수 있다.
+
+```cpp
+
+```
+
 <br/>
 
 ## References
 
 [1] [BAEKJOON, '세그먼트 트리 (Segment Tree)'](https://www.acmicpc.net/blog/view/9)  
+[2] [bowbowbow, 'Segment Tree and Lazy Propagation'](https://bowbowbow.tistory.com/4)  
