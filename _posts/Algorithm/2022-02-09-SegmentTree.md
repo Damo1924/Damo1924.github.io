@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 
+`Tags` 2042 구간 합 구하기, 10999 구간 합 구하기 2, 10868 최솟값
 
 ## 1. Introduction to Segment Tree
 
@@ -156,6 +156,8 @@ void _update(vector<int>& tree, int n, int s, int e, int i, int diff)
 
 ### [백준] 2042. 구간 합 구하기
 
+[백준 2042. 구간 합 구하기 문제 링크](https://www.acmicpc.net/problem/2042)
+
 수의 개수 $N(1 \leq N \leq 10^6)$, 수의 변경이 일어나는 횟수 $M(1 \leq M \leq 10^4)$, 구간의 합을 구하는 횟수 $K(1 \leq K \leq 10^4)$가 주어진다.
 
 명령은 세 정수 $a, b, c$로 주어진다.
@@ -232,6 +234,8 @@ int main()
 
 ### [백준] 10868. 최솟값
 
+[백준 10868. 최솟값 문제 링크](https://www.acmicpc.net/problem/10868)
+
 수의 개수 $N(1 \leq N \leq 10^5)$과 연산의 개수 $M(1 \leq M \leq 10^5)$가 주어진다.
 
 각 연산은 두 정수 $a, b$로 이루어져 있고, $a$번째 정수부터 $b$번째 정수까지의 정수들 중 최솟값을 출력하면 된다.
@@ -288,6 +292,8 @@ int main()
 ---
 
 ### [백준] 10999. 구간 합 구하기 2
+
+[백준 10999. 구간 합 구하기 2 문제 링크](https://www.acmicpc.net/problem/10999)
 
 하나의 값을 업데이트하는 대신 **구간을 업데이트**한다는 점만 제외하면 2042. 구간 합 구하기 문제와 동일하다.
 
