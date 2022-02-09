@@ -46,9 +46,9 @@ $A\[i\]$를 $v$로 바꾸는 작업의 시간복잡도가 $O(n)$이 되어 배�
 
 > 세그먼트 트리의 노드들은 **왼쪽 자식 노드와 오른쪽 자식 노드에 저장된 값의 합**을 저장
 
-어떤 노드에 $A\[l\] + \dots + A\[r\]$이 저장되어 있다면, 왼쪽 자식 노드에는 $A\[l\] + \dots + A\[m\]$, 오른쪽 자식 노드에는 $A\[m + 1\] + \dots + A\[r\]$을 저장하게 된다.
+어떤 노드에 $A\[l\] + \dots + A\[r\]$이 저장되어 있고, $m = \left\lfloor \frac{l + r}{2} \right\rfloor$이라고 하면,
 
-이때 $m = \left\lfloor \frac{l + r}{2} \right\rfloor$이다.
+왼쪽 자식 노드에는 $A\[l\] + \dots + A\[m\]$, 오른쪽 자식 노드에는 $A\[m + 1\] + \dots + A\[r\]$을 저장하게 된다.
 
 세그먼트 트리도 일반적인 트리처럼 배열에 저장한다고 할 때, 다음과 같다.
 
@@ -57,7 +57,7 @@ $A\[i\]$를 $v$로 바꾸는 작업의 시간복잡도가 $O(n)$이 되어 배�
 
 아래 그림은 세그먼트 트리의 각 노드의 인덱스와 저장하고 있는 범위를 나타낸 것이다.
 
-<center><img src="https://user-images.githubusercontent.com/88201512/153126398-195894ad-e55c-445d-8241-6254f29da5a1.jpg" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153126398-195894ad-e55c-445d-8241-6254f29da5a1.jpg" width="75%" height="75%"></center>
 
 이제 세그먼트 트리를 C++로 구현해보자.
 
@@ -189,7 +189,7 @@ $s$부터 $e$까지의 구간에 어떤 값 $d$가 더해졌다는 정보를 $la
 
 여기서 만약 구간 $\[3, 5\]$의 부분합을 구하는 명령이 주어지면 아래와 같은 순서로 전파된다.
 
-<center><img src="https://user-images.githubusercontent.com/88201512/153135748-15036f48-12f4-4a26-b56e-99635a34bc0f.jpg" width="75%" height="75%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153135748-15036f48-12f4-4a26-b56e-99635a34bc0f.jpg" width="80%" height="80%"></center>
 
 지금도 필요한 노드의 값만 업데이트해주는 것을 알 수 있다.
 
