@@ -189,7 +189,7 @@ $s$부터 $e$까지의 구간에 어떤 값 $d$가 더해졌다는 정보를 $la
 
 여기서 만약 구간 $\[3, 5\]$의 부분합을 구하는 명령이 주어지면 아래와 같은 순서로 전파된다.
 
-<center><img src="" width="75%" height="75%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153135748-15036f48-12f4-4a26-b56e-99635a34bc0f.jpg" width="75%" height="75%"></center>
 
 지금도 필요한 노드의 값만 업데이트해주는 것을 알 수 있다.
 
@@ -197,8 +197,61 @@ $s$부터 $e$까지의 구간에 어떤 값 $d$가 더해졌다는 정보를 $la
 
 ### 3-2. Implementation
 
+이제 lazy propagation을 적용한 세그먼트 트리를 구현해보자.
 
+먼저, 노드 $n$에 업데이트 정보 $lazy\[n\]$을 적용하고 자식 노드들로 전파하는 함수를 구현하였다.
 
+```cpp
+void lazyPropagation(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e)
+{
+    tree[n] += (e - s + 1) * lazy[n]; // 구간의 길이만큼 곱해서 더해준다.
+    if (s != e) // 리프 노드가 아니라면, 자식 노드로 정보를 전파
+    {
+        lazy[2 * n] += lazy[n];
+        lazy[2 * n + 1] += lazy[n];
+    }
+    lazy[n] = 0; // 업데이트를 처리한 노드는 lazy[n]을 0으로 바꾸어준다.
+}
+```
+
+이제 이 함수를 구간 업데이트 함수 `_updateRange()`와 부분합을 구하는 함수 `_sum()`에 적용시켜준다.
+
+```cpp
+ll _sum(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r)
+{
+    if (lazy[n] != 0) lazyPropagation(tree, lazy, n, s, e); // 업데이트 정보가 남아있으면 처리해준다.
+    
+    if (e < l || r < s) return 0;
+    if (l <= s && e <= r) return tree[n];
+    
+    int m = (s + e) / 2;
+    return _sum(tree, lazy, 2 * n, s, m, l, r) + _sum(tree, lazy, 2 * n + 1, m + 1, e, l ,r);
+}
+
+void _updateRange(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r, ll diff)
+{
+    if (lazy[n] != 0) lazyPropagation(tree, lazy, n, s, e); // 업데이트 정보가 남아있으면 처리해준다.
+    
+    if (r < s || e < l) return;
+    
+    if (l <= s && e <= r) // 구간 대표 노드까지만 정보를 전파하고 종료!
+    {
+        lazy[n] = diff;
+        lazyPropagation(tree, lazy, n, s, e);
+        return;
+    }
+    
+    int m = (s + e) / 2; // 구간 대표 노드가 아니라면, 자식 노드들에게 전파
+    _updateRange(tree, lazy, 2 * n, s, m, l, r, diff);
+    _updateRange(tree, lazy, 2 * n + 1, m + 1, e, l, r, diff);
+    
+    tree[n] = tree[2 * n] + tree[2 * n + 1]; // 자식 노드의 정보를 부모 노드에 적용
+}
+```
+
+마지막 `tree[n] = tree[2 * n] + tree[2 * n + 1];`가 필요한 이유는 **자손 노드에 저장된 업데이트 정보를 조상 노드가 필요로 하는 상황**이 나올 수 있기 때문이다.
+
+예를 들어 구간 $\[3, 4\]$에 업데이트가 발생한 뒤 구간 $\[1, 5\]$의 부분합을 구해야한다면, $\[3, 4\]$에 해당하는 노드에 적용된 업데이트를 조상 노드들에게도 적용시켜야한다.
 
 <br/>
 
@@ -383,21 +436,18 @@ ll buildSegtree(vector<ll>& A, vector<ll>& tree, int n, int s, int e)
 
 void lazyPropagation(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e)
 {
-    if (lazy[n] != 0)
+    tree[n] += (e - s + 1) * lazy[n];
+    if (s != e)
     {
-        tree[n] += (e - s + 1) * lazy[n];
-        if (s != e)
-        {
-            lazy[2 * n] += lazy[n];
-            lazy[2 * n + 1] += lazy[n];
-        }
-        lazy[n] = 0;
+        lazy[2 * n] += lazy[n];
+        lazy[2 * n + 1] += lazy[n];
     }
+    lazy[n] = 0;
 }
 
 ll _sum(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r)
 {
-    lazyPropagation(tree, lazy, n, s, e);
+    if (lazy[n] != 0) lazyPropagation(tree, lazy, n, s, e);
     
     if (e < l || r < s) return 0;
     if (l <= s && e <= r) return tree[n];
@@ -408,7 +458,7 @@ ll _sum(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r)
 
 void _updateRange(vector<ll>& tree, vector<ll>& lazy, int n, int s, int e, int l, int r, ll diff)
 {
-    lazyPropagation(tree, lazy, n, s, e);
+    if (lazy[n] != 0) lazyPropagation(tree, lazy, n, s, e);
     
     if (r < s || e < l) return;
     
