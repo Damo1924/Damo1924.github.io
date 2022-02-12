@@ -139,12 +139,74 @@ int main()
 
 **[SOLUTION]**
 
-주어진 범위에 해당하는 노드들에 저장된 부분 수열들을 병합(merge)해서 $k$번째 수를 구할 수 있다.
+바로 앞에서 "어떤 부분 수열에서 $x$보다 큰 수의 개수"를 $O(\log^2 n)$에 구하였다.
 
+비슷한 방식으로 **어떤 부분 수열에서** $x$**보다 작거나 같은 수의 개수**를 구하는 함수 `cnt()`를 구현하자.
 
+위 함수는 $x$에 대해 증가하는 함수이기 때문에 **이분 탐색**을 이용하면 $k$번째 수가 되는 $x$를 찾을 수 있다.
 
+이분 탐색이 $O(\log n)$이므로 각 쿼리를 $O(\log^3 n)$에 처리할 수 있다.
 
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+using namespace std;
 
+void buildMergeSortTree(vector<vector<int>>& tree, vector<int>& a)
+{
+    int n = a.size();
+    int h = ceil(log2(n));
+    tree.resize(1 << (1 + h));
+    
+    int idx = 1 << h;
+    for (int i = 0; i < n; i++) tree[i + idx].push_back(a[i]);
+    
+    for (int i = idx - 1; i >= 1; i--) {
+        tree[i].resize(tree[2 * i].size() + tree[2 * i + 1].size());
+        merge(tree[2 * i].begin(), tree[2 * i].end(), tree[2 * i + 1].begin(), tree[2 * i + 1].end(), tree[i].begin());
+    }
+}
+
+int cnt(vector<vector<int>>& tree, int n, int s, int e, int l, int r, int x)
+{
+    if (e < l || r < s) return 0;
+    if (l <= s && e <= r) return upper_bound(tree[n].begin(), tree[n].end(), x) - tree[n].begin();
+    
+    int d = tree[2 * n].size();
+    return cnt(tree, 2 * n, s, s + d - 1, l, r, x) + cnt(tree, 2 * n + 1, s + d, e, l, r, x);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N, M; cin >> N >> M;
+    
+    vector<int> A(N);
+    for (int i = 0; i < N; i++) cin >> A[i];
+    
+    vector<vector<int>> tree;
+    buildMergeSortTree(tree, A);
+    
+    while (M--)
+    {
+        int i, j, k; cin >> i >> j >> k;
+        int s = -1e9, e = 1e9; // 이분탐색
+        while (s <= e)
+        {
+            int mid = (s + e) / 2;
+            if (cnt(tree, 1, 0, N - 1, i - 1, j - 1, mid) < k) s = mid + 1;
+            else e = mid - 1;
+        }
+        cout << s << "\n";
+    }
+}
+```
+
+> 시간복잡도를 개선한 풀이를 알고 싶다면 [이 포스트]()를 참고
 
 
 
