@@ -16,7 +16,7 @@ comments: true
 
 머지 소트 트리는 **세그먼트 트리의 각 노드가 해당 노드의 구간에 있는 원소들을 정렬된 상태로 저장**한 것이다.
 
-<center><img src="" width="65%" height="65%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/153713060-8ebe70e4-e465-4b66-8fd6-85f2a7ee9e3b.jpg" width="50%" height="50%"></center>
 
 어떤 수열에 대해 merge sort를 수행했을 때 각 단계에서 병합해서 얻을 수 있는 부분수열들을 저장하고 있다고 할 수 있다.
 
