@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 2042 구간 합 구하기, 10999 구간 합 구하기 2, 10868 최솟값
+`Tags` 2042 구간 합 구하기, 10999 구간 합 구하기 2, 10868 최솟값, 12899 데이터 구조, k번째 수
 
 ## 1. Introduction to Segment Tree
 
@@ -505,6 +505,74 @@ int main()
 </div>
 </details>
 
+---
+
+### [백준] 12899. 데이터 구조
+
+[백준 12899. 데이터 구조 문제 링크](https://www.acmicpc.net/problem/12899)
+
+자연수를 저장하는 데이터 구조 $S$에 대해 다음 쿼리를 처리하는 문제이다.
+
+- $1$ $X$: $S$에 자연수 $X$를 추가한다.
+- $2$ $X$: $S$에서 $X$번째로 작은 수를 출력하고 해당 수를 $S$에서 삭제한다.
+
+**[SOLUTION]**
+
+세그먼트 트리를 이용하면 $K$번째 수를 $O(\log n)$에 찾을 수 있다.
+
+이때 세그먼트 트리의 각 노드에는 해당 노드의 구간에 속하는 $S$에 저장된 수들의 개수를 저장한다.
+
+<details>
+<summary> 전체 코드 </summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+const int maxN = 2000000;
+
+void insert(vector<int>& tree, int n, int s, int e, int x) // x를 추가하는 함수
+{
+    if (e < x || x < s) return;
+    
+    tree[n]++; // x를 포함하는 노드에 1씩 더해준다.
+    if (s == e) return;
+    
+    int m = (s + e) / 2;
+    insert(tree, 2 * n, s, m, x);
+    insert(tree, 2 * n + 1, m + 1, e, x);
+}
+
+int kth_min(vector<int>& tree, int n, int s, int e, int k) // k번째로 작은 수를 반환하고 삭제
+{
+    tree[n]--; // $k$번째로 작은 수가 포함된 노드에 1씩 빼준다.
+    if (s == e) return s;
+    
+    int mid = (s + e) / 2;
+    if (tree[2 * n] < k) return kth_min(tree, 2 * n + 1, mid + 1, e, k - tree[2 * n]);
+    return kth_min(tree, 2 * n, s, mid, k);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N; cin >> N;
+    int h = (int) ceil(log2(maxN));
+    vector<int> tree(1 << (h + 1), 0);
+    for (int i = 0; i < N; i++)
+    {
+        int T, X; cin >> T >> X;
+        if (T == 1) insert(tree, 1, 1, maxN, X);
+        else cout << kth_min(tree, 1, 1, maxN, X) << "\n";
+    }
+}
+```
+</div>
+</details>
 
 <br/>
 
