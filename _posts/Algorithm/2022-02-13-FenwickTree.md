@@ -80,7 +80,21 @@ comments: true
 구간 합을 구하는 함수 `_sum()`은 다음과 같이 구현할 수 있다.
 
 ```cpp
+int 1_sum(vector<int>& tree, int x) // [1, x]의 구간 합
+{
+    int res = 0;
+    while (x)
+    {
+        res += tree[x];
+        x &= x - 1;
+    }
+    return res;
+}
 
+int _sum(vector<int>& tree, int a, int b) // [a, b]의 구간 합
+{
+    return 1_sum(tree, b) - 1_sum(tree, a - 1);
+}
 ```
 
 ---
@@ -110,8 +124,24 @@ BIT\[5\], BIT\[6\], BIT\[8\], BIT\[16\]
 값을 업데이트하는 함수 `_update()`는 다음과 같이 구현할 수 있다.
 
 ```cpp
-
+void _update(vector<ll>& tree, int n, int diff)
+{
+    int N = tree.size();
+    while (n <= N)
+    {
+        tree[n] += diff;
+        n += (n & (-n));
+    }
+}
 ```
+
+> 수열 $a\[i\]$의 값을 따로 바꾸어주는 것을 빼먹지 않도록 주의!
+
+<br/>
+
+## 2. Related Problems
+
+
 
 <br/>
 
