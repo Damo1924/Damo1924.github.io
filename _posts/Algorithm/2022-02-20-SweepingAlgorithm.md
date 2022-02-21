@@ -196,6 +196,90 @@ $y$좌표가 증가하는 방향이 북쪽, $x$좌표가 증가하는 방향이 
 
 ---
 
-### [SOLUTION] Sweeping algorithm + Segment tree
+### [SOLUTION] Sweeping algorithm + Segment tree + Coordinate compression
 
+두 점을 이은 선분이 오른쪽 아래 방향인 것의 개수를 세는 문제이다.
+
+$y$축에 평행한 직선을 $+x$ 방향으로 이동시키면서 만나는 점을 순서대로 탐색하자.
+
+만약 두 섬의 $x$좌표가 동일하다면, $y$좌표가 큰 것부터 처리해야한다.
+
+이때 현재 직선과 만나는 점은 지금까지 탐색한 점들보다 오른쪽에 위치하고 있으므로, **지금까지 탐색한 점들 중 현재 점보다 아래에 있는 점들의 개수**를 구해주면 된다.
+
+세그먼트 트리를 이용하면 $O(\log n)$으로 탐색한 점을 추가하고 위 값을 구할 수 있다.
+
+주어지는 좌표값은 절댓값이 $10^9$ 이하인 정수이므로 좌표 압축 기법을 사용해야한다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> ii;
+
+int _sum(vector<int>& tree, int n, int s, int e, int v) // y좌표가 v이하인 점의 개수를 반환
+{
+    if (v <= s) return tree[n];
+    if (e < v) return 0;
+
+    int m = (s + e) / 2;
+    return _sum(tree, 2 * n, s, m, v) + _sum(tree, 2 * n + 1, m + 1, e, v);
+}
+
+void _update(vector<int>& tree, int n, int s, int e, int v)
+{
+    if (v < s || e < v) return;
+    
+    tree[n]++;
+    if (s == e) return;
+
+    int m = (s + e) / 2;
+    _update(tree, 2 * n, s, m, v);
+    _update(tree, 2 * n + 1, m + 1, e, v);
+}
+
+bool cmp (ii A, ii B)
+{
+    if (A.first == B.first) return A.second > B.second;
+    return A.first < B.first;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int t; cin >> t;
+    while (t--)
+    {
+        int n; cin >> n;
+        vector<ii> v(n);
+        vector<int> y(n);
+        for (int i = 0; i < n; i++)
+        {
+            cin >> v[i].first >> v[i].second;
+            y[i] = v[i].second;
+        }
+
+        sort(v.begin(), v.end(), cmp);
+        sort(y.begin(), y.end());
+        y.erase(unique(y.begin(), y.end()), y.end()); // y좌표값을 좌표 압축
+
+        int m = y.size();
+        int h = (int)ceil(log2(m));
+        vector<int> tree(1 << (h + 1));
+        
+        ll ans = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int idx = lower_bound(y.begin(), y.end(), v[i].second) - y.begin();
+            ans += _sum(tree, 1, 0, m - 1, idx);
+            _update(tree, 1, 0, m - 1, idx);
+        }
+        cout << ans << "\n";
+    }
+}
+```
 
