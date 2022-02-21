@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 
+`Tags` Segment tree, 2170 선 긋기, 2836 수상 택시, 5419 북서풍
 
 ## 1. Sweeping Algorithm
 
