@@ -1,5 +1,5 @@
 ---
-title: "유니온 파인드 (Union - Find)"
+title: "유니온 파인드 (Union-Find)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags`  Union-Find, Weighted Union, Path Compression, Ackermann function
+`Tags`  Disjoint set, Weighted Union, Path Compression, Ackermann function
 
 ## 1. Union-Find Algorithm
 
