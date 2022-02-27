@@ -283,3 +283,14 @@ int main()
 }
 ```
 
+<br/>
+
+## More Problems
+
+[백준 7627. 직사각형](https://www.acmicpc.net/problem/7626)
+
+> 풀이: [SOLUTION](https://damo1924.github.io/ps/BAEKJOON-7626/)
+
+[백준 11012. Egg](https://www.acmicpc.net/problem/11012)
+
+> 풀이: [SOLUTION]()
