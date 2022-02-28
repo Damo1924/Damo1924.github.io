@@ -1,5 +1,5 @@
 ---
-title: "Persistent Segment Tree"
+title: "Persistent Segment Tree (+ Dynamic Segment Tree)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -53,6 +53,26 @@ Persistent segment tree는 **여러 개의 세그먼트 트리를 효율적으�
 <br/>
 
 ## 2. What is a Persistent Segment Tree?
+
+그렇다면 persistent segment tree는 어떻게 적은 메모리를 이용해서 여러 개의 세그먼트 트리를 관리할 수 있는지 알아보도록 하자.
+
+이에 대해 이해하기 위해서는 **Dynamic Segment Tree**를 알아야한다.
+
+### 2-1. Dynamic Segment Tree
+
+일반적인 시간제한을 가진 문제에서 세그먼트 트리가 나타낼 수 있는 구간의 길이는 $10^5$ 정도이다.
+
+그렇기 때문에 주어지는 좌표값들의 범위를 $0$부터 $10^5$으로 제한하는 문제들이 많다.
+
+만약 이러한 제한이 없다면, **좌표 압축(coordinate compression)**을 사용해서 세그먼트 트리를 구성해야한다.
+
+그런데 **좌표 압축 기법은 모든 쿼리를 입력받은 후에 처리가 가능할 때**에만 사용이 가능하다.
+
+즉, **오프라인 쿼리**인 경우에만 좌표 압축을 통해 해결이 가능한 것이다.
+
+> 그렇다면 좌표값이 $10^9$까지 주어질 수 있으면서 각 쿼리를 실시간으로 처리해야하는 **온라인 쿼리**가 주어지는 문제는 어떻게 해결할 수 있을까?
+
+온라인 쿼리를 처리하기 위해서는 세그먼트 트리를 미리 구축해두는 것이 아니라 **필요한 만큼만 새로운 노드를 생성**해야한다.
 
 
 
