@@ -165,9 +165,7 @@ int _sum(int n, int s, int e, int l, int r)
 
 이제 dynamic segment tree를 구현했던 방식을 이용해서 persistent segment tree를 구현해보자.
 
-세그먼트 트리가 나타내는 구간의 길이를 $N$이라 했을 때 세그먼트 트리를 구현하는데 필요한 배열의 길이는 $O(N)$이다.
-
-여기서 
+각 $x$좌표마다 세그먼트 트리를 만드는 대신, 
 
 
 
