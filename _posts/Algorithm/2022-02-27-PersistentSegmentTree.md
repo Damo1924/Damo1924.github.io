@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 11012 Egg
+`Tags` 11012 Egg, 16978 수열과 쿼리 22
 
 ## 1. When do we use a Persistent Segment Tree?
 
@@ -291,3 +291,125 @@ if (a != 0) ans -= _sum(root_idx[a - 1], 0, 100000, c, d);
 
 > [백준 11012. Egg 풀이](https://damo1924.github.io/ps/BAEKJOON-11012/)
 
+[백준 16978. 수열과 쿼리 22 문제 링크](https://www.acmicpc.net/problem/16978)
+
+> 오프라인 쿼리이기 때문에 굳이 persistent segment tree를 이용할 필요는 없지만, 온라인 쿼리라고 생각하고 풀자.
+
+<details>
+<summary> 소스코드 </summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+typedef long long ll;
+
+struct node {
+    int l, r;
+    ll val;
+};
+
+node make_node(int l, int r, ll val)
+{
+    node N;
+    N.l = l; N.r = r; N.val = val;
+    return N;
+}
+
+void buildSegtree(vector<node>& tree, vector<int>& A, int n, int s, int e)
+{
+    if (s == e)
+    {
+        tree[n].val = A[s];
+        return;
+    }
+    
+    int m = (s + e) / 2;
+    
+    tree.push_back(make_node(0, 0, 0));
+    tree[n].l = tree.size() - 1;
+    buildSegtree(tree, A, tree[n].l, s, m);
+    
+    tree.push_back(make_node(0, 0, 0));
+    tree[n].r = tree.size() - 1;
+    buildSegtree(tree, A, tree[n].r, m + 1, e);
+    
+    tree[n].val = tree[tree[n].l].val + tree[tree[n].r].val;
+}
+
+void _update(vector<node>& tree, int n, int s, int e, int i, int diff)
+{
+    if (i < s || e < i) return;
+    
+    tree[n].val += diff;
+    if (s != e)
+    {
+        int m = (s + e) / 2;
+        if (i <= m)
+        {
+            tree.push_back(tree[tree[n].l]);
+            tree[n].l = tree.size() - 1;
+            _update(tree, tree[n].l, s, m, i, diff);
+        }
+        else
+        {
+            tree.push_back(tree[tree[n].r]);
+            tree[n].r = tree.size() - 1;
+            _update(tree, tree[n].r, m + 1, e, i, diff);
+        }
+    }
+}
+
+ll _sum(vector<node>& tree, int n, int s, int e, int l, int r)
+{
+    if (r < s || e < l) return 0;
+
+    if (l <= s && e <= r) return tree[n].val;
+    
+    int m = (s + e) / 2;
+    ll res = 0;
+    if (l <= m) res += _sum(tree, tree[n].l, s, m, l, r);
+    if (m < r) res += _sum(tree, tree[n].r, m + 1, e, l, r);
+    return res;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N; cin >> N;
+    vector<int> A(N + 1);
+    for (int i = 1; i <= N; i++) cin >> A[i];
+    
+    vector<node> tree(2);
+    tree[1] = make_node(0, 0, 0);
+    buildSegtree(tree, A, 1, 1, N);
+    
+    int M; cin >> M;
+    vector<int> root_idx(M, 0);
+    root_idx[0] = 1;
+    int cnt = 0;
+    while (M--)
+    {
+        int q; cin >> q;
+        if (q == 1)
+        {
+            int i, v; cin >> i >> v;
+            tree.push_back(tree[root_idx[cnt]]);
+            root_idx[++cnt] = tree.size() - 1;
+            _update(tree, root_idx[cnt], 1, N, i, v - A[i]);
+            A[i] = v;
+        }
+        else
+        {
+            int k, i, j; cin >> k >> i >> j;
+            cout << _sum(tree, root_idx[k], 1, N, i, j) << "\n";
+        }
+    }
+}
+```
+
+</div>
+</details>
