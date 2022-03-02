@@ -36,6 +36,8 @@ Persistent segment tree는 **여러 개의 세그먼트 트리를 효율적으�
 
 이 문제도 마찬가지로 $N$이 작다면 **2차원 영역의 합 구하기** 문제처럼 DP로 $O(N^2 + NQ)$로 해결할 수 있다.
 
+<center><img src="https://user-images.githubusercontent.com/88201512/156280197-01accddf-726b-475f-86da-d73d058fef1f.jpg" width="60%" height="60%"></center>
+
 하지만 $N$이 $10^6$ 정도로 커지면 DP로 시간 내에 해결할 수 없게 된다.
 
 이때 가장 먼저 떠오르는 방법은 바로 세그먼트 트리를 $x$좌표마다 구현하는 것이다.
@@ -277,6 +279,8 @@ int ans = _sum(root_idx[b], 0, 100000, c, d);
 if (a != 0) ans -= _sum(root_idx[a - 1], 0, 100000, c, d);
 ```
 
+<center><img src="https://user-images.githubusercontent.com/88201512/156280317-3b965f18-09ca-42e0-b8ad-5ca982d1dd15.jpg" width="60%" height="60%"></center>
+
 경계값인 $a = 0$만 예외처리를 해주었다.
 
 <br/>
@@ -284,4 +288,6 @@ if (a != 0) ans -= _sum(root_idx[a - 1], 0, 100000, c, d);
 ## 4. Related Problems
 
 [백준 11012. Egg 문제 링크](https://www.acmicpc.net/problem/11012)
+
+> [백준 11012. Egg 풀이](https://damo1924.github.io/ps/BAEKJOON-11012/)
 
