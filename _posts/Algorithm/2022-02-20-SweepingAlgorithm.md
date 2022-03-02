@@ -293,4 +293,4 @@ int main()
 
 [백준 11012. Egg](https://www.acmicpc.net/problem/11012)
 
-> 풀이: [SOLUTION]()
+> 풀이: [SOLUTION](https://damo1924.github.io/ps/BAEKJOON-11012/)
