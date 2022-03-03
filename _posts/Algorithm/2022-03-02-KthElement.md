@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` kth element
+`Tags` kth element, Segment tree, BIT, Merge sort tree, 2D segment tree, Binary search
 
 ## $k$th Element Problems
 
