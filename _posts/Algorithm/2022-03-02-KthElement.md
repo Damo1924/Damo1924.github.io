@@ -18,9 +18,9 @@ comments: true
 
 자주 만날 수 있는 $k$번째 원소 문제는 크게 세 가지로 나눌 수 있다.
 
-- **[PROBLEM 1]** 길이가 $n$인 수열의 $k$($1 \leq k \leq n$)번째 원소 구하기
-- **[PROBLEM 2]** 
-- **[PROBLEM 3]** 길이가 $n$인 수열에서, 임의의 구간 $\[l, r\]$($1 \leq l \leq r \leq n$)의 $k$($1 \leq k \leq r - l + 1$)번째 원소 구하기
+- **[PROBLEM 1]** 집합의 $k$번째 원소 구하기
+- **[PROBLEM 2]** 원소의 삽입/삭제가 일어나는 집합의 $k$번째 원소를 구하기
+- **[PROBLEM 3]** 임의의 집합의 $k$번째 원소 구하기
 
 각 문제들을 어떤 알고리즘을 이용해서 해결할 수 있는지 정리해보았다.
 
@@ -63,7 +63,7 @@ int main()
 
 <br/>
 
-## [PROBLEM 2] 원소의 삽입/삭제가 일어나는 집합의 $k$번째 원소를 구하는 문제
+## [PROBLEM 2] 원소의 삽입/삭제가 일어나는 집합의 $k$번째 원소 구하기
 
 이러한 문제들은 다양한 형태로 주어질 수 있다.
 
@@ -173,7 +173,7 @@ int kth_min(vector<int> tree, int k)
 
 이 함수를 이용하면 $k$번째 수를 구하는 쿼리를 $O(\log n)$에 처리할 수 있다.
 
-**Time Complexity**: $O((q \log n)$
+**Time Complexity**: $O(q \log n)$
 
 이때 $q$는 쿼리(= 원소 추가/삭제, $k$번째 수 구하기)의 개수를 의미한다.
 
@@ -252,6 +252,32 @@ int kth_min(vector<int> tree, int k)
 
 <br/>
 
-## [PROBLEM 3]
+## [PROBLEM 3] 임의의 집합의 $k$번째 원소 구하기
+
+집합의 원소를 삽입/삭제하는 과정이 너무 많이 일어나면 위에서 소개한 방법으로는 해결할 수 없다.
+
+문제는 다음과 같이 주어진다.
 
 > [백준 7469. K번째 수](https://www.acmicpc.net/problem/7469)
+> 
+> 길이가 $n$인 수열에서, 임의의 구간 $\[l, r\]$($1 \leq l \leq r \leq n$)의 $k$($1 \leq k \leq r - l + 1$)번째 원소를 구하여라.
+
+이 경우에는 Merge sort tree를 이용하거나 2D Segment tree를 이용해야한다.
+
+---
+
+### [SOLUTION 1] Merge Sort Tree + Binary Search
+
+
+
+
+
+
+
+
+
+
+
+
+
+
