@@ -268,13 +268,71 @@ int kth_min(vector<int> tree, int k)
 
 ### [SOLUTION 1] Merge Sort Tree + Binary Search
 
+Merge sort tree는 노드에 해당 구간의 부분수열이 정렬된 상태로 저장되어 있다.
 
+임의의 구간이 주어졌을 때 해당 구간에 포함되는 노드의 개수는 $O(\log n)$,
 
+각 노드들에서 어떤 수 $x$보다 작거나 같은 수의 개수를 이분 탐색으로 구하는데 $O(\log n)$이다.
 
+따라서 $O(\log^2 n)$으로 주어진 구간에 있는 $x$보다 작거나 같은 수의 개수를 구할 수 있다.
 
+$x$보다 작거나 같은 수의 개수는 $x$에 대한 증가함수이므로 이분 탐색을 이용해서 $k$번째 수를 찾을 수 있다.
 
+Merge sort tree를 만드는데 $O(n \log n)$, 각 쿼리마다 $O(\log^3 n)$이므로 전체 시간복잡도는 다음과 같다.
 
+**Time complexity**: $O(n \log n + q \log^3 n)$
 
+아래는 merge sort tree를 만드는 함수와 주어진 구간에서 $x$보다 작거나 같은 수의 개수를 반환하는 함수이다.
+
+```cpp
+void buildMergeSortTree(vector<vector<int>>& tree, vector<int>& a)
+{
+    int n = a.size();
+    int h = ceil(log2(n));
+    tree.resize(1 << (1 + h));
+    
+    int idx = 1 << h;
+    for (int i = 0; i < n; i++) tree[i + idx].push_back(a[i]);
+    
+    for (int i = idx - 1; i >= 1; i--) {
+        tree[i].resize(tree[2 * i].size() + tree[2 * i + 1].size());
+        merge(tree[2 * i].begin(), tree[2 * i].end(), tree[2 * i + 1].begin(), tree[2 * i + 1].end(), tree[i].begin());
+    }
+}
+
+int cnt(vector<vector<int>>& tree, int n, int s, int e, int l, int r, int x)
+{
+    if (e < l || r < s) return 0;
+    if (l <= s && e <= r) return upper_bound(tree[n].begin(), tree[n].end(), x) - tree[n].begin();
+    
+    int d = tree[2 * n].size();
+    return cnt(tree, 2 * n, s, s + d - 1, l, r, x) + cnt(tree, 2 * n + 1, s + d, e, l, r, x);
+}
+```
+
+이분 탐색을 이용해서 주어진 구간의 $k$번째 수를 찾는 함수는 다음과 같다.
+
+```cpp
+int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
+{
+    int s = -1e9, e = 1e9;
+    while (s <= e)
+    {
+        int m = (s + e) / 2;
+        if (cnt(tree, 1, 1, N, l, r, m) < k) s = m + 1;
+        else e = m - 1;
+    }
+    return s;
+}
+```
+
+위 이분 탐색 코드에서 `while (s < e)`, `else e = m`이라 하면, 중간에 어떤 $m$에 대해 해당 구간에 $m$이 여러 개 있다면 무한루프가 발생한다.
+
+이를 방지하기 위해 `e = m - 1`로 갱신하도록 구현하였다.
+
+---
+
+### [SOLUTION 2] 2D Segment Tree
 
 
 
