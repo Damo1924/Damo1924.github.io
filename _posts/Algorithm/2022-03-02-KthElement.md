@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` kth element, Segment tree, BIT, Merge sort tree, 2D segment tree, Binary search
+`Tags` kth element, Segment tree, BIT, Merge sort tree, Persistent segment tree, 2D segment tree, Binary search
 
 ## $k$th Element Problems
 
@@ -282,6 +282,8 @@ Merge sort tree를 만드는데 $O(n \log n)$, 각 쿼리마다 $O(\log^3 n)$이
 
 **Time complexity**: $O(n \log n + q \log^3 n)$
 
+> 이 방법은 트리의 각 노드가 수들을 모두 저장하고 있기 때문에 주어지는 수의 범위에 관계없이 좌표 압축을 하지 않아도 된다는 장점이 있다.
+
 아래는 merge sort tree를 만드는 함수와 주어진 구간에서 $x$보다 작거나 같은 수의 개수를 반환하는 함수이다.
 
 ```cpp
@@ -332,7 +334,100 @@ int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
 
 ---
 
-### [SOLUTION 2] 2D Segment Tree
+### [SOLUTION 2] Persistent Segment Tree
+
+Persistent segment tree는 각 업데이트가 이루어졌을 때의 세그먼트 트리의 상태를 기억하는 장치로 사용할 수도 있기 때문에 $k$번째 원소를 구하는 문제에서 유용하게 사용할 수 있다.
+
+아래는 persistent segment tree를 구현하는 구조체와 함수들이다.
+
+```cpp
+struct node {
+    int l, r, val;
+};
+
+node make_node(int l, int r, int val)
+{
+    node N;
+    N.l = l; N.r = r; N.val = val;
+    return N;
+}
+
+void buildSegtree(vector<node>& tree, int n, int s, int e)
+{
+    if (s == e) return;
+    int m = (s + e) / 2;
+    
+    tree.push_back(make_node(0, 0, 0));
+    tree[n].l = tree.size() - 1;
+    buildSegtree(tree, tree[n].l, s, m);
+    
+    tree.push_back(make_node(0, 0, 0));
+    tree[n].r = tree.size() - 1;
+    buildSegtree(tree, tree[n].r, m + 1, e);
+}
+
+void _update(vector<node>& tree, vector<int>& x, int n, int s, int e, int i, int diff)
+{
+    if (i < x[s] || x[e] < i) return;
+    
+    tree[n].val += diff;
+    if (s != e)
+    {
+        int m = (s + e) / 2;
+        if (i <= x[m])
+        {
+            tree.push_back(tree[tree[n].l]);
+            tree[n].l = tree.size() - 1;
+            _update(tree, x, tree[n].l, s, m, i, diff);
+        }
+        else
+        {
+            tree.push_back(tree[tree[n].r]);
+            tree[n].r = tree.size() - 1;
+            _update(tree, x, tree[n].r, m + 1, e, i, diff);
+        }
+    }
+}
+```
+
+구간 $\[l, r\]$의 $k$번째 수를 구하고 싶다면, **수열의 $r$번째 수를 트리에 업데이트한 순간과 $l - 1$번째 수를 트리에 업데이트한 순간의 차이를 이용하면 된다.**
+
+**Problem 2**의 segment tree를 이용한 풀이에서 $k$번째 원소를 반환하는 아래 함수의 원리를 그대로 이용할 것이다.
+
+```cpp
+int kth_min(vector<int>& tree, int n, int s, int e, int k)
+{
+    if (s == e) return s;
+    
+    int m = (s + e) / 2;
+    if (k <= tree[2 * n]) return kth_min(tree, 2 * n, s, m, k);
+    return kth_min(tree, 2 * n + 1, mid + 1, e, k - tree[2 * n]);
+}
+```
+
+$k$와 **집합에 있는 수들** 중 $\[s, m\]$에 속하는 수의 개수(=구간에 왼쪽 자식 노드의 값 `tree[2 * n]`)을 비교해서 범위를 줄여나갔다.
+
+이 문제에서는 "전체 수열" 대신 "$l$번째 수부터 $r$번째 수" 중 $\[s, m\]$에 속하는 수의 개수와 비교를 하면 될 것이다.
+
+따라서 아래와 같은 함수를 구현할 수 있다.
+
+```cpp
+int kth_min(vector<node>& tree, int i, int j, int s, int e, int k)
+{
+    if (s == e) return s;
+    
+    int m = (s + e) / 2;
+    int cnt = tree[tree[j].l].val - tree[tree[i].l].val;
+    if (k <= cnt) return kth_min(tree, tree[i].l, tree[j].l, s, m, k);
+    return kth_min(tree, tree[i].r, tree[j].r, m + 1, e, k - cnt);
+}
+```
+
+
+
+---
+
+### [SOLUTION 3] 2D Segment Tree
 
 
 
