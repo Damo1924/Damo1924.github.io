@@ -285,27 +285,7 @@ if (a != 0) ans -= _sum(root_idx[a - 1], 0, 100000, c, d);
 
 <br/>
 
-## 4. How to find kth element with Persistent Segment Tree
-
-Persistent segment tree는 앞의 문제처럼 차원을 확장시킨 문제를 풀 때 사용할수도 있지만, **특정 작업을 수행한 시점의 상태를 기억해야하는 문제**에서도 사용할 수 있다.
-
-그 중 가장 대표적인 것이 바로 **$k$번째 수를 구하는 문제**이다.
-
-다음과 같은 문제를 생각해보자.
-
-> 길이가 $n$인 수열이 주어질 때, 아래와 같은 쿼리를 처리하고자 한다.
-> 
-> - 임의의 구간 $\[l, r\]$($1 \leq l \leq r \leq n$)에 해당하는 부분수열을 정렬했을 때 $k$번째 원소를 출력한다.
-> 
-> 이러한 쿼리 $q$개를 처리하여라.
-
-
-
-
-
-<br/>
-
-## 5. Related Problems
+## 4. Related Problems
 
 [백준 11012. Egg 문제 링크](https://www.acmicpc.net/problem/11012)
 
