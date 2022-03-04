@@ -92,6 +92,7 @@ int _sum(vector<int>& tree, int l, int r)
     {
         if (l % 2 != 0) res += tree[l++];
         if (r % 2 == 0) res += tree[r--];
+        l /= 2; r /= 2;
     }
     return res;
 }
