@@ -276,32 +276,7 @@ Merge sort tree는 노드에 해당 구간의 부분수열이 정렬된 상태�
 
 따라서 $O(\log^2 n)$으로 주어진 구간에 있는 $x$보다 작거나 같은 수의 개수를 구할 수 있다.
 
-$x$보다 작거나 같은 수의 개수는 $x$에 대한 증가함수이므로 이분 탐색을 이용해서 $k$번째 수를 찾을 수 있다.
-
-Merge sort tree를 만드는데 $O(n \log n)$, 각 쿼리마다 $O(\log^3 n)$이므로 전체 시간복잡도는 다음과 같다.
-
-**Time complexity**: $O(n \log n + q \log^3 n)$
-
-> 이 방법은 트리의 각 노드가 수들을 모두 저장하고 있기 때문에 주어지는 수의 범위에 관계없이 좌표 압축을 하지 않아도 된다는 장점이 있다.
-
-아래는 merge sort tree를 만드는 함수와 주어진 구간에서 $x$보다 작거나 같은 수의 개수를 반환하는 함수이다.
-
 ```cpp
-void buildMergeSortTree(vector<vector<int>>& tree, vector<int>& a)
-{
-    int n = a.size();
-    int h = ceil(log2(n));
-    tree.resize(1 << (1 + h));
-    
-    int idx = 1 << h;
-    for (int i = 0; i < n; i++) tree[i + idx].push_back(a[i]);
-    
-    for (int i = idx - 1; i >= 1; i--) {
-        tree[i].resize(tree[2 * i].size() + tree[2 * i + 1].size());
-        merge(tree[2 * i].begin(), tree[2 * i].end(), tree[2 * i + 1].begin(), tree[2 * i + 1].end(), tree[i].begin());
-    }
-}
-
 int cnt(vector<vector<int>>& tree, int n, int s, int e, int l, int r, int x)
 {
     if (e < l || r < s) return 0;
@@ -312,7 +287,7 @@ int cnt(vector<vector<int>>& tree, int n, int s, int e, int l, int r, int x)
 }
 ```
 
-이분 탐색을 이용해서 주어진 구간의 $k$번째 수를 찾는 함수는 다음과 같다.
+$x$보다 작거나 같은 수의 개수는 $x$에 대한 증가함수이므로 이분 탐색을 이용해서 $k$번째 수를 찾을 수 있다.
 
 ```cpp
 int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
@@ -328,9 +303,84 @@ int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
 }
 ```
 
-위 이분 탐색 코드에서 `while (s < e)`, `else e = m`이라 하면, 중간에 어떤 $m$에 대해 해당 구간에 $m$이 여러 개 있다면 무한루프가 발생한다.
+> 위 이분 탐색 코드에서 `while (s < e)`, `else e = m`이라 하면, 중간에 어떤 $m$에 대해 해당 구간에 $m$이 여러 개 있다면 무한루프가 발생한다.
+> 
+> 이를 방지하기 위해 `e = m - 1`로 갱신하도록 구현하였다.
 
-이를 방지하기 위해 `e = m - 1`로 갱신하도록 구현하였다.
+Merge sort tree를 만드는데 $O(n \log n)$, 각 쿼리마다 $O(\log^3 n)$이므로 전체 시간복잡도는 다음과 같다.
+
+**Time complexity**: $O(n \log n + q \log^3 n)$
+
+이 방법은 트리의 각 노드가 수들을 모두 저장하고 있기 때문에 주어지는 수의 범위에 관계없이 좌표 압축을 하지 않아도 된다는 장점이 있다.
+
+<details>
+<summary>[백준] 7469. K번째 수 SOLUTION</summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+void buildMergeSortTree(vector<vector<int>>& tree, vector<int>& a)
+{
+    int n = a.size() - 1;
+    int h = ceil(log2(n));
+    tree.resize(1 << (1 + h));
+    
+    int idx = 1 << h;
+    for (int i = 1; i <= n; i++) tree[i - 1 + idx].push_back(a[i]);
+    
+    for (int i = idx - 1; i >= 1; i--) {
+        tree[i].resize(tree[2 * i].size() + tree[2 * i + 1].size());
+        merge(tree[2 * i].begin(), tree[2 * i].end(), tree[2 * i + 1].begin(), tree[2 * i + 1].end(), tree[i].begin());
+    }
+}
+
+int cnt(vector<vector<int>>& tree, int n, int s, int e, int l, int r, int x)
+{
+    if (e < l || r < s) return 0;
+    if (l <= s && e <= r) return upper_bound(tree[n].begin(), tree[n].end(), x) - tree[n].begin();
+    int d = tree[2 * n].size();
+    return cnt(tree, 2 * n, s, s + d - 1, l, r, x) + cnt(tree, 2 * n + 1, s + d, e, l, r, x);
+}
+
+int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
+{
+    int s = -1e9, e = 1e9;
+    while (s <= e)
+    {
+        int m = (s + e) / 2;
+        if (cnt(tree, 1, 1, N, l, r, m) < k) s = m + 1;
+        else e = m - 1;
+    }
+    return s;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N, M; cin >> N >> M;
+    
+    vector<int> A(N + 1);
+    for (int i = 1; i <= N; i++) cin >> A[i];
+    
+    vector<vector<int>> tree;
+    buildMergeSortTree(tree, A);
+    
+    while (M--)
+    {
+        int i, j, k; cin >> i >> j >> k;
+        cout << kth_min(tree, N, i, j, k) << "\n";
+    }
+}
+```
+</div>
+</details>
 
 ---
 
@@ -338,9 +388,66 @@ int kth_min(vector<vector<int>>& tree, int N, int l, int r, int k)
 
 Persistent segment tree는 각 업데이트가 이루어졌을 때의 세그먼트 트리의 상태를 기억하는 장치로 사용할 수도 있기 때문에 $k$번째 원소를 구하는 문제에서 유용하게 사용할 수 있다.
 
-아래는 persistent segment tree를 구현하는 구조체와 함수들이다.
+구간 $\[l, r\]$의 $k$번째 수를 구하고 싶다면, **수열의 $r$번째 수를 트리에 업데이트한 순간과 $l - 1$번째 수를 트리에 업데이트한 순간의 차이를 이용하면 된다.**
+
+**Problem 2**의 segment tree를 이용한 풀이에서 $k$번째 원소를 반환하는 함수의 원리를 그대로 이용해보자.
 
 ```cpp
+int kth_min(vector<int>& tree, int n, int s, int e, int k)
+{
+    if (s == e) return s;
+    
+    int m = (s + e) / 2;
+    if (k <= tree[2 * n]) return kth_min(tree, 2 * n, s, m, k);
+    return kth_min(tree, 2 * n + 1, mid + 1, e, k - tree[2 * n]);
+}
+```
+
+위 함수는 $k$와 "전체 수열" 중 $\[s, m\]$에 속하는 수의 개수(=구간에 왼쪽 자식 노드의 값, `tree[2 * n]`)을 비교해서 범위를 줄여나간다.
+
+여기서 "전체 수열"을 "$l$번째 수부터 $r$번째 수"로 바꾸어주자.
+
+> $k$와 수열의 $l$번째 수부터 $r$번째 수 중 $\[s, m\]$에 속하는 수의 개수를 비교한다.
+
+```cpp
+struct node {
+    int l, r; // l, r: 왼쪽/오른쪽 자식 노드
+    int val; // val: 노드에 저장된 값
+};
+
+int kth_min(vector<node>& tree, int i, int j, int s, int e, int k)
+{
+    if (s == e) return s;
+    
+    int m = (s + e) / 2;
+    int cnt = tree[tree[j].l].val - tree[tree[i].l].val;
+    if (k <= cnt) return kth_min(tree, tree[i].l, tree[j].l, s, m, k);
+    return kth_min(tree, tree[i].r, tree[j].r, m + 1, e, k - cnt);
+}
+```
+
+위 함수에 쓰인 매개변수 `i, j`는 다음을 의미한다.
+
+- `i`: $l-1$번째 수를 트리에 업데이트한 순간, 구간 $\[s, e\]$을 대표하는 노드의 인덱스
+- `j`: $r$번째 수를 트리에 업데이트한 순간, 구간 $\[s, e\]$을 대표하는 노드의 인덱스
+
+이처럼 persistent segment tree를 이용하면, 각 쿼리를 $O(\log n)$으로 처리할 수 있게 된다.
+
+**Time complexity**: $O(n \log n + q \log n)$
+
+Merge sort tree를 이용한 방식보다 시간복잡도의 측면에서 더 효율적이라고 할 수 있다.
+
+<details>
+<summary>[백준] 7469. K번째 수 SOLUTION</summary>
+<div markdown="1">
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <math.h>
+using namespace std;
+
 struct node {
     int l, r, val;
 };
@@ -388,30 +495,7 @@ void _update(vector<node>& tree, vector<int>& x, int n, int s, int e, int i, int
         }
     }
 }
-```
 
-구간 $\[l, r\]$의 $k$번째 수를 구하고 싶다면, **수열의 $r$번째 수를 트리에 업데이트한 순간과 $l - 1$번째 수를 트리에 업데이트한 순간의 차이를 이용하면 된다.**
-
-**Problem 2**의 segment tree를 이용한 풀이에서 $k$번째 원소를 반환하는 아래 함수의 원리를 그대로 이용할 것이다.
-
-```cpp
-int kth_min(vector<int>& tree, int n, int s, int e, int k)
-{
-    if (s == e) return s;
-    
-    int m = (s + e) / 2;
-    if (k <= tree[2 * n]) return kth_min(tree, 2 * n, s, m, k);
-    return kth_min(tree, 2 * n + 1, mid + 1, e, k - tree[2 * n]);
-}
-```
-
-$k$와 **집합에 있는 수들** 중 $\[s, m\]$에 속하는 수의 개수(=구간에 왼쪽 자식 노드의 값 `tree[2 * n]`)을 비교해서 범위를 줄여나갔다.
-
-이 문제에서는 "전체 수열" 대신 "$l$번째 수부터 $r$번째 수" 중 $\[s, m\]$에 속하는 수의 개수와 비교를 하면 될 것이다.
-
-따라서 아래와 같은 함수를 구현할 수 있다.
-
-```cpp
 int kth_min(vector<node>& tree, int i, int j, int s, int e, int k)
 {
     if (s == e) return s;
@@ -421,9 +505,50 @@ int kth_min(vector<node>& tree, int i, int j, int s, int e, int k)
     if (k <= cnt) return kth_min(tree, tree[i].l, tree[j].l, s, m, k);
     return kth_min(tree, tree[i].r, tree[j].r, m + 1, e, k - cnt);
 }
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int n, m; cin >> n >> m;
+    
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) cin >> a[i];
+    
+    // 좌표 압축
+    vector<int> x = a;
+    sort(x.begin(), x.end());
+    x.erase(unique(x.begin(), x.end()), x.end());
+    
+    int s = x.size();
+    vector<node> tree(2);
+    tree[1] = make_node(0, 0, 0);
+    buildSegtree(tree, 1, 0, s - 1);
+    
+    vector<int> root_idx(n + 1, 0);
+    root_idx[0] = 1;
+    
+    // 수열을 트리에 업데이트
+    for (int i = 0; i < n; i++)
+    {
+        if (root_idx[i + 1] == 0)
+        {
+            tree.push_back(tree[root_idx[i]]);
+            root_idx[i + 1] = tree.size() - 1;
+        }
+        _update(tree, x, root_idx[i + 1], 0, s - 1, a[i], 1);
+    }
+    
+    while (m--)
+    {
+        int i, j, k; cin >> i >> j >> k;
+        cout << x[kth_min(tree, root_idx[i - 1], root_idx[j], 0, s - 1, k)] << "\n";
+    }
+}
 ```
-
-
+</div>
+</details>
 
 ---
 
