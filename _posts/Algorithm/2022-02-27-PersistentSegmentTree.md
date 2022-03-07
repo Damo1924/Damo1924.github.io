@@ -83,7 +83,7 @@ Persistent segment tree는 **여러 개의 세그먼트 트리를 효율적으�
 ```cpp
 struct node {
     int l, r, val;
-}
+};
 
 node make_node(int l, int r, int val)
 {
@@ -139,24 +139,8 @@ int _sum(int n, int s, int e, int l, int r)
     if (l <= s && e <= r) return tree[n].val;
     
     int m = (s + e) / 2, res = 0;
-    if (l <= m)
-    {
-        if (tree[n].l == 0)
-        {
-            tree.push_back(make_node(0, 0, 0));
-            tree[n].l = tree.size() - 1;
-        }
-        res += _sum(tree[n].l, s, m, l, r);
-    }
-    if (m < r)
-    {
-        if (tree[n].r == 0)
-        {
-            tree.push_back(make_node(0, 0, 0));
-            tree[n].r = tree.size() - 1;
-        }
-        res += _sum(tree[n].r, m + 1, e, l, r);
-    }
+    if (l <= m && tree[n].l != 0) res += _sum(tree[n].l, s, m, l, r);
+    if (m < r && tree[n].r != 0) res += _sum(tree[n].r, m + 1, e, l, r);
     return res;
 }
 ```
@@ -244,8 +228,8 @@ int _sum(int n, int s, int e, int l, int r)
     if (l <= s && e <= r) return tree[n].val;
     
     int m = (s + e) / 2, res = 0;
-    if (l <= m) res += _sum(tree[n].l, s, m, l, r);
-    if (m < r) res += _sum(tree[n].r, m + 1, e, l, r);
+    if (l <= m && tree[n].l != 0) res += _sum(tree[n].l, s, m, l, r);
+    if (m < r && tree[n].r != 0) res += _sum(tree[n].r, m + 1, e, l, r);
     return res;
 }
 ```
