@@ -42,6 +42,10 @@ comments: true
 
 **Time complexity**: $O(n \log n)$
 
+<details>
+<summary> [백준] 11004. K번째 수 </summary>
+<div markdown="1">
+
 ```cpp
 #include <iostream>
 #include <vector>
@@ -60,6 +64,9 @@ int main()
     cout << a[k - 1];
 }
 ```
+
+</div>
+</details>
 
 <br/>
 
@@ -112,50 +119,74 @@ $x$보다 작은 원소의 개수는 $x$에 대한 증가함수이므로 이분�
 
 이때 $q_1$은 집합에 원소를 삽입/삭제하는 쿼리의 개수, $q_2$는 집합의 $k$번째 원소를 구하는 쿼리의 개수이다.
 
-아래는 구간합을 구하는 펜윅 트리의 두 함수이다.
+다만, $k$번째 원소를 구하는 쿼리를 처리하는데 $O(\log^2 n)$이라서 앞으로 소개할 두 가지 방법을 사용하는 것이 더 좋다.
+
+<details>
+<summary> [백준] 12899. 데이터 구조 SOLUTION </summary>
+<div markdown="1">
 
 ```cpp
-void _update(vector<int> tree, int n, int diff)
+#include<iostream>
+#include<vector>
+#include<math.h>
+using namespace std;
+typedef long long ll;
+
+void _update(vector<int>& tree, int N, int n, int diff)
 {
-    int N = tree.size();
-    while (n <= N)
+    while (n < N)
     {
         tree[n] += diff;
         n += (n & -n);
     }
 }
 
-int _sum(vector<int> tree, int x) // [1, x] 구간합
+int _sum(vector<int>& tree, int x)
 {
     int res = 0;
     while (x)
     {
         res += tree[x];
-        x &= -x;
+        x &= x - 1;
     }
     return res;
 }
-```
 
-집합에 새로운 원소 $X$를 추가하고 싶으면 `_update(tree, X, 1)`,
-
-집합에 있는 원소 $Y$를 삭제하고 싶으면 `_update(tree, Y, -1)`을 해준다.
-
-$k$번째 원소를 이분탐색으로 구하는 함수는 다음과 같다.
-
-```cpp
-int kth_min(vector<int> tree, int k)
+int kth_min(vector<int>& tree, int k)
 {
-    int s = 1, e = N;
+    int s = 1, e = 2000000;
     while (s < e)
     {
         int m = (s + e) / 2;
-        if (_sum(m) < k) s = m + 1;
+        if (_sum(tree, m) < k) s = m + 1;
         else e = m;
     }
     return s;
 }
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int Q; cin >> Q;
+    vector<int> tree(2000001);
+    while (Q--)
+    {
+        int t, x; cin >> t >> x;
+        if (t == 1) _update(tree, 2000001, x, 1);
+        else
+        {
+            int ans = kth_min(tree, x);
+            cout << ans << "\n";
+            _update(tree, 2000001, ans, -1);
+        }
+    }
+}
 ```
+
+</div>
+</details>
 
 ---
 
@@ -171,27 +202,7 @@ int kth_min(vector<int> tree, int k)
 
 이때 오른쪽 자식 노드로 가는 경우에는 $k$에서 왼쪽 자식 노드의 개수를 빼준다.
 
-이 함수를 이용하면 $k$번째 수를 구하는 쿼리를 $O(\log n)$에 처리할 수 있다.
-
-**Time Complexity**: $O(q \log n)$
-
-이때 $q$는 쿼리(= 원소 추가/삭제, $k$번째 수 구하기)의 개수를 의미한다.
-
-아래는 세그먼트 트리의 두 함수들이다.
-
 ```cpp
-void _update(vector<int>& tree, int n, int s, int e, int x, int diff)
-{
-    if (e < x || x < s) return;
-    
-    tree[n] += diff;
-    if (s == e) return;
-    
-    int m = (s + e) / 2;
-    insert(tree, 2 * n, s, m, x);
-    insert(tree, 2 * n + 1, m + 1, e, x);
-}
-
 int kth_min(vector<int>& tree, int n, int s, int e, int k)
 {
     if (s == e) return s;
@@ -202,9 +213,62 @@ int kth_min(vector<int>& tree, int n, int s, int e, int k)
 }
 ```
 
-집합에 새 원소 $X$를 추가하고 싶으면 `_update(tree, 1, 1, N, X, 1)`,
+이 함수를 이용하면 $k$번째 수를 구하는 쿼리를 $O(\log n)$에 처리할 수 있다.
 
-기존 원소 $Y$를 삭제하고 싶으면 `_update(tree, 1, 1, N, Y, -1)`를 해준다.
+**Time Complexity**: $O(q \log n)$
+
+이때 $q$는 쿼리(= 원소 추가/삭제, $k$번째 수 구하기)의 개수를 의미한다.
+
+<details>
+<summary> [백준] 12899. 데이터 구조 SOLUTION </summary>
+<div markdown="1">
+```cpp
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+const int maxN = 2000000;
+
+void insert(vector<int>& tree, int n, int s, int e, int x)
+{
+    if (e < x || x < s) return;
+    
+    tree[n]++;
+    if (s == e) return;
+    
+    int m = (s + e) / 2;
+    insert(tree, 2 * n, s, m, x);
+    insert(tree, 2 * n + 1, m + 1, e, x);
+}
+
+int kth_min(vector<int>& tree, int n, int s, int e, int k)
+{
+    tree[n]--; // $k$번째 원소를 구함과 동시에 삭제
+    if (s == e) return s;
+    
+    int m = (s + e) / 2;
+    if (k <= tree[2 * n]) return kth_min(tree, 2 * n, s, m, k);
+    return kth_min(tree, 2 * n + 1, mid + 1, e, k - tree[2 * n]);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N; cin >> N;
+    int h = (int) ceil(log2(maxN));
+    vector<int> tree(1 << (h + 1), 0);
+    for (int i = 0; i < N; i++)
+    {
+        int T, X; cin >> T >> X;
+        if (T == 1) insert(tree, 1, 1, maxN, X);
+        else cout << kth_min(tree, 1, 1, maxN, X) << "\n";
+    }
+}
+```
+</div>
+</details>
 
 ---
 
@@ -216,22 +280,12 @@ BIT는 세그먼트 트리보다 빠르면서 메모리도 적게 사용하기 �
 
 물론 시간복잡도는 세그먼트 트리와 동일하게 쿼리당 $O(\log n)$이다.
 
-아래는 BIT의 두 함수들이다.
+아래는 $k$번째 원소를 반환하는 함수이다.
 
 ```cpp
-void _update(vector<int> tree, int n, int diff)
+int kth_min(vector<int>& tree, int N, int h, int k) // N: 전체 구간의 길이, h: 트리의 높이
 {
-    int N = tree.size();
-    while (n <= N)
-    {
-        tree[n] += diff;
-        n += (n & -n);
-    }
-}
-
-int kth_min(vector<int> tree, int k)
-{
-    int N = tree.size(), h = (int) floor(log2(tree.size())), res = 0;
+    int res = 0;
     for (int i = h; i >= 0; i--)
     {
         int tmp = res + (1 << i);
@@ -250,6 +304,65 @@ int kth_min(vector<int> tree, int k)
 
 세그먼트 트리에서 $\[1, N\]$부터 시작해 점점 범위를 좁혀나가는 것을 펜윅 트리로 구현한 것 뿐이다.
 
+<details>
+<summary> [백준] 12899. 데이터구조 SOLUTION </summary>
+<div markdown="1">
+```cpp
+#include<iostream>
+#include<vector>
+#include<math.h>
+using namespace std;
+
+void _update(vector<int>& tree, int N, int n, int diff)
+{
+    while (n < N)
+    {
+        tree[n] += diff;
+        n += (n & -n);
+    }
+}
+
+int kth_min(vector<int>& tree, int N, int h, int k)
+{
+    int res = 0;
+    for (int i = h; i >= 0; i--)
+    {
+        int tmp = res + (1 << i);
+        if (tmp < N && tree[tmp] < k)
+        {
+            k -= tree[tmp];
+            res = tmp;
+        }
+    }
+    if (!k) return res;
+    return res + 1;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int N = 2000001, h = (int) floor(log2(N));
+    vector<int> tree(2000001, 0);
+    
+    int Q; cin >> Q;
+    while (Q--)
+    {
+        int T, X; cin >> T >> X;
+        if (T == 1) _update(tree, N, X, 1);
+        else
+        {
+            int ans = kth_min(tree, N, h, X);
+            cout << ans << "\n";
+            _update(tree, N, ans, -1);
+        }
+    }
+}
+```
+</div>
+</details>
+
 <br/>
 
 ## [PROBLEM 3] 임의의 집합의 $k$번째 원소 구하기
@@ -262,7 +375,7 @@ int kth_min(vector<int> tree, int k)
 > 
 > 길이가 $n$인 수열에서, 임의의 구간 $\[l, r\]$($1 \leq l \leq r \leq n$)의 $k$($1 \leq k \leq r - l + 1$)번째 원소를 구하여라.
 
-이 경우에는 Merge sort tree를 이용하거나 2D Segment tree를 이용해야한다.
+이 경우에는 Merge sort tree를 이용하거나 Persistent segment tree / 2D Segment tree를 이용해야한다.
 
 ---
 
@@ -436,6 +549,8 @@ int kth_min(vector<node>& tree, int i, int j, int s, int e, int k)
 **Time complexity**: $O(n \log n + q \log n)$
 
 Merge sort tree를 이용한 방식보다 시간복잡도의 측면에서 더 효율적이라고 할 수 있다.
+
+반대로 좌표값의 범위가 넓을 때에는 좌표압축을 이용해야한다는 단점이 있다.
 
 <details>
 <summary>[백준] 7469. K번째 수 SOLUTION</summary>
