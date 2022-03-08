@@ -272,7 +272,166 @@ int main()
 
 하지만 좌표평면에 여러 개의 점이 주어지고 어떤 영역 내의 점의 개수를 구하는 문제와 같이 세그먼트 트리가 나타내야할 구간의 길이가 커지면, 앞서 구현한 2D 세그먼트 트리로는 메모리 초과가 발생할 가능성이 높다.
 
+이를 해결하기 위해 기존 세그먼트 트리에서 자주 사용했던 **좌표 압축** 기법을 이차원으로 확장시켜보자.
 
+그렇다고 단순히 $x$좌표, $y$좌표에 대해 좌표 압축을 하면 안된다.
+
+쿼리의 개수를 $q$라고 하면 $O(q^2)$이므로 쿼리가 $10^5$개씩 주어지면 여전히 메모리 초과가 발생한다.
+
+이는 **바깥쪽 세그먼트 트리의 각 노드에 쿼리를 처리하기 위해 필요한 값들에 대한 세그먼트 트리를 구현**함으로써 해결할 수 있다.
+
+예를 들어 `update(1, 2, 10)`과 같은 쿼리가 주어진다면, $x = 1$을 포함하는 바깥쪽 세그먼트 트리의 노드들에만 $y = 2$를 저장하는 것이다.
+
+쿼리로 주어지는 좌표값들을 저장할 수 있도록 클래스에 새로운 이차원 벡터 `y_idx`를 추가하자.
+
+```cpp
+class Seg2D {
+public:
+    int n;
+    vector<vector<int>> node, y_idx;
+    Seg2D(int n) : n(n), node(2 * n), y_idx(2 * n) {}
+}
+```
+
+`y_idx[i]`에는 바깥쪽 세그먼트 트리의 $i$번 노드(= 안쪽 세그먼트 트리)에 구축해야할 $y$좌표값들이 저장된다.
+
+쿼리들을 입력받음과 동시에 다음 함수들을 이용해서 `y_idx`에 값을 추가한다.
+
+```cpp
+void _upd(int x, int y)
+{
+    for (int i = x + n; i; i /= 2) y_idx[i].push_back(y);
+}
+
+void _query(int x1, int x2, int y1, int y2)
+{
+    x1 += n; x2 += n;
+    while (x1 <= x2)
+    {
+        if (x1 % 2 != 0)
+        {
+            y_idx[x1].push_back(y1);
+            y_idx[x1++].push_back(y2);
+        }
+        if (x2 % 2 == 0)
+        {
+            y_idx[x2].push_back(y1);
+            y_idx[x2--].push_back(y2);
+        }
+        x1 /= 2; x2 /= 2;
+    }
+}
+```
+
+이제 각 $i$에 대해 `y_idx[i]`를 압축해주자.
+
+```cpp
+void compress()
+(
+    for (int i = 0; i < 2 * n; i++)
+    {
+        if (y_idx[i].empty()) continue;
+        sort(y_idx.begin(), y_idx.end());
+        y_idx.erase(unique(y_idx.begin(), y_idx.end()), y_idx.end());
+        a[i].resize(y_idx[i].size() * 2);
+    }
+}
+```
+
+전체 클래스는 다음과 같다.
+
+```cpp
+class Seg2D {
+public:
+    int n;
+    vector<vector<int>> node, y_idx;
+    Seg2D(int n) : n(n), node(2 * n), y_idx(2 * n) {}
+    
+    void _upd(int x, int y)
+    {
+        for (int i = x + n; i; i /= 2) y_idx[i].push_back(y);
+    }
+    
+    void _query(int x1, int x2, int y1, int y2)
+    {
+        x1 += n; x2 += n;
+        while (x1 <= x2)
+        {
+            if (x1 % 2 != 0)
+            {
+                y_idx[x1].push_back(y1);
+                y_idx[x1++].push_back(y2);
+            }
+            if (x2 % 2 == 0)
+            {
+                y_idx[x2].push_back(y1);
+                y_idx[x2--].push_back(y2);
+            }
+            x1 /= 2; x2 /= 2;
+        }
+    }
+    
+    void compress()
+    {
+        for (int i = 0; i < 2 * n; i++)
+        {
+            if (y_idx[i].empty()) continue;
+            sort(y_idx.begin(), y_idx.end());
+            y_idx.erase(unique(y_idx.begin(), y_idx.end()), y_idx.end());
+            node[i].resize(y_idx[i].size() * 2);
+        }
+    }
+    
+    void init(vector<vector<int>>& a)
+    {
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                node[i + n][j + n] = a[i][j];
+    
+        for (int i = n; i < 2 * n; i++)
+            for (int j = n - 1; j > 0; j--)
+                node[i][j] = node[i][2 * j] + node[i][2 * j + 1];
+    
+        for (int i = n - 1; i > 0; i--)
+            for (int j = 1; j < 2 * n; j++)
+                node[i][j] = node[2 * i][j] + node[2 * i + 1][j];
+    }
+    
+    void upd(int x, int y, int diff)
+    {
+        for (int j = y + n; j; j /= 2) node[x + n][j] += diff;
+        for (int i = (x + n) / 2; i; i /= 2)
+            for (int j = y + n; j; j /= 2)
+                node[i][j] += diff;
+    }
+    
+    int query(int x, int y1, int y2)
+    {
+        y1 += n; y2 += n;
+        int res = 0;
+        while (y1 <= y2)
+        {
+            if (y1 % 2 != 0) res += node[x][y1++];
+            if (y2 % 2 == 0) res += node[x][y2--];
+            y1 /= 2; y2 /= 2;
+        }
+        return res;
+    }
+    
+    int query(int x1, int x2, int y1, int y2)
+    {
+        x1 += n; x2 += n;
+        int res = 0;
+        while (x1 <= x2)
+        {
+            if (x1 % 2 != 0) res += query(x1++, y1, y2);
+            if (x2 % 2 == 0) res += query(x2--, y1, y2);
+            x1 /= 2; x2 /= 2;
+        }
+        return res;
+    }
+};
+```
 
 
 
