@@ -18,15 +18,35 @@ comments: true
 
 간단히 설명하면 **각 노드가 세그먼트 트리인 세그먼트 트리**라고 할 수 있다.
 
-`vector<vector<int>> tree`와 같은 이차원 벡터를 통해 2D segment tree를 구현해보자.
+바깥쪽 세그먼트 트리는 행(row)을, 바깥쪽 세그먼트 트리의 각 노드인 안쪽 세그먼트 트리는 열(col)을 대표하는 노드를 가진 세그먼트 트리를 의미한다.
 
-바깥쪽 세그먼트 트리는 행(row)을, 바깥쪽 세그먼트 트리의 각 노드인 안쪽 세그먼트 트리는 열(col)을 의미한다.
+즉 바깥쪽 세그먼트 트리의 리프 노드는 각 행을 대표하며, 안쪽 세그먼트 트리의 리프 노드는 각 열을 대표한다.
 
-> 메모리를 최대한 적게 사용하기 위해 [Bottom-Up 방식](https://damo1924.github.io/algorithm/BottomUpSegmentTree/)으로 세그먼트 트리를 구현할 것이다.
-> 
-> 길이가 $N$인 수열에 대한 세그먼트 트리를 구현하는데 길이가 $2N$인 배열이 필요하므로,
-> 
-> 크기가 $N \times M$인 이차원 수열에 대한 2D 세그먼트 트리를 구현하는데는 크기가 $2N \times 2M$인 이차원 배열이 필요하다.
+이때 바깥쪽 세그먼트 트리의 노드들에는 안쪽 세그먼트 트리가 저장되어 있는 형태이다.
+
+이제 2D 세그먼트 트리를 직접 구현해 볼 것이다.
+
+<br/>
+
+## 2. Bottom-Up 2D Segment Tree Implementation
+
+[Bottom-Up 방식](https://damo1924.github.io/algorithm/BottomUpSegmentTree/)으로 세그먼트 트리를 구현하면 Top-Down 방식보다 메모리를 절약할 수 있다.
+
+또한, 반복문만을 이용해서 쿼리를 처리할 수 있기 때문에 재귀함수 호출이 많이 일어나는 Top-Down 방식보다 더 빠르게 동작한다.
+
+그래서 오프라인 쿼리가 주어지는 문제라면 Bottom-Up으로 구현하는 것이 여러모로 좋다.
+
+---
+
+길이가 $N$인 수열에 대한 세그먼트 트리를 구현하는데 길이가 $2N$인 배열이 필요하므로,
+
+크기가 $N \times M$인 이차원 수열에 대한 2D 세그먼트 트리를 구현하는데는 크기가 $2N \times 2M$인 이차원 배열이 필요하다.
+
+```cpp
+vector<vector<int>> tree(2 * N, vector<int>(2 * N));
+```
+
+이제 2D 세그먼트 트리의 여러 함수들을 구현해보자.
 
 ---
 
@@ -141,9 +161,97 @@ $N$이 최대 $1024$이므로 2D 세그먼트 트리를 앞선 방법으로 구�
 
 <br/>
 
-## 2. Memory Optimization
+## 2. Memory Optimization Method
+
+앞에서 푼 문제처럼 이차원 배열을 다루는 문제라면, $N$이 $10^3$ 정도로 주어지기 때문에 메모리 초과가 발생하지 않는 선에서 해결할 수 있다.
+
+하지만 좌표평면에 여러 개의 점이 주어지고 어떤 영역 내의 점의 개수를 구하는 문제와 같이 세그먼트 트리가 나타내야할 구간의 길이가 커지면, 앞서 구현한 2D 세그먼트 트리로는 메모리 초과가 발생할 가능성이 높다.
+
+상대적으로 요구되는 메모리가 적은 Bottom-Up 방식으로 구현해도 크기가 $2N \times 2M$인 배열이 필요하므로 좀 더 효율적으로 공간을 사용해야한다.
 
 
+
+---
+
+### 2-1. Top-Down
+
+Top-Down 방식은 [Dynamic Segment Tree](https://damo1924.github.io/algorithm/PersistentSegmentTree/#2-dynamic-segment-tree--implementation)를 이용해서 효율적으로 쿼리들을 처리할 수 있다.
+
+먼저, 안쪽 세그먼트 트리 클래스를 다음과 같이 구현한다.(Dynamic segment tree 그대로)
+
+```cpp
+class segtree {
+public:
+    class node {
+    public:
+        int l, r; // 왼쪽 자식, 오른쪽 자식 인덱스
+        ll val;
+    };
+    
+    vector<node> tree;
+    segtree(): tree(2) {} // root = tree[1]
+    
+    void upd(int n, int s, int e, int i, int diff)
+    {
+        if (i < s || e < i) return;
+        
+        tree[n] += diff;
+        if (s != e)
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (tree[n].l == 0)
+                {
+                    tree.push_back({0, 0, 0});
+                    tree[n].l = tree.size() - 1;
+                }
+                upd(tree[n].l, s, m, i, diff);
+            }
+            else
+            {
+                if (tree[n].r == 0)
+                {
+                    tree.push_back({0, 0, 0});
+                    tree[n].r = tree.size() - 1;
+                }
+                upd(tree[n].r, m + 1, s, i, diff);
+            }
+        }
+    }
+    
+    ll sum(int n, int s, int e, int l, int r)
+    {
+        if (r < s || e < l) return 0;
+        if (l <= s && e <= r) return tree[n].val;
+        
+        int m = (s + e) / 2, res = 0;
+        if (l <= m && tree[n].l != 0) res += sum(tree[n].l, s, m, l, r);
+        if (m < r && tree[n].r != 0) res += sum(tree[n].r, m + 1, e, l, r);
+        return res;
+    }
+};
+```
+
+
+
+---
+
+### 2-2. Bottom-Up
+
+
+
+---
+
+### 2-3. Comparision between two methods
+
+
+
+
+
+
+
+<br/>
 
 ## References
 
