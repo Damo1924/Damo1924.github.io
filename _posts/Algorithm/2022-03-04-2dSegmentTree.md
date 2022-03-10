@@ -340,6 +340,10 @@ void compress()
 
 이를 적용한 전체 클래스는 다음과 같다.
 
+<details>
+<summary> 이차원 세그먼트 트리 클래스 </summary>
+<div markdown="1">
+
 ```cpp
 class Seg2D {
 public:
@@ -423,13 +427,20 @@ public:
 };
 ```
 
+</div>
+</details>
+
 <br/>
 
 ## 3. Top-Down 2D Segment Tree
 
 Top-Down 방식은 [Dynamic Segment Tree](https://damo1924.github.io/algorithm/PersistentSegmentTree/#2-dynamic-segment-tree--implementation)를 이용해서 효율적으로 쿼리들을 처리할 수 있다.
 
-먼저, 안쪽 세그먼트 트리 클래스를 다음과 같이 구현한다.(Dynamic segment tree)
+주어진 영역에 대해 구하고자 하는 값을 함수 `int f(int a, int b)`라고 하자.
+
+`f(a, b)`는 두 값을 더하는 `sum(a, b)`, 최댓값이나 최솟값을 구하는 `max(a, b)`, `min(a, b)`, 최대공약수를 구하는 `gcd(a, b)` 등이 가능하다.
+
+먼저, 안쪽 세그먼트 트리 클래스를 구현해보자.
 
 ```cpp
 class Seg1D {
@@ -441,13 +452,53 @@ public:
     };
     
     vector<Node> node;
-    Seg1D(): node(2) {} // root = node[1]
-    
-    void upd(int n, int s, int e, int i, int diff)
+    Seg1D(): node(2, {0, 0, 0}) {} // root = node[1]
+ ```
+
+$i$번째 원소를 $k$로 업데이트하는 함수는 다음과 같다.
+
+```cpp
+    void upd_leaf(int n, int s, int e, int i, ll k)
     {
         if (i < s || e < i) return;
-        
-        node[n].val += diff;
+        if (s == e) node[n].val = k;
+        else
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
+                }
+                upd_leaf(node[n].l, s, m, i, k);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
+                }
+                upd_leaf(node[n].r, m + 1, e, i, k);
+            }
+            
+            node[n].val = f(node[node[n].r].val, node[node[n].l].val);
+        }
+    }
+```
+
+Dynamic segment tree의 업데이트 함수와 동일하게 구현해주면 된다.
+
+이때 함수 이름이 `upd_leaf()`인 이유는 **바깥쪽 세그먼트 트리의 리프 노드**를 업데이트할 때만 사용할 함수이기 때문이다.
+
+바깥쪽 세그먼트 트리의 리프 노드를 제외한 나머지 노드를 업데이트할 때 사용할 함수를 따로 정의하자.
+
+```cpp    
+    void upd_parent(Seg1D& lc, int lc_n, Seg1D& rc, int rc_n, int n, int s, int e, int i)
+    {
+        if (i < s || e < i) return;
         if (s != e)
         {
             int m = (s + e) / 2;
@@ -458,7 +509,7 @@ public:
                     node.push_back({0, 0, 0});
                     node[n].l = node.size() - 1;
                 }
-                upd(node[n].l, s, m, i, diff);
+                upd_parent(lc, lc.node[lc_n].l, rc, rc.node[rc_n].l, node[n].l, s, m, i);
             }
             else
             {
@@ -467,46 +518,158 @@ public:
                     node.push_back({0, 0, 0});
                     node[n].r = node.size() - 1;
                 }
-                upd(node[n].r, m + 1, e, i, diff);
+                upd_parent(lc, lc.node[lc_n].r, rc, rc.node[rc_n].r, node[n].r, m + 1, e, i);
             }
         }
+        node[n].val = f(lc.node[lc_n].val, rc.node[rc_n].val);
     }
-    
-    ll sum(int n, int s, int e, int l, int r)
+```
+
+`upd_parent()`는 바깥쪽 세그먼트 트리의 노드를 해당 노드의 두 자식 노드에서 업데이트된 부분을 합치는 작업을 수행한다.
+
+각 매개변수는 다음을 의미한다.
+
+- `lc` / `rc`: 업데이트하려는 바깥 세그먼트 트리의 노드의 왼쪽 자식(left child) / 오른쪽 자식(right child)
+- `n` : 현재 세그먼트 트리에서 `[s, e]` 구간을 대표하는 노드의 인덱스
+- `lc_n` / `rc_n` : `lc` / `rc`에서 `[s, e]` 구간을 대표하는 노드의 인덱스
+
+각 세그먼트 트리마다 특정 구간을 대표하는 노드의 인덱스가 다를 수 있으므로 각각의 인덱스를 모두 매개변수로 전달해주어야한다.
+
+마지막으로 주어진 쿼리를 처리하는 함수를 구현한다.
+
+```cpp
+    ll query(int n, int s, int e, int l, int r)
     {
-        if (r < s || e < l) return 0;
+        if (r < s || e < l) return 0; // 함수 f에 따라 적절한 값을 사용 (ex) min() - INF
         if (l <= s && e <= r) return node[n].val;
         
-        int m = (s + e) / 2, res = 0;
-        if (l <= m && node[n].l != 0) res += sum(node[n].l, s, m, l, r);
-        if (m < r && node[n].r != 0) res += sum(node[n].r, m + 1, e, l, r);
+        int m = (s + e) / 2;
+        ll res = 0;
+        if (l <= m && node[n].l != 0) res = f(res, query(node[n].l, s, m, l, r));
+        if (m < r && node[n].r != 0) res = f(res, query(node[n].r, m + 1, e, l, r));
         return res;
     }
 };
 ```
 
-정의한 `Seg1D` 클래스를 노드에 저장하는 `Seg2D` 클래스를 정의하자.
+쿼리가 어떤 값을 구하는지에 따라서 적절한 상수 값을 사용해야함에 주의하자.
 
-세그먼트 트리의 노드에 저장하는 값이 정수에서 세그먼트 트리로 바뀌었다는 점만 제외하면 완전히 같은 클래스이다.
+<details>
+<summary> 일차원 세그먼트 트리 클래스 </summary>
+<div markdown="1">
 
+```cpp
+class Seg1D {
+public:
+    class Node {
+    public:
+        int l, r;
+        ll val;
+    };
+    
+    vector<Node> node;
+    Seg1D(): node(2, {0, 0, 0}) {} // root = node[1]
+    
+    void upd_leaf(int n, int s, int e, int i, ll k)
+    {
+        if (i < s || e < i) return;
+        if (s == e) node[n].val = k;
+        else
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
+                }
+                upd_leaf(node[n].l, s, m, i, k);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
+                }
+                upd_leaf(node[n].r, m + 1, e, i, k);
+            }
+            
+            node[n].val = f(node[node[n].r].val, node[node[n].l].val);
+        }
+    }
+    
+    void upd_parent(Seg1D& lc, int lc_n, Seg1D& rc, int rc_n, int n, int s, int e, int i)
+    {
+        if (i < s || e < i) return;
+        if (s != e)
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
+                }
+                upd_parent(lc, lc.node[lc_n].l, rc, rc.node[rc_n].l, node[n].l, s, m, i);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
+                }
+                upd_parent(lc, lc.node[lc_n].r, rc, rc.node[rc_n].r, node[n].r, m + 1, e, i);
+            }
+        }
+        node[n].val = f(lc.node[lc_n].val, rc.node[rc_n].val);
+    }
+    
+    ll query(int n, int s, int e, int l, int r)
+    {
+        if (r < s || e < l) return 0;
+        if (l <= s && e <= r) return node[n].val;
+        
+        int m = (s + e) / 2;
+        ll res = 0;
+        if (l <= m && node[n].l != 0) res = f(res, query(node[n].l, s, m, l, r));
+        if (m < r && node[n].r != 0) res = f(res, query(node[n].r, m + 1, e, l, r));
+        return res;
+    }
+};
+```
+
+</div>
+</details>
+
+이렇게 정의한 `Seg1D` 클래스를 노드에 저장하는 이차원 세그먼트 트리 `Seg2D` 클래스를 정의하자.
+
+세그먼트 트리의 노드에 저장하는 값이 정수에서 세그먼트 트리로 바뀌었다는 점만 제외하면 완전히 같은 클래스이므로 어렵지 않게 구현할 수 있다.
+
+<details>
+<summary> 이차원 세그먼트 트리 클래스 </summary>
+<div markdown="1">
+  
 ```cpp
 class Seg2D {
 public:
     class Node {
     public:
         int l, r;
-        Seg1D tree; // 노드에 저장된 세그먼트 트리
+        Seg1D tree;
     };
     
-    int N; // 이차원 배열 a의 크기가 N x N 임을 의미
+    int R, C; // R x C 크기의 이차원 배열
     vector<Node> node;
-    Seg2D(int N): N(N), node(2) {}
+    Seg2D(int R, int C): R(R), C(C), node(2, {0, 0, Seg1D()}) {}
     
-    void upd(int n, int s, int e, int i, int j, int diff)
+    void upd(int n, int s, int e, int i, int j, ll k)
     {
         if (i < s || e < i) return;
-        
-        node[n].tree.upd(1, 1, N, j, diff);
+        if (s == e) node[n].tree.upd(1, 0, C - 1, j, k);
         if (s != e)
         {
             int m = (s + e) / 2;
@@ -517,7 +680,7 @@ public:
                     node.push_back({0, 0, Seg1D()});
                     node[n].l = node.size() - 1;
                 }
-                upd(node[n].l, s, m, i, j, diff);
+                upd(node[n].l, s, m, i, j, k);
             }
             else
             {
@@ -526,39 +689,44 @@ public:
                     node.push_back({0, 0, Seg1D()});
                     node[n].r = node.size() - 1;
                 }
-                upd(node[n].r, m + 1, e, i, j, diff);
+                upd(node[n].r, m + 1, e, i, j, k);
             }
+            node[n].tree._upd(node[node[n].r].tree, 1, node[node[n].l].tree, 1, 1, 0, C - 1, j);
         }
     }
     
-    void upd(int i, int j, int diff) { upd(1, 1, N, i, j, diff); }
+    void upd(int i, int j, ll k) { upd(1, 0, R - 1, i, j, k); }
     
-    ll sum(int n, int s, int e, int i1, int i2, int j1, int j2)
+    ll query(int n, int s, int e, int i1, int i2, int j1, int j2)
     {
         if (i2 < s || e < i1) return 0;
-        if (i1 <= s && e <= i2) return node[n].tree.sum(1, 1, N, j1, j2);
+        if (i1 <= s && e <= i2) return node[n].tree.query(1, 0, C - 1, j1, j2);
         
-        int m = (s + e) / 2, res = 0;
-        if (i1 <= m && node[n].l != 0) res += sum(node[n].l, s, m, i1, i2, j1, j2);
-        if (m < i2 && node[n].r != 0) res += sum(node[n].r, m + 1, e, i1, i2, j1, j2);
+        int m = (s + e) / 2;
+        ll res = 0;
+        if (i1 <= m && node[n].l != 0) res = gcd2(res, query(node[n].l, s, m, i1, i2, j1, j2));
+        if (m < i2 && node[n].r != 0) res = gcd2(res, query(node[n].r, m + 1, e, i1, i2, j1, j2));
         return res;
     }
     
-    ll sum(int i1, int i2, int j1, int j2) { return sum(1, 1, N, i1, i2, j1, j2); }
+    ll query(int i1, int i2, int j1, int j2) { return query(1, 0, R - 1, i1, i2, j1, j2); }
 };
 ```
 
-
+</div>
+</details>
 
 <br/>
 
 ## 4. Comparision between two methods
 
+이렇게 세그먼트 트리를 구현하는 두 가지 방법에 대해 알아보았는데, 이를 어떤 문제에서 사용해야할까?
 
+두 방식의 가장 큰 차이는 Bottom-Up은 오프라인 쿼리에서만 사용할 수 있지만, Top-Down은 온라인 쿼리에서도 사용할 수 있다는 것이다.
 
+일차원 세그먼트 트리에서는 Bottom-Up 방식이 Top-Down 방식보다 메모리가 적다는 장점이 있었지만, 이차원 세그먼트 트리에서는 항상 그렇지도 않다.
 
-
-
+쿼리들에 대한 정보를 저장하는 배열과 좌표압축을 위한 배열을 추가로 사용해야하기 때문이다.
 
 <br/>
 
