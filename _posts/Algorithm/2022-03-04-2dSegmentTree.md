@@ -148,6 +148,10 @@ int query(int x1, int x2, int y1, int y2)
 
 ---
 
+<details>
+<summary> [Bottom-Up 2D Segment Tree] </summary>
+<div markdown="1">
+
 ```cpp
 class Seg2D {
 public:
@@ -216,9 +220,11 @@ $N \times N$($1 \leq N \leq 1024$) 크기의 표가 주어질 때, 다음과 같
 - $0$ $x$ $y$ $c$ : $x$행 $y$열의 값을 $c$로 바꾼다.
 - $1$ $x_1$ $y_1$ $x_2$ $y_2$ : $x_1$행 $y_1$열부터 $x_2$행 $y_2$열까지의 합을 출력한다.
 
-**[SOLUTION]**
+> $N$이 최대 $1024$이므로 2D 세그먼트 트리를 앞선 방법으로 구현해도 메모리 초과가 발생하지 않는다.
 
-$N$이 최대 $1024$이므로 2D 세그먼트 트리를 앞선 방법으로 구현해도 메모리 초과가 발생하지 않는다.
+<details>
+<summary> [SOLUTION] </summary>
+<div markdown="1">
 
 ```cpp
 #include <iostream>
@@ -262,9 +268,12 @@ int main()
 }
 ```
 
+</div>
+</details>
+
 <br/>
 
-## 2. Memory Optimization 
+## 2. Memory Optimization
 
 앞에서 푼 문제처럼 이차원 배열을 다루는 문제라면, $N$이 $10^3$ 정도로 주어지기 때문에 메모리 초과가 발생하지 않는 선에서 해결할 수 있다.
 
@@ -341,7 +350,7 @@ void compress()
 이를 적용한 전체 클래스는 다음과 같다.
 
 <details>
-<summary> 이차원 세그먼트 트리 클래스 </summary>
+<summary> [Bottom-Up 2D Segment Tree - Memory Optimization] </summary>
 <div markdown="1">
 
 ```cpp
@@ -453,6 +462,7 @@ public:
     
     vector<Node> node;
     Seg1D(): node(2, {0, 0, 0}) {} // root = node[1]
+};
  ```
 
 $i$번째 원소를 $k$로 업데이트하는 함수는 다음과 같다.
@@ -549,13 +559,12 @@ Dynamic segment tree의 업데이트 함수와 동일하게 구현해주면 된�
         if (m < r && node[n].r != 0) res = f(res, query(node[n].r, m + 1, e, l, r));
         return res;
     }
-};
 ```
 
 쿼리가 어떤 값을 구하는지에 따라서 적절한 상수 값을 사용해야함에 주의하자.
 
 <details>
-<summary> 일차원 세그먼트 트리 클래스 </summary>
+<summary> [Top-Down 1D Dynamic Segment Tree] </summary>
 <div markdown="1">
 
 ```cpp
@@ -650,7 +659,7 @@ public:
 세그먼트 트리의 노드에 저장하는 값이 정수에서 세그먼트 트리로 바뀌었다는 점만 제외하면 완전히 같은 클래스이므로 어렵지 않게 구현할 수 있다.
 
 <details>
-<summary> 이차원 세그먼트 트리 클래스 </summary>
+<summary> [Top-Down 2D Dynamic Segment Tree] </summary>
 <div markdown="1">
   
 ```cpp
