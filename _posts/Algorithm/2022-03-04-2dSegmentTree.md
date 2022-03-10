@@ -657,6 +657,8 @@ public:
 </div>
 </details>
 
+<br/>
+
 이렇게 정의한 `Seg1D` 클래스를 노드에 저장하는 이차원 세그먼트 트리 `Seg2D` 클래스를 정의하자.
 
 세그먼트 트리의 노드에 저장하는 값이 정수에서 세그먼트 트리로 바뀌었다는 점만 제외하면 완전히 같은 클래스이므로 어렵지 않게 구현할 수 있다.
@@ -723,6 +725,194 @@ public:
     
     ll query(int i1, int i2, int j1, int j2) { return query(1, 0, R - 1, i1, i2, j1, j2); }
 };
+```
+
+</div>
+</details>
+
+---
+
+### [백준] 23839. 바자와 샤자
+
+[백준 23839. 바자와 샤자 문제 링크](https://www.acmicpc.net/problem/23839)
+
+$R \times C$($1 \leq R, C \leq 10^9$) 크기의 이차원 배열에 대해, 주어지는 온라인 쿼리를 처리하는 문제이다.
+
+> 아래 코드는 메모리 초과로 인해 80점을 받았다.
+
+<details>
+<summary> [SOLUTION] </summary>
+<div markdown="1">
+
+```cpp
+#include "game.h"
+#include <vector>
+using namespace std;
+typedef long long ll;
+
+long long gcd2(long long X, long long Y) {
+    long long tmp;
+    while (X != Y && Y != 0) {
+        tmp = X;
+        X = Y;
+        Y = tmp % Y;
+    }
+    return X;
+}
+
+class Seg1D {
+public:
+    class Node {
+    public:
+        int l, r;
+        ll val;
+    };
+    
+    vector<Node> node;
+    Seg1D(): node(2, {0, 0, 0}) {} // root = node[1]
+    
+    void upd(int n, int s, int e, int i, ll k)
+    {
+        if (i < s || e < i) return;
+        if (s == e) node[n].val = k;
+        else
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
+                }
+                upd(node[n].l, s, m, i, k);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
+                }
+                upd(node[n].r, m + 1, e, i, k);
+            }
+            
+            node[n].val = gcd2(node[node[n].r].val, node[node[n].l].val);
+        }
+    }
+    
+    void _upd(Seg1D& lc, int lcn, Seg1D& rc, int rcn, int n, int s, int e, int i)
+    {
+        if (i < s || e < i) return;
+        if (s != e)
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
+                }
+                _upd(lc, lc.node[lcn].l, rc, rc.node[rcn].l, node[n].l, s, m, i);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
+                }
+                _upd(lc, lc.node[lcn].r, rc, rc.node[rcn].r, node[n].r, m + 1, e, i);
+            }
+        }
+        node[n].val = gcd2(lc.node[lcn].val, rc.node[rcn].val);
+    }
+    
+    ll query(int n, int s, int e, int l, int r)
+    {
+        if (r < s || e < l) return 0;
+        if (l <= s && e <= r) return node[n].val;
+        
+        int m = (s + e) / 2;
+        ll res = 0;
+        if (l <= m && node[n].l != 0) res = gcd2(res, query(node[n].l, s, m, l, r));
+        if (m < r && node[n].r != 0) res = gcd2(res, query(node[n].r, m + 1, e, l, r));
+        return res;
+    }
+};
+
+class Seg2D {
+public:
+    class Node {
+    public:
+        int l, r;
+        Seg1D tree;
+    };
+    
+    int R, C;
+    vector<Node> node;
+    Seg2D(int R, int C): R(R), C(C), node(2, {0, 0, Seg1D()}) {}
+    
+    void upd(int n, int s, int e, int i, int j, ll k)
+    {
+        if (i < s || e < i) return;
+        if (s == e) node[n].tree.upd(1, 0, C - 1, j, k);
+        if (s != e)
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, Seg1D()});
+                    node[n].l = node.size() - 1;
+                }
+                upd(node[n].l, s, m, i, j, k);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, Seg1D()});
+                    node[n].r = node.size() - 1;
+                }
+                upd(node[n].r, m + 1, e, i, j, k);
+            }
+            node[n].tree._upd(node[node[n].r].tree, 1, node[node[n].l].tree, 1, 1, 0, C - 1, j);
+        }
+    }
+    
+    void upd(int i, int j, ll k) { upd(1, 0, R - 1, i, j, k); }
+    
+    ll query(int n, int s, int e, int i1, int i2, int j1, int j2)
+    {
+        if (i2 < s || e < i1) return 0;
+        if (i1 <= s && e <= i2) return node[n].tree.query(1, 0, C - 1, j1, j2);
+        
+        int m = (s + e) / 2;
+        ll res = 0;
+        if (i1 <= m && node[n].l != 0) res = gcd2(res, query(node[n].l, s, m, i1, i2, j1, j2));
+        if (m < i2 && node[n].r != 0) res = gcd2(res, query(node[n].r, m + 1, e, i1, i2, j1, j2));
+        return res;
+    }
+    
+    ll query(int i1, int i2, int j1, int j2) { return query(1, 0, R - 1, i1, i2, j1, j2); }
+};
+
+Seg2D tree(1, 1);
+
+void init(int R, int C) {
+    tree.R = R; tree.C = C;
+}
+
+void update(int P, int Q, long long K) {
+    tree.upd(P, Q, K);
+}
+
+long long calculate(int P, int Q, int U, int V) {
+    return tree.query(P, U, Q, V);
+}
 ```
 
 </div>
