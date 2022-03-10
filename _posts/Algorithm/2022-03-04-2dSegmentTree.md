@@ -97,8 +97,7 @@ $a_{x, y}$를 $v$로 바꾸었을 때, 트리를 업데이트하는 함수를 �
 ```cpp
 void upd(int x, int y, int diff)
 {
-    for (int j = y + n; j; j /= 2) node[x + n][j] += diff; // 바깥쪽 트리의 리프 노드 업데이트
-    for (int i = (x + n) / 2; i; i /= 2) // 바깥쪽 트리의 나머지 노드 업데이트
+    for (int i = (x + n); i; i /= 2)
         for (int j = y + n; j; j /= 2)
             node[i][j] = node[2 * i][j] + node[2 * i + 1][j];
 }
@@ -173,8 +172,7 @@ public:
     
     void upd(int x, int y, int diff)
     {
-        for (int j = y + n; j; j /= 2) node[x + n][j] += diff;
-        for (int i = (x + n) / 2; i; i /= 2)
+        for (int i = (x + n); i; i /= 2)
             for (int j = y + n; j; j /= 2)
                 node[i][j] += diff;
     }
@@ -338,7 +336,9 @@ void compress()
 }
 ```
 
-전체 클래스는 다음과 같다.
+모든 $i$에 대해 `y_idx[i]`를 압축했으므로 안쪽 세그먼트 트리를 업데이트하거나 쿼리를 처리할 때 `lower_bound()`를 이용해야한다.
+
+이를 적용한 전체 클래스는 다음과 같다.
 
 ```cpp
 class Seg2D {
@@ -382,32 +382,22 @@ public:
         }
     }
     
-    void init(vector<vector<int>>& a)
-    {
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                node[i + n][j + n] = a[i][j];
-    
-        for (int i = n; i < 2 * n; i++)
-            for (int j = n - 1; j > 0; j--)
-                node[i][j] = node[i][2 * j] + node[i][2 * j + 1];
-    
-        for (int i = n - 1; i > 0; i--)
-            for (int j = 1; j < 2 * n; j++)
-                node[i][j] = node[2 * i][j] + node[2 * i + 1][j];
-    }
-    
     void upd(int x, int y, int diff)
     {
-        for (int j = y + n; j; j /= 2) node[x + n][j] += diff;
-        for (int i = (x + n) / 2; i; i /= 2)
-            for (int j = y + n; j; j /= 2)
+        for (int i = (x + n); i; i /= 2)
+        {
+            int j = lower_bound(y_idx[i].begin(), y_idx[i].end(), y) - y_idx[i].begin();
+            for (j += y_idx[i].size(); j; j /= 2)
                 node[i][j] += diff;
+        }
     }
     
     int query(int x, int y1, int y2)
     {
-        y1 += n; y2 += n;
+        y1 = lower_bound(y_idx[x].begin(), y_idx[x].end(), y1) - y_idx[x].begin();
+        y2 = lower_bound(y_idx[x].begin(), y_idx[x].end(), y2) - y_idx[x].begin();
+        y1 += y_idx[x].size(); y2 += y_idx[x].size();
+        
         int res = 0;
         while (y1 <= y2)
         {
@@ -433,53 +423,51 @@ public:
 };
 ```
 
-
-
 <br/>
 
 ## 3. Top-Down 2D Segment Tree
 
 Top-Down 방식은 [Dynamic Segment Tree](https://damo1924.github.io/algorithm/PersistentSegmentTree/#2-dynamic-segment-tree--implementation)를 이용해서 효율적으로 쿼리들을 처리할 수 있다.
 
-먼저, 안쪽 세그먼트 트리 클래스를 다음과 같이 구현한다.(Dynamic segment tree 그대로)
+먼저, 안쪽 세그먼트 트리 클래스를 다음과 같이 구현한다.(Dynamic segment tree)
 
 ```cpp
-class segtree {
+class Seg1D {
 public:
-    class node {
+    class Node {
     public:
-        int l, r; // 왼쪽 자식, 오른쪽 자식 인덱스
+        int l, r;
         ll val;
     };
     
-    vector<node> tree;
-    segtree(): tree(2) {} // root = tree[1]
+    vector<Node> node;
+    Seg1D(): node(2) {} // root = node[1]
     
     void upd(int n, int s, int e, int i, int diff)
     {
         if (i < s || e < i) return;
         
-        tree[n] += diff;
+        node[n].val += diff;
         if (s != e)
         {
             int m = (s + e) / 2;
             if (i <= m)
             {
-                if (tree[n].l == 0)
+                if (node[n].l == 0)
                 {
-                    tree.push_back({0, 0, 0});
-                    tree[n].l = tree.size() - 1;
+                    node.push_back({0, 0, 0});
+                    node[n].l = node.size() - 1;
                 }
-                upd(tree[n].l, s, m, i, diff);
+                upd(node[n].l, s, m, i, diff);
             }
             else
             {
-                if (tree[n].r == 0)
+                if (node[n].r == 0)
                 {
-                    tree.push_back({0, 0, 0});
-                    tree[n].r = tree.size() - 1;
+                    node.push_back({0, 0, 0});
+                    node[n].r = node.size() - 1;
                 }
-                upd(tree[n].r, m + 1, s, i, diff);
+                upd(node[n].r, m + 1, e, i, diff);
             }
         }
     }
@@ -487,17 +475,78 @@ public:
     ll sum(int n, int s, int e, int l, int r)
     {
         if (r < s || e < l) return 0;
-        if (l <= s && e <= r) return tree[n].val;
+        if (l <= s && e <= r) return node[n].val;
         
         int m = (s + e) / 2, res = 0;
-        if (l <= m && tree[n].l != 0) res += sum(tree[n].l, s, m, l, r);
-        if (m < r && tree[n].r != 0) res += sum(tree[n].r, m + 1, e, l, r);
+        if (l <= m && node[n].l != 0) res += sum(node[n].l, s, m, l, r);
+        if (m < r && node[n].r != 0) res += sum(node[n].r, m + 1, e, l, r);
         return res;
     }
 };
 ```
 
+정의한 `Seg1D` 클래스를 노드에 저장하는 `Seg2D` 클래스를 정의하자.
 
+세그먼트 트리의 노드에 저장하는 값이 정수에서 세그먼트 트리로 바뀌었다는 점만 제외하면 완전히 같은 클래스이다.
+
+```cpp
+class Seg2D {
+public:
+    class Node {
+    public:
+        int l, r;
+        Seg1D tree; // 노드에 저장된 세그먼트 트리
+    };
+    
+    int N; // 이차원 배열 a의 크기가 N x N 임을 의미
+    vector<Node> node;
+    Seg2D(int N): N(N), node(2) {}
+    
+    void upd(int n, int s, int e, int i, int j, int diff)
+    {
+        if (i < s || e < i) return;
+        
+        node[n].tree.upd(1, 1, N, j, diff);
+        if (s != e)
+        {
+            int m = (s + e) / 2;
+            if (i <= m)
+            {
+                if (node[n].l == 0)
+                {
+                    node.push_back({0, 0, Seg1D()});
+                    node[n].l = node.size() - 1;
+                }
+                upd(node[n].l, s, m, i, j, diff);
+            }
+            else
+            {
+                if (node[n].r == 0)
+                {
+                    node.push_back({0, 0, Seg1D()});
+                    node[n].r = node.size() - 1;
+                }
+                upd(node[n].r, m + 1, e, i, j, diff);
+            }
+        }
+    }
+    
+    void upd(int i, int j, int diff) { upd(1, 1, N, i, j, diff); }
+    
+    ll sum(int n, int s, int e, int i1, int i2, int j1, int j2)
+    {
+        if (i2 < s || e < i1) return 0;
+        if (i1 <= s && e <= i2) return node[n].tree.sum(1, 1, N, j1, j2);
+        
+        int m = (s + e) / 2, res = 0;
+        if (i1 <= m && node[n].l != 0) res += sum(node[n].l, s, m, i1, i2, j1, j2);
+        if (m < i2 && node[n].r != 0) res += sum(node[n].r, m + 1, e, i1, i2, j1, j2);
+        return res;
+    }
+    
+    ll sum(int i1, int i2, int j1, int j2) { return sum(1, 1, N, i1, i2, j1, j2); }
+};
+```
 
 
 
