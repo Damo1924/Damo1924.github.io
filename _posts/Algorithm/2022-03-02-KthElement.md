@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` kth element, Segment tree, BIT, Merge sort tree, Persistent segment tree, 2D segment tree, Binary search
+`Tags` kth element, Segment tree, BIT, Merge sort tree, Persistent segment tree, Binary search
 
 ## $k$th Element Problems
 
@@ -375,8 +375,6 @@ int main()
 > 
 > 길이가 $n$인 수열에서, 임의의 구간 $\[l, r\]$($1 \leq l \leq r \leq n$)의 $k$($1 \leq k \leq r - l + 1$)번째 원소를 구하여라.
 
-이 경우에는 Merge sort tree를 이용하거나 Persistent segment tree / 2D Segment tree를 이용해야한다.
-
 ---
 
 ### [SOLUTION 1] Merge Sort Tree + Binary Search
@@ -664,11 +662,6 @@ int main()
 ```
 </div>
 </details>
-
----
-
-### [SOLUTION 3] 2D Segment Tree
-
 
 
 
