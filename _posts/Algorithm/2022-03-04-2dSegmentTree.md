@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Dynamic segment tree
+`Tags` Dynamic segment tree, 11658 구간 합 구하기 3, 23839   바자와 샤자
 
 ## 1. 2D Segment Tree
 
@@ -23,8 +23,6 @@ comments: true
 즉 바깥쪽 세그먼트 트리의 리프 노드는 각 행을 대표하며, 안쪽 세그먼트 트리의 리프 노드는 각 열을 대표한다.
 
 이때 바깥쪽 세그먼트 트리의 노드들에는 안쪽 세그먼트 트리가 저장되어 있는 형태이다.
-
-이제 2D 세그먼트 트리를 직접 구현해 볼 것이다.
 
 <br/>
 
@@ -97,7 +95,7 @@ $a_{x, y}$를 $v$로 바꾸었을 때, 트리를 업데이트하는 함수를 �
 ```cpp
 void upd(int x, int y, int diff)
 {
-    for (int i = (x + n); i; i /= 2)
+    for (int i = x + n; i; i /= 2)
         for (int j = y + n; j; j /= 2)
             node[i][j] = node[2 * i][j] + node[2 * i + 1][j];
 }
@@ -138,8 +136,8 @@ int query(int x1, int x2, int y1, int y2)
     int res = 0;
     while (x1 <= x2)
     {
-        if (x1 % 2 != 0) res += _sum(x1++, y1, y2);
-        if (x2 % 2 == 0) res += _sum(x2--, y1, y2);
+        if (x1 % 2 != 0) res += query(x1++, y1, y2);
+        if (x2 % 2 == 0) res += query(x2--, y1, y2);
         x1 /= 2; x2 /= 2;
     }
     return res;
@@ -176,7 +174,7 @@ public:
     
     void upd(int x, int y, int diff)
     {
-        for (int i = (x + n); i; i /= 2)
+        for (int i = x + n; i; i /= 2)
             for (int j = y + n; j; j /= 2)
                 node[i][j] += diff;
     }
@@ -284,11 +282,9 @@ int main()
 
 이를 해결하기 위해 기존 세그먼트 트리에서 자주 사용했던 **좌표 압축** 기법을 이차원으로 확장시켜보자.
 
-그렇다고 단순히 $x$좌표, $y$좌표에 대해 좌표 압축을 하면 안된다.
+그렇다고 단순히 $x$좌표, $y$좌표에 대해 좌표 압축을 하면, 쿼리가 $10^5$개씩 주어지는 상황에서는 여전히 메모리 초과가 발생한다.
 
-쿼리의 개수를 $q$라고 하면 $O(q^2)$이므로 쿼리가 $10^5$개씩 주어지면 여전히 메모리 초과가 발생한다.
-
-이는 **바깥쪽 세그먼트 트리의 각 노드에 쿼리를 처리하기 위해 필요한 값들에 대한 세그먼트 트리를 구현**함으로써 해결할 수 있다.
+> **바깥쪽 세그먼트 트리의 각 노드에 쿼리를 처리하기 위해 필요한 값들에 대한 세그먼트 트리를 구현**
 
 예를 들어 `update(1, 2, 10)`과 같은 쿼리가 주어진다면, $x = 1$을 포함하는 바깥쪽 세그먼트 트리의 노드들에만 $y = 2$를 저장하는 것이다.
 
@@ -343,12 +339,12 @@ void compress()
         if (y_idx[i].empty()) continue;
         sort(y_idx.begin(), y_idx.end());
         y_idx.erase(unique(y_idx.begin(), y_idx.end()), y_idx.end());
-        a[i].resize(y_idx[i].size() * 2);
+        node[i].resize(y_idx[i].size() * 2);
     }
 }
 ```
 
-모든 $i$에 대해 `y_idx[i]`를 압축했으므로 안쪽 세그먼트 트리를 업데이트하거나 쿼리를 처리할 때 `lower_bound()`를 이용해야한다.
+모든 $i$에 대해 `y_idx[i]`를 압축했으므로 안쪽 세그먼트 트리를 업데이트하거나 쿼리를 처리할 때에는 `lower_bound()`를 이용해야한다.
 
 이를 적용한 전체 클래스는 다음과 같다.
 
@@ -400,7 +396,7 @@ public:
     
     void upd(int x, int y, int diff)
     {
-        for (int i = (x + n); i; i /= 2)
+        for (int i = x + n; i; i /= 2)
         {
             int j = lower_bound(y_idx[i].begin(), y_idx[i].end(), y) - y_idx[i].begin();
             for (j += y_idx[i].size(); j; j /= 2)
@@ -446,13 +442,13 @@ public:
 
 ## 3. Top-Down 2D Segment Tree
 
-Top-Down 방식은 [Dynamic Segment Tree](https://damo1924.github.io/algorithm/PersistentSegmentTree/#2-dynamic-segment-tree--implementation)를 이용해서 효율적으로 쿼리들을 처리할 수 있다.
+Top-Down 방식은 [Dynamic Segment Tree](https://damo1924.github.io/algorithm/PersistentSegmentTree/#2-dynamic-segment-tree--implementation)를 이용해서 효율적으로 쿼리들을 처리하고, 온라인 쿼리도 처리할 수 있다.
 
 주어진 영역에 대해 구하고자 하는 값을 함수 `int f(int a, int b)`라고 하자.
 
-`f(a, b)`는 두 값을 더하는 `sum(a, b)`, 최댓값이나 최솟값을 구하는 `max(a, b)`, `min(a, b)`, 최대공약수를 구하는 `gcd(a, b)` 등이 가능하다.
+> `f(a, b)`로는 `sum(a, b)`, `max(a, b)`, `min(a, b)`, `gcd(a, b)` 등이 가능하다.
 
-먼저, 안쪽 세그먼트 트리 클래스를 구현해보자.
+먼저, 안쪽 세그먼트 트리 클래스(= 1D segment tree)를 구현해보자.
 
 ```cpp
 class Seg1D {
@@ -506,7 +502,7 @@ Dynamic segment tree의 업데이트 함수와 동일하게 구현해주면 된�
 
 이때 함수 이름이 `upd_leaf()`인 이유는 **바깥쪽 세그먼트 트리의 리프 노드**를 업데이트할 때만 사용할 함수이기 때문이다.
 
-바깥쪽 세그먼트 트리의 리프 노드를 제외한 나머지 노드를 업데이트할 때 사용할 함수를 따로 정의하자.
+바깥쪽 세그먼트 트리의 리프 노드를 제외한 나머지 노드를 업데이트할 때 사용할 함수를 따로 정의할 필요가 있다.
 
 ```cpp    
     void upd_parent(Seg1D& lc, int lc_n, Seg1D& rc, int rc_n, int n, int s, int e, int i)
@@ -538,9 +534,7 @@ Dynamic segment tree의 업데이트 함수와 동일하게 구현해주면 된�
     }
 ```
 
-`upd_parent()`는 바깥쪽 세그먼트 트리의 노드를 해당 노드의 두 자식 노드에서 업데이트된 부분을 합치는 작업을 수행한다.
-
-각 매개변수는 다음을 의미한다.
+`upd_parent()`는 바깥쪽 세그먼트 트리의 노드를 해당 노드의 두 자식 노드에서 업데이트된 부분을 합치는 작업을 수행하며, 각 매개변수는 다음을 의미한다.
 
 - `lc` / `rc`: 업데이트하려는 바깥 세그먼트 트리의 노드의 왼쪽 자식(left child) / 오른쪽 자식(right child)
 - `n` : 현재 세그먼트 트리에서 `[s, e]` 구간을 대표하는 노드의 인덱스
@@ -917,18 +911,6 @@ long long calculate(int P, int Q, int U, int V) {
 
 </div>
 </details>
-
-<br/>
-
-## 4. Comparision between two methods
-
-이렇게 세그먼트 트리를 구현하는 두 가지 방법에 대해 알아보았는데, 이를 어떤 문제에서 사용해야할까?
-
-두 방식의 가장 큰 차이는 Bottom-Up은 오프라인 쿼리에서만 사용할 수 있지만, Top-Down은 온라인 쿼리에서도 사용할 수 있다는 것이다.
-
-일차원 세그먼트 트리에서는 Bottom-Up 방식이 Top-Down 방식보다 메모리가 적다는 장점이 있었지만, 이차원 세그먼트 트리에서는 항상 그렇지도 않다.
-
-쿼리들에 대한 정보를 저장하는 배열과 좌표압축을 위한 배열을 추가로 사용해야하기 때문이다.
 
 <br/>
 
