@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Range Minimum Queries, RMQ
+`Tags` 희소 배열, Range Minimum Queries, RMQ, 10868 최솟값, 17435 합성함수와 쿼리
 
 ## 1. Sparse Table
 
@@ -110,7 +110,7 @@ $j$값은 $O(1)$에 구하기 위해 $1$부터 $N$까지의 정수 $i$에 대해
 ```cpp
 int log[N + 1];
 log[1] = 0;
-for (int i = 1; i <= N; i++)
+for (int i = 2; i <= N; i++)
     log[i] = log[i / 2] + 1;
 ```
 
@@ -118,7 +118,109 @@ for (int i = 1; i <= N; i++)
 
 ```cpp
 int j = log[r - l + 1];
-cout << mn = query(st[l][j], st[r - (1 << j) + 1][j]);
+int mn = min(st[l][j], st[r - (1 << j) + 1][j]);
+```
+
+<br/>
+
+## 3. Related Problems
+
+### [백준] 10868. 최솟값
+
+$N$($1 \leq N \leq 10^5$)개의 정수들이 주어진다.
+
+이때 두 정수 $a, b$에 대해 $a$번째 수부터 $b$번째 수까지 중에서 최솟값을 구하는 쿼리가 $M$($1 \leq M \leq 10^5$)개 주어진다.
+
+**[SOLUTION]**
+
+RMQ이므로 sparse table을 이용하면 각 쿼리를 $O(1)$에 처리할 수 있다.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int log[100001], st[100001][20];
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int n, m; cin >> n >> m;
+    for (int i = 1; i <= n; i++) cin >> st[i][0];
+    for (int j = 1; j < 20; j++)
+        for (int i = 1; i + (1 << j) - 1 <= n; i++)
+            st[i][j] = min(st[i][j - 1], st[i + (1 << (j - 1))][j - 1]);
+    for (int i = 2; i <= n; i++) log[i] = log[i / 2] + 1;
+    
+    for (int i = 0; i < m; i++)
+    {
+        int a, b; cin >> a >> b;
+        int j = log[b - a + 1];
+        cout << min(st[a][j], st[b - (1 << j) + 1][j]) << "\n";
+    }
+}
+```
+
+---
+
+### [백준] 17435. 합성함수와 쿼리
+
+$1$부터 $m$($1 \leq m \leq 200000$)까지의 정수들의 집합을 $M$이라고 할 때, 함수 $f:M \to M$에 대해 합성함수 $f_n$을 다음과 같이 정의하자.
+
+- $f_1(x) = f(x)$
+- $f_{n+1}(x) = f(f_n(x))$
+
+이때 두 정수 $n, x$($1 \leq n \leq 500000$)에 대해 $f_n(x)$를 출력해야하는 쿼리가 $q$($1 \leq q \leq 200000$)개 주어진다.
+
+**[SOLUTION]**
+
+합성함수를 구하는 쿼리도 sparse table을 이용하면 $O(\log n)$에 처리할 수 있다.
+
+\begin{aligned}
+f_n(x) = f_{n - k}\left(f_k(i)\right)
+\end{aligned}
+
+위와 같은 함성함수의 성질을 이용해서 전처리 부분과 쿼리를 처리하는 함수를 구현하자.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+int st[200001][20];
+
+int query(int n, int x)
+{
+    int res = x;
+    for (int j = 20; j >= 0; j--)
+    {
+        if ((1 << j) <= n)
+        {
+            res = st[res][j];
+            n -= (1 << j);
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int m; cin >> m;
+    for (int i = 1; i <= m; i++) cin >> st[i][0];
+    for (int j = 1; j < 20; j++)
+        for (int i = 1; i <= m; i++)
+            st[i][j] = st[st[i][j - 1]][j - 1];
+    
+    int q; cin >> q;
+    for (int i = 0; i < q; i++)
+    {
+        int n, x; cin >> n >> x;
+        cout << query(n, x) << "\n";
+    }
+}
 ```
 
 <br/>
