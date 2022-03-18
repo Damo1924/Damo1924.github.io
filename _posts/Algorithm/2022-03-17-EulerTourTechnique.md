@@ -78,9 +78,111 @@ comments: true
 
 트리를 ETT로 표현하고, 만들어진 리스트에 대한 세그먼트 트리를 구현하자.
 
+이때 리스트에 꼭 노드를 두 번 삽입할 필요 없이 방문할 때만 삽입하고 범위를 `s[i]`와 `e[i]`에 저장해두기만 해도 된다.
+
+```cpp
+int idx = 1;
+void dfs(int i)
+{
+    l[idx] = p[i]; // 리스트에 직원의 월급을 저장
+    s[i] = idx; // 직원 i의 위치 저장
+    for (int j : g[i])
+    {
+        idx++;
+        dfs(j);
+    }
+    e[i] = idx; // 직원 i의 부하직원들의 마지막 위치 저장
+}
+```
+
 첫 번째 쿼리는 리스트의 구간 업데이트, 두 번째 쿼리는 한 원소의 값을 출력하는 것으로 생각할 수 있다.
 
 구간 업데이트이기 때문에 lazy propagation을 이용해도 되지만, 구간 합이 아니라 한 원소의 값을 출력하는 문제이므로 굳이 lazy propagation을 이용할 필요는 없다.
+
+> [백준 16975. 수열과 쿼리 21](https://www.acmicpc.net/problem/16975) 참고
+
+전체 코드
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+using namespace std;
+typedef long long ll;
+
+int p[500001], l[500001], s[500001], e[500001];
+
+vector<int> g[500001];
+
+int idx = 1;
+void dfs(int i)
+{
+    l[idx] = p[i];
+    s[i] = idx;
+    for (int j : g[i])
+    {
+        idx++;
+        dfs(j);
+    }
+    e[i] = idx;
+}
+
+ll query(vector<ll>& tree, int n, int s, int e, int x)
+{
+    if (e < x || x < s) return 0;
+    if (s == e) return tree[n];
+    
+    int m = (s + e) / 2;
+    return tree[n] + query(tree, 2 * n, s, m, x) + query(tree, 2 * n + 1, m + 1, e, x);
+}
+
+void upd(vector<ll>& tree, int n, int s, int e, int l, int r, ll diff)
+{
+    if (r < s || e < l) return;
+    if (l <= s && e <= r)
+    {
+        tree[n] += diff;
+        return;
+    }
+    
+    int m = (s + e) / 2;
+    upd(tree, 2 * n, s, m, l, r, diff);
+    upd(tree, 2 * n + 1, m + 1, e, l, r, diff);
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int n, m; cin >> n >> m;
+    cin >> p[1];
+    for (int i = 2; i <= n; i++)
+    {
+        int a; cin >> p[i] >> a;
+        g[a].push_back(i);
+    }
+    dfs(1);
+    
+    int h = (int) ceil(log2(n));
+    vector<ll> tree(1 << (h + 1), 0);
+    
+    while (m--)
+    {
+        char c;
+        int a;
+        cin >> c >> a;
+        if (c == 'p')
+        {
+            int x; cin >> x;
+            upd(tree, 1, 1, n, s[a], e[a], x);
+            p[a] -= x; // 본인의 월급은 올리지 못한다.
+        }
+        else cout << p[a] + query(tree, 1, 1, n, s[a]) << "\n";
+    }
+}
+```
 
 
 
