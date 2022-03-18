@@ -57,6 +57,35 @@ comments: true
 
 ---
 
+### Implementation
+
+사실 문제를 풀 때는 앞서 말한 것처럼 리스트에 두 번씩 노드를 삽입할 필요는 없다.
+
+우리가 필요한 정보는 노드 $i$의 서브트리에 있는 노드들의 번호이기 때문이다.
+
+리스트에 노드를 방문할 때만 삽입한다고 했을 때, 노드 $i$에 대해 `s[i]`와 `e[i]`를 다음과 같이 정의해도 된다.
+
+- `s[i]` : 리스트에서 $i$가 나타나는 위치
+- `e[i]` : 노드 $i$의 서브트리에 있는 노드들 중 리스트에 마지막으로 나타나는 노드의 위치
+
+이제 다음과 같은 DFS 함수를 이용해서 우리가 필요한 정보를 얻을 수 있다.
+
+```cpp
+int idx = 1;
+void dfs(int i)
+{
+    s[i] = idx;
+    for (int j : g[i]) // g[i]: 노드 i의 자식 노드들의 번호 저장
+    {
+        idx++;
+        dfs(j);
+    }
+    e[i] = idx;
+}
+```
+
+---
+
 ### [백준] 2820. 자동차 공장
 
 [백준 2820. 자동차 공장 문제 링크](https://www.acmicpc.net/problem/2820)
@@ -77,23 +106,6 @@ comments: true
 공장의 직원 체계는 하나의 트리로 표현할 수 있다.
 
 트리를 ETT로 표현하고, 만들어진 리스트에 대한 세그먼트 트리를 구현하자.
-
-이때 리스트에 꼭 노드를 두 번 삽입할 필요 없이 방문할 때만 삽입하고 범위를 `s[i]`와 `e[i]`에 저장해두기만 해도 된다.
-
-```cpp
-int idx = 1;
-void dfs(int i)
-{
-    l[idx] = p[i]; // 리스트에 직원의 월급을 저장
-    s[i] = idx; // 직원 i의 위치 저장
-    for (int j : g[i])
-    {
-        idx++;
-        dfs(j);
-    }
-    e[i] = idx; // 직원 i의 부하직원들의 마지막 위치 저장
-}
-```
 
 첫 번째 쿼리는 리스트의 구간 업데이트, 두 번째 쿼리는 한 원소의 값을 출력하는 것으로 생각할 수 있다.
 
@@ -184,8 +196,6 @@ int main()
 }
 ```
 
-
-
 <br/>
 
 ## 3. Lowest Common Ancestor(LCA)
@@ -203,6 +213,7 @@ int main()
 ## References
 
 [1] [Codeforces, ifsmirnov's blog, 'On Euler tour trees'](https://codeforces.com/blog/entry/18369)  
+[2] [WIKIPEDIA, 'Euler tour technique'](https://en.m.wikipedia.org/wiki/Euler_tour_technique)  
 
 
 
