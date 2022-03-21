@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Sum of subtree, LCA, Segemnt tree, BIT, Sparse table
+`Tags` Sum of subtree, LCA, Segemnt tree, BIT, Sparse table, 2820 자동차 공장
 
 ## 1. Euler Tour Technique
 
