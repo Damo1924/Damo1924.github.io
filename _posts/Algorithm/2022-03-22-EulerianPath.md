@@ -1,5 +1,5 @@
 ---
-title: "Finding the Eulerian Path/Cycle"
+title: "Finding the Eulerian Path/Cycle (Hierholzer's Algorithm)"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 오일러 회로, 한붓그리기, 1199, 1178, 17414, 1591
+`Tags` 오일러 회로, 한붓그리기, 1199, 1178, 17414, 1591, 17434
 
 ## 1. Eulerian Path/Cycle
 
@@ -53,9 +53,9 @@ comments: true
 
 ## 2. Hierholzer's Algorithm
 
-Hierholzer's algorithm은 오일러 경로/회로를 $O(E)$로 구할 수 있는 알고리즘이다.
+Hierholzer's algorithm은 오일러 회로를 $O(E)$로 구할 수 있는 알고리즘이다.
 
-> 오일러 회로는 아무 정점이나 시작 정점으로 잡아도 상관 없지만, 오일러 경로는 반드시 차수가 홀수인 정점에서 탐색을 시작해야한다.
+> 오일러 경로를 구하고 싶으면, **차수가 홀수인 두 정점을 연결하는 가상의 간선을 추가**하여 오일러 회로를 구한 후에 해당 간선을 제거하면 된다.
 
 알고리즘은 간단하게 아래와 같이 설명할 수 있다.
 
@@ -240,7 +240,19 @@ g[j].push_back({ i, g[i].size() - 1 });
 
 위 문제와 마찬가지로 무엇을 그래프의 정점, 그리고 간선으로 정의할 것인지가 중요한 문제이다.
 
-**[Hint]** 길이가 $M-1$인 부분수열들을 정점으로 생각하면, 오일러 경로가 존재하는 방향 그래프를 얻을 수 있다.
+**[Hint]** 길이가 $M-1$인 부분수열들을 정점으로, 길이가 $M$인 부분수열들을 간선으로 생각한다면, 오일러 경로가 존재하는 방향 그래프를 얻을 수 있다.
+
+---
+
+### [백준] 17434. 도로 청소
+
+[백준 17434. 도로 청소 문제 링크](https://www.acmicpc.net/problem/17434)
+
+주어진 연결 그래프에 대해 두붓그리기를 하는 문제이다.
+
+차수가 홀수인 정점들을 찾아 가상의 간선들을 추가하여 오일러 회로를 구하고, 가상의 간선들을 제거해주면 된다.
+
+단, Hierholzer's algorithm으로 구한 경로는 역순이기 때문에 간선의 부호를 정할 때 주의해야한다.
 
 <br/>
 
