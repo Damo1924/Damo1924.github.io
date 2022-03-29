@@ -152,10 +152,70 @@ Tarjan's algorithm은 Kosaraju's algorithm보다 훨씬 직관적으로 받아�
 
 ### 3-1. Implementation
 
+각 정점의 방문 순서를 저장할 배열과 SCC에 속한 정점인지 체크할 배열이 필요하다.
+
+```cpp
+vector<int> g[10001]; // graph
+int d[10001], idx = 0; // d[i]: depth (visited order)
+bool chk[10001]; // check if it's in SCC
+stack<int> st;
+vector<vector<int>> scc;
+
+int dfs(int u)
+{
+    d[u] = ++idx; // 방문 순서를 저장하고 스택에 삽입
+    st.push(u);
+    
+    int res = d[u]; // u의 decendents의 방문 순서 중 가장 작은 값
+    for (int v : g[u])
+    {
+        if (!d[v]) res = min(res, dfs(v));
+        else if (!chk[v]) res = min(res, d[v]);
+    }
+    
+    if (res == d[u])
+    {
+        vector<int> tmp;
+        while (true)
+        {
+            int t = st.top();
+            st.pop();
+            tmp.push_back(t);
+            chk[t] = 1;
+            if (t == u) break;
+        }
+        scc.push_back(tmp);
+    }
+    return res;
+}
+```
+
+모든 정점에 대해 한 번씩 함수가 실행되므로 시간복잡도는 $O(V + E)$이다.
+
+<br/>
+
+## 4. Related Problems
+
+SCC를 구하는 두 가지 알고리즘은 같은 시간복잡도를 갖기 때문에 자신이 편한 알고리즘을 사용하면 된다.
+
+SCC를 구해서 풀 수 있는 문제들을 풀어보도록 하자.
+
+---
+
+### [BOJ] 2150. Strongly Connected Component
+
+[BOJ 2150. Strongly Connected Component 문제 링크](https://www.acmicpc.net/problem/2150)
+
+주어진 방향 그래프의 SCC를 모두 구하는 문제.
+
+---
+
+### [BOJ] 
 
 
 <br/>
 
 ## References
 
-[1] [
+[1] [ACM-ICPC 상 탈 사람, 'SCC(Strongly Connected Component)'](https://jason9319.tistory.com/m/98)  
+[2] [web.stanford.edu, 'Fundamental Graph Algorithms'](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjiwNCtxer2AhUKDN4KHbdIBe0QFnoECAMQAQ&url=https%3A%2F%2Fweb.stanford.edu%2Fclass%2Farchive%2Fcs%2Fcs161%2Fcs161.1138%2Flectures%2F04%2FSmall04.pdf&usg=AOvVaw1XASogccN6o2LFBFDoZGCf)  
