@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 강한 연결 요소, Kosaraju's algorithm, Tarjan's algorithm
+`Tags` 강한연결요소, Kosaraju, Tarjan, DAG, Condensation, 2-SAT, 2150, 4196, 3977, 4013
 
 ## 1. Strongly Connected Component
 
