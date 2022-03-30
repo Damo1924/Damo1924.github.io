@@ -75,4 +75,6 @@ $x_1 = true$, $x_2 = false$로 값을 할당하면 위 식이 참이 되므로 2
 
 $p \to q$와 $\lnot p \lor q$가 동치라는 사실을 이용해서 주어진 2-CNF로부터 그래프를 만들어보자.
 
-그래프는 $2n$개의 정점 $x_1, \lnot x_1, x_2, \lnot x_2, \dots, x_n, \lnot x_n$
+> $x_1, \lnot x_1, x_2, \lnot x_2, \dots, x_n, \lnot x_n$을 정점으로 하고, 2-CNF의 각 절 $x_i \lor x_j$에 대해 $\lnot x_i \to x_j$와 $\lnot x_j \to x_i$을 간선으로 갖는 그래프
+
+2-CNF가 참이기 위해서는 각 절이 모두 참이어야하므로 
