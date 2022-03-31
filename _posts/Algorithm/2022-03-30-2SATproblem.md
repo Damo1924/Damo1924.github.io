@@ -71,10 +71,57 @@ $x_1 = true$, $x_2 = false$로 값을 할당하면 위 식이 참이 되므로 2
 
 ---
 
-### 2-2. Make a Directed Graph from 2-CNF
+### 2-2. Implication Graph & Solution to the problem
 
-$p \to q$와 $\lnot p \lor q$가 동치라는 사실을 이용해서 주어진 2-CNF로부터 그래프를 만들어보자.
+$p \lor q$는 $\lnot p \to q$, $\lnot q \to p$와 동치라는 사실을 이용해서 주어진 2-CNF로부터 그래프를 만들어보자.
 
 > $x_1, \lnot x_1, x_2, \lnot x_2, \dots, x_n, \lnot x_n$을 정점으로 하고, 2-CNF의 각 절 $x_i \lor x_j$에 대해 $\lnot x_i \to x_j$와 $\lnot x_j \to x_i$을 간선으로 갖는 그래프
+> 
+> (이러한 그래프를 **implication graph**라고 부른다)
 
-2-CNF가 참이기 위해서는 각 절이 모두 참이어야하므로 
+2-CNF가 참이기 위해서는 모든 간선이 참이어야하고, 따라서 $p = true$, $q = false$인 간선 $p \to q$가 존재하면 안된다.
+
+이로부터 다음과 같은 사실을 알 수 있다.
+
+> [Lemma] 그래프에 어떤 경로 $y_1 \to y_2 \to \dots \to y_l$가 존재한다면, 경로 위의 정점(변수)들은 다음과 같이 값을 가져야한다.
+> 
+> 어떤 정수 $k$($0 \leq k \leq l$)에 대해,
+> 
+> y_i =
+> \begin{cases}
+> false, & \mbox{if }1 \leq i \leq k \\\\  
+> true, & \mbox{if }k < i \leq l
+
+이제 $x_i$와 $\lnot x_i$의 관계를 생각해보자.
+
+- 경로 $x_i \to \lnot x_i$와 경로 $\lnot x_i \to x_i$가 모두 존재하는 경우
+- 두 경로 중 하나만 존재하는 경우
+- 두 경로 모두 존재하지 않는 경우
+
+두 경로가 모두 존재한다면, Lemma에 의해 $x_i = \lnot x_i$이어야하므로 모순이다.
+
+두 경로 중 하나만 존재한다면, Lemma에 의해 결론 부분에 오는 정점이 $true$가 된다.
+
+따라서 다음과 같은 과정을 통해 2-SAT 문제를 풀 수 있다.
+
+1. 2-CNF으로부터 implication graph를 구현한다.
+2. 그래프를 SCC들로 분할한다.
+3. $x_i$와 $\lnot x_i$가 같은 SCC에 속한다면, 해가 존재하지 않는다.
+4. 위와 같은 경우가 없다면, 각 $x_i$, $\lnot x_i$ 사이의 위상 정렬 순서를 비교함으로써 참/거짓을 할당해준다.
+
+---
+
+### 2-3. Implementation
+
+
+
+
+
+
+
+
+
+
+
+
+
