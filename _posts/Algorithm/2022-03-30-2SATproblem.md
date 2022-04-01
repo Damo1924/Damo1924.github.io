@@ -92,6 +92,7 @@ $p \lor q$는 $\lnot p \to q$, $\lnot q \to p$와 동치라는 사실을 이용�
 > \begin{cases}
 > false, & \mbox{if }1 \leq i \leq k \\\\  
 > true, & \mbox{if }k < i \leq l
+> \end{cases}
 > \end{aligned}
 
 이제 $x_i$와 $\lnot x_i$의 관계를 생각해보자.
