@@ -241,6 +241,30 @@ Ex)
 
 ---
 
+### [BOJ] 1154. 팀 편성
+
+[BOJ 1154. 팀 편성 문제 링크](https://www.acmicpc.net/problem/1154)
+
+$n$명의 학생들을 두 팀으로 나누는데, 각 팀에 속한 학생들끼리는 모두 아는 사이여야한다.
+
+서로 아는 사이인 두 학생의 번호가 주어질 때, 조건을 만족하도록 그룹을 나누는 문제이다.
+
+서로 친구인 경우에는 서로 다른 팀에 속해도 상관이 없지만, 친구가 아니라면 반드시 다른 팀에 속해야한다는 점을 이용하자.
+
+$a, b$가 서로 알지 못한다면, 다음과 같은 논리식을 세울 수 있다.
+
+\begin{aligned}
+(a \land \lnot b) \lor (\lnot a \land b)
+\end{aligned}
+
+분배법칙을 이용해서 정리하면, 2-CNF으로 만들 수 있다.
+
+\begin{aligned}
+(a \lor b) \land (\lnot a \lor \lnot b)
+\end{aligned}
+
+---
+
 ### [BOJ] 16367. TV Show Game
 
 [BOJ 16367. TV Show Game 문제 링크](https://www.acmicpc.net/problem/16367)
@@ -271,18 +295,18 @@ Ex)
 
 $(a, b)$에서 $(c, d)$로 운행하는 버스를 생각해보자.
 
-- $a = c$, $b = d$ : 도로의 방향에 영향이 없다.
-- $a = c$, $b \neq d$ : 가로 도로 $a$의 방향이 정해진다.
-- $a \neq c$, $b = d$ : 세로 도로 $b$의 방향이 정해진다.
-- $a \neq c$, $b \neq d$ : $(a, d)$의 방향이 정해지거나, $(b, c)$의 방향이 정해진다.
+1. $a = c$, $b \neq d$ : 가로 도로 $a$의 방향이 정해진다.
+2. $a \neq c$, $b = d$ : 세로 도로 $b$의 방향이 정해진다.
+3. $a \neq c$, $b \neq d$ : $(a, d)$의 방향이 정해지거나, $(b, c)$의 방향이 정해진다.
+4. $a = c$, $b = d$ : 도로의 방향에 영향이 없다.
 
-첫 번째 경우는 제외하고, 나머지 경우를 2-CNF로 표현하면 다음과 같다.
+각 경우를 2-CNF로 표현하면 다음과 같다.
 
-- $a \lor a$
-- $b \lor b$
-- $(a \lor b) \land (a \lor c) \land (d \lor b) \land (d \lor c)$
+1. $a \lor a$
+2. $b \lor b$
+3. $(a \lor b) \land (a \lor c) \land (d \lor b) \land (d \lor c)$
 
-마지막 경우는 $(a \land d) \lor (b \land c)$를 분배법칙을 통해 전개하여 얻을 수 있다.
+세 번째 경우는 $(a \land d) \lor (b \land c)$를 분배법칙을 통해 전개하여 얻을 수 있다.
 
 따라서 변수가 $n + m$개인 2-SAT 문제를 풀면 된다.
 
