@@ -213,23 +213,57 @@ int main()
 
 <br/>
 
-## 3. Related Problems
+## 3. Converting to 2-SAT Problems
 
 2-SAT 문제 자체는 SCC를 구하는 알고리즘을 알고 있다면 쉽게 해결할 수 있다.
 
 실제 문제를 풀 때 중요한 점은 주어진 문제를 2-SAT 문제의 형태로 모델링하는 것이다.
 
-굳이 어떤 조작을 하지 않아도 되는 문제들도 있지만, 주어진 논리식을 CNF로 변형해서 풀어야하는 어려운 문제들도 있다.
+굳이 어떤 조작을 하지 않아도 되는 문제들도 있지만, 주어진 논리식을 CNF로 변형해서 풀어야하는 문제들도 있다.
 
-> 모든 명제 논리식은 CNF로 변환할 수 있다.
+모든 명제 논리식은 CNF로 변환할 수 있기 때문에 생각보다 다양한 문제들을 2-SAT 문제로 변형할 수 있다.
 
-Ex)
+예로 아래와 같은 것들을 들 수 있다.
 
 - $x \iff (x \lor x)$
 - $x = y \iff (x \lor \lnot y) \land (\lnot x \lor y)$
 - $x \neq y \iff (x \lor y) \land (\lnot x \lor \lnot y)$
 
----
+이 외에도 분배법칙(distributive law)이나 드 모르간의 법칙(De Morgan's law) 등을 이용하면 어렵지 않게 CNF의 형태로 바꾸어줄 수 있다.
+
+조금 더 어려운 문제들에는 $n$**개의 변수들 중 최대 1개만 참일 수 있는 조건**이 등장하기도 한다.
+
+> 조건: $n$개의 변수 $x_1, x_2, \dots, x_n$ 중 최대 1개의 변수만 참이다.
+
+$n$이 작은 경우에는 다음과 같이 처리할 수 있다.
+
+> **모든 $i, j$($i < j$)에 대해 $(\lnot x_i \lor \lnot x_j)$**에 해당하는 간선을 추가한다.
+
+$O(n^2)$개의 간선을 추가하게 되는데, 만약 $n$이 매우 커진다면 주어진 제한 시간 내에 통과하지 못할 수도 있다.
+
+물론 [BOJ 2519. 막대기](https://damo1924.github.io/algorithm/2SATproblem/#boj-2519-%EB%A7%89%EB%8C%80%EA%B8%B0)처럼 $n$이 작다면 위와 같이 처리해도 충분하다.
+
+하지만 $n$이 큰 값을 가질 수 있는 [BOJ. 19703. 실험]()과 같은 문제에서는 좋은 방법이라고 할 수 없다.
+
+이러한 경우에는 아래 방법을 사용하면 된다.
+
+> 다음과 같은 $n$개의 변수 $y_1, y_2, \dots, y_n$을 추가한다.
+> 
+> \being{aligned}
+> y_i = x_1 \lor x_2 \lor \dots \lor x_i
+> \end{aligned}
+> 
+> 모든 $i$($1 \leq i \leq n$)에 대해 다음 세 간선을 추가해준다.
+> 
+> - $x_i \to y_i$
+> - $y_i \to y_{i+1}$
+> - $y_i \to \lnot x_{i+1}$
+
+기존 그래프에 $n$개의 새로운 정점과 $3n$개의 간선을 추가하는 것이므로 시간복잡도를 훨씬 줄일 수 있다.
+
+<br/>
+
+## 4. Related Problems
 
 ### [BOJ] 3648. 아이돌
 
@@ -346,12 +380,24 @@ $(a, b)$에서 $(c, d)$로 운행하는 버스를 생각해보자.
 
 > 두 선분이 겹치는지 확인하기 위해 CCW를 이용한다.
 
+---
+
+### [BOJ] 19703. 실험**
+
+[BOJ 19703. 실험 문제 링크](https://www.acmicpc.net/problem/19703)
+
+$n$명의 유저를 $m$개의 그룹으로 나눈 후, 다음 조건을 만족하도록 베타 테스터를 선정하려고 한다.
+
+- 하나의 그룹에서 최대 한 명의 베타 테스터만 뽑을 수 있다.
+- 서로 반대되는 성향의 두 유저 중 적어도 한 명은 뽑아야한다.
+
+이 문제의 경우 한 그룹에 $10^5$명의 사람이 속할 수 있기 때문에 $O(n)$ 방법으로 첫 번째 조건을 처리해야한다.
+
 <br/>
 
 ## References
 
-[1] [WIKIPEDIA, 'Conjunctive normal form'](https://en.m.wikipedia.org/wiki/Conjunctive_normal_form)
-
+[1] [WIKIPEDIA, 'Conjunctive normal form'](https://en.m.wikipedia.org/wiki/Conjunctive_normal_form)  
 [2] [Samsung Software Membership, leejseo, '2-SAT 및 그의 응용'](https://www.secmem.org/blog/2021/09/01/2sat-app/)
 
 
