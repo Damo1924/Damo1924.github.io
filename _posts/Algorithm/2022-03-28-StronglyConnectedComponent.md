@@ -200,7 +200,7 @@ SCC를 구하는 두 가지 알고리즘은 같은 시간복잡도를 갖기 때
 
 SCC로 해결할 수 있는 가장 대표적인 문제는 **2-SAT problem**인데, 아래 포스팅에서 따로 다루었다.
 
-> [2-SAT problem]()
+> [2-SAT problem](https://damo1924.github.io/algorithm/2SATproblem/)
 
 아래 문제들은 앞서 공부한 알고리즘을 알고 있으면 쉽게 풀 수 있는 문제들이다.
 
