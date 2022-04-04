@@ -86,69 +86,48 @@ N은 3 이상 100,000 이하인 자연수이고, 각 점의 좌표는 절댓값�
 ```cpp
 #include <iostream>
 #include <math.h>
-#include <vector>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
-struct point {
-    long long x, y;
-} P[100000];
+typedef long long ll;
+typedef pair<ll, ll> p;
+#define x first
+#define y second
 
-bool CCW(point& A, point& B, point& C) // CCW이면 true, 아니면 false를 반환하는 함수
+int CCW(p A, p B, p C)
 {
-    return (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y) > 0;
+    ll V = (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y);
+    if (V > 0) return 1;
+    if (V < 0) return -1;
+    return 0;
 }
 
-point Q; // 기준점
-bool compare(point& A, point& B) // 반시계 방향으로 정렬
+void getConvexHull(vector<p> &v, vector<p> &hull)
 {
-    long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
-    if (V > 0) return true;
-    if (V < 0) return false;
-    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y); // Q-A-B가 일직선 상에 있으면 Q와 가까운 점을 앞에 오도록 정렬한다.
+    swap(v[0], *min_element(v.begin(), v.end())); // 기준점을 맨 앞으로 옮긴다.
+    sort(v.begin() + 1, v.end(), [&](p A, p B){ // 나머지 점들을 기준점에 대해 반시계방향으로 정렬
+        int res = CCW(v[0], A, B);
+        if (res) return res > 0;
+        return abs(A.x - v[0].x) + abs(A.y - v[0].y) < abs(B.x - v[0].x) + abs(B.y - v[0].y); // 단, 세 점이 일직선 상에 있으면 기준점과 가까울수록 앞에 오도록 정렬
+    });
+    for (auto P : v)
+    {
+        while (hull.size() > 1 && CCW(hull[hull.size() - 2], hull.back(), P) != 1) hull.pop_back();
+        hull.push_back(P);
+    }
 }
 
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    cin.tie(NULL); cout.tie(NULL);
     
-    int N;
-    cin >> N;
-    
-    // 1. 입력 & 기준점 찾기
-    int idx = 0;
-    for (int i = 0; i < N; i++)
-    {
-        cin >> P[i].x >> P[i].y;
-        if (P[i].y < P[idx].y) idx = i;
-        else if (P[i].y == P[idx].y && P[i].x < P[idx].x) idx = i;
-    }
-    Q = P[idx];
-    
-    // 2. 점들을 반시계 방향으로 정렬
-    sort(P, P + N, compare);
-    
-    // 3. 점들을 차례대로 탐색하면서 볼록 껍질 구하기
-    vector<point> hull = {P[0], P[1]}; // 볼록 껍질을 구성하는 점들
-    int hs = 2; // 볼록 껍질에 포함된 점들의 개수
-    for (int i = 2; i < N; i++)
-    {
-        while (hs > 1 && !CCW(hull[hs - 2], hull[hs - 1], P[i]))
-        {
-            hull.pop_back();
-            hs--;
-        }
-        hull.push_back(P[i]);
-        hs++;
-    }
-    if (hs > 2 && !CCW(hull[hs - 2], hull[hs - 1], P[0])) // 모든 점이 동일한 직선 위에 있는 경우, hs = 2이므로 hs > 2 조건이 필요하다.
-    {
-        hull.pop_back();
-        hs--;
-    }
-    cout << hs;
+    int n; cin >> n;
+    vector<p> points(n), hull;
+    for (int i = 0; i < n; i++) cin >> points[i].x >> points[i].y;
+    getConvexHull(points, hull);
+    cout << hull.size();
 }
 ```
 
