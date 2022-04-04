@@ -228,108 +228,80 @@ N개의 도시의 위치가 $(x, y)$로 주어질 때, 가장 먼 두 도시를 
 ```cpp
 #include <iostream>
 #include <math.h>
-#include <vector>
 #include <algorithm>
+#include <vector>
 using namespace std;
 
-struct point {
-    long long x, y;
-} P[200000];
+typedef long long ll;
+typedef pair<ll, ll> p;
+#define x first
+#define y second
 
-bool CCW(point& A, point& B, point& C)
-{
-    return (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y) > 0;
-}
-
-point Q;
-bool compare(point& A, point& B)
-{
-    long long V = (A.x - Q.x) * (B.y - Q.y) - (A.y - Q.y) * (B.x - Q.x);
-    if (V > 0) return true;
-    if (V < 0) return false;
-    return abs(A.x - Q.x) + abs(A.y - Q.y) < abs(B.x - Q.x) + abs(B.y - Q.y);
-}
-
-long long dist(point& A, point& B)
+ll dist(p A, p B)
 {
     return (A.x - B.x) * (A.x - B.x) + (A.y - B.y) * (A.y - B.y);
+}
+
+int CCW(p A, p B, p C)
+{
+    ll V = (B.x - A.x) * (C.y - B.y) - (C.x - B.x) * (B.y - A.y);
+    if (V > 0) return 1;
+    if (V < 0) return -1;
+    return 0;
+}
+
+void getConvexHull(vector<p> &v, vector<p> &hull)
+{
+    swap(v[0], *min_element(v.begin(), v.end()));
+    sort(v.begin() + 1, v.end(), [&](p A, p B){
+        int res = CCW(v[0], A, B);
+        if (res) return res > 0;
+        return abs(A.x - v[0].x) + abs(A.y - v[0].y) < abs(B.x - v[0].x) + abs(B.y - v[0].y);
+    });
+    for (auto P : v)
+    {
+        while (hull.size() > 1 && CCW(hull[hull.size() - 2], hull.back(), P) != 1) hull.pop_back();
+        hull.push_back(P);
+    }
+}
+
+void rotatingCalipers(vector<p> &hull)
+{
+    int n = hull.size();
+    int i = min_element(hull.begin(), hull.end()) - hull.begin();
+    int j = max_element(hull.begin(), hull.end()) - hull.begin();
+    
+    int a = i, b = j;
+    ll d = dist(hull[i], hull[j]);
+    
+    for (int k = 0; k < n; k++)
+    {
+        int ni = (i + 1) % n, nj = (j + 1) % n; // next i, next j
+        ll CP = (hull[ni].x - hull[i].x) * (hull[j].y - hull[nj].y); // cross product
+        CP -= (hull[ni].y - hull[i].y) * (hull[j].x - hull[nj].x);
+        if (CP > 0) i = ni;
+        else if (CP < 0) j = nj;
+        else i = ni, j = nj;
+        
+        ll D = dist(hull[i], hull[j]);
+        if (d < D) { d = D; a = i; b = j; }
+    }
+    cout << hull[a].x << " " << hull[a].y << " " << hull[b].x << " " << hull[b].y << "\n";
 }
 
 int main()
 {
     ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
+    cin.tie(NULL); cout.tie(NULL);
     
-    int T;
-    cin >> T;
-    while (T--)
+    int t; cin >> t;
+    while (t--)
     {
-        int N;
-        cin >> N;
-    
-        int idx = 0;
-        for (int i = 0; i < N; i++)
-        {
-            cin >> P[i].x >> P[i].y;
-            if (P[i].y < P[idx].y) idx = i;
-            else if (P[i].y == P[idx].y && P[i].x < P[idx].x) idx = i;
-        }
-        Q = P[idx];
-    
-        sort(P, P + N, compare);
-        
-        // 1. 볼록 껍질 구하기
-        vector<point> hull = {P[0], P[1]};
-        int n = 2;
-        for (int i = 2; i < N; i++)
-        {
-            while (n > 1 && !CCW(hull[n - 2], hull[n - 1], P[i]))
-            {
-                hull.pop_back();
-                n--;
-            }
-            hull.push_back(P[i]);
-            n++;
-        }
-        if (n != 2 && !CCW(hull[n - 2], hull[n - 1], P[0]))
-        {
-            hull.pop_back();
-            n--;
-        }
-        
-        // 2. 캘리퍼스가 x축에 평행할 때, 캘리퍼스와 만나는 두 점 Q1, Q2의 인덱스 구하기
-        int q1 = 0, q2 = 1; // q1: y좌표가 가장 작은 점, q2: y좌표가 가장 큰 점
-        for (int i = 2; i < n; i++)
-        {
-            if (vec[q2].y < vec[i].y) q2 = i;
-            else if (vec[q2].y == vec[i].y && vec[q2].x < vec[i].x) q2 = i;
-        }
-        
-        // 3. 캘리퍼스를 회전시키며 가장 먼 두 점 구하기
-        point A = vec[q1], B = vec[q2];
-        long long d = dist(vec[q1], vec[q2]); // 거리의 제곱(실수 연산을 하지 않기 위함)
-        for (int i = 0; i < n; i++) // 캘리퍼스가 볼록 다각형의 각 변과 한 번씩 맞닿을 동안 반복
-        {
-            int nq1 = (q1 + 1) % n, nq2 = (q2 + 1) % n;
-            long long CP = (vec[nq1].x - vec[q1].x) * (vec[q2].y - vec[nq2].y);
-            CP -= (vec[nq1].y - vec[q1].y) * (vec[q2].x - vec[nq2].x);
-            if (CP > 0) q1 = nq1;
-            else if (CP < 0) q2 = nq2;
-            else
-            {
-                q1 = nq1;
-                q2 = nq2;
-            }
-            
-            long long D = dist(vec[q1], vec[q2]);
-            if (d < D)
-            {
-                d = D;
-                A = vec[q1]; B = vec[q2];
-            }
-        }
-        cout << A.x << " " << A.y << " " << B.x << " " << B.y << "\n";
+        int n; cin >> n;
+        vector<p> points(n), hull;
+        for (int i = 0; i < n; i++) cin >> points[i].x >> points[i].y;
+        getConvexHull(points, hull);
+        rotatingCalipers(hull);
     }
 }
 ```
