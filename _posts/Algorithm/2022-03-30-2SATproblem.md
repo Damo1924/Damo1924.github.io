@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` CNF, SCC, 
+`Tags` CNF, SCC, 3648, 1154, 16367, 1739, 16853, 2519, 19703
 
 ## 1. 2-SAT problem
 
@@ -243,7 +243,7 @@ $O(n^2)$개의 간선을 추가하게 되는데, 만약 $n$이 매우 커진다�
 
 물론 [BOJ 2519. 막대기](https://damo1924.github.io/algorithm/2SATproblem/#boj-2519-%EB%A7%89%EB%8C%80%EA%B8%B0)처럼 $n$이 작다면 위와 같이 처리해도 충분하다.
 
-하지만 $n$이 큰 값을 가질 수 있는 [BOJ. 19703. 실험]()과 같은 문제에서는 좋은 방법이라고 할 수 없다.
+하지만 $n$이 큰 값을 가질 수 있는 [BOJ. 19703. 실험](https://damo1924.github.io/algorithm/2SATproblem/#boj-19703-%EC%8B%A4%ED%97%98)과 같은 문제에서는 좋은 방법이라고 할 수 없다.
 
 이러한 경우에는 아래 방법을 사용하면 된다.
 
