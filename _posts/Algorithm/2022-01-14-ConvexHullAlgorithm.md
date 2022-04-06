@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 그레이엄 스캔, Graham's Scan, CCW, 회전하는 캘리퍼스, 가장 먼 두 점, 1708 볼록 껍질, 10254. 고속도로
+`Tags` 그레이엄 스캔, Graham's Scan, CCW, 회전하는 캘리퍼스, 가장 먼 두 점
 
 ## 1. Convex Hull Algorithm
 
@@ -343,6 +343,18 @@ int main()
 **[HINT]** 두 convex hull이 겹치지 않도록 하는 조건은 무엇일까?
 
 > 자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-3878/)에서 다루고 있다.
+
+---
+
+### [BOJ] 10839. 미술관
+
+[BOJ 10839. 미술관 문제 링크](https://www.acmicpc.net/problem/10839)
+
+주어진 다각형의 내부로만 이동할 수 있을 때, 두 정점 사이의 최단경로를 구하는 문제이다.
+
+**[HINT]** 연속된 세 정점이 시계방향을 이룰 때와 반시계방향을 이룰 때의 최단경로를 비교해보자.
+
+> 자세한 풀이는 [이 포스트](https://damo1924.github.io/ps/BAEKJOON-10839/)에서 다루고 있다.
 
 ---
 
