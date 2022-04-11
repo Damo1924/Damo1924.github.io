@@ -135,8 +135,8 @@ int CRT(vector<int>& a, vector<int>& n) // Chinese Remainder Theorem
         EEA(n[i - 1], n[i], m1, m2);
         ll sol = (1ll) * a[i - 1] * m2 * n[i] + (1ll) * a[i] * m1 * n[i - 1];
         n[i] *= n[i - 1];
-        while (sol < 0) sol += n[i];
         a[i] = sol % n[i];
+        if (a[i] < 0) a[i] += n[i];
     }
     return a.back();
 }
