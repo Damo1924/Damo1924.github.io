@@ -115,10 +115,40 @@ $a_1, a_2, \dots, a_k$와 $n_1, n_2, \dots, n_k$가 주어졌을 때, 연립합�
 
 앞서 해의 존재성을 증명할 때 언급했듯이, **확장 유클리드 알고리즘**을 이용할 것이다.
 
+```cpp
+int EEA(int a, int b, int& s, int& t) // Expended Euclidian Algorithm
+{
+    if (b == 0) { s = 1; t = 0; return a; }
+    
+    int gcd = EEA(b, a % b, s, t);
+    int temp = t;
+    t = s - (a / b) * t;
+    s = temp;
+    return gcd;
+}
 
+int CRT(vector<int>& a, vector<int>& n) // Chinese Remainder Theorem
+{
+    int m1, m2;
+    for (int i = 1; i < a.size(); i++)
+    {
+        EEA(n[i - 1], n[i], m1, m2);
+        ll sol = (1ll) * a[i - 1] * m2 * n[i] + (1ll) * a[i] * m1 * n[i - 1];
+        n[i] *= n[i - 1];
+        while (sol < 0) sol += n[i];
+        a[i] = sol % n[i];
+    }
+    return a.back();
+}
+```
+
+두 개의 식으로 이루어진 연립합동식의 해를 반복해서 구해줌으로써 전체 연립합동식의 해를 얻을 수 있다.
+
+두 정수 $a, b$의 최대공약수를 구할 때 유클리드 호제법의 시간복잡도는 $O(\log (\max(a, b)))$이므로 전체 시간복잡도는 $O(k \log N)$이다.
 
 <br/>
 
 ## References
 
-[1] [WIKIPEDIA, 'Chinese Remainder Theorem'](https://en.m.wikipedia.org/wiki/Chinese_remainder_theorem)
+[1] [WIKIPEDIA, 'Chinese Remainder Theorem'](https://en.m.wikipedia.org/wiki/Chinese_remainder_theorem)  
+[2] [WIKIPEDIA, 'Bézout's identity'](https://en.m.wikipedia.org/wiki/B%C3%A9zout%27s_identity)  
