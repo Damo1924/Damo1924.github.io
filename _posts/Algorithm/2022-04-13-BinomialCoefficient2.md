@@ -36,13 +36,9 @@ comments: true
 
 ## 1. Background Knowledges from Number Theory
 
-필요한 내용을 찾아보면서 함께 공부한 정수론 배경지식들에 대해 정리하였다.
-
----
-
 ### 1-1. Wilson's Theorem
 
-> [Thm] Wilson's Theorem
+> **[$Thm$] Wilson's Theorem**
 > 
 > $1$보다 큰 자연수 $n$이 소수인 것의 필요충분조건은 $(n-1)! \equiv -1 \pmod{n}$이다.
 
@@ -169,6 +165,8 @@ $n$의 $p$진 전개를 $n = a_0 + a_1p + a_2p^2 + \dots + a_kp^k$라고 하자.
 &= \sum_{j=1}^k a_j \cdot \frac{p^j - 1}{p-1} = \sum_{j=0}^k a_j \cdot \frac{p^j - 1}{p-1} = \frac{1}{p-1} \left( \sum_{j=0}^k a_jp^j - \sum_{j=0}^ka_j \right) \\\\  
 &= \frac{1}{p-1} \left( n - s_p(n) \right)
 \end{aligned}
+
+---
 
 ### 1-3. Kummer's Theorem
 
