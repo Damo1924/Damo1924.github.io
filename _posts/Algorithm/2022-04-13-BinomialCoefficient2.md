@@ -202,11 +202,9 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다
 
 <br/>
 
-## 2. Computing Binomial Coefficients modulo Prime Powers
+## 2. How to Compute Binomial Coefficients modulo Prime Powers
 
-이제 앞에서 공부한 내용을 토대로 아래 논문의 Theorem 1의 증명 과정을 살펴보자.
-
-[Andrew Granvile, 'Arithmetic Properites of Binomial Coefficients I: Binomial Coefficients modulo prime powers'](Andrew Granvile, 'Arithmetic Properites of Binomial Coefficients I: Binomial Coefficients modulo prime powers')
+이제 앞에서 공부한 내용을 토대로 Andrew Granvile의 논문([4](https://damo1924.github.io/algorithm/BinomialCoefficient2/#references))의 Theorem 1의 증명 과정을 살펴보자.
 
 > **Definition.** 양의 정수 $n$과 소수 $p$에 대하여, $(n!)\_p$를 다음과 같이 정의한다.
 > 
@@ -226,7 +224,7 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다
 > 
 > 동일한 방식으로 $m_j, M_j, r_j, R_j$을 정의한다.
 > 
-> 또한, $\varepsilon_j$를 $p$진법에서 $m$과 $r$을 더할 때 $p^j$($j \geq 0$)자리에서 발생하는 자리 올림(carries)의 횟수,
+> 또한, $\varepsilon_j$를 $p$진법에서 $m$과 $r$을 더할 때 $p^j$($j \geq 0$)자리에서 발생하는 자리 올림의 횟수,
 > 
 > 그리고 $e_j = \sum_{i \geq j} \varepsilon_i$라고 정의하면, 다음이 성립한다.
 > 
@@ -400,8 +398,20 @@ n! \cdot p^{-\sum_{j \geq 0} \left\lfloor n/p^j \right\rfloor} \equiv (\pm 1)^{\
 
 <br/>
 
+## 3. Implementation with C++
+
+Theorem 1을 이용해서 이항계수 ${n \choose m}$을 $p^q$로 나눈 나머지를 구하는 함수를 구현할 것이다.
+
+나머지를 구하는 과정은 크게 두 단계로 나눌 수 있다.
+
+1. ${n \choose m}$이 $p^q$로 나누어떨어진다면 $0$ 반환한다.
+2. 나누어떨어지지 않는다면 Theorem 1을 이용해서 나머지를 구한다.
+
+
+
 ## References
 
 [1] [WIKIPEDIA, 'Wilson's theorem'](https://en.m.wikipedia.org/wiki/Wilson%27s_theorem)  
 [2] [jjycjn's Math Storehouse, '르장드르의 정리와 쿠머의 정리'](https://jjycjnmath.tistory.com/532)  
-[3] 
+[3] [Stackoverflow, 'Binomial coefficient modulo 142857'](https://stackoverflow.com/questions/13106587/binomial-coefficient-modulo-142857)  
+[4] [Andrew Granvile, 'Arithmetic Properites of Binomial Coefficients I: Binomial Coefficients modulo prime powers'](http://www.cecm.sfu.ca/organics/papers/granville/paper/binomial/html/binomial.html)
