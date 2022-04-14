@@ -204,7 +204,9 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다
 
 ## 2. Computing Binomial Coefficients modulo Prime Powers
 
-이제 앞에서 공부한 내용을 토대로 []의 내용을 정리해보자.
+이제 앞에서 공부한 내용을 토대로 아래 논문의 Theorem 1의 증명 과정을 살펴보자.
+
+[Andrew Granvile, 'Arithmetic Properites of Binomial Coefficients I: Binomial Coefficients modulo prime powers'](Andrew Granvile, 'Arithmetic Properites of Binomial Coefficients I: Binomial Coefficients modulo prime powers')
 
 > **Definition.** 양의 정수 $n$과 소수 $p$에 대하여, $(n!)\_p$를 다음과 같이 정의한다.
 > 
@@ -213,6 +215,36 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다
 > \end{aligned}
 > 
 > 즉, $(n!)\_p$는 $n$ 이하의 자연수 중 $p$의 배수가 아닌 것들의 곱이다.
+
+> **Theorem 1**
+> 
+> 소수 $p$의 거듭제곱 $p^q$와 $n = m + r$을 만족하는 양의 정수 $n, m, r$이 주어졌을 때,
+> 
+> $n$을 $p$진법으로 표기한 것을 $n = n_0 + n_1p + \dots + n_dp^d$라 하고,
+> 
+> $N_j = \lfloor n / p^j \rfloor \pmod{p^q}$라 하자.
+> 
+> 동일한 방식으로 $m_j, M_j, r_j, R_j$을 정의한다.
+> 
+> 또한, $\varepsilon_j$를 $p$진법에서 $m$과 $r$을 더할 때 $p^j$($j \geq 0$)자리에서 발생하는 자리 올림(carries)의 횟수라고 할 때, 다음이 성립한다.
+> 
+> \begin{aligned}
+> \frac{(\pm 1)^{e_{q-1}\}\}{p^{e_0}\} {n \choose m} \equiv \prod_{j=0}^d \frac{(N_j!)\_p}{(M_j!)\_p(R_j!)\_p} \pmod{p^q}
+> \end{aligned}
+> 
+> 이때 복부호 $(\pm 1)$은 다음과 같이 정의된다.
+> 
+> \begin{aligned}
+> \pm 1 =
+> \begin{cases}
+> 1 & \mbox{if } p = 2 \mbox{ and } q \geq 3 \\\\  
+> -1 & \mbox{otherwise}
+> \end{cases}
+> \end{aligned}
+
+이를 증명해보자.
+
+---
 
 > **Lemma 1. Generalization of Wilson's Theorem to prime powers**
 > 
@@ -264,6 +296,8 @@ $p = 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
 \end{cases}
 \end{aligned}
 
+---
+
 > **Corollary 1.** 소수 $p$와 자연수 $q$에 대하여 $n!$을 $p^q$로 나눈 나머지를 $N_0$라고 할 때,
 > 
 > \begin{aligned}
@@ -281,6 +315,8 @@ $p = 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
 &\equiv (\pm 1)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q}
 \end{aligned}
 
+---
+
 > **Kummer's Theorem** (about carries)
 > 
 > 소수 $p$와 이항계수 ${n \choose m}$에 대하여, 다음 식이 성립한다.
@@ -289,9 +325,7 @@ $p = 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
 > \nu_p \left( {n \choose m} \right) = \sum_{j = 0}^{\infty} \varepsilon_j
 > \end{aligned}
 > 
-> 이때 $\varepsilon_j$의 정의는 다음과 같다.
-> 
-> <center>"$p$진법에서 $m$과 $r = n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$이다."</center>
+> $p$진법에서 $m$과 $r = n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$로 정의한다.
 > 
 > 즉, ${n \choose m}$을 $p$로 나눈 나머지는 $p$진법에서 $m$과 $r$을 더할 때 발생하는 자리 올림의 횟수와 같다.
 
@@ -317,7 +351,32 @@ n_j = m_j + r_j + \varepsilon_{j-1} - p\varepsilon_j
 &= \sum_{j=0}^{\infty} \varepsilon_j
 \end{aligned}
 
-> 
+---
+
+위 증명에 이어, $j \geq 1$인 정수 $j$에 대하여 $n' = n \pmod{p^j} = \sum_{i=0}^{j-1} n_ip^i\$라고 하면, 다음 식을 얻을 수 있다.
+
+\begin{aligned}
+n' - m' - r' &= \sum_{i=0}^{j-1} (n_i - m_i - r_i) p^i \\\\  
+&= -p\varepsilon_0 + \sum_{i=0}^{j-1}(\varepsilon_{i-1} - p\varepsilon_{i})p^i \\\\  
+&= -p^j \varepsilon_{j-1}
+\end{aligned}
+
+이때 Theorem 1의 $N_j$의 정의로부터 $n = N_jp^j + n'$이 성립함을 이용하면
+
+\begin{aligned}
+n-m-r &= (N_jp^j+n') - (M_jp^j+m') - (R_jp^j+r') \\\\  
+&= (N_j - M_j - R_j)p^j + (n' - m' - r') \\\\  
+&= (N_j - M_j - R_j - \varepsilon_{j-1})p^j = 0
+\end{aligned}
+
+이고, $n - m - r = 0$이므로 다음을 얻을 수 있다.
+
+\begin{aligned}
+N_j - M_j - R_j = \left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{m}{p^j} \right\rfloor - \left\lfloor \frac{r}{p^j} \right\rfloor = \varepsilon_{j-1}
+\end{aligned}
+
+
+
 
 <br/>
 
