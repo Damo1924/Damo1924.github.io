@@ -200,6 +200,34 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음이 성립한다.
 
 <br/>
 
+## 2. Computing Binomial Coefficients modulo Prime Powers
+
+이제 앞에서 공부한 내용을 토대로 []의 내용을 정리해보자.
+
+> **Definition.** 양의 정수 $n$과 소수 $p$에 대하여, $(n!)\_p$를 다음과 같이 정의한다.
+> 
+> \begin{aligned}
+> (n!)\_p = \prod_{1\leq k \leq n, p \nmid k}^n k
+> \end{aligned}
+> 
+> 즉, $(n!)\_p$는 $n$ 이하의 자연수 중 $p$의 배수가 아닌 것들의 곱이다.
+
+> **Lemma 1. Generalization of Wilson's Theorem to prime powers**
+> 
+> 소수 $p$와 자연수 $q$에 대하여 다음이 성립한다.
+> 
+> \begin{aligned}
+> (p^q!)\_p \equiv \pm 1 \pmod{p^q}
+> \end{aligned}
+> 
+> 이때 $\pm 1$은 *Theorem 1*에서 정의된 것과 같다.
+
+**Proof.** Wilson's Theorem과 비슷한 방법으로 증명이 가능하다.
+
+정수 $a$($1 \leq a \leq p^q$)
+
+<br/>
+
 ## References
 
 [1] [WIKIPEDIA, 'Wilson's theorem'](https://en.m.wikipedia.org/wiki/Wilson%27s_theorem)  
