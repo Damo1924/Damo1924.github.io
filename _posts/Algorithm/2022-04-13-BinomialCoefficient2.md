@@ -378,7 +378,7 @@ N_j - M_j - R_j = \left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{
 마지막으로, Corollary 1에 의해 다음 식이 성립한다.
 
 \begin{aligned}
-\frac{\left\lfloor n/p^j \right\rfloor!}{p^{\left\lfloor n/p^{j+1} \right\rfloor \left\lfloor n/p^{j+1} \right\rfloor!} &= (\left\lfloor \frac{n}{p^j} \right\rfloor!)\_p \\\\  
+\frac{\left\lfloor n/p^j \right\rfloor!}{p^{\left\lfloor n/p^{j+1} \right\rfloor} \left\lfloor n/p^{j+1} \right\rfloor!} &= (\left\lfloor \frac{n}{p^j} \right\rfloor!)\_p \\\\  
 &\equiv (\pm 1)^{\left\lfloor n/p^{j+q} \right\rfloor}(N_j!)\_p \pmod{p^q}
 \end{aligned}
 
