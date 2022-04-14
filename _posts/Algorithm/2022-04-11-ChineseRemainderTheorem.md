@@ -162,7 +162,19 @@ int CRT(vector<int>& a, vector<int>& n) // Chinese Remainder Theorem
 
 ---
 
+### [BOJ] 14854. 이항 계수 6
 
+[BOJ 14854. 이항 계수 6 문제 링크](https://www.acmicpc.net/problem/14854)
+
+이항계수를 $142857$이라는 특이한 수로 나눈 나머지를 구하는 문제이다.
+
+$142857 = 3^3 \times 11 \times 13 \times 37$인 것을 이용해야한다.
+
+$11, 13, 27, 37$으로 나눈 나머지를 구한 후, 중국인의 나머지 정리를 활용해서 답을 구해주면 된다.
+
+이 문제는 소수의 거듭제곱인 $3^3$으로 나눈 나머지를 구해야하기 때문에 꽤나 골치아픈 부분이 있다.
+
+이항계수를 소수의 거듭제곱으로 나눈 나머지를 구하는 방법은 [이 포스트](https://damo1924.github.io/algorithm/BinomialCoefficient2/#3-implementation-with-c)에서 다루고 있다.
 
 <br/>
 
