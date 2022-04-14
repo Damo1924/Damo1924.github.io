@@ -322,10 +322,8 @@ $p = 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
 > 소수 $p$와 이항계수 ${n \choose m}$에 대하여, 다음 식이 성립한다.
 > 
 > \begin{aligned}
-> \nu_p \left( {n \choose m} \right) = \sum_{j = 0}^{\infty} \varepsilon_j
+> \nu_p \left( {n \choose m} \right) = \sum_{j = 0}^{d} \varepsilon_j
 > \end{aligned}
-> 
-> $p$진법에서 $m$과 $r = n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$로 정의한다.
 > 
 > 즉, ${n \choose m}$을 $p$로 나눈 나머지는 $p$진법에서 $m$과 $r$을 더할 때 발생하는 자리 올림의 횟수와 같다.
 
@@ -346,9 +344,9 @@ n_j = m_j + r_j + \varepsilon_{j-1} - p\varepsilon_j
 이 성립하고, $s_p(n)$의 정의에 의해 우변을 다음과 같이 나타낼 수 있다.
 
 \begin{aligned}
-\frac{s_p(m) + s_p(r) - s_p(n)}{p - 1} &= \sum_{j=0}^{\infty} \frac{m_j + r_j - n_j}{p-1} \\\\  
-&= \frac{1}{p-1} \cdot \left( p\varepsilon_0 + \sum_{j=0}^{\infty}(p\varepsilon_j - \varepsilon_{j-1}) \right) \\\\  
-&= \sum_{j=0}^{\infty} \varepsilon_j
+\frac{s_p(m) + s_p(r) - s_p(n)}{p - 1} &= \sum_{j=0}^{d} \frac{m_j + r_j - n_j}{p-1} \\\\  
+&= \frac{1}{p-1} \cdot \left( p\varepsilon_0 + \sum_{j=0}^{d}(p\varepsilon_j - \varepsilon_{j-1}) \right) \\\\  
+&= \sum_{j=0}^{d} \varepsilon_j
 \end{aligned}
 
 ---
@@ -361,12 +359,12 @@ n' - m' - r' &= \sum_{i=0}^{j-1} (n_i - m_i - r_i) p^i \\\\
 &= -p^j \varepsilon_{j-1}
 \end{aligned}
 
-이때 Theorem 1의 $N_j$의 정의로부터 $n = N_jp^j + n'$이 성립함을 이용하면
+이때 Theorem 1의 $N_j$의 정의로부터 $n = N_jp^j + n'$임을 이용하면
 
 \begin{aligned}
 n-m-r &= (N_jp^j+n') - (M_jp^j+m') - (R_jp^j+r') \\\\  
 &= (N_j - M_j - R_j)p^j + (n' - m' - r') \\\\  
-&= (N_j - M_j - R_j - \varepsilon_{j-1})p^j = 0
+&= (N_j - M_j - R_j - \varepsilon_{j-1})p^j
 \end{aligned}
 
 이고, $n - m - r = 0$이므로 다음을 얻을 수 있다.
@@ -375,7 +373,25 @@ n-m-r &= (N_jp^j+n') - (M_jp^j+m') - (R_jp^j+r') \\\\
 N_j - M_j - R_j = \left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{m}{p^j} \right\rfloor - \left\lfloor \frac{r}{p^j} \right\rfloor = \varepsilon_{j-1}
 \end{aligned}
 
+---
 
+마지막으로, Corollary 1에 의해 다음 식이 성립한다.
+
+\begin{aligned}
+\frac{\left\lfloor n/p^j \right\rfloor!}{p^{\left\lfloor n/p^{j+1} \right\rfloor \left\lfloor n/p^{j+1} \right\rfloor!} &= (\left\lfloor \frac{n}{p^j} \right\rfloor!)\_p \\\\  
+&\equiv (\pm 1)^{\left\lfloor n/p^{j+q} \right\rfloor}(N_j!)\_p \pmod{p^q}
+\end{aligned}
+
+
+
+이제 Theorem 1을 증명할 수 있다.
+
+\begin{aligned}
+{n \choose m} &= \frac{n!}{m!r!} \\\\  
+&\equiv \frac{(\pm 1)^{\lfloor n / p^q \rfloor}(N_0!)\_p}{(\pm 1)^{\lfloor m / p^q \rfloor}(M_0!)\_p \cdot (\pm 1)^{\lfloor r / p^q \rfloor}(R_0!)\_p} \pmod{p^q} \\\\  
+&\equiv (\pm 1)^{\varepsilon_{q-1}\} \cdot \frac{(N_0!)\_p}{(M_0!)\_p(R_0!)\_p} \\\\  
+&\equiv 
+\end{aligned}
 
 
 <br/>
