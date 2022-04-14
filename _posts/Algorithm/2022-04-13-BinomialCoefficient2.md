@@ -359,18 +359,18 @@ n' - m' - r' &= \sum_{i=0}^{j-1} (n_i - m_i - r_i) p^i \\\\
 &= -p^j \varepsilon_{j-1}
 \end{aligned}
 
-이때 Theorem 1의 $N_j$의 정의로부터 $n = N_jp^j + n'$임을 이용하면
+이때 $n = \left\lfloor n / p^j \right\rfloor \cdot p^j + n'$임을 이용하면
 
 \begin{aligned}
-n-m-r &= (N_jp^j+n') - (M_jp^j+m') - (R_jp^j+r') \\\\  
-&= (N_j - M_j - R_j)p^j + (n' - m' - r') \\\\  
-&= (N_j - M_j - R_j - \varepsilon_{j-1})p^j
+n-m-r &= (\left\lfloor n / p^j \right\rfloor \cdot p^j+n') - (\left\lfloor m / p^j \right\rfloor \cdot p^j+m') - (\left\lfloor r / p^j \right\rfloor \cdot p^j+r') \\\\  
+&= (\left\lfloor n / p^j \right\rfloor - \left\lfloor m / p^j \right\rfloor  - \left\lfloor r / p^j \right\rfloor)p^j + (n' - m' - r') \\\\  
+&= (\left\lfloor n / p^j \right\rfloor - \left\lfloor m / p^j \right\rfloor  - \left\lfloor r / p^j \right\rfloor - \varepsilon_{j-1})p^j
 \end{aligned}
 
 이고, $n - m - r = 0$이므로 다음을 얻을 수 있다.
 
 \begin{aligned}
-N_j - M_j - R_j = \left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{m}{p^j} \right\rfloor - \left\lfloor \frac{r}{p^j} \right\rfloor = \varepsilon_{j-1}
+\left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{m}{p^j} \right\rfloor - \left\lfloor \frac{r}{p^j} \right\rfloor = \varepsilon_{j-1}
 \end{aligned}
 
 ---
@@ -378,19 +378,21 @@ N_j - M_j - R_j = \left\lfloor \frac{n}{p^j} \right\rfloor - \left\lfloor \frac{
 마지막으로, Corollary 1에 의해 다음 식이 성립한다.
 
 \begin{aligned}
-\frac{\left\lfloor n/p^j \right\rfloor!}{p^{\left\lfloor n/p^{j+1} \right\rfloor} \left\lfloor n/p^{j+1} \right\rfloor!} &= (\left\lfloor \frac{n}{p^j} \right\rfloor!)\_p \\\\  
+\frac{\left\lfloor n/p^j \right\rfloor!}{p^{\left\lfloor n/p^{j+1} \right\rfloor} \left\lfloor n/p^{j+1} \right\rfloor!} &= \left(\left\lfloor \frac{n}{p^j} \right\rfloor!\right)\_p \\\\  
 &\equiv (\pm 1)^{\left\lfloor n/p^{j+q} \right\rfloor}(N_j!)\_p \pmod{p^q}
 \end{aligned}
 
+위 식을 $j = 0$부터 $j = d$까지 곱하면, 다음 합동식을 얻을 수 있다.
 
+\begin{aligned}
+\frac{n!}{p^{\nu_p(n!)}\} \equiv (\pm 1)^{\sum_{j \geq q} \left\lfloor n/p^j \right\rfloor} \prod_{j \geq 0} (N_j!)\_p \pmod{p^q}
+\end{aligned}
 
 이제 Theorem 1을 증명할 수 있다.
 
 \begin{aligned}
 {n \choose m} &= \frac{n!}{m!r!} \\\\  
-&\equiv \frac{(\pm 1)^{\lfloor n / p^q \rfloor}(N_0!)\_p}{(\pm 1)^{\lfloor m / p^q \rfloor}(M_0!)\_p \cdot (\pm 1)^{\lfloor r / p^q \rfloor}(R_0!)\_p} \pmod{p^q} \\\\  
-&\equiv (\pm 1)^{\varepsilon_{q-1}\} \cdot \frac{(N_0!)\_p}{(M_0!)\_p(R_0!)\_p} \\\\  
-&\equiv 
+&\equiv p^{\nu_p(n!) - \nu_p(m!)- \nu_p(r!)} \cdot (\pm 1)^{\sum_{j \geq q} \left\lfloor n / p^j \right\rfloor - \left\lfloor m / p^j \right\rfloor - \left\lfloor r / p^j \right\rfloor} \prod_{j \geq 0} \frac{(N_j!)\_p}{(M_j!)\_p (R_j!)\_p} \pmod{p^q}
 \end{aligned}
 
 
