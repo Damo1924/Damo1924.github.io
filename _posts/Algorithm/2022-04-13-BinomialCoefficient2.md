@@ -170,11 +170,38 @@ $n$의 $p$진 전개를 $n = a_0 + a_1p + a_2p^2 + \dots + a_kp^k$라고 하자.
 
 ### 1-3. Kummer's Theorem
 
+> **Properties of $p$-adic valuation**
+> 
+> 소수 $p$와 두 양의 정수 $m, n$에 대하여 다음이 성립한다.
+> 
+> (a) $\nu_p(nm) = \nu_p(n) + \nu_p(m)$
+> (b) $\nu_p(n^m) = m \cdot \nu_p(n)$
+> (c) $\nu_p \left( \frac{n}{m} \right) = \nu_p(n) - \nu_p(m)$ ($m \neq 0$)
 
+> **Kummer's Theorem**
+> 
+> 소수 $p$와 두 양의 정수 $m, n$에 대하여 다음 식이 성립한다.
+> 
+> \begin{aligned}
+> \nu_p \left( {m + n \choose n} \right) = \frac{s_p(m) + s_p(n) - s_p(m + n)}{p - 1}
+> \end{aligned}
+> 
+> 이때 위 식의 우변은 $p$진법에서 $m$과 $n$을 더할 때의 **자리 올림의 횟수**와 같다.
+
+**Proof.**
+
+$\nu_p(n)$의 성질과 르장드르 정리에 의해 다음이 성립한다.
+
+\begin{aligned}
+\nu_p \left( {m + n \choose n} \right) &= \nu_p \left( \frac{(m+n)!}{m!n!} \right) = \nu_p((m+n)!) - \nu_p(m!) - \nu_p(n!) \\\\  
+&= \frac{(m+n) - s_p(m + n)}{p - 1} -  \frac{m - s_p(m)}{p - 1} -  \frac{n - s_p(n)}{p - 1} \\\\  
+&= \frac{s_p(m) + s_p(n) - s_p(m + n)}{p - 1}
+\end{aligned}
 
 <br/>
 
 ## References
 
 [1] [WIKIPEDIA, 'Wilson's theorem'](https://en.m.wikipedia.org/wiki/Wilson%27s_theorem)  
-[2] 
+[2] [jjycjn's Math Storehouse, '르장드르의 정리와 쿠머의 정리'](https://jjycjnmath.tistory.com/532)  
+[3] 
