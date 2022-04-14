@@ -232,25 +232,29 @@ $1 \leq a \leq p^q$, $p \nmid a$를 만족하는 정수 $a$ 중 모듈러 곱셈
 (a + 1)(a - 1) \equiv 0 \pmod{p^q}
 \end{aligned}
 
-$p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
+$(a+1) - (a-1)= 2$이기 때문에 $p \neq 2$인 경우, $a \equiv \pm 1 \pmod{p^q}$ 이외의 해가 존재하지 않는다.
 
-(a) $p^q = 2$ : $a = 1$  
-(b) $p^q = 4$ : $a = 1, 3$  
-(c) $p = 2, q \geq 3$ : $a = 1, 2^q - 1, 2^{q-1} \pm 1$  
-(d) $p \neq 2$ : $a = 1, p^q- 1$
+$p = 2$일 때, $q$에 따라 경우를 나누어서 위 합동식의 해를 구하면, 다음 결과를 얻을 수 있다.
 
-이다.($p \neq 2$인 경우, $a \equiv \pm 1 \pmod{p^q}$ 이외의 해가 존재하지 않는다.)
+(a) $q = 1$ : $a = 1$  
+(b) $q = 2$ : $a = 1, 3$  
+(c) $q \geq 3$ : $a = 1, 2^q - 1, 2^{q-1} \pm 1$  
 
 위 해들을 제외한 $(p^q!)\_p$의 다른 인자들은 각각의 모듈러 곱셈의 역원과 짝지을 수 있다.
 
-각 경우에 대해 $(p^q!)\_p$를 $p^q$로 나눈 나머지를 구해보면 다음과 같다.
+먼저 $p \neq 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
 
-(a) $(2!)\_2 = 1 \equiv -1 \pmod{2}$
-(b) $(4!)\_4 = 1 \cdot 3 = 3 \equiv -1 \pmod{4}$  
-(c) $(2^q!)\_2 \equiv 1 \cdot (2^q - 1) \cdot (2^{q-1} - 1) \cdot (2^{q-1} + 1) \cdot 1 \equiv 1 \pmod{2^q}$  
-(d) $(p^q!)\_p \equiv 1 \cdot (p^q - 1) \cdot 1 \equiv -1 \pmod{p^q}$
+\begin{aligned}
+(p^q!)\_p \equiv 1 \cdot (p^q - 1) \cdot 1 \equiv -1 \pmod{p^q}
+\end{aligned}
 
-따라서 다음을 얻을 수 있다.
+$p = 2$일 때, $(p^q!)\_p$를 $p^q$로 나눈 나머지는 다음과 같다.
+
+(a) $q = 1$ : $(2!)\_2 = 1 \equiv -1 \pmod{2}$  
+(b) $q = 2$ : $(4!)\_4 = 1 \cdot 3 = 3 \equiv -1 \pmod{4}$  
+(c) $q \geq 3$ : $(2^q!)\_2 \equiv 1 \cdot (2^q - 1) \cdot (2^{q-1} - 1) \cdot (2^{q-1} + 1) \cdot 1 \equiv 1 \pmod{2^q}$
+
+따라서 다음과 같이 정리할 수 있다.
 
 \begin{aligned}
 (p^q!)\_p =
@@ -273,11 +277,11 @@ $p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
 \begin{aligned}
 (n!)\_p &= \prod_{1\leq k \leq n, p \nmid k} k \\\\  
 &= \left( \prod_{i = 0}^{\lfloor n / p^q \rfloor - 1} \prod_{1 \leq j \leq p^q, p \nmid j} (ip^q + j) \right) \left( \prod_{1 \leq j \leq N_0, p \nmid j} (\lfloor n / p^q \rfloor p^q + j) \right) \\\\  
-&\equiv \left( (p^q!)\_p \right)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q}
+&\equiv \left( (p^q!)\_p \right)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q} \\\\  
 &\equiv (\pm 1)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q}
 \end{aligned}
 
-> **Kummer's Theorem**(about carries)
+> **Kummer's Theorem** (about carries)
 > 
 > 소수 $p$와 이항계수 ${n \choose m}$에 대하여, 다음 식이 성립한다.
 > 
@@ -287,9 +291,9 @@ $p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
 > 
 > 이때 $\varepsilon_j$의 정의는 다음과 같다.
 > 
-> "$p$진법에서 $m$과 $n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$이다."
+> <center>"$p$진법에서 $m$과 $r = n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$이다."</center>
 > 
-> 즉, ${n \choose m}$을 $p$로 나눈 나머지는 $p$진법에서 $m$과 $n - m$을 더할 때 발생하는 자리 올림의 횟수와 같다.
+> 즉, ${n \choose m}$을 $p$로 나눈 나머지는 $p$진법에서 $m$과 $r$을 더할 때 발생하는 자리 올림의 횟수와 같다.
 
 **Proof.**
 
@@ -298,8 +302,6 @@ $p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
 \begin{aligned}
 n_j = m_j + r_j + \varepsilon_{j-1} - p\varepsilon_j
 \end{aligned}
-
-이때 $r = n - m$이다.
 
 앞서 [1장에서 증명한 내용](https://damo1924.github.io/algorithm/BinomialCoefficient2/#1-3-kummers-theorem)에 따르면
 
