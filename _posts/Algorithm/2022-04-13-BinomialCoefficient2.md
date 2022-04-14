@@ -407,7 +407,79 @@ Theorem 1을 이용해서 이항계수 ${n \choose m}$을 $p^q$로 나눈 나머
 1. ${n \choose m}$이 $p^q$로 나누어떨어진다면 $0$ 반환한다.
 2. 나누어떨어지지 않는다면 Theorem 1을 이용해서 나머지를 구한다.
 
+이를 구현한 코드는 아래와 같다.
 
+```cpp
+#include <iostream>
+#include <vector>
+using namespace std;
+typedef long long ll;
+typedef pair<int, int> ii;
+
+ii get(ll n, ll p, ll q, ll pq, vector<ll>& v)
+{
+    int cnt = 0; // v_p(n!): (n!)을 소인수분해 했을 때 소수 p의 개수
+    ll prodN = 1; // (N_1!)_p ... (N_d!)_p
+    while (n)
+    {
+        prodN = prodN * v[n % pq] % pq;
+        n /= p;
+        cnt += n;
+    }
+    return { cnt, prodN };
+}
+
+int nCk(ll n, ll m, ll p, ll q) // nCm를 p^q로 나눈 나머지
+{
+    ll r = n - m;
+    ll pq = 1; // p^q
+    for (int i = 0; i < q; i++) pq *= p;
+    vector<ll> v(pq); // v[k] = (k!)_p
+    v[0] = 1;
+    for (int i = 1; i < pq; i++)
+    {
+        if (i % p) v[i] = v[i - 1] * i % pq;
+        else v[i] = v[i - 1];
+    }
+    
+    auto [cnt_n, prodN] = get(n, p, q, pq, v);
+    auto [cnt_m, prodM] = get(m, p, q, pq, v);
+    auto [cnt_r, prodR] = get(r, p, q, pq, v);
+    int e_0 = cnt_n - cnt_m - cnt_r;
+    if (e_0 >= q) return 0;
+    
+    int MR = prodM * prodR % pq;
+    for (int i = 1; i < pq; i++)
+    {
+        if (MR * i % pq == 1)
+        {
+            prodN = prodN * i % pq;
+            break;
+        }
+    }
+    
+    int e = 0;
+    for (int i = 0; i < q - 1; i++)
+    {
+        if (m % p + r % p >= p) e++;
+        m /= p; r /= p;
+    }
+    if ((e_0 - e) % 2) prodN = pq - prodN; // e_{q-1} = e_0 - e
+    
+    while (e_0--) prodN = prodN * p % pq;
+    return prodN;
+}
+```
+
+$1 \leq N < p^q$인 모든 $N$에 대해 $(N!)\_p$를 계산하는데 $O(p^q)$,
+
+$n$을 $p$로 나누어가며 $(N_j!)\_p$과 $\varepsilon_j$를 구하는데 $O(\log n)$,
+
+이므로 전체 시간복잡도는 $O(p^q + \log n)$이다.
+
+참고한 논문에서는 시간복잡도를 더 줄일 수 있는 방법에 대해 다루고 있지만,
+
+이 포스팅을 하게 된 계기인 [BOJ 14854. 이항 계수 6](https://www.acmicpc.net/problem/14854)는 $n \leq 10^9$, $p^q \leq 37$이기 때문에 위 방법으로도 충분하다.
 
 ## References
 
