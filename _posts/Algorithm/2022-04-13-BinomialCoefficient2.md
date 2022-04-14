@@ -60,13 +60,13 @@ $p = 3$이면 $(3 - 1)! \equiv -1 \pmod{3}$이므로 성립한다.
 a \equiv a^{-1} \pmod{p}
 \end{aligned}
 
-을 만족하고, 이는
+을 만족하고, 이를 정리하면
 
 \begin{aligned}
-a^2 \equiv 1 \pmod{p}
+(a + 1)(a - 1) \equiv 0 \pmod{p}
 \end{aligned}
 
-이므로, 자기 자신이 역원인 정수 $a$는 $a \equiv \pm 1 \pmod{p}$뿐임을 알 수 있다.
+이므로, $p$가 소수이므로 자기 자신이 역원인 정수 $a$는 $a \equiv \pm 1 \pmod{p}$뿐임을 알 수 있다.
 
 따라서 $(p-1)!$의 인자 중 $1$과 $(p-1)$을 제외한 나머지 인자들은
 
@@ -174,8 +174,8 @@ $n$의 $p$진 전개를 $n = a_0 + a_1p + a_2p^2 + \dots + a_kp^k$라고 하자.
 > 
 > 소수 $p$와 두 양의 정수 $m, n$에 대하여 다음이 성립한다.
 > 
-> (a) $\nu_p(nm) = \nu_p(n) + \nu_p(m)$
-> (b) $\nu_p(n^m) = m \cdot \nu_p(n)$
+> (a) $\nu_p(nm) = \nu_p(n) + \nu_p(m)$  
+> (b) $\nu_p(n^m) = m \cdot \nu_p(n)$  
 > (c) $\nu_p \left( \frac{n}{m} \right) = \nu_p(n) - \nu_p(m)$ ($m \neq 0$)
 
 > **Kummer's Theorem**
@@ -220,11 +220,45 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음이 성립한다.
 > (p^q!)\_p \equiv \pm 1 \pmod{p^q}
 > \end{aligned}
 > 
-> 이때 $\pm 1$은 *Theorem 1*에서 정의된 것과 같다.
+> 이때 $\pm 1$은 Theorem 1에서 정의된 것과 동일하다.
 
 **Proof.** Wilson's Theorem과 비슷한 방법으로 증명이 가능하다.
 
-정수 $a$($1 \leq a \leq p^q$)
+$1 \leq a \leq p^q$, $p \nmid a$를 만족하는 정수 $a$ 중 모듈러 곱셈의 역원이 자기 자신과 같은 것은 다음을 만족한다.
+
+\begin{aligned}
+(a + 1)(a - 1) \equiv 0 \pmod{p^q}
+\end{aligned}
+
+$p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
+
+(a) $p^q = 2$ : $a = 1$  
+(b) $p^q = 4$ : $a = 1, 3$  
+(c) $p = 2, q \geq 3$ : $a = 1, 2^q - 1, 2^{q-1} \pm 1$  
+(d) $p \neq 2$ : $a = 1, p^q- 1$
+
+이다.($p \neq 2$인 경우, $a \equiv \pm 1 \pmod{p^q}$ 이외의 해가 존재하지 않는다.)
+
+위 해들을 제외한 $(p^q!)\_p$의 다른 인자들은 각각의 모듈러 곱셈의 역원과 짝지을 수 있다.
+
+각 경우에 대해 $(p^q!)\_p$를 $p^q$로 나눈 나머지를 구해보면 다음과 같다.
+
+(a) $(2!)\_2 = 1 \equiv -1 \pmod{2}$
+(b) $(4!)\_4 = 1 \cdot 3 = 3 \equiv -1 \pmod{4}$  
+(c) $(2^q!)\_2 \equiv 1 \cdot (2^q - 1) \cdot (2^{q-1} - 1) \cdot (2^{q-1} + 1) \cdot 1 \equiv 1 \pmod{2^q}$  
+(d) $(p^q!)\_p \equiv 1 \cdot (p^q - 1) \cdot 1 \equiv -1 \pmod{p^q}$
+
+따라서 다음을 얻을 수 있다.
+
+\begin{aligned}
+(p^q!)\_p =
+\begin{cases}
+1 & \mbox{if } p = 2 \mbox{ and } q \geq 3 \\\\  
+-1 & \mbox{otherwise}
+\end{cases}
+\end{aligned}
+
+> **Corollary 1.** 
 
 <br/>
 
