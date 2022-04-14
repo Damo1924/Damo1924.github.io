@@ -226,7 +226,9 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다
 > 
 > 동일한 방식으로 $m_j, M_j, r_j, R_j$을 정의한다.
 > 
-> 또한, $\varepsilon_j$를 $p$진법에서 $m$과 $r$을 더할 때 $p^j$($j \geq 0$)자리에서 발생하는 자리 올림(carries)의 횟수라고 할 때, 다음이 성립한다.
+> 또한, $\varepsilon_j$를 $p$진법에서 $m$과 $r$을 더할 때 $p^j$($j \geq 0$)자리에서 발생하는 자리 올림(carries)의 횟수,
+> 
+> 그리고 $e_j = \sum_{i \geq j} \varepsilon_i$라고 정의하면, 다음이 성립한다.
 > 
 > \begin{aligned}
 > \frac{(\pm 1)^{e_{q-1}\}\}{p^{e_0}\} {n \choose m} \equiv \prod_{j=0}^d \frac{(N_j!)\_p}{(M_j!)\_p(R_j!)\_p} \pmod{p^q}
@@ -385,16 +387,16 @@ n-m-r &= (\left\lfloor n / p^j \right\rfloor \cdot p^j+n') - (\left\lfloor m / p
 위 식을 $j = 0$부터 $j = d$까지 곱하면, 다음 합동식을 얻을 수 있다.
 
 \begin{aligned}
-\frac{n!}{p^{\nu_p(n!)}\} \equiv (\pm 1)^{\sum_{j \geq q} \left\lfloor n/p^j \right\rfloor} \prod_{j \geq 0} (N_j!)\_p \pmod{p^q}
+n! \cdot p^{-\sum_{j \geq 0} \left\lfloor n/p^j \right\rfloor} \equiv (\pm 1)^{\sum_{j \geq q} \left\lfloor n/p^j \right\rfloor} \prod_{j \geq 0} (N_j!)\_p \pmod{p^q}
 \end{aligned}
 
-이제 Theorem 1을 증명할 수 있다.
+위 식과 앞에서 구한 $\left\lfloor n / p^j \right\rfloor - \left\lfloor m / p^j \right\rfloor  - \left\lfloor r / p^j \right\rfloor = \varepsilon_{j-1}$를 이용하면,
 
 \begin{aligned}
-{n \choose m} &= \frac{n!}{m!r!} \\\\  
-&\equiv p^{\nu_p(n!) - \nu_p(m!)- \nu_p(r!)} \cdot (\pm 1)^{\sum_{j \geq q} \left\lfloor n / p^j \right\rfloor - \left\lfloor m / p^j \right\rfloor - \left\lfloor r / p^j \right\rfloor} \prod_{j \geq 0} \frac{(N_j!)\_p}{(M_j!)\_p (R_j!)\_p} \pmod{p^q}
+{n \choose m} = \frac{n!}{m!r!} \equiv p^{\sum_{j \geq 0} \varepsilon_j} \cdot (\pm 1)^{\sum_{j \geq q - 1} \varepsilon_j} \prod_{j \geq 0} \frac{(N_j!)\_p}{(M_j!)\_p (R_j!)\_p} \pmod{p^q}
 \end{aligned}
 
+이고, $e_j$의 정의에 의해 최종 식을 얻을 수 있다.
 
 <br/>
 
