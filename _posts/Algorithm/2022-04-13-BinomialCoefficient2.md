@@ -186,17 +186,19 @@ $n$의 $p$진 전개를 $n = a_0 + a_1p + a_2p^2 + \dots + a_kp^k$라고 하자.
 > \nu_p \left( {m + n \choose n} \right) = \frac{s_p(m) + s_p(n) - s_p(m + n)}{p - 1}
 > \end{aligned}
 > 
-> 이때 위 식의 우변은 $p$진법에서 $m$과 $n$을 더할 때의 **자리 올림의 횟수**와 같다.
+> 이때 위 식의 우변은 $p$진법에서 $m$과 $n$을 더할 때의 **자리 올림의 횟수(number of carries)**와 같다.
 
 **Proof.**
 
-$\nu_p(n)$의 성질과 르장드르 정리에 의해 다음이 성립한다.
+$\nu_p(n)$의 성질과 르장드르 정리에 의해 다음 식이 성립한다.
 
 \begin{aligned}
 \nu_p \left( {m + n \choose n} \right) &= \nu_p \left( \frac{(m+n)!}{m!n!} \right) = \nu_p((m+n)!) - \nu_p(m!) - \nu_p(n!) \\\\  
 &= \frac{(m+n) - s_p(m + n)}{p - 1} -  \frac{m - s_p(m)}{p - 1} -  \frac{n - s_p(n)}{p - 1} \\\\  
 &= \frac{s_p(m) + s_p(n) - s_p(m + n)}{p - 1}
 \end{aligned}
+
+자리 올림의 횟수에 대한 자세한 내용과 증명은 아래에서 다룰 것이다.
 
 <br/>
 
@@ -207,7 +209,7 @@ $\nu_p(n)$의 성질과 르장드르 정리에 의해 다음이 성립한다.
 > **Definition.** 양의 정수 $n$과 소수 $p$에 대하여, $(n!)\_p$를 다음과 같이 정의한다.
 > 
 > \begin{aligned}
-> (n!)\_p = \prod_{1\leq k \leq n, p \nmid k}^n k
+> (n!)\_p = \prod_{1\leq k \leq n, p \nmid k} k
 > \end{aligned}
 > 
 > 즉, $(n!)\_p$는 $n$ 이하의 자연수 중 $p$의 배수가 아닌 것들의 곱이다.
@@ -258,7 +260,62 @@ $p, q$에 따라 경우를 나누어서 위 합동식의 해를 구하면,
 \end{cases}
 \end{aligned}
 
-> **Corollary 1.** 
+> **Corollary 1.** 소수 $p$와 자연수 $q$에 대하여 $n!$을 $p^q$로 나눈 나머지를 $N_0$라고 할 때,
+> 
+> \begin{aligned}
+> (n!)\_p \equiv (\pm 1)^{\lfloor n / p^q \rfloor}(N_0!)\_p \pmod{p^q}
+> \end{aligned}
+> 
+> 가 성립하며, $\pm 1$는 Theorem 1에서 정의된 것과 동일하다.
+
+**Proof.** $(n!)\_p$는 Lemma 1에 의해 다음과 같이 나타낼 수 있다.
+
+\begin{aligned}
+(n!)\_p &= \prod_{1\leq k \leq n, p \nmid k} k \\\\  
+&= \left( \prod_{i = 0}^{\lfloor n / p^q \rfloor - 1} \prod_{1 \leq j \leq p^q, p \nmid j} (ip^q + j) \right) \left( \prod_{1 \leq j \leq N_0, p \nmid j} (\lfloor n / p^q \rfloor p^q + j) \right) \\\\  
+&\equiv \left( (p^q!)\_p \right)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q}
+&\equiv (\pm 1)^{\lfloor n / p^q \rfloor} (N_0!)\_p \pmod{p^q}
+\end{aligned}
+
+> **Kummer's Theorem**(about carries)
+> 
+> 소수 $p$와 이항계수 ${n \choose m}$에 대하여, 다음 식이 성립한다.
+> 
+> \begin{aligned}
+> \nu_p \left( {n \choose m} \right) = \sum_{j = 0}^{\infty} \varepsilon_j
+> \end{aligned}
+> 
+> 이때 $\varepsilon_j$의 정의는 다음과 같다.
+> 
+> "$p$진법에서 $m$과 $n - m$을 더할 때 $p^j$($j \geq 0$)자리에서 자리 올림이 발생하면 $\varepsilon_j = 1$, 자리 올림이 발생하지 않으면 $\varepsilon_j = 0$이다."
+> 
+> 즉, ${n \choose m}$을 $p$로 나눈 나머지는 $p$진법에서 $m$과 $n - m$을 더할 때 발생하는 자리 올림의 횟수와 같다.
+
+**Proof.**
+
+임의의 정수 $a$를 $p$진법으로 나타냈을 때, $p^j$ 자릿수를 $a_j$라고 하면, $j \geq 0$인 정수 $j$에 대하여 다음이 성립한다.
+
+\begin{aligned}
+n_j = m_j + r_j + \varepsilon_{j-1} - p\varepsilon_j
+\end{aligned}
+
+이때 $r = n - m$이다.
+
+앞서 [1장에서 증명한 내용](https://damo1924.github.io/algorithm/BinomialCoefficient2/#1-3-kummers-theorem)에 따르면
+
+\begin{aligned}
+\nu_p \left( {n \choose m} \right) = \frac{s_p(m) + s_p(r) - s_p(n)}{p - 1}
+\end{aligned}
+
+이 성립하고, $s_p(n)$의 정의에 의해 우변을 다음과 같이 나타낼 수 있다.
+
+\begin{aligned}
+\frac{s_p(m) + s_p(r) - s_p(n)}{p - 1} &= \sum_{j=0}^{\infty} \frac{m_j + r_j - n_j}{p-1} \\\\  
+&= \frac{1}{p-1} \cdot \left( p\varepsilon_0 + \sum_{j=0}^{\infty}(p\varepsilon_j - \varepsilon_{j-1}) \right) \\\\  
+&= \sum_{j=0}^{\infty} \varepsilon_j
+\end{aligned}
+
+> 
 
 <br/>
 
