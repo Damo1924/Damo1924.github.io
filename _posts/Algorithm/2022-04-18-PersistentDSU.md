@@ -199,7 +199,13 @@ struct dsu_segtree
 
 [Codeforces. Narrow Components 문제 링크](https://codeforces.com/contest/1661/problem/E)
 
+행렬의 각 원소 중 일부(free인 셀)를 노드로 하고, 인접한 두 노드를 잇는 간선으로 이루어진 그래프를 생각하자.
 
+이렇게 만들어진 그래프는 고정된 그래프인 대신, 쿼리로 들어오는 구간에 해당하는 부분그래프에 있는 연결요소의 개수를 구하는 문제가 된다.
+
+**[HINT]** 부분행렬에 해당하는 그래프의 연결 요소의 개수를 저장하는 세그먼트 트리를 구현한 뒤, 세그먼트 트리의 각 노드에 대해 persistent dsu를 구현한다.
+
+> 자세한 풀이는 [이 포스트](https://damo1924.github.io/codeforces/ECR126-div2/#solution-2-persistent-dsuunion-find--segment-tree)에서 다루고 있다.
 
 <br/>
 
