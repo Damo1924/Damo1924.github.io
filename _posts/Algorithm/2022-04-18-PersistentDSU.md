@@ -177,7 +177,27 @@ struct dsu_segtree
 
 ## 3. Related Problems
 
-위에서 푼 문제 외에도 다른 값들을 구하는 문제들이 있다.
+### [Codeforces] Connect and Disconnect
+
+[Codeforces. Connect and Disconnect 문제 링크](https://codeforces.com/gym/100551/problem/A)
+
+마찬가지로 그래프에 간선을 추가하고 제거하는 쿼리들이 주어지는데, 이번에는 세 번째 종류의 쿼리마다 **그래프의 연결 요소의 개수**를 구해야한다.
+
+초기에는 그래프에 간선이 하나도 없기 때문에 그래프의 연결 요소의 개수는 정점의 개수인 $N$이다.
+
+이때 그래프에 새로운 간선이 추가되어 서로 다른 연결 요소에 속하던 두 정점이 연결된다면, 연결 요소의 개수가 1만큼 줄어들게 된다.
+
+반대로, rollback을 하면 두 정점이 연결되기 전으로 돌아가므로 연결 요소의 개수가 1만큼 늘어난다.
+
+따라서, 앞서 구현한 `dsu_with_rollbacks` 구조체에 그래프에 있는 연결 요소의 개수를 나타내는 멤버 변수 `comps`를 추가한 다음, 위 내용을 그대로 적용해주면 된다.
+
+- 생성자: `comps = n;`
+- Union: `comps--;`
+- Rollback: `comps++;`
+
+이제 세그먼트 트리를 DFS로 탐색해서 쿼리에 대한 답을 구해줄 수 있다.
+
+---
 
 
 
