@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Union-Find, Dynamic Connectivity, 16911
+`Tags` Union-Find, Dynamic Connectivity, 16911, 16695
 
 ## 1. Dynamic Connectivity
 
@@ -58,106 +58,92 @@ Dynamic connectivity 문제를 풀기 위해 rollback 기법을 적용한 DSU를
 먼저, rollback이 가능한 DSU부터 구현하였다.
 
 ```cpp
-struct dsu_save // for rollback
-{
-    int x, vx, y, vy;
-    dsu_save() {}
-    dsu_save(int _x, int _vx, int _y, int _vy)
-        : x(_x), vx(_vx), y(_y), vy(_vy) {}
-};
-
 struct dsu_with_rollbacks
 {
-    vector<int> p, rnk; // parent, rank
-    stack<dsu_save> st; // for rollback
+    vector<int> p; // root: p = -rank, else: p = parent
+    stack<ii> st; // for rollback
     
     dsu_with_rollbacks() {}
-    dsu_with_rollbacks(int n)
+    dsu_with_rollbacks(int n) : p(n, -1) {}
+    
+    int find(int u)
     {
-        p.resize(n);
-        rnk.resize(n);
-        for (int i = 0; i < n; i++) p[i] = i, rnk[i] = 0;
+        if (p[u] < 0) return u;
+        return find(p[u]);
     }
     
-    int _find(int x)
+    bool merge(int u, int v)
     {
-        if (x == p[x]) return x;
-        return _find(p[x]); // no path compression
-    }
-    
-    bool _union(int x, int y) // (x, y) union
-    {
-        x = _find(x); y = _find(y);
-        if (x == y) return true;
+        u = find(u); v = find(v);
+        if (u == v) return false;
         
-        if (rnk[x] > rnk[y]) swap(x, y);
-        st.push(dsu_save(x, rnk[x], y, rnk[y]));
-        p[x] = y;
-        if (rnk[x] == rnk[y]) rnk[y]++;
-        return false;
+        if (p[u] > p[v]) swap(u, v);
+        st.push({ v, p[v] });
+        p[u] += p[v];
+        p[v] = u;
+        return true;
     }
     
-    void rollback() // (x, y) un-union
+    void rollback()
     {
         if (st.empty()) return;
-        dsu_save q = st.top(); st.pop();
-        
-        p[q.x] = q.x; rnk[q.x] = q.vx;
-        p[q.y] = q.y; rnk[q.y] = q.vy;
+        auto [u, sz] = st.top(); st.pop();
+        p[p[u]] -= sz;
+        p[u] = sz;
     }
 };
 ```
 
 새로운 간선을 추가하거나 제거하기 전 상태를 스택에 저장하여 다시 불러올 수 있도록 하는 것이 핵심이기 때문에, 부모 노드의 번호를 바꾸는 path compression은 사용하지 않는다.
 
+Weight compression을 위해 따로 rank 배열을 사용하기보다는 부모 노드의 번호를 저장하는 배열 하나로 처리하였다.
+
+루트 노드라면 음의 부호를 붙인 rank 값을 저장하였고, rank의 초깃값은 $-1$이다.
+
 따라서 persistent DSU는 각 연산을 $O(\log N)$로 처리하게 된다.
 
 다음으로는 앞에서 설명한 세그먼트 트리를 구현하였다.
 
 ```cpp
-struct query
-{
-    int x, y;
-    query() {}
-    query(int _x, int _y) : x(_x), y(_y) {}
+struct query {
+    int u, v;
 };
+
+vector<query> q;
 
 struct dsu_segtree
 {
-    vector<query> queries;
     vector<vector<query>> tree;
     dsu_with_rollbacks dsu;
     int Q; // Number of queries
     
-    dsu_segtree() {}
     dsu_segtree(int _Q, int n) : Q(_Q)
     {
-        queries.resize(Q);
-        tree.resize(4 * Q + 4);
         dsu = dsu_with_rollbacks(n);
+        tree.resize(4 * Q + 4);
     }
     
-    void add_query(int t, int s, int e, int l, int r, query q)
+    void add_query(int t, int s, int e, int l, int r, int idx)
     {
         if (e < l || r < s) return;
         if (l <= s && e <= r)
         {
-            tree[t].push_back(q);
+            tree[t].push_back(q[idx]);
             return;
         }
         
         int m = (s + e) / 2;
-        add_query(2 * t, s, m, l, r, q);
-        add_query(2 * t + 1, m + 1, e, l, r, q);
+        add_query(2 * t, s, m, l, r, idx);
+        add_query(2 * t + 1, m + 1, e, l, r, idx);
     }
     
     void dfs(int t, int s, int e, vector<bool>& ans)
     {
         int cnt = 0;
-        for (query& q : tree[t])
-            if (!dsu._union(q.x, q.y)) cnt++;
+        for (auto& [u, v] : tree[t])
+            if (dsu.merge(u, v)) cnt++;
         
-        if (s == e) ans[s] = (dsu._find(queries[s].x) == dsu._find(queries[s].y));
+        if (s == e) ans[s] = (dsu.find(q[s].u) == dsu.find(q[s].v));
         else
         {
             int m = (s + e) / 2;
@@ -198,6 +184,20 @@ struct dsu_segtree
 이제 세그먼트 트리를 DFS로 탐색해서 쿼리에 대한 답을 구해줄 수 있다.
 
 ---
+
+### [BOJ] 16695. The Bridge on the River Kawaii
+
+[BOJ 16695. The Bridge on the River Kawaii 문제 링크](https://www.acmicpc.net/problem/16695)
+
+간선에 가중치가 있어 두 정점 사이의 경로 중 가중치의 최댓값이 가장 작은 것을 구하는 쿼리가 주어진다.
+
+**[HINT]** 간선의 가중치로 가능한 값이 $10$개뿐이다.
+
+---
+
+### [Codeforces] Narrow Components
+
+[Codeforces. Narrow Components 문제 링크](https://codeforces.com/contest/1661/problem/E)
 
 
 
