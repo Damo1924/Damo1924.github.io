@@ -2,21 +2,26 @@
 // sum(idx) : a[idx] 의 값 반환.
 // upd(l, r, dif) : a[l] ~ a[r] 에 dif 를 더함.
 
+#include <iostream>
+#include <vector>
+using namespace std;
+typedef long long ll;
+
 struct reverse_Segtree
 {
     int n;
-    vector<int> node, a;
+    vector<ll> node, a;
     
     reverse_Segtree() {}
     reverse_Segtree(int _n) : n(_n)
     {
-        node.resize(2 * n);
+        node.resize(2 * n, 0);
         a.resize(n);
     }
     
-    int sum(int idx)
+    ll sum(int idx)
     {
-        int res = a[idx];
+        ll res = a[idx];
         for (int i = n + idx; i; i /= 2) res += node[i];
         return res;
     }
