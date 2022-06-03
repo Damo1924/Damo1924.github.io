@@ -40,8 +40,8 @@ comments: true
 
 그렇다면, 이를 해결할 수 있는 알고리즘에 대해 알아보자.
 
-
 <br/>
+
 ## 2. Ford-Fulkerson Algorithm
 
 포드-풀커슨 알고리즘은 다음과 같다.
@@ -72,8 +72,8 @@ comments: true
 
 BFS를 사용하는 알고리즘을 Edmonds-Karp Algorithm이라고 부른다.
 
-
 <br/>
+
 ## 3. Edmonds-Karp Algorithm & Implementation
 
 에드몬드-카프 알고리즘은 포드-풀커슨 알고리즘에서 증가 경로를 찾는 방법만을 제시한 것이므로 알고리즘 자체는 동일하지만, 이번에는 코드를 구현하는 관점에서 알고리즘을 정리해보았다.
@@ -234,8 +234,8 @@ int main()
 }
 ```
 
-
 <br/>
+
 ## 4. Dinic's Algorithm
 
 Dinic's Algorithm은 $O(V^2E)$의 시간복잡도는 갖는 최대 유량을 구하는 알고리즘이다.
@@ -253,19 +253,17 @@ Dinic's Algorithm은 $O(V^2E)$의 시간복잡도는 갖는 최대 유량을 구
 
 이를 바탕으로 Dinic's Algorithm에 대해 알아보자.
 
----
-
-1) BFS를 통해 그래프의 각 정점에 레벨을 부여한다.
-
-2) DFS를 통해 각 최단 경로를 순회하면서 차단 유량을 구한다.
-
-3) 위 과정(1 ~ 2)을 BFS를 통해 싱크에 레벨을 부여하지 못할 때까지 반복한다.
-
----
+- BFS를 통해 그래프의 각 정점에 레벨을 부여한다.
+- DFS를 통해 각 최단 경로를 순회하면서 차단 유량을 구한다.
+- 위 과정(1 ~ 2)을 BFS를 통해 싱크에 레벨을 부여하지 못할 때까지 반복한다.
 
 Edmond-Karp Algorithm에서는 BFS를 통해 최단 경로를 발견하면 해당 경로를 지날 수 있는 유량을 더해주었다면, Dinic's Algorithm에서는 DFS를 이용해서 최단 경로를 탐색해서 유량을 구한다는 차이점이 있다.
 
 그렇기 때문에 Edmond-Karp Algorithm은 경로를 저장하기 위한 배열을 사용했지만, Dinic's Algorithm을 구현하기 위해서는 경로를 기억하는 배열 대신 각 정점의 레벨을 저장해둘 배열을 선언해서 사용하게 된다.
+
+---
+
+### 4-1. Time complexity
 
 다음으로 Dinic's Algorithm이 $O(V^2E)$의 시간복잡도를 가진다는 사실을 증명해보자.
 
@@ -363,13 +361,87 @@ $\therefore$ Dinic's Algorithm의 시간복잡도는 $O(\min \\{ V^{2/3}, E^{1/2
 
 ---
 
-마지막으로 Dinic's Algorithm을 사용해서 최대 유량 문제를 해결해보자.
+### 4-2. Implementation
+
+먼저 인접행렬을 이용한 디닉 알고리즘은 아래와 같이 구현할 수 있다.
+
+```cpp
+#include <iostream>
+#include <vector>
+#include <queue>
+using namespace std;
+typedef long long ll;
+const int N = 402;
+const int src = 0, snk = 401;
+
+vector<int> g[N];
+int c[N][N], f[N][N]; // capacity, flow
+int lev[N], path[N];
+ll ans = 0;
+
+bool bfs() // assign level to each vertex
+{
+    for (int i = 0; i < N; i++) lev[i] = -1;
+    queue<int> q;
+    q.push(src);
+    lev[src] = 0;
+    while (!q.empty())
+    {
+        int x = q.front();
+        q.pop();
+        for (int y : g[x])
+        {
+            if (c[x][y] - f[x][y] > 0 && lev[y] == -1)
+            {
+                lev[y] = lev[x] + 1;
+                q.push(y);
+            }
+        }
+    }
+    return lev[snk] != -1;
+}
+
+bool dfs(int x, int flow) // find shortest path following the level
+{
+    if (x == snk)
+    {
+        for (int i = snk; i != src; i = path[i])
+        {
+            f[path[i]][i] += flow;
+            f[i][path[i]] -= flow;
+        }
+        ans += flow;
+        return true;
+    }
+    
+    for (int y : g[x])
+    {
+        if (c[x][y] - f[x][y] > 0 && lev[y] == lev[x] + 1)
+        {
+            path[y] = x;
+            if (dfs(y, min(flow, c[x][y] - f[x][y]))) return true;
+        }
+    }
+    return false;
+}
+
+int maxflow()
+{
+    while (bfs())
+        while (dfs(src, 1e9));
+    return ans;
+}
+```
+
+간선 정보를 저장하는 구조체의 벡터를 이용하는 방법은 아래와 같다.
+
+
 
 ---
 
-### [백준] 2367. 파티
+### 4-3. Related problems
 
-[백준 2367. 파티 문제 링크](https://www.acmicpc.net/problem/2367)
+[BOJ 2367. 파티 문제 링크](https://www.acmicpc.net/problem/2367)
 
 N명의 사람이 파티를 하기 위해 D 종류의 음식을 준비하려고 한다.
 
@@ -505,6 +577,9 @@ int main()
 }
 ```
 
+<br/>
+
 ## References
+
 [1] [구사과, '유량 관련 알고리즘 증명'](https://koosaga.com/133)  
 [2] [WIKIPEDIA, 'Dinic's algorithm'](https://en.m.wikipedia.org/wiki/Dinic%27s_algorithm)  
