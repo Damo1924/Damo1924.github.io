@@ -361,7 +361,7 @@ $\therefore$ Dinic's Algorithm의 시간복잡도는 $O(\min \\{ V^{2/3}, E^{1/2
 
 ---
 
-### 4-2. Implementation
+### 4-2. Implementation - Adjacency matrix
 
 먼저 인접행렬을 이용한 디닉 알고리즘은 아래와 같이 구현할 수 있다.
 
@@ -433,13 +433,85 @@ int maxflow()
 }
 ```
 
-간선 정보를 저장하는 구조체의 벡터를 이용하는 방법은 아래와 같다.
-
-
-
 ---
 
-### 4-3. Related problems
+### 4-3. Implementation - Vector
+
+간선 정보를 저장하는 구조체의 벡터를 이용하는 방법은 아래와 같다.
+
+```cpp
+struct max_flow_dinic {
+    struct edge {
+        int to, c, f, rev;
+    };
+    
+    int n, src, snk, ans = 0;
+    vector<vector<edge>> g;
+    vector<int> lev, path, idx;
+    
+    max_flow_dinic(){}
+    max_flow_dinic(int _n) : n(_n) {
+        g.resize(_n); lev.resize(_n); path.resize(_n); idx.resize(_n);
+        src = 0, snk = _n - 1;
+    }
+    
+    void add_edge(int s, int e, int c) {
+        g[s].push_back({ e, c, 0, (int)g[e].size() });
+        g[e].push_back({ s, 0, 0, (int)g[s].size() - 1 });
+    }
+    
+    bool bfs() {
+        for (int i = 0; i < n; i++) lev[i] = -1;
+        queue<int> q;
+        q.push(src);
+        lev[src] = 0;
+        while (!q.empty()) {
+            int x = q.front();
+            q.pop();
+            for (edge e : g[x]) {
+                if (e.c - e.f > 0 && lev[e.to] == -1) {
+                    lev[e.to] = lev[x] + 1;
+                    q.push(e.to);
+                }
+            }
+        }
+        return lev[snk] != -1;
+    }
+    
+    bool dfs(int x, int flow) {
+        if (x == snk) {
+            for (int i = snk; i != src; i = path[i]) {
+                edge &e = g[path[i]][idx[i]];
+                e.f += flow;
+                g[i][e.rev].f -= flow;
+            }
+            ans += flow;
+            return true;
+        }
+        
+        for (int i = 0; i < g[x].size(); i++) {
+            edge e = g[x][i];
+            if (e.c - e.f > 0 && lev[e.to] == lev[x] + 1) {
+                path[e.to] = x;
+                idx[e.to] = i;
+                if (dfs(e.to, min(flow, e.c - e.f))) return true;
+            }
+        }
+        return false;
+    }
+    
+    void solve() {
+        while (bfs())
+            while (dfs(src, 1e9));
+    }
+};
+```
+
+<br/>
+
+## 5. Related problems
+
+### [BOJ] 2367. 파티
 
 [BOJ 2367. 파티 문제 링크](https://www.acmicpc.net/problem/2367)
 
@@ -451,131 +523,11 @@ N명의 사람이 파티를 하기 위해 D 종류의 음식을 준비하려고 
 
 최대 유량 문제들은 직접적으로 그 형태가 드러나기보다는 이처럼 최대 유량 문제인지를 숨기는 경우가 많다.
 
-먼저, 최대 유량 문제로 변환하기 위해 적절한 그래프 하나를 그려보자.
-
 소스와 싱크, 그리고 N명의 사람들과 D 종류의 음식에 해당하는 정점으로 이루어진 그래프를 다음과 같이 그릴 수 있다.
 
 <img src="https://user-images.githubusercontent.com/88201512/134772866-340e8b4f-a538-42cf-9f52-84a14d763333.jpg" width="80%" height="80%">
 
-이 그래프를 최대 유량 문제에 적용할 때 주의할 점은 각 간선은 정해진 방향으로만 흐를 수 있다는 것이다.
-
-그렇기 때문에 한 쪽 방향으로만 용량을 입력해주어야 한다.
-
-전체 코드는 다음과 같다.
-
-```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-using namespace std;
-
-int n, d, k, ans;
-
-vector<int> graph[302]; // 0: source, 1 ~ 200: 사람, 201 ~ 300: 요리, 301: sink
-int c[302][302]; // capacity
-int f[302][302]; // flow
-int level[302]; // bfs를 통해 구할 각 정점의 레벨
-int path[302]; // dfs 경로
-
-bool bfs() // 각 정점에 level 부여하기
-{
-    fill(level, level + 302, -1);
-
-    level[0] = 0;
-    queue<int> q;
-    q.push(0);
-    while (!q.empty())
-    {
-        int x = q.front();
-        q.pop();
-        for (int i = 0; i < graph[x].size(); i++)
-        {
-            int y = graph[x][i];
-            if (c[x][y] - f[x][y] > 0 && level[y] == -1)
-            {
-                level[y] = level[x] + 1;
-                q.push(y);
-            }
-        }
-    }
-    return level[301] != -1;
-}
-
-bool dfs(int x, int flow) // level을 통해 최단 경로 탐색
-{
-    if (x == 301)
-    {
-        for (int i = x; i != 0; i = path[i])
-        {
-            f[path[i]][i] += flow;
-            f[i][path[i]] -= flow;
-        }
-        ans += flow;
-        return true;
-    }
-
-    for (int i = 0; i < graph[x].size(); i++)
-    {
-        int y = graph[x][i];
-        if (c[x][y] - f[x][y] > 0 && level[y] == level[x] + 1)
-        {
-            path[y] = x;
-            if (dfs(y, min(flow, c[x][y] - f[x][y]))) return true;
-        }
-    }
-    return false;
-}
-
-void maxDish()
-{
-    while (bfs())
-    {
-        while (1)
-        {
-            if (!dfs(0, 1000000000)) break;
-        }
-    }
-}
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    cin >> n >> k >> d;
-    for (int i = 1; i <= d; i++)
-    {
-        int tmp;
-        cin >> tmp; // 각 요리의 최대 접시 수
-        c[200 + i][301] = tmp;
-        graph[200 + i].push_back(301);
-        graph[301].push_back(200 + i);
-    }
-
-    for (int i = 1; i <= n; i++)
-    {
-        c[0][i] = k; // 각 사람이 가져올 수 있는 접시의 수는 k
-        graph[0].push_back(i);
-        graph[i].push_back(0);
-
-        int z;
-        cin >> z; // i번째 사람이 할 수 있는 요리의 종류
-        for (int j = 0; j < z; j++)
-        {
-            int food;
-            cin >> food; // i번째 사람이 할 수 있는 요리의 종류
-            graph[i].push_back(200 + food);
-            graph[200 + food].push_back(i);
-            c[i][200 + food] = 1; // 각 사람은 한 요리당 접시 하나만 가져갈 수 있음
-        }
-    }
-
-    maxDish();
-    cout << ans;
-}
-```
+위 그래프를 구현해준 후, 디닉 알고리즘을 이용하여 해결할 수 있다.
 
 <br/>
 
