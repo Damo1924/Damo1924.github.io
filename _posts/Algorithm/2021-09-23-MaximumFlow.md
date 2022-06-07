@@ -174,113 +174,60 @@ int max_flow(int src, int snk) {
 간선들을 벡터로 저장하는 방식으로 구현하면 아래와 같다.
 
 ```cpp
-
-```
-
-<br/>
-
-### [백준] 6086. 최대 유량
-
-[백준 6086. 최대 유량 문제 링크](https://www.acmicpc.net/problem/6086)
-
-첫 줄에 간선의 개수 N($1 \leq N \leq 700$)이 주어지고 둘째 줄부터 각 간선의 정보가 주어진다.
-
-각 노드의 이름은 알파벳 소문자(a ~ z)와 대문자(A ~ Z)이며, 간선의 용량은 1000 이하의 자연수이다.
-
-이때 A에서 Z까지의 최대 유량을 구하는 문제로, Edward-Karp Algorithm을 이용하면 시간 내에 해결할 수 있다.
-
-Edmond-Karp Algorithm을 이용해서 최대 유량을 반환하는 함수 `maxFlow()`와 노드의 이름이 문자로 주어지므로 이를 0 ~ 51의 정수로 변환해주는 `index()` 함수를 구현하였다.
-
-```cpp
-#include <iostream>
-#include <vector>
-#include <queue>
-#include <algorithm>
-using namespace std;
-
-const int Max = 52, Inf = 1000000000;
-
-int n;
-
-int p[Max]; // path
-int c[Max][Max]; // capacity
-int f[Max][Max]; // flow
-
-vector<int> g[Max]; // graph
-
-int maxFlow(int start, int end)
-{
-    int ans = 0;
-
-    while (1)
-    {
-        fill(p, p + Max, -1); // 경로를 -1로 초기화
-
-        queue<int> q;
-        q.push(start);
-        while (!q.empty() && p[end] == -1)
-        {
-            int x = q.front();
-            q.pop();
-            for (int i = 0; i < g[x].size(); i++)
-            {
-                int y = g[x][i];
-
-                // 방문하지 않은 노드 중 용량이 남은 경우
-                if (c[x][y] - f[x][y] > 0 && p[y] == -1)
-                {
-                    q.push(y);
-                    p[y] = x; // 경로 저장
+struct max_flow_edmondkarp {
+    struct edge {
+        int to, c, f, rev;
+    };
+    
+    int n, src, snk;
+    vector<vector<edge>> g;
+    vector<int> path, idx;
+    
+    max_flow_edmondkarp(){}
+    max_flow_edmondkarp(int _n) : n(_n) {
+        g.resize(_n); path.resize(_n); idx.resize(_n);
+        src = 0, snk = _n - 1;
+    }
+    
+    void add_edge(int s, int e, int c) {
+        g[s].push_back({ e, c, 0, (int)g[e].size() });
+        g[e].push_back({ s, 0, 0, (int)g[s].size() - 1 });
+    }
+    
+    int solve() {
+        int ans = 0;
+        while (true) {
+            for (int i = 0; i < n; i++) path[i] = -1;
+        
+            queue<int> q;
+            q.push(src);
+            while (!q.empty()) {
+                int x = q.front();
+                q.pop();
+                for (int i = 0; i < g[x].size(); i++) {
+                    edge e = g[x][i];
+                    if (e.c - e.f > 0 && path[e.to] == -1) {
+                        q.push(e.to);
+                        path[e.to] = x;
+                        idx[e.to] = i;
+                    }
                 }
             }
+            if (path[snk] == -1) break;
+            
+            int flow = 1e9;
+            for (int i = snk; i != src; i = path[i])
+                flow = min(flow, g[path[i]][idx[i]].c - g[path[i]][idx[i]].f);
+            for (int i = snk; i != src; i = path[i]) {
+                edge &e = g[path[i]][idx[i]];
+                e.f += flow;
+                g[i][e.rev].f -= flow;
+            }
+            ans += flow;
         }
-
-        if (p[end] == -1) break; // 더 이상 도착 지점에 도달하는 경로가 없는 경우
-
-        int flow = Inf; // 찾은 경로를 지나는 최대 유량
-        for (int i = end; i != start; i = p[i])
-            flow = min(flow, c[p[i]][i] - f[p[i]][i]);
-
-        for (int i = end; i != start; i = p[i])
-        {
-            f[p[i]][i] += flow;
-            f[i][p[i]] -= flow;
-        }
-        ans += flow;
+        return ans;
     }
-
-    return ans;
-}
-
-int index(char c)
-{
-    if (c >= 'a') return c - 71;
-    else return c - 65;
-}
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-    cout.tie(NULL);
-
-    cin >> n;
-    for (int i = 0; i < n; i++)
-    {
-        char a, b;
-        int tmp, A, B;
-        cin >> a >> b >> tmp;
-        A = index(a);
-        B = index(b);
-
-        g[A].push_back(B);
-        g[B].push_back(A);
-        c[A][B] += tmp;
-        c[B][A] += tmp;
-    }
-
-    cout << maxFlow(0, 25);
-}
+};
 ```
 
 <br/>
