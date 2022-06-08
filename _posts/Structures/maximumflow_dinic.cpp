@@ -3,18 +3,18 @@
 #include <queue>
 using namespace std;
 
-struct max_flow_dinic {
+struct maxflow_dinic {
     struct edge {
         int to, c, f, rev;
     };
     
     int n, src, snk, ans = 0;
     vector<vector<edge>> g;
-    vector<int> lev, path, idx;
+    vector<int> lev, work;
     
-    max_flow_dinic(){}
-    max_flow_dinic(int _n) : n(_n) {
-        g.resize(_n); lev.resize(_n); path.resize(_n); idx.resize(_n);
+    maxflow_dinic(){}
+    maxflow_dinic(int _n) : n(_n) {
+        g.resize(_n); lev.resize(_n); work.resize(_n);
         src = 0, snk = _n - 1;
     }
     
@@ -24,7 +24,7 @@ struct max_flow_dinic {
     }
     
     bool bfs() {
-        for (int i = 0; i < n; i++) lev[i] = -1;
+        fill(lev.begin(), lev.end(), -1);
         queue<int> q;
         q.push(src);
         lev[src] = 0;
@@ -41,30 +41,32 @@ struct max_flow_dinic {
         return lev[snk] != -1;
     }
     
-    bool dfs(int x, int flow) {
-        if (x == snk) {
-            for (int i = snk; i != src; i = path[i]) {
-                edge &e = g[path[i]][idx[i]];
-                e.f += flow;
-                g[i][e.rev].f -= flow;
-            }
-            ans += flow;
-            return true;
-        }
-        
-        for (int i = 0; i < g[x].size(); i++) {
-            edge e = g[x][i];
+    int dfs(int x, int flow) {
+        if (x == snk) return flow;
+        for (int &i = work[x]; i < g[x].size(); i++) {
+            edge &e = g[x][i];
             if (e.c - e.f > 0 && lev[e.to] == lev[x] + 1) {
-                path[e.to] = x;
-                idx[e.to] = i;
-                if (dfs(e.to, min(flow, e.c - e.f))) return true;
+                int _f = dfs(e.to, min(flow, e.c - e.f));
+                if (_f > 0) {
+                    e.f += _f;
+                    g[e.to][e.rev].f -= _f;
+                    return _f;
+                }
             }
         }
-        return false;
+        return 0;
     }
     
-    void solve() {
-        while (bfs())
-            while (dfs(src, 1e9));
+    int maxflow() {
+        int ans = 0;
+        while (bfs()) {
+            fill(work.begin(), work.end(), 0);
+            while (true) {
+                int _f = dfs(src, 1e9);
+                if (!_f) break;
+                ans += _f;
+            }
+        }
+        return ans;
     }
 };
