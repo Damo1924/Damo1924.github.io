@@ -11,6 +11,13 @@ int c[N][N], f[N][N];
 int lev[N];
 int work[N];
 
+void add_edge(int x, int y, int z, bool direc) {
+    g[x].push_back(y);
+    g[y].push_back(x);
+    c[x][y] = z;
+    if (!direc) c[y][x] = z;
+}
+
 bool bfs() {
     memset(lev, -1, sizeof lev);
     queue<int> q;
