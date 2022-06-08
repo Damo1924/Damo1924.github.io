@@ -363,32 +363,28 @@ $\therefore$ Dinic's Algorithm의 시간복잡도는 $O(\min \\{ V^{2/3}, E^{1/2
 
 ```cpp
 #include <iostream>
+#include <memory.h>
 #include <vector>
 #include <queue>
 using namespace std;
-typedef long long ll;
-const int N = 402;
-const int src = 0, snk = 401;
+const int N = 502;
+const int src = 0, snk = 501;
 
 vector<int> g[N];
-int c[N][N], f[N][N]; // capacity, flow
-int lev[N], path[N];
-ll ans = 0;
+int c[N][N], f[N][N];
+int lev[N];
+int work[N];
 
-bool bfs() // assign level to each vertex
-{
-    for (int i = 0; i < N; i++) lev[i] = -1;
+bool bfs() {
+    memset(lev, -1, sizeof lev);
     queue<int> q;
     q.push(src);
     lev[src] = 0;
-    while (!q.empty())
-    {
+    while (!q.empty()) {
         int x = q.front();
         q.pop();
-        for (int y : g[x])
-        {
-            if (c[x][y] - f[x][y] > 0 && lev[y] == -1)
-            {
+        for (int y : g[x]) {
+            if (c[x][y] - f[x][y] > 0 && lev[y] == -1) {
                 lev[y] = lev[x] + 1;
                 q.push(y);
             }
@@ -397,34 +393,32 @@ bool bfs() // assign level to each vertex
     return lev[snk] != -1;
 }
 
-bool dfs(int x, int flow) // find shortest path following the level
-{
-    if (x == snk)
-    {
-        for (int i = snk; i != src; i = path[i])
-        {
-            f[path[i]][i] += flow;
-            f[i][path[i]] -= flow;
-        }
-        ans += flow;
-        return true;
-    }
-    
-    for (int y : g[x])
-    {
-        if (c[x][y] - f[x][y] > 0 && lev[y] == lev[x] + 1)
-        {
-            path[y] = x;
-            if (dfs(y, min(flow, c[x][y] - f[x][y]))) return true;
+int dfs(int x, int flow) {
+    if (x == snk) return flow;
+    for (int &i = work[x]; i < g[x].size(); i++) {
+        int y = g[x][i];
+        if (c[x][y] - f[x][y] > 0 && lev[y] == lev[x] + 1) {
+            int _f = dfs(y, min(flow, c[x][y] - f[x][y]));
+            if (_f > 0) {
+                f[x][y] += _f;
+                f[y][x] -= _f;
+                return _f;
+            }
         }
     }
-    return false;
+    return 0;
 }
 
-int maxflow()
-{
-    while (bfs())
-        while (dfs(src, 1e9));
+int max_flow() {
+    int ans = 0;
+    while (bfs()) {
+        memset(work, 0, sizeof work);
+        while (true) {
+            int _f = dfs(src, 1e9);
+            if (!_f) break;
+            ans += _f;
+        }
+    }
     return ans;
 }
 ```
@@ -436,18 +430,18 @@ int maxflow()
 간선 정보를 저장하는 구조체의 벡터를 이용하는 방법은 아래와 같다.
 
 ```cpp
-struct max_flow_dinic {
+struct maxflow_dinic {
     struct edge {
         int to, c, f, rev;
     };
     
     int n, src, snk, ans = 0;
     vector<vector<edge>> g;
-    vector<int> lev, path, idx;
+    vector<int> lev, work;
     
-    max_flow_dinic(){}
-    max_flow_dinic(int _n) : n(_n) {
-        g.resize(_n); lev.resize(_n); path.resize(_n); idx.resize(_n);
+    maxflow_dinic(){}
+    maxflow_dinic(int _n) : n(_n) {
+        g.resize(_n); lev.resize(_n); work.resize(_n);
         src = 0, snk = _n - 1;
     }
     
@@ -457,7 +451,7 @@ struct max_flow_dinic {
     }
     
     bool bfs() {
-        for (int i = 0; i < n; i++) lev[i] = -1;
+        fill(lev.begin(), lev.end(), -1);
         queue<int> q;
         q.push(src);
         lev[src] = 0;
@@ -474,31 +468,33 @@ struct max_flow_dinic {
         return lev[snk] != -1;
     }
     
-    bool dfs(int x, int flow) {
-        if (x == snk) {
-            for (int i = snk; i != src; i = path[i]) {
-                edge &e = g[path[i]][idx[i]];
-                e.f += flow;
-                g[i][e.rev].f -= flow;
-            }
-            ans += flow;
-            return true;
-        }
-        
-        for (int i = 0; i < g[x].size(); i++) {
-            edge e = g[x][i];
+    int dfs(int x, int flow) {
+        if (x == snk) return flow;
+        for (int &i = work[x]; i < g[x].size(); i++) {
+            edge &e = g[x][i];
             if (e.c - e.f > 0 && lev[e.to] == lev[x] + 1) {
-                path[e.to] = x;
-                idx[e.to] = i;
-                if (dfs(e.to, min(flow, e.c - e.f))) return true;
+                int _f = dfs(e.to, min(flow, e.c - e.f));
+                if (_f > 0) {
+                    e.f += _f;
+                    g[e.to][e.rev].f -= _f;
+                    return _f;
+                }
             }
         }
-        return false;
+        return 0;
     }
     
-    void solve() {
-        while (bfs())
-            while (dfs(src, 1e9));
+    int maxflow() {
+        int ans = 0;
+        while (bfs()) {
+            fill(work.begin(), work.end(), 0);
+            while (true) {
+                int _f = dfs(src, 1e9);
+                if (!_f) break;
+                ans += _f;
+            }
+        }
+        return ans;
     }
 };
 ```
