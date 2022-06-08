@@ -18,9 +18,9 @@ struct maxflow_dinic {
         src = 0, snk = _n - 1;
     }
     
-    void add_edge(int s, int e, int c) {
+    void add_edge(int s, int e, int c, bool direc) {
         g[s].push_back({ e, c, 0, (int)g[e].size() });
-        g[e].push_back({ s, 0, 0, (int)g[s].size() - 1 });
+        g[e].push_back({ s, (direc ? 0 : c), 0, (int)g[s].size() - 1 });
     }
     
     bool bfs() {
