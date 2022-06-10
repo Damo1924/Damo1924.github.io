@@ -310,11 +310,83 @@ Minimum cut phase의 시간복잡도를 $O(f(V, E))$라고 하면, 전체 시간
 
 ---
 
-### 3-4. Implementation
+### 3-4. Implementation - Linear search
 
+시간복잡도: $O(V^3)$
 
+```cpp
+#include <iostream>
+#include <memory.h>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+const int N = 500;
+
+int n, w[N][N], t[N]; // w(i, j), tight(i)
+bool merged[N], inA[N];
+
+int upd(int v) { // update tightness
+    int mx = -1, idx;
+    for (int i = 0; i < n; i++) {
+        if (!merged[i] && !inA[i]) {
+            t[i] += w[v][i];
+            if (t[i] > mx) {
+                mx = t[i];
+                idx = i;
+            }
+        }
+    }
+    return idx; // return next vertex
+}
+
+int stoer_wagner() {
+    int ans = 1e9;
+    memset(merged, 0, sizeof merged);
+    for (int k = 1; k < n; k++) {
+        memset(inA, 0, sizeof inA);
+        memset(t, 0, sizeof t);
+        
+        int next, prev;
+        for (int i = 0; i < n; i++) if (!merged[i]) { // 1. choose any vertex and insert into A
+            inA[i] = 1, prev = i, next = upd(i);
+            break;
+        }
+        
+        for (int i = 0; i < n - k - 1; i++) { // 2. insert the "most tightly connected" vertex into A
+            prev = next, inA[next] = 1;
+            next = upd(next);
+        }
+        
+        ans = min(ans, t[next]);
+        merged[next] = 1;
+        for (int i = 0; i < n; i++) { // merge s & t (edge contraction)
+            w[i][prev] += w[i][next];
+            w[prev][i] += w[next][i];
+        }
+    }
+    return ans;
+}
+```
 
 ---
+
+### [BOJ] 13367. Weeping Fig
+
+[BOJ 13367. Weeping Fig 문제 링크](https://www.acmicpc.net/problem/13367)
+
+주어진 그래프의 global minimum cut를 구하는 문제이다.
+
+---
+
+### [BOJ] 14060. Paths in Multigraph
+
+[BOJ 14060. Paths in Multigraph 문제 링크](https://www.acmicpc.net/problem/14060)
+
+두 정점 사이에 여러 개의 간선이 존재하는 multigraph가 주어질 때, 그래프를 두 부분으로 분리하기 위해 제거해야하는 간선의 개수를 구하는 문제이다.
+
+두 정점 $u, v$을 연결하는 간선의 가중치 $w(u, v)$를 주어진 multigraph에서 $u, v$를 연결하는 간선의 개수로 놓고 global minimum cut을 구하면 된다.
+
 
 
 <br/>
