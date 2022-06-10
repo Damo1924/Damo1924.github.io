@@ -240,17 +240,77 @@ Weighted undirected graph $G = (V, E, w)$에 대하여 $G$의 global minimum cut
 
 집합 $A$에 속하지 않은 정점 $v$에 대하여 $v$의 tightness는 $\sum_{u \in A} w(u, v)$ 로 정의된다.
 
-위 과정을 통해 최소 컷을 구하고 **edge contraction**을 통해 두 정점을 합쳐주는 과정을 반복하면 global minimum cut을 구할 수 있다.
+위 과정(minimum cut phase)을 통해 최소 컷을 구하고 **edge contraction**을 통해 두 정점을 합쳐주는 과정을 반복하면 global minimum cut을 구할 수 있다.
 
 ---
 
 ### 3-2. Proof of Stoer-Wagner algorithm
 
+최소 컷을 구하는 과정을 증명하기 위해 아래와 같이 **active vertex**를 정의하자.
 
+- 집합 $A$에 추가된 순서대로 정점들을 나열했을 때, s-t cut에 대하여 직전 정점과 반대편에 놓이게 되는 정점
+
+> 가장 마지막 정점 $t$는 정의에 의해 반드시 active vertex이다.
+
+또, 어떤 active vertex $v$에 대하여 집합 $A_v$와 컷 $C_v$를 아래와 같이 정의하자.
+
+- $A_v$ : $v$ 이전에 추가된 정점들의 집합
+- $C_v$ : $A_v \cup v$ 를 s-t cut과 동일하게 분할하는 cut
+
+$C_v$의 weight를 $w(C_v)$라고 할 때, 귀납법을 이용하여 아래 식이 성립함을 보일 것이다.
+
+\begin{aligned}
+w(A_v, v) \leq w(C_v)
+\end{aligned}
+
+첫 번째 active vertex $v$는 $C_v = (A_v, v)$ 이므로 $w(A_v, v) = w(C_v)$ 이다.
+
+이제 임의의 active vertex $u$에 대하여 직전의 active vertex를 $v$라고 할 때, $w(A_v, v) \leq w(C_v)$ 이면 $w(A_u, u) \leq w(C_u)$ 임을 보이자.
+
+집합 $A$에 새로운 원소를 추가할 때 항상 tightness가 가장 큰 정점을 선택하기 때문에 $w(A_v, u) \leq w(A_v, v)$ 이 성립한다.
+
+또, $v$부터 $u$ 이전 정점까지는 모두 $C$에 대하여 $u$와 반대편에 놓이므로 $w(C_v) + w(A_u - A_v, u) = w(C_u)$ 이다.
+
+위 식들을 이용하면,
+
+\begin{aligned}
+w(A_u, u) &= w(A_v, u) + w(A_u - A_v, u) \\\\  
+&\leq w(A_v, v) + w(A_u - A_v, u) \\\\  
+&\leq w(C_v) + (A_u - A_v, u) = w(C_u)
+\end{aligned}
+
+를 얻을 수 있고, 귀납법에 의해 다음이 성립한다.
+
+> 모든 active vertex $v$에 대하여 $w(A_v, v) \leq w(C_v)$ 가 성립한다.
+
+이때 마지막 정점 $t$는 항상 active vertex이므로 $w(A_t, t) \leq w(C_t)$ 이고, $C_t = C$ 이므로 다음이 증명된다.
+
+> Minimum cut phase로 얻은 두 정점 $s, t$에 대하여, s-t minimum cut의 weight는 $w(A_t, t)$, 즉 $t$의 tightness와 같다.
 
 ---
 
 ### 3-3. Time complexity
+
+그래프 $G = (V, E)$에 대하여 minimum cut phase를 총 $V-1$번 수행하게 된다.
+
+Minimum cut phase의 시간복잡도를 $O(f(V, E))$라고 하면, 전체 시간복잡도는 $O(f(V, E) \cdot V)$이다.
+
+만약 **가장 tightness가 큰 정점을 선형탐색**으로 매번 구해주면 $O(V)$, 정점을 총 $V-1$번 찾게되므로 $f(V, E) = V^2$이다.
+
+선형탐색 대신 **피보나치 힙**을 이용하면, 정점 $v$를 집합 $A$에 추가할 때
+
+- $v$를 피보나치 힙에서 제거
+- 집합 $A$에 속하지 않은 정점들 중 $v$와 연결된 것들의 tightness를 업데이트
+
+를 수행해야한다.
+
+각 정점을 피보나치 힙에서 한 번씩 제거하므로 $O(V \log V)$, 간선의 개수만큼 tightness를 업데이트해주므로 $O(E)$의 시간복잡도를 가진다.
+
+따라서 피보나치 힙을 이용하면 $f(V, E) = V \log V + E$ 이다.
+
+---
+
+### 3-4. Implementation
 
 
 
@@ -262,4 +322,4 @@ Weighted undirected graph $G = (V, E, w)$에 대하여 $G$의 global minimum cut
 ## References
 
 [1] [WIKIPEDIA, 'Max-flow min-cut theorem'](https://en.m.wikipedia.org/wiki/Max-flow_min-cut_theorem)  
-[2] 
+[2] [WIKIPEDIA, 'Stoer-Wagner algorithm'](https://en.m.wikipedia.org/wiki/Stoer%E2%80%93Wagner_algorithm)  
