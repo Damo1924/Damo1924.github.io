@@ -1,5 +1,5 @@
 ---
-title: "폴라드 로 알고리즘 (Pollard's rho algorithm)"
+title: "Cycle Detection & Pollard's rho algorithm"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Pollard's rho, 소인수분해, Cycle detection
+`Tags` 폴라드 로, 소인수분해
 
 ## 1. Cycle Detection
 
@@ -50,6 +50,31 @@ x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_i = f(x_{i-1}), \dots
 
 알고리즘의 시간복잡도는 $O(\mu + \lambda)$ 이다.
 
+```cpp
+pair<int, int> floyd(x_0) { // for given f, x_0
+    int x = f(x_0), y = f(f(x_0));
+    while (x != y) x = f(x), y = f(y);
+    
+    // get mu
+    int m = 0;
+    x = x_0;
+    while (x != y) {
+        x = f(x), y = f(y);
+        m++;
+    }
+    
+    // get lambda
+    int l = 1;
+    y = f(x);
+    while (x != y) {
+        y = f(y);
+        l++;
+    }
+    
+    return { l, m };
+}
+```
+
 ---
 
 ### 1-2. Brent's algorithm
@@ -64,8 +89,61 @@ x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_i = f(x_{i-1}), \dots
 
 > 실제 속도는 평균적으로 브랜트 알고리즘이 플로이드 알고리즘보다 36% 정도 더 빠르다고 한다.
 
+```cpp
+pair<int, int> brent(x_0) { // for given f, x_0
+    // get lambda
+    int p = 1, l = 1; // p = 2^i, l = j - p
+    int x = x_0, y = f(x_0);
+    while (x != y) { // x == y -> l = lambda
+        if (i == j) {
+            x = y;
+            p *= 2;
+            l = 0;
+        }
+        y = f(y);
+        l++;
+    }
+    
+    // get mu
+    x = x_0, y = x_0;
+    for (int i = 0; i < l; i++) y = f(y);
+    int m = 0;
+    while (x != y) {
+        x = f(x), y = f(y);
+        m++;
+    }
+    
+    return { l, m };
+}
+```
+
 <br/>
 
 ## 2. Pollard's rho algorithm
 
-폴라드 로 알고리즘은 
+지금까지 다룬 내용은 소인수분해와는 전혀 관련이 없어 보일 수 있지만, 폴라드 로 알고리즘은 **cycle finding을 이용해서 인수를 찾는 알고리즘**이다.
+
+인수분해를 하고자 하는 정수 $n = pq$과 $n$의 자명하지 않은 인수 $p$를 생각하자.
+
+임의의 정수 $c$, 함수 $f(x) = x^2 + c \pmod{n}$ 와 초기값 $x_0$ 로부터 만들 수 있는 수열
+
+\begin{aligned}
+x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_k = f(x_{k-1})$, \dots
+\end{aligned}
+
+과 $y_i = x_i \pmod{p}$($i \geq 0$) 로 정의되는 수열은 모두 사이클을 갖는다.
+
+$y_i = y_j$ 인 서로 다른 두 인덱스 $i, j$에 대하여 $p \mid (x_j - x_i)$ 이고, $(x_j - x_i) \mid n$ 이다.
+
+즉, 수열 $x$에서 $\gcd(x_j - x_i, n) \neq 1$ 인 $i, j$를 찾으면 $n$은 $p = \gcd(x_j - x_i, n)$ 라는 인수를 갖는다고 할 수 있다.
+
+만약 $\gcd(x_j - x_i, n) = n$ 이면 $c$ 또는 $x_0$ 를 바꾸어가며 알고리즘을 수행해주면 된다.
+
+> **Birthday paradox**에 의하면, 무작위 수열에 $N$개의 숫자가 나타날 때 사이클이 나타나는 순간의 기댓값은 $O(\sqrt{N})$ 정도라고 한다.
+> 
+> $p$는 $n$의 인수이므로 $p \leq \sqrt{n}$ 이므로 수열 $y_i$에서 사이클이 나타나는 순간의 기댓값은 $O(\sqrt[4]{n})$ 이다.
+> 
+> 폴라드 로 알고리즘의 실제 수행시간도 이를 따른다고 알려져 있긴 하지만, 엄밀히 증명된 적은 없다.
+
+
+
