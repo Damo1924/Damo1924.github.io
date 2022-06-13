@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Fermat's little theorem, Carmichael numbers
+`Tags` Miller-Rabin, Fermat's little theorem, Carmichael numbers
 
 ## 1. Simple Method: Trial Division
 
