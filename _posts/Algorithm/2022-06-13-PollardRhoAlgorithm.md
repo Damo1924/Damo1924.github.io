@@ -128,7 +128,7 @@ pair<int, int> brent(x_0) { // for given f, x_0
 임의의 정수 $c$, 함수 $f(x) = x^2 + c \pmod{n}$ 와 초기값 $x_0$ 로부터 만들 수 있는 수열
 
 \begin{aligned}
-x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_k = f(x_{k-1})$, \dots
+x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_k = f(x_{k-1}), \dots
 \end{aligned}
 
 과 $y_i = x_i \pmod{p}$($i \geq 0$) 로 정의되는 수열은 모두 사이클을 갖는다.
