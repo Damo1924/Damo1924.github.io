@@ -65,7 +65,7 @@ n - 1 = 2^s d
 \begin{aligned}
 a^{n-1} - 1 &= a^{2^s d} - 1 \\\\  
 &= (a^{2^{s-1} d} + 1)(a^{2^{s-1} d} - 1) \\\\  
-&\vdots
+&\vdots \\\\  
 &= (a^{2^{s-1} d} + 1)(a^{2^{s-2} d} + 1) \dots (a^d + 1)(a^d - 1)
 \end{aligned}
 
@@ -106,33 +106,35 @@ a^{n-1} - 1 &= a^{2^s d} - 1 \\\\
 using namespace std;
 typedef unsigned long long ll;
 
-ll pow(ll x, ll y, ll m) { // x ^ y % m
-    if (y == 1) return x % m;
-    ll t = pow(x, y / 2, m);
-    t = t * t % m;
-    if (y % 2) return t * x % m;
-    return t;
-}
-
-bool isComposite(ll n, ll a, ll d, ll s) {
-    ll x = pow(a, d, n);
-    if (x == 1 || x == n - 1) return false;
-    for (int r = 1; r < s; r++) {
-        x = x * x % n;
-        if (x == n - 1) return false;
+ll modpow(ll x, ll y, ll mod) {
+    ll ret = 1;
+    while (y) {
+        if (y % 2) ret = (__int128) ret * x % mod;
+        x = (__int128) x * x % mod;
+        y /= 2;
     }
-    return true;
+    return ret;
 }
 
-bool isPrime(ll n) { // Miller-Rabin
-    if (n == 1) return false;
+bool miller_rabin(ll n, ll a, ll d, ll s) { // 합성수라는 것에 대한 강한 증거이면 true를 반환
+    ll x = modpow(a, d, n);
+    if (x == 1) return 0;
+    for (int r = 0; r < s; r++) {
+        if (x == n - 1) return 0;
+        x = (__int128) x * x % n;
+    }
+    return 1;
+}
+
+bool isPrime(ll n) {
+    if (n == 1) return 0;
     ll d = n - 1, s = 0;
     while (d % 2 == 0) s++, d /= 2;
-    for (int a : { 2, 7, 61 }) { // always correct for all unsigned int
-        if (n == a) return true;
-        if (isComposite(n, a, d, s)) return false;
+    for (ll a : { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 }) {
+        if (n % a == 0) return n == a;
+        if (miller_rabin(n, a, d, s)) return 0;
     }
-    return true;
+    return 1;
 }
 ```
 
