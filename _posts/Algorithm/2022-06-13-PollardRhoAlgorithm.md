@@ -121,7 +121,16 @@ pair<int, int> brent(x_0) { // for given f, x_0
 
 ## 2. Pollard's rho algorithm
 
-지금까지 다룬 내용은 소인수분해와는 전혀 관련이 없어 보일 수 있지만, 폴라드 로 알고리즘은 **cycle finding을 이용해서 인수를 찾는 알고리즘**이다.
+### 2-1. Algorithm
+
+**폴라드 로 알고리즘**은 함수 $f(x)$와 초기값 $x_0$에 대한 **cycle finding을 이용해서 인수를 찾는 확률적 알고리즘**이다.
+
+> 수열을 방향그래프로 나타냈을 때의 형태가 $\rho$ 와 비슷해서 'rho' 라는 이름이 붙게 되었다.
+
+> 폴라드 로 알고리즘은 다음을 **보장하지 않음**에 주의해야한다.
+> 
+> - 항상 인수를 발견
+> - 발견한 인수가 소수
 
 인수분해를 하고자 하는 정수 $n = pq$과 $n$의 자명하지 않은 인수 $p$를 생각하자.
 
@@ -139,11 +148,106 @@ $y_i = y_j$ 인 서로 다른 두 인덱스 $i, j$에 대하여 $p \mid (x_j - x
 
 만약 $\gcd(x_j - x_i, n) = n$ 이면 $c$ 또는 $x_0$ 를 바꾸어가며 알고리즘을 수행해주면 된다.
 
+---
+
+### 2-2. Time Complexity (Birthday Paradox)
+
 > **Birthday paradox**에 의하면, 무작위 수열에 $N$개의 숫자가 나타날 때 사이클이 나타나는 순간의 기댓값은 $O(\sqrt{N})$ 정도라고 한다.
 > 
 > $p$는 $n$의 인수이므로 $p \leq \sqrt{n}$ 이므로 수열 $y_i$에서 사이클이 나타나는 순간의 기댓값은 $O(\sqrt[4]{n})$ 이다.
 > 
 > 폴라드 로 알고리즘의 실제 수행시간도 이를 따른다고 알려져 있긴 하지만, 엄밀히 증명된 적은 없다.
 
+---
+
+### 2-3. Implementation (Factorization)
+
+폴라드 로 알고리즘을 사용할 때에는 반드시 **해당 수가 합성수인지 확인**해야하기 때문에 [밀러-라빈 소수판별법](https://damo1924.github.io/algorithm/MillerRabinPrimalityTest/)을 이용하였다.
+
+또한, 폴라드 로 알고리즘이 반환하는 인수는 소인수라는 보장이 없기 때문에 재귀적으로 적용해서 소인수분해를 할 수 있다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <random>
+using namespace std;
+typedef unsigned long long ll;
+
+ll modpow(ll x, ll y, ll mod) {
+    ll ret = 1;
+    while (y) {
+        if (y % 2) ret = (__int128) ret * x % mod;
+        x = (__int128) x * x % mod;
+        y /= 2;
+    }
+    return ret;
+}
+
+bool miller_rabin(ll n, ll a, ll d, ll s) {
+    ll x = modpow(a, d, n);
+    if (x == 1) return 0;
+    for (int r = 0; r < s; r++) {
+        if (x == n - 1) return 0;
+        x = (__int128) x * x % n;
+    }
+    return 1;
+}
+
+bool isPrime(ll n) { // 밀러-라빈
+    if (n == 1) return 0;
+    ll d = n - 1, s = 0;
+    while (d % 2 == 0) s++, d /= 2;
+    for (ll a : { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 }) {
+        if (n % a == 0) return n == a;
+        if (miller_rabin(n, a, d, s)) return 0;
+    }
+    return 1;
+}
+
+ll gcd(ll x, ll y) {
+    while (y) {
+        ll t = x % y;
+        x = y;
+        y = t;
+    }
+    return x;
+}
+
+ll pollard_rho(ll n) {
+    ll x = 2, y = 2, g = 1, c = 1;
+    auto f = [&](ll x) { return ((__int128) x * x % n + c) % n; };
+    while (g == 1) {
+        x = f(x), y = f(f(y));
+        g = gcd(x > y ? x - y : y - x, n);
+        if (g == n) {
+            x = y = rand() % (n - 2);
+            c = rand() % 10 + 1;
+            g = 1;
+        }
+    }
+    return g;
+}
+
+vector<ll> factors;
+void factorize(ll n) { // 소인수분해
+    if (isPrime(n)) factors.push_back(n);
+    else {
+        ll g = (n % 2 ? pollard_rho(n) : 2); // 2^k 을 인수로 갖는 경우를 처리해주기 위함
+        factorize(g);
+        factorize(n / g);
+    }
+}
+```
+
+<br/>
+
+## 3. Related Problems
+
+
+
+<br/>
+
+## Referernces
 
 
