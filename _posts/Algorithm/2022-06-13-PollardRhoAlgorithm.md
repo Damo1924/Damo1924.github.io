@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 폴라드 로, 소인수분해
+`Tags` 폴라드 로, 소인수분해, factorization, Birthday paradox
 
 ## 1. Cycle Detection
 
@@ -132,7 +132,7 @@ pair<int, int> brent(x_0) { // for given f, x_0
 > - 항상 인수를 발견
 > - 발견한 인수가 소수
 
-인수분해를 하고자 하는 정수 $n = pq$과 $n$의 자명하지 않은 인수 $p$를 생각하자.
+인수분해를 하고자 하는 정수 $n = pq$과 $n$의 자명하지 않은 인수 $p$($p \leq \sqrt{n}$)를 생각하자.
 
 임의의 정수 $c$, 함수 $f(x) = x^2 + c \pmod{n}$ 와 초기값 $x_0$ 로부터 만들 수 있는 수열
 
@@ -142,25 +142,60 @@ x_0, x_1 = f(x_0), x_2 = f(x_1), \dots, x_k = f(x_{k-1}), \dots
 
 과 $y_i = x_i \pmod{p}$($i \geq 0$) 로 정의되는 수열은 모두 사이클을 갖는다.
 
-$y_i = y_j$ 인 서로 다른 두 인덱스 $i, j$에 대하여 $p \mid (x_j - x_i)$ 이고, $(x_j - x_i) \mid n$ 이다.
+$y_i = y_j$ 인 서로 다른 두 인덱스 $i, j$에 대하여 $p \mid x_i - x_j$ 이고, $p \mid n$ 이므로 다음이 성립한다.
+
+\begin{aligned}
+p \mid \gcd(x_i - x_j, n)
+\end{aligned}
 
 즉, 수열 $x$에서 $\gcd(x_j - x_i, n) \neq 1$ 인 $i, j$를 찾으면 $n$은 $p = \gcd(x_j - x_i, n)$ 라는 인수를 갖는다고 할 수 있다.
-
-만약 $\gcd(x_j - x_i, n) = n$ 이면 $c$ 또는 $x_0$ 를 바꾸어가며 알고리즘을 수행해주면 된다.
 
 ---
 
 ### 2-2. Time Complexity (Birthday Paradox)
 
-> **Birthday paradox**에 의하면, 무작위 수열에 $N$개의 숫자가 나타날 때 사이클이 나타나는 순간의 기댓값은 $O(\sqrt{N})$ 정도라고 한다.
+$n$의 어떤 인수 $p$에 대하여 $y_i = y_j$ 인 두 인덱스 $i, j$($1 \leq i < j \leq k$)가 존재하는 **범위 $k$의 기댓값**은 어느 정도일까?
+
+이는 **생일 역설(birthday paradox)**과 비슷한 방법으로 대략 $\sqrt{p}$ 임을 알 수 있다.
+
+> **Birthday Paradox**: $n$명의 사람 중 생일이 같은 사람이 존재할 확률에 대한 문제이다.
 > 
-> $p$는 $n$의 인수이므로 $p \leq \sqrt{n}$ 이므로 수열 $y_i$에서 사이클이 나타나는 순간의 기댓값은 $O(\sqrt[4]{n})$ 이다.
+> 생일로 가능한 경우의 수가 $365$개이므로 단순히 생각하면 생일이 같은 사람이 존재하기 위해서는 많은 사람이 필요할 것 같지만,
 > 
-> 폴라드 로 알고리즘의 실제 수행시간도 이를 따른다고 알려져 있긴 하지만, 엄밀히 증명된 적은 없다.
+> $30$명 중 생일이 같은 사람이 존재할 확률은 $60%$보다 크고, $60$명 중 생일이 같은 사람이 존재할 확률은 $99%$보다 크다.
+
+$y_1, y_2, \dots, y_k$ 중 겹치는 것이 없을 확률을 $P$라고 하면,
+
+\begin{aligned}
+P &= \left( 1 - \frac{1}{p} \right) \left( 1 - \frac{2}{p} \right) \dots \left( 1 - \frac{k - 1}{p} \right) \\\\  
+&\leq e^{-1/p} \cdot e^{-2/p} \dots e^{-(k-1)/p} \\\\  
+&= e^{- \frac{k(k-1)}{2p}\} \\\\  
+&\sim e^{-k^2 / (2p)}
+\end{aligned}
+
+이다. 위 식에 $k = \sqrt{p}$ 를 대입하면, $k$개의 수들 중 겹치는 것이 없을 확률은 대략 $e^{-1/2} \leq 2/3$ 임을 알 수 있다.
+
+따라서 겹치는 수가 존재할 확률이 어느 정도 있다고 할 수 있다.
+
+이때 $p \leq \sqrt{n}$ 이므로 $k = \sqrt[4]{n}$ 이다.
+
+그런데 $1 \leq i < j \leq k$ 에 있는 순서쌍 $(i, j)$의 개수는 ${k \choose 2} \sim \frac{1}{2} \sqrt{n}$ 이므로 **모든 수로 직접 나누어보는 브루트포스 방법과 차이가 없다**는 것을 알 수 있다.
+
+이를 해결하기 위한 방법이 바로 **함수 $f(x) = x^2 + c \pmod{n}$와 초기값 $x_0$로 얻어지는 수열의 사이클을 찾는 것**이다.
+
+> 엄밀히 증명된 것은 아니지만, 대부분의 초기값 $x_0$에 대하여 $x_i \equiv x_j \pmod{p}$인 인덱스 $i < j < C \sqrt{p}$ ($C$는 작은 상수) 가 존재한다는 것이 경험적으로(empirically) 확인되었다.
+
+따라서 **cycle finding algorithm**을 이용하면 위의 "경험적 사실"에 의해 $C \sqrt{p} \leq C \sqrt[4]{n}$ 번 정도를 탐색하면 원하는 순서쌍을 찾을 수 있다.
+
+만약 사이클을 찾는 탐색 횟수가 너무 길어진다면, 포기하고 $c$ 또는 $x_0$의 값을 바꾸어서 찾으면 된다.
 
 ---
 
 ### 2-3. Implementation (Factorization)
+
+$\gcd(x_i - x_j, n)$의 값이 $1$이 아닐 때까지 플로이드 알고리즘을 통해 사이클을 찾아주도록 구현하였다.
+
+만약 $\gcd(x_i - x_j, n) = n$ 이면 $c$와 $x_0$를 다른 랜덤한 값으로 바꾼 후 사이클을 찾아주었다.
 
 폴라드 로 알고리즘을 사용할 때에는 반드시 **해당 수가 합성수인지 확인**해야하기 때문에 [밀러-라빈 소수판별법](https://damo1924.github.io/algorithm/MillerRabinPrimalityTest/)을 이용하였다.
 
@@ -244,10 +279,17 @@ void factorize(ll n) { // 소인수분해
 
 ## 3. Related Problems
 
+### [BOJ] 4149. 큰 수 소인수분해
 
+[BOJ 4149. 큰 수 소인수분해 문제 링크](https://www.acmicpc.net/problem/4149)
+
+$1$보다 크고 $2^{62}$보다 작은 정수가 주어질 때, 해당 수를 소인수분해한 결과를 출력하는 문제이다.
+
+---
 
 <br/>
 
 ## Referernces
 
-
+[1] [WIKIPEDIA, 'Pollard's rho algorithm'](https://en.m.wikipedia.org/wiki/Pollard%27s_rho_algorithm)  
+[2] [MIT 18.310 lecture notes, Michel Goemans, 'Factoring'](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwj52dGZlqz4AhWVSWwGHfIYCtkQFnoECDUQAQ&url=https%3A%2F%2Fmath.mit.edu%2F~goemans%2F18310S15%2Ffactoring-notes.pdf&usg=AOvVaw0nAwtS-kP0M-01Ri_XO1dQ)
