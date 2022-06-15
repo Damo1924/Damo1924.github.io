@@ -168,14 +168,79 @@ a_1 b_4 - a_2 b_3 + a_3 b_2 - a_4 b_1 = (a_1 b_4 - a_4 b_1) - (a_2 b_3 + a_3 b_2
 
 <br/>
 
-## 2. Legendre's Three-Square Theorem
+## 2. Fermat's Theorem on Sums of Two Squares
 
-> **Theorem 2.** (Legendre's three-square theorem)
+> **Theorem 2-1.** (Fermat's theorem on sums of two squares)
 > 
-> 자연수 $n$이 세 정수의 제곱의 합으로 나타낼 수 있기 위한 필요충분조건은 $n$이 $4^a(8b + 7)$($a, b$는 음이 아닌 정수)의 꼴이 아니라는 것이다.
+> 홀수인 소수 $p$가 두 정수의 제곱의 합으로 나타낼 수 있기 위한 필요충분조건은 $p \equiv 1 \pmod{4}$ 이다.
+
+> **Theorem 2-2.** (Sum of two squares theorem)
+> 
+> $1$보다 큰 정수가 두 정수의 제곱의 합으로 나타낼 수 있기 위한 필요충분조건은 정수를 소인수분해했을 때 $p^k$를 포함하지 않는 것이다.
+> 
+> 이때 $p$는 $4$로 나눈 나머지가 $3$인 소수이고, $k$는 홀수이다.
+
+Theorem 2-2는 Theorem 2-1로부터 간단히 증명할 수 있으므로 Theorem 2-1을 증명해보자.
+
+---
+
+> **Lemma 4.** 두 정수의 제곱의 합으로 표현되는 두 수의 곱은 두 정수의 제곱의 합으로 표현이 가능하다.
+
+**Proof.** $(a_1^2 + a_2^2)(b_1^2 + b_2^2) = (a_1 b_1 + a_2 b_2)^2 + (a_1 b_2 - a_2 b_1)^2$ 이므로 증명된다.
+
+---
+
+> **Lemma 5.** 두 정수의 제곱의 합으로 표현되는 수가 두 정수의 제곱의 합으로 표현되는 소수로 나누어 떨어지면, 그 몫도 두 정수의 제곱의 합으로 표현이 가능하다.
+
+**Proof.** $a = a_1^2 + a_2^2$ 가 소수 $p = p_1^2 + p_2^2$ 로 나누어 떨어진다고 하자. 그렇다면,
+
+\begin{aligned}
+(p_1 a_2 - a_1 p_2) (p_1 a_2 + a_1 p_2) &= p_1^2 a_2^2 - a_1^2 p_2^2 \\\\  
+&= p_1^2 (a_1^2 + a_2^2) - a_1^2 (p_1^2 + p_2^2)
+&= p_1^2 a - a_1^2 p \equiv 0 \pmod{p}
+\end{aligned}
+
+이므로, $p_1 a_2 - a_1 p_2$ 또는 $p_1 a_2 + a_1 p_2$ 중 적어도 하나는 $p$로 나누어 떨어진다.
+
+일반성을 잃지 않고 $p_1 a_2 - a_1 p_2$ 가 $p$로 나누어 떨어진다고 할 수 있다. Lemma 1에 의해,
+
+\begin{aligned}
+ap = (a_1^2 + a_2^2)(p_1^2 + p_2^2) = (a_1 p_1 + a_2 p_2)^2 + (a_1 p_2 - a_2 p_1)^2
+\end{aligned}
+
+이므로 $(a_1 p_1 + a_2 p_2)^2$ 도 $p$로 나누어 떨어진다.
+
+위 식의 양변을 $p^2$로 나누어주면,
+
+\begin{aligned}
+\frac{a}{p} = \left( \frac{a_1 p_1 + a_2 p_2}{p} \right)^2 + \left( \frac{a_1 p_2 - a_2 p_1}{p} \right)^2
+\end{aligned}
+
+이고 모든 항은 정수이므로 증명이 완료된다.
+
+---
+
+> **Lemma 6.** 서로소인 두 양의 정수 $a, b$에 대하여 $a^2 + b^2$의 모든 소인수는 두 정수의 제곱수의 합으로 표현할 수 있다.
+
+**Proof.** $a^2 + b^2$ 이 소수이면 자명하므로 소수가 아니라고 하자.
 
 
 
+<br/>
+
+## 3. Legendre's Three-Square Theorem
+
+> **Theorem 3.** (Legendre's three-square theorem)
+> 
+> 자연수 $n$이 세 정수의 제곱의 합으로 나타낼 수 있기 위한 필요충분조건은
+> 
+> $n$이 $4^a(8b + 7)$ 의 꼴이 아니라는 것이다.($a, b$는 음이 아닌 정수)
+
+정수 $x$를 제곱했을 때 $8$로 나눈 나머지는 $0$ 또는 $1$ 또는 $4$뿐이라는 것을 이용하면 $n = 4^a(8b + 7)$ 꼴의 수를 세 제곱수의 합으로 표현하지 못한다는 것은 쉽게 증명할 수 있다.
+
+<br/>
+
+ 
 
 
 
@@ -184,5 +249,6 @@ a_1 b_4 - a_2 b_3 + a_3 b_2 - a_4 b_1 = (a_1 b_4 - a_4 b_1) - (a_2 b_3 + a_3 b_2
 
 [1] [WIKIPEDIA, 'Lagrange's four-square theorem'](https://en.m.wikipedia.org/wiki/Lagrange%27s_four-square_theorem)  
 [2] [WIKIPEDIA, 'Legendre's three-square theorem'](https://en.m.wikipedia.org/wiki/Legendre%27s_three-square_theorem)  
-[3] 
+[3] [WIKIPEDIA, 'Fermat's theorem on sums of two squares'](https://en.m.wikipedia.org/wiki/Fermat%27s_theorem_on_sums_of_two_squares)  
+[4] 
 
