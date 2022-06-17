@@ -64,7 +64,7 @@ $\mathrm{det} U = 1$ 이므로 equivalent한 두 행렬 $A, B$는 $\mathrm{det} 
 이때 어떤 $U \in SL_n(\mathbb{Z})$에 대하여 $U^TAU = B$라고 하면,
 
 \begin{aligned}
-F_B(x) = xBx^T = xU^TAUx^T = (Ux^T)^T A (Ux^T) = F_A(Ux^T)
+F_B(x) = xBx^T = xU^TAUx^T = (xU^T) A (xU^T)^T = F_A(xU^T)
 \end{aligned}
 
 를 얻을 수 있다.
@@ -250,15 +250,49 @@ a_{11} F_B(x_1, x_2, x_3)= (b_{11}x_1 + b_{12}x_2 + b_{13}x_3)^2 + G_{B'}(x_2, x
 
 이고, $d(G_{B'})= a_{11} d$ 이다.
 
+또한, $F_B$가 positive definite이므로 $G_{B'}$도 positive definite이다.
+
 Lemma 1에 의해 $G_{B'}(x_2, x_3)$ 는 equivalent form
 
 \begin{aligned}
-G
+G_{\hat{A}\}(x_2, x_3) = \hat{a_{11}\}x_2^2 + 2 \hat{a_{12}\}x_2x_3 + \hat{a_{22}\} x_3^2
 \end{aligned}
 
+을 갖고, 이때 행렬 $\hat{A} \in SL_2(\mathbb{Z})$ 의 성분들은 다음을 만족한다.
 
+\begin{aligned}
+2 \left\vert \hat{a_{12}\} \right\vert \leq \hat{a_{11}\} \leq 2 \sqrt{\frac{a_{11}d}{3}
+\end{aligned}
 
+$\hat{A} \sim B'$ 이므로 어떤 행렬 $\hat{V} \in SL_2(\mathbb{Z})$ 에 대하여 $\hat{A} = \hat{V}^T B' \hat{V}$ 이다.
 
+어떤 정수 $r, s$ 에 대하여 행렬 $V \in SL_3(\mathbb{Z})$ 을
+
+\begin{aligned}
+V = \begin{pmatrix} 1 & r & s \\\\ 0 & \hat{v_{11}\} & \hat{v_{12}\} \\\\  0 & \hat{v_{21}\} & \hat{v_{22}\} \end{pmatrix}
+\end{aligned}
+
+로, 행렬 $A = V^T B V$ 로 정의하자.
+
+어렵지 않게 $V^T B V$의 $(1, 1)$ 성분이 $b_{11}$ 인 것을 알 수 있고, 앞서 $b_{11} = a_{11}$ 이었다.
+
+두 행벡터 $x = (x_1, x_2, x_3)$, $y = (y_1, y_2, y_3) = xV^T$ 를 정의하면,
+
+\begin{aligned}
+F_A (x_1, x_2, x_3) = F_B (y_1, y_2, y_3)
+\end{aligned}
+
+이고, $(y_2, y_3) = (x_2, x_3) \hat{V}$ 로부터
+
+\begin{aligned}
+G_{B'}(y_2, y_3) = G_{\hat{V}^T B' \hat{V}\} (x_2, x_3) = G_{\hat{A}\}(x_2, x_3)
+\end{aligned}
+
+이다. 그렇다면 Lemma 2에 의해,
+
+\begin{aligned}
+
+\end{aligned}
 
 
 
