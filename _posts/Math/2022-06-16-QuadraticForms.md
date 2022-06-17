@@ -77,9 +77,11 @@ F_B(x) = xBx^T = xU^TAUx^T = (xU^T) A (xU^T)^T = F_A(xU^T)
 
 Quadratic form $F_A$가 모든 $x_1, \dots, x_n \in \mathbb{Z}$ (모두 $0$인 경우 제외)에 대하여 $F_A(x_1, \dots, x_n) > 0$을 만족하면 **positive definite**이라고 부른다.
 
-**대칭행렬** $A$에 대하여 $F_A$의 판별식(discriminant)는 $d(F_A) = \mathrm{det} A$ 로 정의되므로,
+**대칭행렬** $A$에 대하여 $F_A$의 판별식(discriminant)는 $d(F_A) = \mathrm{det} A$ 로 정의된다.
 
-$F_A$가 positive definite이기 위한 필요충분조건은 $\mathrm{det} A < 0$ 이라고 할 수 있다.
+$F_A$가 항상 양수($x \neq \vec{0}$)이기 위한 필요충분조건은 행렬 $A$가 [정치행렬(positive definite matrix)](https://en.m.wikipedia.org/wiki/Definite_matrix)이어야하므로,
+
+모든 $k = 1, \dots, n$에 대하여 $\mathrm{det} (a_{ij})\_{1 \leq i, j \leq k} > 0$ 을 만족해야한다.
 
 <br/>
 
@@ -302,7 +304,9 @@ G_{B'}(y_2, y_3) = G_{\hat{V}^T B' \hat{V}\} (x_2, x_3) = G_{\hat{A}\}(x_2, x_3)
 &= (a_{11} x_1 + a_{12} x_2 + a_{13} x_3)^2 + G_{\hat{A}\}(x_2, x_3)
 \end{aligned}
 
-가 되고, $A' = \hat{A}$ 임을 알 수 있다.
+가 되고, $G_{A'}(x_2, x_3) = G_{\hat{A}\}(x_2, x_3)$ 를 얻는다.
+
+어떤 quadratic form에 대응되는 대칭행렬은 유일하므로 $A' = \hat{A}$ 임을 알 수 있다.
 
 이제 $r, s$를 $\left\vert a_{12} \right\vert \leq a_{11} / 2$ 와 $\left\vert a_{13} \right\vert \leq a_{11} / 2$ 이도록 선택하자.
 
@@ -326,7 +330,13 @@ a_{11}^2 \leq a_{11}a_{22} = \hat{a}\_{11} + a_{12}^2 \leq 2 \sqrt{\frac{a_{11}d
 
 > **Theorem 2.** 판별식의 값이 $1$인 모든 positive definite ternary quadratic form $F(x_1, x_2, x_3)$ 는 $x_1^2 + x_2^2 + x_3^2$ 와 equivalent하다.
 
-**Proof.** 
+**Proof.** Lemma 3에 의해 $F$와 equivalent한 $F_A(x_1, x_2, x_3)$ 가 존재하고, 이때 대칭행렬 $A \in M_3(\mathbb{Z})$ 은
+
+\begin{aligned}
+2 \max(\left\vert a_{12} \right\vert, \left\vert a_{13} \right\vert) \leq a_{11} \leq \frac{4}{3}
+\end{aligned}
+
+을 만족한다. 각 성분은 모두 정수이므로 $a_{11}$은 $0$ 또는 $1$의 값을 가질 수 있는데, 
 
 
 
