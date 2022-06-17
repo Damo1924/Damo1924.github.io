@@ -336,7 +336,50 @@ a_{11}^2 \leq a_{11}a_{22} = \hat{a}\_{11} + a_{12}^2 \leq 2 \sqrt{\frac{a_{11}d
 2 \max(\left\vert a_{12} \right\vert, \left\vert a_{13} \right\vert) \leq a_{11} \leq \frac{4}{3}
 \end{aligned}
 
-을 만족한다. 각 성분은 모두 정수이므로 $a_{11}$은 $0$ 또는 $1$의 값을 가질 수 있는데, 
+을 만족한다. 각 성분은 모두 정수이므로 $a_{11}$은 $0$ 또는 $1$의 값을 가질 수 있는데, 어느 값이던 $a_{12} = a_{13} = 0$ 이다.
+
+$\mathrm{det} A = 1 \neq 0$ 이므로 $a_{11} = 1$ 수밖에 없다.
+
+$F_A$가 positive definite이므로,
+
+\begin{aligned}
+\mathrm{det} \begin{pmatrix} a_{11} & a_{12} \\\\  a_{21} & a_{22} \end{pmatrix} = a_{22} > 0
+\end{aligned}
+
+이다. 행렬 $A'$을
+
+\begin{aligned}
+A' = \begin{pmatrix} a_{22} & a_{23} \\\\  a_{23} & a_{33} \end{pmatrix}
+\end{aligned}
+
+라고 정의하면, $a_{22} > 0$ 이고, $\mathrm{det} A' = 1 > 0$ 가 된다.
+
+따라서 $F_{A'}$는 판별식이 $1$인 positive definite binary quadratic form 이다.
+
+Theorem 1에 의해 $F_{A'}$은 $x_1^2 + x_2^2$ 과 equivalent하므로, 어떤 행렬
+
+\begin{aligned}
+U' = \begin{pmatrix} u_{22} & u_{23} \\\\  u_{23} & u_{33} \end{pmatrix} \in SL_2(\mathbb{Z})
+\end{aligned}
+
+에 대하여 $(U')^T A' U' = I_2$ 이다. ($I_2$는 $2 \times 2$ 단위행렬)
+
+행렬 $U$를
+
+\begin{aligned}
+U = \begin{pmatrix} 1 & 0 & 0 \\\\  0 & u_{22} & u_{23} \\\\  0 & u_{23} & u_{33} \end{pmatrix} \in SL_3(\mathbb{Z})
+\end{aligned}
+
+라고 정의하면, $U^T A U = I_3$ 가 되어 $A_3 \sim I_3$ 임을 알 수 있다.
+
+따라서 $F(x_1, x_2, x_3) \sim F_A(x_1, x_2, x_3) \sim F_{I_3}(x_1, x_2, x_3) = x_1^2 + x_2^2 + x_3^2$ 이다.
+
+<br/>
+
+## 4. Proof of the Legendre's Three-Square Theorem
+
+
+
 
 
 
