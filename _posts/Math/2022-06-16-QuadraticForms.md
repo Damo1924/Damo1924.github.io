@@ -255,13 +255,13 @@ a_{11} F_B(x_1, x_2, x_3)= (b_{11}x_1 + b_{12}x_2 + b_{13}x_3)^2 + G_{B'}(x_2, x
 Lemma 1에 의해 $G_{B'}(x_2, x_3)$ 는 equivalent form
 
 \begin{aligned}
-G_{\hat{A}\}(x_2, x_3) = \hat{a_{11}\}x_2^2 + 2 \hat{a_{12}\}x_2x_3 + \hat{a_{22}\} x_3^2
+G_{\hat{A}\}(x_2, x_3) = \hat{a}\_{11} x_2^2 + 2 \hat{a}\_{12}x_2x_3 + \hat{a}\_{22} x_3^2
 \end{aligned}
 
 을 갖고, 이때 행렬 $\hat{A} \in SL_2(\mathbb{Z})$ 의 성분들은 다음을 만족한다.
 
 \begin{aligned}
-2 \left\vert \hat{a_{12}\} \right\vert \leq \hat{a_{11}\} \leq 2 \sqrt{\frac{a_{11}d}{3}
+2 \left\vert \hat{a}\_{12} \right\vert \leq \hat{a}\_{11} \leq 2 \sqrt{\frac{a_{11}d}{3}\}
 \end{aligned}
 
 $\hat{A} \sim B'$ 이므로 어떤 행렬 $\hat{V} \in SL_2(\mathbb{Z})$ 에 대하여 $\hat{A} = \hat{V}^T B' \hat{V}$ 이다.
@@ -269,14 +269,14 @@ $\hat{A} \sim B'$ 이므로 어떤 행렬 $\hat{V} \in SL_2(\mathbb{Z})$ 에 대
 어떤 정수 $r, s$ 에 대하여 행렬 $V \in SL_3(\mathbb{Z})$ 을
 
 \begin{aligned}
-V = \begin{pmatrix} 1 & r & s \\\\ 0 & \hat{v_{11}\} & \hat{v_{12}\} \\\\  0 & \hat{v_{21}\} & \hat{v_{22}\} \end{pmatrix}
+V = \begin{pmatrix} 1 & r & s \\\\ 0 & \hat{v}\_{11} & \hat{v}\_{12} \\\\  0 & \hat{v}\_{21} & \hat{v}\_{22} \end{pmatrix}
 \end{aligned}
 
 로, 행렬 $A = V^T B V$ 로 정의하자.
 
 어렵지 않게 $V^T B V$의 $(1, 1)$ 성분이 $b_{11}$ 인 것을 알 수 있고, 앞서 $b_{11} = a_{11}$ 이었다.
 
-두 행벡터 $x = (x_1, x_2, x_3)$, $y = (y_1, y_2, y_3) = xV^T$ 를 정의하면,
+두 행벡터 $x = (x_1, x_2, x_3)$, $y = (y_1, y_2, y_3) = xV^T$ 에 대하여
 
 \begin{aligned}
 F_A (x_1, x_2, x_3) = F_B (y_1, y_2, y_3)
@@ -288,19 +288,45 @@ F_A (x_1, x_2, x_3) = F_B (y_1, y_2, y_3)
 G_{B'}(y_2, y_3) = G_{\hat{V}^T B' \hat{V}\} (x_2, x_3) = G_{\hat{A}\}(x_2, x_3)
 \end{aligned}
 
-이다. 그렇다면 Lemma 2에 의해,
+이다. 또한, $A = V^T B V$ 에서
 
 \begin{aligned}
-
+\sum_{j=1}^3 a_{1j} x_j = \sum_{j=1}^3 \left( \sum_{i=1}^3 b_{1i} v_{ij} \right) x_j = \sum_{i=1}^3 b_{1i} \sum_{j=1}^3 b_{ij}x_j = \sum_{i=1}^3 b_{1i}y_i
 \end{aligned}
 
+를 얻을 수 있다. 그렇다면 Lemma 2에 의해,
 
+\begin{aligned}
+(a_{11} x_1 + a_{12} x_2 + a_{13} x_3)^2 + G_{A'}(x_2, x_3) &= a_{11} F_A (x_1, x_2, x_3) = b_{11} F_B (y_1, y_2, y_3) \\\\  
+&= (b_{11}x_1 + b_{12}x_2 + b_{13}x_3)^2 + G_{B'}(x_2, x_3) \\\\  
+&= (a_{11} x_1 + a_{12} x_2 + a_{13} x_3)^2 + G_{\hat{A}\}(x_2, x_3)
+\end{aligned}
 
+가 되고, $A' = \hat{A}$ 임을 알 수 있다.
 
+이제 $r, s$를 $\left\vert a_{12} \right\vert \leq a_{11} / 2$ 와 $\left\vert a_{13} \right\vert \leq a_{11} / 2$ 이도록 선택하자.
 
+$A = V^T B V = (UV)^T C (UV)$, $UV \in SL_3(\mathbb{Z})$ 이므로 $A \sim C$이고, $F_C$와 $F_A$가 나타낼 수 있는 정수는 동일하다.
 
+즉, $F_A$가 나타낼 수 있는 양의 정수 중 최솟값도 $a_{11}$이므로,
 
+\begin{aligned}
+a_{22} = F_A(0, 1, 0) \geq a_{11}
+\end{aligned}
 
+이다. Lemma 2의 정의에 의해 다음이 성립한다.
+
+\begin{aligned}
+a_{11}^2 \leq a_{11}a_{22} = \hat{a}\_{11} + a_{12}^2 \leq 2 \sqrt{\frac{a_{11}d}{3}\} + \left( \frac{a_{11}\}{2} \right)^2
+\end{aligned}
+
+따라서 $a_{11} \leq \frac{4}{3} \sqrt[3]{d}$ 이다.
+
+---
+
+> **Theorem 2.** 판별식의 값이 $1$인 모든 positive definite ternary quadratic form $F(x_1, x_2, x_3)$ 는 $x_1^2 + x_2^2 + x_3^2$ 와 equivalent하다.
+
+**Proof.** 
 
 
 
