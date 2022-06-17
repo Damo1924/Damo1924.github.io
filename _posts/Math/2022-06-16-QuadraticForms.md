@@ -174,7 +174,7 @@ $a_{11} > 0$ 이므로 $a_{11} = 1$, $a_{12} = 0$, $a_{22} = 1$ 이다.
 > 인 행렬 $A'$에 대응되는 binary quadratic form을 $G_{A'}$라고 하면 다음이 성립한다.
 > 
 > \begin{aligned}
-> a_{11} F_A(x_1, x_2, x_3)= (a_{11}x_1 + a_{12}x_2 + a_{13}x_3^2)^2 + G_{A'}(x_2, x_3)
+> a_{11} F_A(x_1, x_2, x_3)= (a_{11}x_1 + a_{12}x_2 + a_{13}x_3)^2 + G_{A'}(x_2, x_3)
 > \end{aligned}
 > 
 > \begin{aligned}
@@ -194,7 +194,9 @@ a_{11} F_A(x_1, a_{11}x_2, a_{11}x_3) &= a_{11}^2 (x_1 + a_{12}x_2 + a_{13}x_3)^
 &= 0 + a_{11}^2 G_{A'}(x_2, x_3) \leq 0
 \end{aligned}
 
-이다. $a_{11} > 0$ 이므로 $x_1= x_2 = x_3 = 0$ 이고, 따라서 $G_{A'}$은 positive definite이다.
+이다. $a_{11} > 0$ 이므로 $F_A(x_1, a_{11}x_2, a_{11}x_3) \leq 0$ 이고, $F_A$가 positive definite이므로 $x_1= x_2 = x_3 = 0$ 이다.
+
+따라서 $G_{A'}(x_2, x_3) \leq 0$를 만족하는 순서쌍 $(x_2, x_3)$는 $(0, 0)$뿐이고, 이는 $G_{A'}$가 positive definite임을 의미한다.
 
 ---
 
@@ -223,6 +225,41 @@ a_{11} \leq F_C \left( \frac{u_{11}\}{u}, \frac{u_{21}\}{u}, \frac{u_{31}\}{u} \
 \end{aligned}
 
 이므로, $u = 1$ 임을 알 수 있다.
+
+$\gcd(u_{11}, u_{21}) = a$ 라고 하면, $u_{11}u_{22} - u_{21}u_{12} = a$ 을 만족하는 정수 $u_{12}, u_{22}$ 가 존재한다.
+
+$\gcd(a, u_{31}) = u = 1$ 이므로 $a u_{33} - b u_{33}= 1$ 을 만족하는 정수 $u_{33}, b$ 가 존재한다.
+
+다음과 같이 행렬 $U$를 정의하면,
+
+\begin{aligned}
+U = \begin{pmatrix} u_{11} & u_{12} & bu_{11} / a \\\\ u_{21} & u_{22} & bu_{21} / a \\\\  u_{31} & 0 & u_{33} \end{pmatrix}
+\end{aligned}
+
+$\mathrm{det} U = 1$ 가 되어 $U \in SL_3(\mathbb{Z})$ 가 된다.
+
+행렬 $B$를 $B := U^T C U$ 라고 정의하면, $F_B \sim F_C$ 이고 $d(F_B) = d(F_C) = d$ 이다.
+
+이때 $b_{11} = \sum_{j, k = 1}^3 = F_C(u_{11}, u_{21}, u_{31}) = a_{11}$ 이다.
+
+Lemma 2에서 정의한 행렬 $B'$과 대응되는 binary quadratic form $G_{B'}$에 대하여,
+
+\begin{aligned}
+a_{11} F_B(x_1, x_2, x_3)= (b_{11}x_1 + b_{12}x_2 + b_{13}x_3)^2 + G_{B'}(x_2, x_3)
+\end{aligned}
+
+이고, $d(G_{B'})= a_{11} d$ 이다.
+
+Lemma 1에 의해 $G_{B'}(x_2, x_3)$ 는 equivalent form
+
+\begin{aligned}
+G
+\end{aligned}
+
+
+
+
+
 
 
 
