@@ -34,7 +34,7 @@ $M_n(\mathbb{Z})$을 정수들로 이루어진 $n \times n$ 행렬들의 [환(ri
 행렬 $A \in M_n(\mathbb{Z})$ 에 대응되는 quadratic form은
 
 \begin{aligned}
-F_A(x_1, \dots, x_n) = \sum_{i=1}^n \sum_{j=1}{n} a_{ij} x_i x_j = xAx^T
+F_A(x_1, \dots, x_n) = \sum_{i=1}^n \sum_{j=1}^n a_{ij} x_i x_j = xAx^T
 \end{aligned}
 
 로 쓸 수 있고, 이때 $x$는 행벡터 $(x_1, \dots, x_n)$ 이다.
@@ -55,11 +55,11 @@ $SL_n(\mathbb{Z})$을 행렬식이 $1$인 행렬 $U \in M_n(\mathbb{Z})$ 들로 
 U^TAU = B
 \end{aligned}
 
-을 만족하면 **$A$ is equivalent to $B$** 라고 하고, $A$~$B$ 로 표기한다.
+을 만족하면 **$A$ is equivalent to $B$** 라고 하고, $A \sim B$ 로 표기한다.
 
 $\mathrm{det} U = 1$ 이므로 equivalent한 두 행렬 $A, B$는 $\mathrm{det} A = \mathrm{det} B$를 만족한다.
 
-서로 equivalent한 두 대칭행렬 $A, B$에 대응되는 quadratic form $F_A, F_B$ 에 대하여 $F_A$~$F_B$ 라고 쓴다.
+서로 equivalent한 두 대칭행렬 $A, B$에 대응되는 quadratic form $F_A, F_B$ 에 대하여 $F_A \sim F_B$ 라고 쓴다.
 
 이때 어떤 $U \in SL_n(\mathbb{Z})$에 대하여 $U^TAU = B$라고 하면,
 
@@ -69,7 +69,7 @@ F_B(x) = xBx^T = xU^TAUx^T = (Ux^T)^T A (Ux^T) = F_A(Ux^T)
 
 를 얻을 수 있다.
 
-이로부터 **$F_A$~$F_B$ 이면 $F_A$로 나타낼 수 있는 정수들과 $F_B$가 나타낼 수 있는 정수들이 일치한다는 것**을 알 수 있다.
+이로부터 **$F_A \sim F_B$ 이면 $F_A$로 나타낼 수 있는 정수들과 $F_B$가 나타낼 수 있는 정수들이 일치한다는 것**을 알 수 있다.
 
 ---
 
@@ -108,10 +108,10 @@ $F_B$로 나타낼 수 있는 양의 정수의 최솟값을 $a_{11}$, 대응되�
 F_B(r_1, r_2) = a_{11}
 \end{aligned}
 
-이다. 이때 $\mathrm{gcd} (r_1, r_2) = g$ 라고 하면,
+이다. 이때 $\mathrm{gcd} (r_1, r_2) = r$ 라고 하면,
 
 \begin{aligned}
-a_{11} \leq F_B(\frac{r_1}{r}, \frac{r_2}{r}) = \frac{F_B(r_1, r_2)}{r^2} = \frac{a_{11}\}{r^2} \leq a_11
+a_{11} \leq F_B(\frac{r_1}{r}, \frac{r_2}{r}) = \frac{F_B(r_1, r_2)}{r^2} = \frac{a_{11}\}{r^2} \leq a_{11}
 \end{aligned}
 
 이므로 $r = 1$ 임을 알 수 있다.
@@ -143,7 +143,7 @@ $r_1(s_2 + r_2 t) - r_2(s_1 + r_1 t)= 1$ 이므로 $s_1 + r_1 t, s_2 + r_2 t$ �
 
 이다. 이때 $A$~$B$ 로부터 $F_A$~$F_B$ 이고, $\mathrm{det} A = \mathrm{det} B = d$ 이다.
 
-따라서 $d \geq \frac{3}{4} a_{11}^2$, $a_{11} \leq 2 \sqrt{d/3}$ 이다.
+따라서 $2 \left\vert a_{12} \right\vert \leq a_{11} \leq 2 \sqrt{d/3}$ 이다.
 
 ---
 
@@ -155,15 +155,79 @@ $r_1(s_2 + r_2 t) - r_2(s_1 + r_1 t)= 1$ 이므로 $s_1 + r_1 t, s_2 + r_2 t$ �
 a_{11}a_{22} - a_{12} = d(F) = 1, \,\, 2 \left\vert a_{12} \right\vert \leq a_{11} \leq 2 \sqrt{\frac{1}{3}\} < 2
 \end{aligned}
 
-과 $F(x_1, x_2)$~$a_{11}x_1^2 + 2a_{12}x_1x_2 + a_{22}x_2^2$ 을 만족하는 $a_{11}, a_{12}, a_{22}$ 가 존재한다.
+과 $F(x_1, x_2) \sim a_{11}x_1^2 + 2a_{12}x_1x_2 + a_{22}x_2^2$ 을 만족하는 $a_{11}, a_{12}, a_{22}$ 가 존재한다.
 
 $a_{11} > 0$ 이므로 $a_{11} = 1$, $a_{12} = 0$, $a_{22} = 1$ 이다.
 
-따라서 $F$~$x_1^2 + x_2^2$ 이다.
+따라서 $F \sim x_1^2 + x_2^2$ 이다.
 
 <br/>
 
 ## 3. Ternary Quadratic Forms
+
+> **Lemma 2.** 판별식이 $d$인 대칭행렬 $A \in M_3(\mathbb{Z})$ 에 대하여 $A$에 대응되는 ternary quadratic form을 $F_A$라고 하자.
+> 
+> \begin{aligned}
+> A' = \begin{pmatrix} a_{11}a_{22} - a_{12}^2 & a_{11}a_{23} - a_{12}a_{13} \\\\  a_{11}a_{23} - a_{12}a_{13} & a_{11}a_{33} - a_{13}^2 \end{pmatrix}
+> \end{aligned}
+> 
+> 인 행렬 $A'$에 대응되는 binary quadratic form을 $G_{A'}$라고 하면 다음이 성립한다.
+> 
+> \begin{aligned}
+> a_{11} F_A(x_1, x_2, x_3)= (a_{11}x_1 + a_{12}x_2 + a_{13}x_3^2)^2 + G_{A'}(x_2, x_3)
+> \end{aligned}
+> 
+> \begin{aligned}
+> d(G_{A'})= \mathrm{det} A' = a_{11} d
+> \end{aligned}
+> 
+> 또한, $F_A$가 positive definite이면 $G_{A'}$도 positive definite이다.
+
+**Proof.** 두 식은 직접 양 변을 전개함으로써 성립함을 확인할 수 있다.
+
+$F_A$가 positive definite라고 하면, $a_{11} = F_A(1, 0, 0) > 0$ 이다.
+
+어떤 $x_2, x_3 \in \mathbb{Z}$ 에 대하여 $G_{A'} (x_2, x_3) \leq 0$ 이고, $x_1 = -a_{12}x_2 - a_{13}x_3$ 라고 하면,
+
+\begin{aligned}
+a_{11} F_A(x_1, a_{11}x_2, a_{11}x_3) &= a_{11}^2 (x_1 + a_{12}x_2 + a_{13}x_3)^2 + G_{A'}(a_{11}x_2, a_{11}x_3) \\\\  
+&= 0 + a_{11}^2 G_{A'}(x_2, x_3) \leq 0
+\end{aligned}
+
+이다. $a_{11} > 0$ 이므로 $x_1= x_2 = x_3 = 0$ 이고, 따라서 $G_{A'}$은 positive definite이다.
+
+---
+
+> **Lemma 3.** 판별식이 $d$인 각 positive definite ternary quadratic form은 equivalent form
+> 
+> \begin{aligned}
+> F_A(x_1, x_2, x_3) = \sum_{i=1}^3 \sum_{j=1}^3 a_{ij} x_i x_j
+> \end{aligned}
+> 
+> 를 가진다. 이때 $A$는 대칭행렬이고, 다음을 만족한다.
+> 
+> \begin{aligned}
+> 2 \max(\left\vert a_{12} \right\vert, \left\vert a_{13} \right\vert) \leq a_{11} \leq \frac{4}{3} \sqrt[3]{d}
+> \end{aligned}
+
+**Proof.** 앞서 Lemma 1을 증명했던 것과 비슷한 방법으로 증명할 수 있다.
+
+$\mathrm{det} C = d$인 대칭행렬 $C \in M_3(\mathbb{Z})$ 의 positive definite ternary quadratic form을 $F_C$라고 하자.
+
+$F_C$가 나타낼 수 있는 가장 작은 양의 정수를 $a_{11}$, $F_C(u_{11}, u_{21}, u_{31}) = a_{11}$라고 하자.
+
+세 정수 $u_{11}, u_{21}, u_{31}$ 의 최대공약수를 $u$라고 하면,
+
+\begin{aligned}
+a_{11} \leq F_C \left( \frac{u_{11}\}{u}, \frac{u_{21}\}{u}, \frac{u_{31}\}{u} \right) = \frac{a_{11}\}{u^2} \leq a_{11}
+\end{aligned}
+
+이므로, $u = 1$ 임을 알 수 있다.
+
+
+
+
+
 
 
 
