@@ -376,7 +376,56 @@ U = \begin{pmatrix} 1 & 0 & 0 \\\\  0 & u_{22} & u_{23} \\\\  0 & u_{23} & u_{33
 
 <br/>
 
-## 4. Proof of the Legendre's Three-Square Theorem
+## 4. Legendre's Three-Square Theorem
+
+> **Lemma 4.** $n > 1$, $d > 0$ 인 두 정수 $n, d$ 에 대하여 $-d$ 가 [quadratic residue](https://en.m.wikipedia.org/wiki/Quadratic_residue) modulo $dn - 1$ 이면,
+> 
+> $n = x^2 + y^2 + z^2$ 을 만족하는 $x, y, z \in \mathbb{Z}$ 가 존재한다.
+
+**Proof.** 조건에 의해 $a_{12}^2 = a_{11} (dn-1) + d$ 인 정수 $a_{11}, a_{12}$ 가 존재한다.
+
+$a_{22} = dn - 1$ 라고 하면, $a_{12}^2 + d = a_{11} a_{12}$ 가 된다.
+
+$d > 0$ 이므로 $a_{11} > 0$, $a_{22} > 0$ 이다.
+
+\begin{aligned}
+A = \begin{pmatrix} a_{11} & a_{12} & 1 \\\\  a_{12} & a_{22} & 0 \\\\  1 & 0 & n \end{pmatrix}
+\end{aligned}
+
+라고 정의하면,
+
+\begin{aligned}
+\mathrm{det} A = 1 \times \mathrm{det} \begin{pmatrix} a_{12} & 1 \\\\  a_{22} & 0 \end{pmatrix} + n \times \mathrm{det} \begin{pmatrix} a_{11} & a_{12} \\\\  a_{12} & a_{22} \end{pmatrix} = -a_{22} + dn = 1
+\end{aligned}
+
+이다. 따라서 $F_A$는 판별식이 $1$인 positive definite ternary quadratic form이다.
+
+Theorem 2에 의해 $F_A(x_1, x_2, x_3) \sim x_1^2 + x_2^2 + x_3^2$ 이다.
+
+$n = F_A(0, 0, 1)$ 이므로 $n$은 $x_1^2 + x_2^2 + x_3^2$ 로도 나타낼 수 있다.
+
+---
+
+> **Theorem 3.** (Dirichlet's theorem on arithmetic progression)
+> 
+> 서로소인 두 양의 정수 $a, d$에 대하여 $a + nd$ 꼴의 소수들이 무한히 많다. ($n$은 양의 정수)
+
+---
+
+> **Theorem 4.** (Legendre's three-square theorem)
+> 
+> 
+
+**Proof.**
+
+
+
+$1 = 1^2 + 0^2 + 0^2$ 이므로 $n = 1$ 은 세 정수의 제곱의 합으로 나타낼 수 있다.
+
+$4^a(8b + 7)$ 꼴이 
+
+
+
 
 
 
