@@ -159,8 +159,6 @@ $a^{\frac{p-1}{2}\} \equiv 1 \pmod{p}$ 을 만족하는 정수 $a$는 $p$의 제
 
 가우스가 처음으로 증명한 이후로 지금까지 200개 이상의 증명이 알려져 있는데, 대표적인 증명 방법 중 하나를 소개하고자 한다.
 
-이차 상호 법칙을 증명하기 전에 보조정리 하나를 먼저 증명해야한다.
-
 > **Lemma 4.1.** (Gauss's lemma)
 > 
 > 홀수인 소수 $p$, $p$와 서로소인 정수 $a$에 대하여
@@ -240,7 +238,27 @@ a^{(p-1)/2} \equiv (-1)^n \pmod{p}
 
 ---
 
-> **Theorem 3.** (Law of quadratic reciprocity)
+> **Lemma 4.2.** (Eisenstein's lemma)
+> 
+> 홀수인 소수 $p$와 $q$에 대하여 다음이 성립한다.
+> 
+> \begin{aligned}
+> \left( \frac{q}{p} \right) = (-1)^n
+> \end{aligned}
+> 
+> 이때 $n$은 다음과 같이 정의된다.
+> 
+> \begin{aligned}
+> n = \sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor
+> \end{aligned}
+
+**Proof.** Gauss's lemma를 이용해서 증명할 것이다.
+
+
+
+---
+
+> **Theorem 4.1.** (Law of quadratic reciprocity)
 > 
 > $p$와 $q$를 서로 다른 홀수인 소수라고 할 때 다음이 성립한다.
 > 
