@@ -457,15 +457,21 @@ $n = F_A(0, 0, 1)$ 이므로 $n$은 $x_1^2 + x_2^2 + x_3^2$ 로도 나타낼 수
 
 $4^a(8b + 7)$ 꼴이 아닌 정수 $n > 1$ 을 세 정수의 제곱의 합으로 나타낼 수 있음을 보이자.
 
-  *Case 1.* $n \equiv 2 \pmod{4}$
+- *Case 1.* $n \equiv 2 \pmod{4}$
+
+$\gcd(4n, n - 1) = 1$ 이므로 Dirichlet's theorem에 의해 $p = 4nj + n - 1 = (4j + 1)n - 1$ 가 소수인 양의 정수 $j$가 존재한다.
+
+정수 $d = 4j + 1$ 이라 하면 $p = dn - 1 \equiv 1 \pmod{4}$ 이므로,
+
+\begin{aligned}
+
+\end{aligned}
+
+- *Case 2.* $2 \nmid n$ and $n \not\equiv 7 \pmod{4}$
 
 
 
-  *Case 2.* $2 \nmid n$ and $n \not\equiv 7 \pmod{4}$
-
-
-
-  *Case 3.* $4 \mid n$
+- *Case 3.* $4 \mid n$
 
 
 
