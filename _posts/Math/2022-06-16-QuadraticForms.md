@@ -464,7 +464,7 @@ $\gcd(4n, n - 1) = 1$ 이므로 Dirichlet's theorem에 의해 $p = 4nj + n - 1 =
 정수 $d = 4j + 1$ 이라 하면 $p = dn - 1 \equiv 1 \pmod{4}$ 이므로,
 
 \begin{aligned}
-\left( \frac{-d}{p} \right) = 
+\left( \frac{-d}{p} \right) = \left( \frac{-1}{p} \right) \left( \frac{d}{p} \right) = \left( \frac{d}{p} \right)
 \end{aligned}
 
 - Case 2. $2 \nmid n$ and $n \not\equiv 7 \pmod{4}$
