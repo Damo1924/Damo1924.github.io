@@ -308,7 +308,11 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 - $C = \left( \frac{p}{2}, \frac{q}{2} \right)$
 - $D = \left( 0, \frac{q}{2} \right)$
 
-을 생각하자. 그렇다면 $\sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor$ 는 삼각형 $ABC$ 내부에 있는 격자점의 개수가 된다.
+을 생각하자. 
+
+<center><img src="https://user-images.githubusercontent.com/88201512/174698980-b6fe9513-48cb-40aa-bc8c-cf4efad6eaea.jpg" width="70%" height="70%"></center>
+
+그렇다면 $\sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor$ 는 삼각형 $ABC$ 내부에 있는 격자점의 개수가 된다.
 
 마찬가지로 $\sum_{k=1}^{(q-1)/2} \left\lfloor \frac{kp}{q} \right\rfloor$ 는 삼각형 $ACD$ 내부에 있는 격자점의 개수가 된다.
 
@@ -361,7 +365,7 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 **Proof 3.** Euler's criterion에 의해
 
 \begin{aligned}
-\left( frac{a}{p} \right) \left( frac{b}{p} \right \equiv a^{\frac{p-1}{2}\} b^{\frac{p-1}{2}\} \equiv (ab)^{\frac{p-1}{2}\} \equiv \left( \frac{ab}{p} \right) \pmod{p}
+\left( \frac{a}{p} \right) \left( \frac{b}{p} \right) \equiv a^{\frac{p-1}{2}\} b^{\frac{p-1}{2}\} \equiv (ab)^{\frac{p-1}{2}\} \equiv \left( \frac{ab}{p} \right) \pmod{p}
 \end{aligned}
 
 이다. $a, b$가 $p$와 서로소이므로 르장드르 기호가 가질 수 있는 값은 $1$ 또는 $-1$ 뿐인데,
@@ -372,7 +376,13 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 
 **Proof 5.** 앞에서 증명.
 
-**Proof 6.** 
+**Proof 6.** Euler criterion에 $a = -1$ 을 대입.
+
+**Proof 7.** Gauss's lemma에서,
+
+$p = 4k + 1$ 꼴이면 $n = \frac{p-1}{4}$ 이고, $p = 4k + 3$ 꼴이면 $n = \frac{p+1}{4}$ 이다.
+
+따라서 $p = 8k \pm 1$ 꼴이면 $2$가 제곱 잉여이고, $p = 8k \pm 3$ 꼴이면 $2$가 제곱 잉여가 아니다.
 
 <br/>
 
@@ -384,4 +394,4 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 [4] [WIKIPEDIA, 'Euler's criterion'](https://en.m.wikipedia.org/wiki/Euler%27s_criterion)  
 [5] [WIKIPEDIA, 'Proofs of quadratic reciprocity'](https://en.m.wikipedia.org/wiki/Proofs_of_quadratic_reciprocity)  
 [6] [mathoverflow, 'What is the best proof of quadratic reciprocity?'](https://mathoverflow.net/questions/1420/whats-the-best-proof-of-quadratic-reciprocity)  
-[7] 
+[7] [Almuteri, Awatef Noweafa, "Quadratic Reciprocity: Proofs and Applications" (2019). Electronic Theses and Dissertations. 1540.](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjZrIjgzbv4AhW5plYBHQrsC80QFnoECAoQAQ&url=https%3A%2F%2Fegrove.olemiss.edu%2Fcgi%2Fviewcontent.cgi%3Farticle%3D2539%26context%3Detd&usg=AOvVaw2pnzBvNNIsw8DsfQVtsh9z)  
