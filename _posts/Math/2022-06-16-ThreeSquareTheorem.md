@@ -465,8 +465,7 @@ $\gcd(4n, n - 1) = 1$ 이므로 Dirichlet's theorem에 의해 $p = 4nj + n - 1 =
 
 \begin{aligned}
 \left( \frac{-d}{p} \right) &= \left( \frac{-1}{p} \right) \left( \frac{d}{p} \right) = (-1)^{(p-1)/2} \left( \frac{d}{p} \right) = \left( \frac{d}{p} \right) \\\\  
-&= (-1)^{(p-1)(d-1)/4} \left( \frac{p}{d} \right) = \left( \frac{p}{d} \right) \\\\  
-&= \left( \frac{dn-1}{d} \right) = \left( \frac{-1}{d} \right) = (-1)^{(d-1)/2} = 1
+&= (-1)^{(p-1)(d-1)/4} \left( \frac{p}{d} \right) = \left( \frac{p}{d} \right) = \left( \frac{dn-1}{d} \right) = \left( \frac{-1}{d} \right) = (-1)^{(d-1)/2} = 1
 \end{aligned}
 
 를 얻을 수 있다. $\left( \frac{-d}{p} \right) = 1$ 이므로 $-d$는 $p = dn-1$의 제곱 잉여이다.
@@ -508,13 +507,41 @@ $d = 8j + c$ 라고 하면, $2p = dn - 1$ 이고, 야코비 기호의 성질들�
 
 이다. 이를 앞서 구한 르장드르 기호 식에 대입하면, 전부 $\left( \frac{-d}{p} \right) = 1$ 임을 알 수 있다.
 
+이로부터 $x^2 \equiv -d \pmod{p}$ 를 만족하는 정수 $x$가 존재하고, 그러한 정수 $x$는
 
+1. $x^2 \equiv -d \pmod{2p}$
+2. $x^2 \equiv -d + p \pmod{2p}$
+
+중 하나를 만족한다.
+
+$x$가 1번 식을 만족한다면, $-d$가 $2p = dn - 1$의 제곱 잉여이다.
+
+반대로 $x$가 2번 식을 만족한다면 $(x + p)^2 \equiv (-d + p) + 0 + p^2 \equiv -d + p(p + 1) \pmod{2p}$ 이다.
+
+$p$가 홀수인 소수이므로 $p+1$은 짝수이고, 따라서 $p(p+1) \equiv 0 \pmod{2p}$ 임을 알 수 있다.
+
+즉, $(x + p)^2 \equiv -d \pmod{2p}$ 가 되어 $-d$가 $2p = dn - 1$의 제곱 잉여가 된다.
+
+Lemma 4에 의해 $n$은 세 정수의 제곱의 합으로 표현이 가능하다.
 
 - Case 3. $4 \mid n$
 
+두 양의 정수 $k, n_0$ ($4 \nmid n_0$)에 대하여 $n = 4^k n_0$ 로 나타낼 수 있다.
 
+$n_0$는 앞에서 증명한 Case 1 또는 2 중 하나에 속하기 때문에 세 정수의 제곱의 합으로 표현할 수 있다.
 
+어떤 세 정수 $x, y, z$ 에 대하여 $n_0 = x^2 + y^2 + z^2$ 이면,
 
+\begin{aligned}
+n = (2^kx)^2 + (2^ky)^2 + (2^kz)^2
+\end{aligned}
 
+이므로 $n$도 세 정수의 제곱의 합으로 표현이 가능하다.
+
+<br/>
+
+## References
+
+[1] 
 
 
