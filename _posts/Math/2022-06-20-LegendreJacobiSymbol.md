@@ -1,5 +1,5 @@
 ---
-title: "Properties of Quadratic Residue Modulo Prime Numbers"
+title: "Properties of Legendre / Jacobi Symbol"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,15 +10,7 @@ comments: true
 
 ---
 
-`Tags` NumberTheory, Legendre symbol, Law of quadratic reciprocity, Lagrange's theorem, Euler's criterion
-
-이번 포스팅에서는 소수의 제곱 잉여들이 가지는 성질들에 대해서 공부해볼 것이다.
-
-먼저 제곱 잉여가 무엇이고, 소수의 제곱 잉여에 관한 함수인 르장드르 기호에 대해 공부하고,
-
-소수의 제곱 잉여의 성질들을 증명해본 후, 이를 르장드르 기호로 표현하는 것까지의 과정을 정리하였다.
-
-<br/>
+`Tags` NumberTheory, Quadratic residue, Law of quadratic reciprocity, Lagrange's theorem, Euler's criterion
 
 ## 1. Definitions
 
@@ -47,6 +39,30 @@ x^2 \equiv q \pmod{n}
 0 & \mbox{if }a \equiv 0 \pmod{p}.
 \end{cases}
 \end{aligned}
+
+르장드르 기호 $\left( \frac{a}{p} \right)$의 값을 알고 있다면, $a$가 $p$의 제곱 잉여인지 여부를 판단할 수 있다.
+
+$\left( \frac{a}{p} \right) = 1$ 이면 $a$가 $p$의 제곱 잉여이고, $\left( \frac{a}{p} \right) = -1$ 이면 $a$가 $p$의 제곱 비잉여이다.
+
+---
+
+### 1-3. Jacobi Symbol
+
+**야코비 기호(Jacobi symbol)**은 르장드르 기호를 소수에서 **모든 양의 홀수**로 확장한 함수이다.
+
+양의 홀수 $n$이 $n = p_1^{\alpha_1} p_2^{\alpha_2} \dots p_k^{\alpha_k}$ 꼴로 소인수분해가 될 때,
+
+\begin{aligned}
+\left( \frac{a}{n} \right) = \left( \frac{a}{p_1} \right)^{\alpha_1} \left( \frac{a}{p_2} \right)^{\alpha_2} \dots \left( \frac{a}{p_k} \right)^{\alpha_k} 
+\end{aligned}
+
+로 정의된다. 이때 소수 $p$에 대한 $\left( \frac{a}{p} \right)$ 은 르장드르 기호를 의미한다.
+
+야코비 기호를 다룰 때는 다음을 주의해야한다.
+
+- 야코비 기호는 르장드르 기호와 다르게, $\left( \frac{a}{n} \right) = 1$ 이라고 해서 $a$가 $n$의 제곱 잉여라는 사실을 **보장하지 않는다**.
+
+단, $\left( \frac{a}{n} \right) = -1$ 이면 $a$가 $n$의 제곱 비잉여라는 사실은 성립한다.
 
 <br/>
 
@@ -340,9 +356,9 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 
 <br/>
 
-## 5. Properties of Quadratic Residue Modulo Prime
+## 5. Properties of Legendre Symbol
 
-홀수인 소수 $p$, $p$와 서로소인 두 정수 $a, b$에 대하여 다음이 성립한다.
+홀수인 두 소수 $p, q$ 와 $p$와 서로소인 두 정수 $a, b$에 대하여 다음이 성립한다.
 
 > 모든 정수는 $2$의 제곱 잉여이므로 홀수인 소수에 대해서만 다룬다.
 
@@ -384,6 +400,30 @@ $p = 4k + 1$ 꼴이면 $n = \frac{p-1}{4}$ 이고, $p = 4k + 3$ 꼴이면 $n = \
 
 <br/>
 
+## 6. Properties of Jacobi Symbol
+
+르장드르 기호의 성질들 중 대부분이 야코비 기호에서도 그대로 성립한다.
+
+특히, **이차 상호 법칙도 확장하여 사용이 가능**하다.
+
+> 실제로 증명 과정을 보면, $a$와 $p$가 서로소라는 조건만 이용하는 경우가 대부분이다.
+
+반면, 소수에 대한 정리인 페르마의 소정리로부터 얻어진 Euler's criterion과 같은 경우는 당연히 성립하지 않는다.
+
+두 양의 홀수 $n, m$와 두 양의 정수 $a, b$에 대하여 다음이 성립한다.
+
+1. $a \equiv b \pmod{n}$ 이면, $\left( \frac{a}{n} \right) = \left( \frac{b}{n} \right)$
+2. $\gcd(a, n) \neq 1$ 이면, $\left( \frac{a}{n} \right) = 0$
+3. $\left( \frac{a}{n} \right) \left( \frac{b}{n} \right) = \left( \frac{ab}{n} \right)$
+4. $\left( \frac{a}{m} \right) \left( \frac{a}{n} \right) = \left( \frac{a}{mn} \right)$
+5. $\gcd(m, n)= 1$ 이면 $\left( \frac{m}{n} \right) \left( \frac{n}{m} \right) = (-1)^{\frac{m-1}{2} \frac{n-1}{2}\}$ (Law of quadratic reciprocity)
+6. $\left( \frac{-1}{n} \right) = (-1)^{(n-1)/2}$ (first supplement to the law of quadratic reciprocity)
+7. $\left( \frac{2}{n} \right) = (-1)^{(n^2-1)/8}$ (second supplement to the law of quadratic reciprocity)
+
+모두 르장드르 기호의 성질들을 증명했던 것과 거의 비슷하게 증명이 가능하다.
+
+<br/>
+
 ## References
 
 [1] [WIKIPEDIA, 'Quadratic residue'](https://en.m.wikipedia.org/wiki/Quadratic_residue)  
@@ -391,5 +431,6 @@ $p = 4k + 1$ 꼴이면 $n = \frac{p-1}{4}$ 이고, $p = 4k + 3$ 꼴이면 $n = \
 [3] [WIKIPEDIA, 'Lagrange's theorem (number theory)'](https://en.m.wikipedia.org/wiki/Lagrange%27s_theorem_(number_theory))  
 [4] [WIKIPEDIA, 'Euler's criterion'](https://en.m.wikipedia.org/wiki/Euler%27s_criterion)  
 [5] [WIKIPEDIA, 'Proofs of quadratic reciprocity'](https://en.m.wikipedia.org/wiki/Proofs_of_quadratic_reciprocity)  
-[6] [mathoverflow, 'What is the best proof of quadratic reciprocity?'](https://mathoverflow.net/questions/1420/whats-the-best-proof-of-quadratic-reciprocity)  
-[7] [Almuteri, Awatef Noweafa, "Quadratic Reciprocity: Proofs and Applications" (2019). Electronic Theses and Dissertations. 1540.](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjZrIjgzbv4AhW5plYBHQrsC80QFnoECAoQAQ&url=https%3A%2F%2Fegrove.olemiss.edu%2Fcgi%2Fviewcontent.cgi%3Farticle%3D2539%26context%3Detd&usg=AOvVaw2pnzBvNNIsw8DsfQVtsh9z)  
+[6] [WIKIPEDIA, 'Jacobi symbol'](https://en.m.wikipedia.org/wiki/Jacobi_symbol)  
+[7] [mathoverflow, 'What is the best proof of quadratic reciprocity?'](https://mathoverflow.net/questions/1420/whats-the-best-proof-of-quadratic-reciprocity)  
+[8] [Almuteri, Awatef Noweafa, "Quadratic Reciprocity: Proofs and Applications" (2019). Electronic Theses and Dissertations. 1540.](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjZrIjgzbv4AhW5plYBHQrsC80QFnoECAoQAQ&url=https%3A%2F%2Fegrove.olemiss.edu%2Fcgi%2Fviewcontent.cgi%3Farticle%3D2539%26context%3Detd&usg=AOvVaw2pnzBvNNIsw8DsfQVtsh9z)  
