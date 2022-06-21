@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` NumberTheory, 
+`Tags` NumberTheory, Jacobi symbol, Dirichlet's theorem
 
 ## 1. Definitions
 
@@ -461,13 +461,52 @@ $4^a(8b + 7)$ 꼴이 아닌 정수 $n > 1$ 을 세 정수의 제곱의 합으로
 
 $\gcd(4n, n - 1) = 1$ 이므로 Dirichlet's theorem에 의해 $p = 4nj + n - 1 = (4j + 1)n - 1$ 가 소수인 양의 정수 $j$가 존재한다.
 
-정수 $d = 4j + 1$ 이라 하면 $p = dn - 1 \equiv 1 \pmod{4}$ 이므로,
+정수 $d = 4j + 1$ 이라 하면 $p = dn - 1 \equiv 1 \pmod{4}$ 이므로 야코비 기호의 성질에 의해
 
 \begin{aligned}
-\left( \frac{-d}{p} \right) = \left( \frac{-1}{p} \right) \left( \frac{d}{p} \right) = \left( \frac{d}{p} \right)
+\left( \frac{-d}{p} \right) &= \left( \frac{-1}{p} \right) \left( \frac{d}{p} \right) = (-1)^{(p-1)/2} \left( \frac{d}{p} \right) = \left( \frac{d}{p} \right) \\\\  
+&= (-1)^{(p-1)(d-1)/4} \left( \frac{p}{d} \right) = \left( \frac{p}{d} \right) \\\\  
+&= \left( \frac{dn-1}{d} \right) = \left( \frac{-1}{d} \right) = (-1)^{(d-1)/2} = 1
 \end{aligned}
 
+를 얻을 수 있다. $\left( \frac{-d}{p} \right) = 1$ 이므로 $-d$는 $p = dn-1$의 제곱 잉여이다.
+
+Lemma 4에 의해 $n$은 세 정수의 제곱의 합으로 표현이 가능하다.
+
 - Case 2. $2 \nmid n$ and $n \not\equiv 7 \pmod{4}$
+
+$n$에 대하여 정수 $c$를 $c= 2 + (-1)^{(n-1)/2}$ 로 정의하면,
+
+\begin{aligned}
+c \equiv -n \pmod{4}
+\end{aligned}
+
+\begin{aligned}
+\frac{cn - 1}{2} \equiv 1 \pmod{2}
+\end{aligned}
+
+가 성립한다. 이때,
+
+\begin{aligned}
+\gcd \left( 4n, \frac{cn - 1}{2} \right) = \gcd \left( n, \frac{cn - 1}{2} \right) = \frac{\gcd(2n, cn - 1)}{2} = \frac{\gcd(2n, n - 1)}{2} = 1
+\end{aligned}
+
+이고, Dirichlet's theorem에 의해 $p = 4nj + \frac{cn - 1}{2}$ 가 소수인 양의 정수 $j$가 존재한다.
+
+$d = 8j + c$ 라고 하면, $2p = dn - 1$ 이고, 야코비 기호의 성질들로부터
+
+\begin{aligned}
+\left( \frac{-d}{p} \right) &= (-1)^{(p-1)/2} (-1)^{(d-1)(p-1)/4} \left( \frac{p}{d} \right) = (-1)^{(d+1)(p-1)/4} \left( \frac{p}{d} \right) \\\\  
+&= (-1)^{(d+1)(p-1)/4} \left( \frac{2}{d} \right) \left( \frac{2p}{d} \right) = (-1)^{(d+1)(p-1)/4} (-1)^{(d^2-1)/8} \left( \frac{2p}{d} \right) \\\\  
+&= (-1)^{(c+1)(p-1)/4} (-1)^{(c^2-1)/8} \left( \frac{-1}{d} \right) = (-1)^{(c+1)(p-1)/4} (-1)^{(c^2-1)/8}
+\end{aligned}
+
+을 얻을 수 있다. $n$을 $8$로 나눈 나머지에 따라서 경우를 나누면,
+
+- $n \equiv 1 \pmod{8}$ 또는 $n \equiv 5 \pmod{8}$ 이면 $c= 3$, $p \equiv 3 \pmod{4}$ 이다.
+- $n \equiv 3 \pmod{8}$ 이면 $c = 1$, $p \equiv 1 \pmod{4}$ 이다.
+
+이다. 이를 앞서 구한 르장드르 기호 식에 대입하면, 전부 $\left( \frac{-d}{p} \right) = 1$ 임을 알 수 있다.
 
 
 
