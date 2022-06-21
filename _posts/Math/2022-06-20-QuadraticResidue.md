@@ -243,18 +243,49 @@ a^{(p-1)/2} \equiv (-1)^n \pmod{p}
 > 홀수인 소수 $p$와 $q$에 대하여 다음이 성립한다.
 > 
 > \begin{aligned}
-> \left( \frac{q}{p} \right) = (-1)^n
+> \left( \frac{q}{p} \right) = (-1)^m
 > \end{aligned}
 > 
 > 이때 $n$은 다음과 같이 정의된다.
 > 
 > \begin{aligned}
-> n = \sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor
+> m = \sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor
 > \end{aligned}
 
 **Proof.** Gauss's lemma를 이용해서 증명할 것이다.
 
+$1 \leq k \leq \frac{p-1}{2}$ 인 정수 $k$에 대하여
 
+\begin{aligned}
+kq = \left\lfloor \frac{kq}{p} \right\rfloor p + r(k)
+\end{alinged}
+
+가 성립한다. 이때 $r(k)$는 Gauss's lemma를 증명할 때와 동일하게 정의한다.
+
+위 식을 가능한 모든 $k$에 대하여 더해주면,
+
+\begin{aligned}
+q \cdot \sum_{j = 1}^{(p-1)/2} j &= p \cdot \sum_{j = 1}^{(p-1)/2} \left\lfloor \frac{jq}{p} \right\rfloor + \sum_{j = 1}^{(p-1)/2} r(j) \\\\  
+&= p \cdot ( m + n ) + \left( \sum_{j = 1}^{(p-1)/2} r(j) - np \right)
+\end{alinged}
+
+를 얻을 수 있다. 이때 $n$은 Gauss's lemma에서 정의한 그대로이다.
+
+먼저 $q$가 홀수이므로
+
+\begin{aligned}
+q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
+\end{alinged}
+
+이다. 또, $\sum_{j = 1}^{(p-1)/2} r(j) - np$ 의 각 항에 절댓값을 취하면 $1$부터 $\frac{p-1}{2}$까지의 정수라는 사실을 이용하면,
+
+\begin{aligned}
+\sum_{j = 1}^{(p-1)/2} r(j) - np \equiv \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
+\end{alinged}
+
+가 되고, 따라서 $m + n$ 은 짝수이다.
+
+두 수의 합이 짝수라는 것은 두 수의 홀짝성이 같다는 것을 의미하므로 $(-1)^m = (-1)^n$ 이 성립하고, 증명이 완료된다.
 
 ---
 
@@ -268,15 +299,80 @@ a^{(p-1)/2} \equiv (-1)^n \pmod{p}
 
 **Proof.** (Eisenstein's proof)
 
+두 양의 정수 $a, b$에 대하여 $\left\lfloor \frac{a}{b} \right\rfloor$ 은 **$a$보다 작거나 같은 자연수 중 $b$의 배수의 개수**라고 할 수 있다.
 
+좌표평면 위에 네 점
+
+- $A = (0, 0)$
+- $B = \left( \frac{p}{2}, 0 \right)$
+- $C = \left( \frac{p}{2}, \frac{q}{2} \right)$
+- $D = \left( 0, \frac{q}{2} \right)$
+
+을 생각하자. 그렇다면 $\sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor$ 는 삼각형 $ABC$ 내부에 있는 격자점의 개수가 된다.
+
+마찬가지로 $\sum_{k=1}^{(q-1)/2} \left\lfloor \frac{kp}{q} \right\rfloor$ 는 삼각형 $ACD$ 내부에 있는 격자점의 개수가 된다.
+
+이때 $p, q$는 서로 다른 소수이므로 두 삼각형이 만나는 직선 $y = \frac{q}{p} x$ 위에는 격자점이 존재하지 않는다.
+
+따라서 두 삼각형에 있는 격자점의 개수의 합은 직사각형 ABCD 내부에 있는 격자점의 개수
+
+\begin{aligned}
+\frac{p-1}{2} \frac{q-1}{2}
+\end{aligned}
+
+이다. Eisenstein's lemma에 의해
+
+\begin{aligned}
+\left( \frac{q}{p} \right) &= (-1)^{\sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor} \\\\  
+\left( \frac{p}{q} \right) &= (-1)^{\sum_{k=1}^{(q-1)/2} \left\lfloor \frac{kp}{q} \right\rfloor}
+\end{aligned}
+
+가 성립하므로, 다음과 같이 정리할 수 있다.
+
+\begin{aligned}
+\left( \frac{p}{q} \right) \left( \frac{q}{p} \right) &= (-1)^{\sum_{k=1}^{(p-1)/2} \left( \left\lfloor \frac{kq}{p} \right\rfloor + \left\lfloor \frac{kp}{q} \right\rfloor \right) } \\\\  
+&= (-1)^{\frac{p-1}{2} \frac{q-1}{2}\}
+\end{aligned}
 
 <br/>
 
-## 5. Quadratic Residue Modulo Prime
+## 5. Properties of Quadratic Residue Modulo Prime
 
-먼저, 모든 정수는 $2$의 제곱 잉여이다.
+홀수인 소수 $p$, $p$와 서로소인 두 정수 $a, b$에 대하여 다음이 성립한다.
 
-홀수인 소수 $p$에 대하여 $0$부터 $p-1$까지의 정수 중 
+> 모든 정수는 $2$의 제곱 잉여이므로 홀수인 소수에 대해서만 다룬다.
+
+1. $\left( \frac{a}{p} \right) \equiv a^{\frac{p-1}{2}\} \pmod{p}$ (Euler's criterion)
+2. $a \equiv b \pmod{p}$ 이면, $\left( \frac{a}{p} \right) = \left( \frac{b}{p} \right)$
+3. $\left( \frac{a}{p} \right) \left( \frac{b}{p} \right) = \left( \frac{ab}{p} \right)$
+4. $\left( \frac{a^2}{p} \right) = 1$
+5. $\left( \frac{p}{q} \right) \left( \frac{q}{p} \right) = (-1)^{\frac{p-1}{2} \frac{q-1}{2}\}$ (Quadratic reciprocity)
+6. $\left( \frac{-1}{p} \right) = (-1)^{(p-1)/2}$ (first supplement to the law of quadratic reciprocity)
+7. $\left( \frac{2}{p} \right) = (-1)^{(p^2-1)/8}$ (second supplement to the law of quadratic reciprocity)
+
+각 성질들을 증명해보자.
+
+---
+
+**Proof 1.** 앞에서 증명.
+
+**Proof 2.** $x^2 \equiv a \equiv b \pmod{p}$ 이므로 제곱 잉여의 정의에 의해 성립한다.
+
+**Proof 3.** Euler's criterion에 의해
+
+\begin{aligned}
+\left( frac{a}{p} \right) \left( frac{b}{p} \right \equiv a^{\frac{p-1}{2}\} b^{\frac{p-1}{2}\} \equiv (ab)^{\frac{p-1}{2}\} \equiv \left( \frac{ab}{p} \right) \pmod{p}
+\end{aligned}
+
+이다. $a, b$가 $p$와 서로소이므로 르장드르 기호가 가질 수 있는 값은 $1$ 또는 $-1$ 뿐인데,
+
+만약 $\left( \frac{a}{p} \right) \left( \frac{b}{p} \right) \neq \left( \frac{ab}{p} \right)$ 이면 $1 \equiv -1 \pmod{p}$ 가 되어 모순이 발생한다.
+
+**Proof 4.** $x^2 \equiv a^2 \pmod{p}$ 가 해 $x = a$ 를 가지기 때문에 $\left( \frac{a^2}{p} \right) = 1$ 이다.
+
+**Proof 5.** 앞에서 증명.
+
+**Proof 6.** 
 
 <br/>
 
@@ -287,4 +383,5 @@ a^{(p-1)/2} \equiv (-1)^n \pmod{p}
 [3] [WIKIPEDIA, 'Lagrange's theorem (number theory)'](https://en.m.wikipedia.org/wiki/Lagrange%27s_theorem_(number_theory))  
 [4] [WIKIPEDIA, 'Euler's criterion'](https://en.m.wikipedia.org/wiki/Euler%27s_criterion)  
 [5] [WIKIPEDIA, 'Proofs of quadratic reciprocity'](https://en.m.wikipedia.org/wiki/Proofs_of_quadratic_reciprocity)  
-[6] 
+[6] [mathoverflow, 'What is the best proof of quadratic reciprocity?'](https://mathoverflow.net/questions/1420/whats-the-best-proof-of-quadratic-reciprocity)  
+[7] 
