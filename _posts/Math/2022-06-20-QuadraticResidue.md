@@ -258,7 +258,7 @@ $1 \leq k \leq \frac{p-1}{2}$ 인 정수 $k$에 대하여
 
 \begin{aligned}
 kq = \left\lfloor \frac{kq}{p} \right\rfloor p + r(k)
-\end{alinged}
+\end{aligned}
 
 가 성립한다. 이때 $r(k)$는 Gauss's lemma를 증명할 때와 동일하게 정의한다.
 
@@ -267,7 +267,7 @@ kq = \left\lfloor \frac{kq}{p} \right\rfloor p + r(k)
 \begin{aligned}
 q \cdot \sum_{j = 1}^{(p-1)/2} j &= p \cdot \sum_{j = 1}^{(p-1)/2} \left\lfloor \frac{jq}{p} \right\rfloor + \sum_{j = 1}^{(p-1)/2} r(j) \\\\  
 &= p \cdot ( m + n ) + \left( \sum_{j = 1}^{(p-1)/2} r(j) - np \right)
-\end{alinged}
+\end{aligned}
 
 를 얻을 수 있다. 이때 $n$은 Gauss's lemma에서 정의한 그대로이다.
 
@@ -275,13 +275,13 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j &= p \cdot \sum_{j = 1}^{(p-1)/2} \left\lfloor 
 
 \begin{aligned}
 q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
-\end{alinged}
+\end{aligned}
 
 이다. 또, $\sum_{j = 1}^{(p-1)/2} r(j) - np$ 의 각 항에 절댓값을 취하면 $1$부터 $\frac{p-1}{2}$까지의 정수라는 사실을 이용하면,
 
 \begin{aligned}
 \sum_{j = 1}^{(p-1)/2} r(j) - np \equiv \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
-\end{alinged}
+\end{aligned}
 
 가 되고, 따라서 $m + n$ 은 짝수이다.
 
@@ -354,9 +354,7 @@ q \cdot \sum_{j = 1}^{(p-1)/2} j \equiv \frac{p-1}{2} \pmod{2}
 6. $\left( \frac{-1}{p} \right) = (-1)^{(p-1)/2}$ (first supplement to the law of quadratic reciprocity)
 7. $\left( \frac{2}{p} \right) = (-1)^{(p^2-1)/8}$ (second supplement to the law of quadratic reciprocity)
 
-각 성질들을 증명해보자.
-
----
+각 성질들을 간략하게 증명해보자.
 
 **Proof 1.** 앞에서 증명.
 
