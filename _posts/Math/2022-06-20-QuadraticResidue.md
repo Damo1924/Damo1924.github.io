@@ -246,7 +246,7 @@ a^{(p-1)/2} \equiv (-1)^n \pmod{p}
 > \left( \frac{q}{p} \right) = (-1)^m
 > \end{aligned}
 > 
-> 이때 $n$은 다음과 같이 정의된다.
+> 이때 $m$은 다음과 같이 정의된다.
 > 
 > \begin{aligned}
 > m = \sum_{k=1}^{(p-1)/2} \left\lfloor \frac{kq}{p} \right\rfloor
