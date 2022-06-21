@@ -410,7 +410,7 @@ $p = 4k + 1$ 꼴이면 $n = \frac{p-1}{4}$ 이고, $p = 4k + 3$ 꼴이면 $n = \
 
 반면, 소수에 대한 정리인 페르마의 소정리로부터 얻어진 Euler's criterion과 같은 경우는 당연히 성립하지 않는다.
 
-두 양의 홀수 $n, m$와 두 양의 정수 $a, b$에 대하여 다음이 성립한다.
+두 양의 홀수 $n, m$와 두 정수 $a, b$에 대하여 다음이 성립한다.
 
 1. $a \equiv b \pmod{n}$ 이면, $\left( \frac{a}{n} \right) = \left( \frac{b}{n} \right)$
 2. $\gcd(a, n) \neq 1$ 이면, $\left( \frac{a}{n} \right) = 0$
@@ -421,6 +421,39 @@ $p = 4k + 1$ 꼴이면 $n = \frac{p-1}{4}$ 이고, $p = 4k + 3$ 꼴이면 $n = \
 7. $\left( \frac{2}{n} \right) = (-1)^{(n^2-1)/8}$ (second supplement to the law of quadratic reciprocity)
 
 모두 르장드르 기호의 성질들을 증명했던 것과 거의 비슷하게 증명이 가능하다.
+
+앞에서 Euler's criterion으로 증명했던 6번 성질만 추가로 증명해보자.
+
+**Proof 6.** 먼저, $n = 4k + 1$ 꼴이면 $x^2 \equiv -1 \pmod{n}$ 의 해 $x = 4k$ 가 존재한다.
+
+따라서 $n = 4k + 1$ 꼴이면 $\left( \frac{-1}{n} \right) = 1$ 이다.
+
+3번 성질에 $a = b = 1$ 을 대입하면
+
+\begin{aligned}
+\left( \frac{1}{n} \right)^2 = \left( \frac{1}{n} \right)
+\end{aligned}
+
+이므로 $\left( \frac{1}{n} \right) = 1$ 를 얻을 수 있다.
+
+마찬가지로 4번 성질에 $n = m = 1$ 을 대입하면
+
+\begin{aligned}
+\left( \frac{a}{1} \right)^2 = \left( \frac{a}{1} \right)
+\end{aligned}
+
+이므로 $\left( \frac{a}{1} \right) = 1$ 을 얻을 수 있다.
+
+이제 5번 성질과 7번 성질을 이용해서 다음과 같이 구할 수 있다.
+
+\begin{aligned}
+\left( \frac{-1}{4k + 3} \right) &= \left( \frac{4k + 2}{4k + 3} \right) = \left( \frac{2}{4k + 3} \right) \left( \frac{2k + 1}{4k + 3} \right) = (-1) \left( \frac{2k + 1}{4k + 3} \right) \\\\  
+&= (-1) \left( \frac{4k + 3}{2k + 1} \right) = (-1) \left( \frac{1}{2k + 1} \right) = -1
+\end{aligned}
+
+따라서 $n = 4k + 3$ 꼴이면 $\left( \frac{-1}{n} \right) = -1$ 이다.
+
+두 결과를 종합하면, 6번 성질을 얻을 수 있다.
 
 <br/>
 
