@@ -4,7 +4,7 @@ toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
 categories:
-  - Algorithm
+  - Math
 use_math: true
 comments: true
 
