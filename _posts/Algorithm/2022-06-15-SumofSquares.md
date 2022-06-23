@@ -228,8 +228,55 @@ N(a + bi) = (a + bi)(a - bi) = a^2 + b^2
 
 으로 정의된다, 이는 실수부와 허수부를 각각 제곱해서 더해준 것과 같다.
 
+두 가우스 정수 $z, w$에 대하여 $z$를 $w$로 나누는 과정은 다음과 같다.
 
+> 1) $\frac{z}{w} = x + yi$ 에 가장 가까운 가우스 정수 $a + bi$를 구한다. 아래를 만족하는 $a, b$를 구해주면 된다.
+> 
+> \begin{aligned}
+> \left\vert x - a \right\vert \leq \frac{1}{2},\, \left\vert y - b \right\vert \leq \frac{1}{2}
+> \end{aligned}
+> 
+> 2) $z - w(a + bi)$ 는 $\left( (x - a) + (y - b)i \right) \times b$ 이므로, 노름을 구해주면,
+> 
+> \begin{aligned}
+> N \left(z - w(a + bi) \right) = \left( (x-a)^2 + (y-b)^2 \right) N(b) \leq \frac{1}{2} N(b) < N(b)
+> \end{aligned}
+> 
+> 가 되어 나머지의 정의를 만족한다.
+> 
+> 3) 따라서 몫은 $a + bi$, 나머지는 $z - w(a + bi)$ 로 구할 수 있다.
 
+---
+
+### 3-5. Euclidean Algorithm
+
+나머지가 작아지도록 나눗셈을 정의하였으므로, [유클리드 호제법](https://damo1924.github.io/algorithm/EuclideanAlgorithm/)을 그대로 적용할 수 있다.
+
+- 가우스 정수 $z, w$에 대하여 $z$를 $w$로 나눈 나머지를 $r$이라 하면, $\gcd(z, w) = \gcd(w, r)$ 이다.
+
+---
+
+### 3-6. Finding Two Squares which Sum to Prime
+
+$p$의 약수 $a + bi$를 구하기 위해 $a + bi$를 약수로 갖는 또다른 가우스 정수 $q$를 찾아 $\gcd(p, q) = a + bi$ 가 되도록 하려고 한다.
+
+$\gcd(p, q) = p$ 이면 안되기 때문에 $q$는 다음 조건을 만족해야한다.
+
+- $N(q)$ 가 $p^2$ 보다 작은 $p$의 배수
+
+이를 만족하는 $q$는 $x^2 \equiv -1 \pmod{p}$ 인 정수 $x$를 찾아 $q = x + i$ 로 구할 수 있다.
+
+$N(q) = x^2 + 1 \equiv 0 \pmod{p}$ 이고, $0 < x < q$ 인 $x$를 찾으면 $N(q) < p^2$ 를 만족한다.
+
+이때 [Euler's criterion](https://damo1924.github.io/math/LegendreJacobiSymbol/#3-eulers-criterion)에 의해 $1 \leq a \leq p - 1$ 인 정수 $a$ 중
+
+\begin{aligned}
+a^{(p-1)/2} \equiv -1 \pmod{p]
+\end{aligned}
+
+을 만족하는 $a$는 $\frac{p-1}{2}$ 개이므로 $\frac{1}{2}$ 의 확률로 위 합동식을 만족하는 $a$를 찾을 수 있다.
+
+그러한 $a$를 찾았다면 $x = a^{(p-1)/4}$ 이다.
 
 
 
