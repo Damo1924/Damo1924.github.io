@@ -1,5 +1,5 @@
 ---
-title: "자연수를 제곱수의 합으로 나타내기"
+title: "자연수를 제곱수들의 합으로 표현하는 방법"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` NumberTheory, 17633, 17646, 
+`Tags` NumberTheory, 17633, 17646, Gaussian intergers, Euclidean algorithm
 
 이 포스팅은 아래 문제들을 풀기 위해 필요한 내용에 대해 다루고 있다.
 
@@ -57,6 +57,12 @@ comments: true
  2. $N$을 소인수분해 했을 때, $4$로 나눈 나머지가 $3$인 소수가 홀수 개만큼 있는지 확인 $\to$ 있다면 $N$은 최소 세 제곱수의 합으로 표현 가능하다.
  3. $N$이 제곱수인지 확인 $\to$ 제곱수이면 한 개, 아니면 두 개의 제곱수의 합으로 표현 가능하다.
 
+이를 이용하면 [BOJ 17633. 제곱수의 합(More Huge)](https://www.acmicpc.net/problem/17633)을 해결할 수 있다.
+
+소인수분해는 [밀러-라빈 소수판별법(Miller-Rabin primality test)](https://damo1924.github.io/algorithm/MillerRabinPrimalityTest/)을 이용하는 [폴라드 로 알고리즘(Pollard's rho algorithm](https://damo1924.github.io/algorithm/PollardRhoAlgorithm/)을 통해 $O(\sqrt[4]{n})$ 로 수행할 수 있다.
+
+이제 [BOJ 17646. 제곱수의 합 2(More Huge)](https://www.acmicpc.net/problem/17646)을 해결하기 위해 직접 제곱수의 합으로 표현하는 방법에 대하여 알아보자.
+
 <br/>
 
 ## 2. 
@@ -66,5 +72,5 @@ comments: true
 
 ## References
 
-[1] 
-
+[1] [SECMEM, ho94949, '제곱수의 합'](http://www.secmem.org/blog/2019/10/18/sum-of-squares/)  
+[2] 
