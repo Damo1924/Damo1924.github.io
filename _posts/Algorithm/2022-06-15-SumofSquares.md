@@ -271,14 +271,194 @@ $N(q) = x^2 + 1 \equiv 0 \pmod{p}$ 이고, $0 < x < q$ 인 $x$를 찾으면 $N(q
 이때 [Euler's criterion](https://damo1924.github.io/math/LegendreJacobiSymbol/#3-eulers-criterion)에 의해 $1 \leq a \leq p - 1$ 인 정수 $a$ 중
 
 \begin{aligned}
-a^{(p-1)/2} \equiv -1 \pmod{p]
+a^{(p-1)/2} \equiv -1 \pmod{p}
 \end{aligned}
 
 을 만족하는 $a$는 $\frac{p-1}{2}$ 개이므로 $\frac{1}{2}$ 의 확률로 위 합동식을 만족하는 $a$를 찾을 수 있다.
 
 그러한 $a$를 찾았다면 $x = a^{(p-1)/4}$ 이다.
 
+<br/>
 
+## 4. Implementation
+
+[BOJ 17646. 제곱수의 합 2(More Huge)](https://www.acmicpc.net/problem/17646) 소스코드:
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <random>
+#include <map>
+using namespace std;
+typedef long long ll;
+
+vector<ll> factors; // result of factorization
+
+// Fast factorization using Miller-Rabin & Pollard rho algorithm
+ll modpow(ll x, ll y, ll mod) {
+    ll ret = 1;
+    while (y) {
+        if (y % 2) ret = (__int128)ret * x % mod;
+        x = (__int128)x * x % mod;
+        y /= 2;
+    }
+    return ret;
+}
+bool miller_rabin(ll n, ll a, ll d, ll s) {
+    ll x = modpow(a, d, n);
+    if (x == 1) return 0;
+    for (int r = 0; r < s; r++) {
+        if (x == n - 1) return 0;
+        x = (__int128)x * x % n;
+    }
+    return 1;
+}
+bool isPrime(ll n) {
+    if (n == 1) return 0;
+    ll d = n - 1, s = 0;
+    while (d % 2 == 0) s++, d /= 2;
+    for (ll a : { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37 }) {
+        if (n % a == 0) return n == a;
+        if (miller_rabin(n, a, d, s)) return 0;
+    }
+    return 1;
+}
+ll gcd(ll x, ll y) {
+    while (y) {
+        ll t = x % y;
+        x = y;
+        y = t;
+    }
+    return x;
+}
+ll pollard_rho(ll n) {
+    ll x = 2, y = 2, g = 1, c = 1;
+    auto f = [&](ll x) { return ((__int128)x * x % n + c) % n; };
+    while (g == 1) {
+        x = f(x), y = f(f(y));
+        g = gcd(x > y ? x - y : y - x, n);
+        if (g == n) {
+            x = y = rand() % (n - 2);
+            c = rand() % 10 + 1;
+            g = 1;
+        }
+    }
+    return g;
+}
+void factorize(ll n) {
+    if (isPrime(n)) factors.push_back(n);
+    else {
+        ll g = (n % 2 ? pollard_rho(n) : 2);
+        factorize(g);
+        factorize(n / g);
+    }
+}
+
+// calculate two squares that sum to some integer N using Gaussian integers
+__int128 rem(__int128 x, __int128 y) { // remainder which is -y/2 < r < y/2
+    __int128 r = x % y;
+    if (r < 0) r += y;
+    if (2 * r > y) r -= y;
+    return r;
+}
+pair<ll, ll> gaussian_rem(ll a, ll b, ll c, ll d) { // calculating remainder of gaussian integers
+    __int128 Re = (__int128)a * c + (__int128)b * d;
+    __int128 Im = (__int128)c * b - (__int128)a * d;
+    __int128 N = (__int128)c * c + (__int128)d * d;
+    __int128 x = (Re - rem(Re, N)) / N;
+    __int128 y = (Im - rem(Im, N)) / N;
+    return { a - c * x + d * y, b - c * y - d * x };
+};
+pair<ll, ll> gaussian_gcd(ll a, ll b, ll c, ll d) { // GCD of gaussian integers
+    while (c != 0 || d != 0) {
+        pair<ll, ll> r = gaussian_rem(a, b, c, d);
+        a = c, b = d;
+        c = r.first, d = r.second;
+    }
+    return { a, b };
+}
+ll quadratic_residue(ll p) { // return any quadratic residue of prime p
+    for (int x = 2; ; x++) {
+        ll a = modpow(x, p / 4, p);
+        if ((__int128)a * a % p == p - 1) return a;
+    }
+}
+pair<ll, ll> two_square_sum_prime(ll p) { // get a, b which is a^2 + b^2 = p for prime p
+    if (p == 2) return { 1, 1 };
+    return gaussian_gcd(p, 0, quadratic_residue(p), 1);
+}
+pair<ll, ll> two_square_sum(ll n) { // get a, b which is a^2 + b^2 = n
+    factorize(n);
+    map<ll, ll> m;
+    for (ll i : factors) m[i]++;
+    for (auto i : m) if (i.first % 4 == 3 && i.second % 2) return { -1, -1 };
+
+    ll a = 1, b = 0, k = 1;
+    for (auto i : m) {
+        k *= modpow(i.first, i.second / 2, 1e18);
+        if (i.second % 2) {
+            pair<ll, ll> tmp = two_square_sum_prime(i.first);
+            ll c = a * tmp.first + b * tmp.second;
+            ll d = a * tmp.second - b * tmp.first;
+            a = c, b = d;
+        }
+    }
+    if (a < 0) a *= -1;
+    if (b < 0) b *= -1;
+    return { k * a, k * b };
+}
+
+vector<ll> solve(ll N) {
+    ll k = 1;
+    while (N % 4 == 0) k *= 2, N /= 4;
+
+    vector<ll> ans;
+
+    ll N2 = sqrt(N);
+    if (N2 * N2 == N) { // 1 square
+        ans.push_back(k * N2);
+        return ans;
+    }
+
+    if (N % 8 == 7) {
+        N--;
+        ans.push_back(k);
+    }
+    else {
+        pair<ll, ll> res = two_square_sum(N);
+        if (res.first != -1) { // 2 square
+            ans.push_back(k * res.first);
+            ans.push_back(k * res.second);
+            return ans;
+        }
+    }
+
+    for (ll c = 1; ; c++) { // find c which N - c^2 can be represented by sum of two squares
+        ll n = N - c * c;
+        factors.clear();
+        pair<ll, ll> res = two_square_sum(n);
+        if (res.first != -1) {
+            ans.push_back(k * c);
+            ans.push_back(k * res.first);
+            ans.push_back(k * res.second);
+            return ans;
+        }
+    }
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    ll N; cin >> N;
+    vector<ll> ans = solve(N);
+    sort(ans.begin(), ans.end());
+    cout << ans.size() << "\n";
+    for (ll i : ans) cout << i << " ";
+}
+```
 
 <br/>
 
@@ -287,6 +467,5 @@ a^{(p-1)/2} \equiv -1 \pmod{p]
 [1] [SECMEM, ho94949, '제곱수의 합'](http://www.secmem.org/blog/2019/10/18/sum-of-squares/)  
 [2] [WIKIPEDIA, 'Landau-Ramanujan constant'](https://en.m.wikipedia.org/wiki/Landau%E2%80%93Ramanujan_constant)  
 [3] [WIKIPEDIA, 'Gaussian integer'](https://en.m.wikipedia.org/wiki/Gaussian_integer)  
-[4] 
 
 
