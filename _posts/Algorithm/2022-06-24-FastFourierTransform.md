@@ -182,9 +182,9 @@ f(-w) = f_{even} \left( w^2 \right) - w \cdot f_{odd} \left( w^2 \right)
 
 이제 2절에서 다룬 DFT 아이디어와 위의 분할정복을 합쳐보자.
 
-$n = 2^m$ 꼴일 때, Primitive $n$-th root of unity $w$, 모든 $0 \leq k < n$ 에 대하여 $f(w^k)$를 구해야하는데,
+$n = 2^m$ 꼴일 때, $w$를 primitive $n$-th root of unity라고 하자.
 
-이는 $f_{even}(w^{2k})$과 $f_{odd}(w^{2k})$로부터 구할 수 있다.
+모든 $0 \leq k < n$ 에 대하여 $f(w^k)$를 구해야하는데, 이는 $f_{even}(w^{2k})$과 $f_{odd}(w^{2k})$로부터 구할 수 있다.
 
 이때 $w = e^{\frac{2 \pi i}{n}\}$ 이므로,
 
@@ -194,15 +194,13 @@ w^{2k} = e^{\frac{4 \pi ki}{n}\} = e^{\frac{2 \pi ki}{n/2}\} = w_{n/2}^k
 
 이다. 이때 $w_{n/2}$는 primitive $\frac{n}{2}$-th root of unity이다.
 
-그런데 $f_{even}(x)$와 $f_{odd}(x)$는 모두 $\frac{n}{2}-1$ 차 다항식이므로,
-
-**$f_{even}(w^{2k})$와 $f_{odd}(w^{2k})$는 각 다항식에 DFT를 수행해준 결과**임을 알 수 있다.
+그런데 $f_{even}(x)$와 $f_{odd}(x)$는 모두 $\frac{n}{2}-1$ 차 다항식이므로, **$f_{even}(w^{2k})$와 $f_{odd}(w^{2k})$는 각 다항식에 DFT를 수행해준 결과**임을 알 수 있다.
 
 즉, 아래와 같이 정리할 수 있다.
 
-- 짝수 $n$에 대하여 $n$차 다항식 $f(x)$에 DFT를 수행한 결과는 $f_{even}(x)$와 $f_{odd}(x)$에 DFT를 수행한 결과로부터 $O(n)$으로 구할 수 있다.
+- $n$차 다항식 $f(x)$에 DFT를 수행한 결과는 $f_{even}(x)$와 $f_{odd}(x)$에 DFT를 수행한 결과로부터 $O(n)$으로 구할 수 있다.
 
-따라서 이를 분할정복으로 구현하면 총 $O(\log n)$ 개의 단계를 거치게 되고, 각 단계를 처리하는데 $O(n)$이므로 전체 시간복잡도는 $O(n \log n)$ 이 된다.
+이를 분할정복으로 구현하면 총 $O(\log n)$ 개의 단계를 거치게 되므로 전체 시간복잡도는 $O(n \log n)$ 이 된다.
 
 ---
 
