@@ -14,8 +14,119 @@ comments: true
 
 <br/>
 
-## 1. Fourier Transform
+## 1. Introduction
 
+두 다항식 $A(x), B(x)$가 각각
+
+\begin{aligned}
+A(x) = a_0 + a_1 x + a_2 x^2 + \dots + a_{n-1} x^{n-1} = \sum_{j=0}^{n-1} a_j x_j
+\end{aligned}
+
+\begin{aligned}
+B(x) = b_0 + b_1 x + b_2 x^2 + \dots + b_{n-1} x^{n-1} = \sum_{j=0}^{n-1} b_j x_j
+\end{aligned}
+
+로 주어질 때, 두 다항식의 곱 $C(x) = A(x)B(x)$ 를
+
+\begin{aligned}
+C(x) = c_0 + c_1 x + c_2 x^2 + \dots + c_{2n-2} x^{2n-2} = \sum_{j=0}^{2n-2} c_j x_j
+\end{aligned}
+
+와 같이 쓸 수 있다. 이때 $c_i = a_0 b_i + a_1 b_{i-1} + \dots + a_i b_0$ 이다.
+
+두 다항식을 전개하는 방법으로 $C(x)$를 구하면 $O(n^2)$ 의 시간복잡도로 구할 수 있다.
+
+이번 포스팅에서 공부할 **고속 푸리에 변환(Fast Fourier Transform)**은 $O(n^2)$ 보다 빠르게 두 다항식의 곱을 계산하는 알고리즘이다.
+
+<br/>
+
+## 2. Basic Idea
+
+### 2-1. Lagrange's Interpolation
+
+고속 푸리에 변환 알고리즘의 핵심 아이디어는 **라그랑주 보간법(Lagrange's interpolation)**에 기반한다.
+
+- $n$개의 점 $\left( x_k, f(x_k) \right)$ 을 지나는 $n-1$차 다항함수 $f(x)는 유일하게 존재한다.
+
+즉, 두 다항식의 곱 $C(x) = A(x)B(x)$ 을 표현하기 위해서는 $2n-1$개의 $x$값에 대한 함수값을 알아야한다.
+
+서로 다른 $2n-1$개의 점 $x_0, x_1, \dots, x_{2n-2}$ 에 대하여
+
+\begin{aligned}
+C(x_k) = A(x_k)B(x_k)
+\end{aligned}
+
+이므로 $A(x_k)$와 $B(x_k)$의 값을 안다면 $C(x_k)$의 값을 빠르게 계산할 수 있다.
+
+---
+
+### 2-2. Discrete Fourier Transform
+
+다항식 $A(x) = a_0 + a_1 x + a_2 x^2 + \dots + a_{n-1} x^{n-1}$ 에 대하여,
+
+복소수 $w \in \mathbb{C}$을 primitive $n$-th root of unity라고 할 때,
+
+> **primitive $n$-th root of unity** $w$ : $w^n = 1$ 의 해들 중에서 최소 $n$제곱을 해야 $1$이 되는 것
+> 
+> \begin{aligned}
+> w = e^{\frac{2 \pi i}{n}\} = \cos \frac{2 \pi}{n} + i \cdot \sin \frac{2 \pi}{n}
+> \end{aligned}
+
+서로 다른 $n$개의 점 $w^0, w^1, w^2, \dots, w^{n-1}$ 에서의 함수값
+
+\begin{aligned}
+A(w^k) = \sum_{j=0}^{n-1} a_j (w^k)^j
+\end{aligned}
+
+들을 구할 수 있다. 이때 변환 $\mathbb{C} \to \mathbb{C}$ 
+
+\begin{aligned}
+(a_0, a_1, \dots, a_{n-1}) \mapsto \left( A(w^0), A(w^1), \dots, A(w^{n-1}) \right)
+\end{aligned}
+
+을 **이산 푸리에 변환(Discrete Fourier Transform, DFT)**라고 한다.
+
+---
+
+### 2-3. Inverse transform of DFT
+
+반대로, DFT를 수행한 결과
+
+\begin{aligned}
+y_k = A(w^k) = \sum_{j = 0}^{n-1} a_j(w^k)^j
+\end{aligned}
+
+를 알고 있을 때, 역으로 $a_0, a_1, \dots, a_{n-1}$ 을 구하는 방법에 대하여 알아보자.
+
+DFT는 아래와 같이 행렬로 표현할 수 있다.
+
+\begin{aligned}
+\begin{pmatrix} y_0 \\\\   y_1 \\\\   y_2 \\\\   \vdots \\\\   y_{n-1} \end{pmatrix} =
+\begin{bmatrix} 1 & 1 & 1 & \dots & 1 \\\\   1 & w & w^2 & \dots & w^{n-1} \\\\   1 & w^2 & w^4 & \dots & w^{2(n-1)} \\\\   \vdots & \vdots & \vdots & \ddots & \vdots \\\\   1 & w^{n-1} & w^{2(n-1)} & \dots & w^{(n-1)(n-1)} \end{bmatrix}
+\begin{pmatrix} a_0 \\\\   a_1 \\\\   a_2 \\\\   \vdots \\\\   a_{n-1} \end{pmatrix}
+\end{aligned}
+
+양변에 역행렬을 곱해주면,
+
+\begin{aligned}
+\begin{pmatrix} a_0 \\\\   a_1 \\\\   a_2 \\\\   \vdots \\\\   a_{n-1} \end{pmatrix} = \frac{1}{n}
+\begin{bmatrix} 1 & 1 & 1 & \dots & 1 \\\\   1 & w^{-1} & w^{-2} & \dots & w^{-(n-1)} \\\\   1 & w^{-2} & w^{-4} & \dots & w^{-2(n-1)} \\\\   \vdots & \vdots & \vdots & \ddots & \vdots \\\\   1 & w^{-(n-1)} & w^{-2(n-1)} & \dots & w^{-(n-1)(n-1)} \end{bmatrix}
+\begin{pmatrix} y_0 \\\\   y_1 \\\\   y_2 \\\\   \vdots \\\\   y_{n-1} \end{pmatrix}
+\end{aligned}
+
+을 얻을 수 있다. 즉, DFT의 역변환은 다음과 같다.
+
+- $(y_0, y_1, \dots, y_{n-1})$ 을 $w^{-1}$ 에 대하여 DFT를 수행한 후, $n$으로 나누어주면 $(a_0, a_1, \dots, a_{n-1})$ 을 얻을 수 있다.
+
+---
+
+### 2-4. Idea
+
+두 다항식의 곱은 다음과 같이 계산할 수 있다.
+
+1. $A(x), B(x)$ 에 대해 DFT 수행
+2. 위 결과를 이용하여 $C(w^0), C(w^1), \dots, C(w^{2n-2})$ 를 계산
+3. 
 
 <br/>
 
@@ -23,7 +134,7 @@ comments: true
 
 쿨리-튜키 알고리즘은 **분할 정복**을 이용하는 방법으로, 대표적인 FFT 알고리즘 중 하나이다.
 
-$n-1$차 다항식
+$n = 2^k$ 일 때, $n-1$차 다항식
 
 \begin{aligned}
 f(x) = a_{n-1}x^{n-1} + a_{n-2}x^{n-2} + \dots + a_2x^2 + a_1x + a_0
@@ -32,11 +143,11 @@ f(x) = a_{n-1}x^{n-1} + a_{n-2}x^{n-2} + \dots + a_2x^2 + a_1x + a_0
 에 대하여, 두 다항식
 
 \begin{aligned}
-f_{even}(x) = a_{2 \lfloor (n-1)/2 \rfloor} x^{\lfloor (n-1)/2 \rfloor} + \dots + a_4 x^2 + a_2 x + a_0 = \sum_{i=0}^{\lfloor (n-1)/2 \rfloor} a_{2i} x^i
+f_{even}(x) = a_{n-2} x^{(n-2)/2} + a_{n-4} x^{(n-4)/2} \dots + a_4 x^2 + a_2 x + a_0 = \sum_{i=0}^{(n-2)/2} a_{2i} x^i
 \end{aligned}
 
 \begin{aligned}
-f_{odd}(x) = a_{2 \lfloor (n-2)/2 \rfloor + 1} x^{\lfloor (n-2)/2 \rfloor} + \dots + a_5 x^2 + a_3 x + a_1 = \sum_{i=0}^{\lfloor (n-2)/2 \rfloor} a_{2i+1} x^i
+f_{odd}(x) = a_{n-1} x^{(n-2)/2} + a_{n-3}x^{(n-4)/2} + \dots + a_5 x^2 + a_3 x + a_1 = \sum_{i=0}^{(n-2)/2} a_{2i+1} x^i
 \end{aligned}
 
 을 정의하면, 다음이 성립한다.
@@ -57,10 +168,26 @@ f(-w) = f_{even} \left( w^2 \right) - w \cdot f_{odd} \left( w^2 \right)
 
 이므로, $f_{even} \left( w^2 \right)$ 과 $f_{odd} \left( w^2 \right)$ 의 값을 알고 있다면 $O(1)$로 $f(w)$ 와 $f(-w)$ 을 구할 수 있다.
 
+이를 이용해서 $n-1$차 다항식 $f(x) = \sum_{k=0}^{n-1} a_k x^k$ 을 $n$개의 좌표 $\left( x_k, f(x_k) \right)$ ($0 \leq k < n$)로 표현할 것이다.
+
+각 $k$에 대하여 $x_k$를 $x_1 = 1$을 시작으로 복소수평면에서 반시계방향으로 정렬한 $x^n = 1$ 의 해들 중 $k$번째 해라고 하면,
+
+\begin{aligned}
+x_k = e^{\frac{2k \pi i} = \cos \frac{2k \pi}{n} + i \cdot \sin \frac{2k \pi}{n}
+\end{aligned}
+
+가 되고, $0 \leq k < n / 2$ 인 $k$에 대하여
+
+\begin{aligned}
+-x_k = x_{k + n / 2}
+\end{aligned}
+
+이므로 
+
 이를 분할정복으로 구현하면
 
 - 총 $O(\log n)$의 단계를 거치게 되고
-- 각 단계에서 $f_{even}$ 과 $f_{odd}$ 의 값을 계산하는데 $O(n)$
+- 각 단계에서 $f_{even}\left( w^2 \right)$ 과 $f_{odd}\left( w^2 \right)$ 의 값을 계산하는데 $O(n)$
 
 이므로 전체 시간복잡도는 $O(n \log n)$ 이 된다.
 
