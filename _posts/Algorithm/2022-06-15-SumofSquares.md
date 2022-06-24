@@ -266,7 +266,7 @@ $\gcd(p, q) = p$ 이면 안되기 때문에 $q$는 다음 조건을 만족해야
 
 이를 만족하는 $q$는 $x^2 \equiv -1 \pmod{p}$ 인 정수 $x$를 찾아 $q = x + i$ 로 구할 수 있다.
 
-$N(q) = x^2 + 1 \equiv 0 \pmod{p}$ 이고, $0 < x < q$ 인 $x$를 찾으면 $N(q) < p^2$ 를 만족한다.
+$N(q) = x^2 + 1 \equiv 0 \pmod{p}$ 이고, $0 < x < p$ 인 $x$를 찾으면 $N(q) < p^2$ 를 만족한다.
 
 이때 [Euler's criterion](https://damo1924.github.io/math/LegendreJacobiSymbol/#3-eulers-criterion)에 의해 $1 \leq a \leq p - 1$ 인 정수 $a$ 중
 
@@ -276,7 +276,7 @@ a^{(p-1)/2} \equiv -1 \pmod{p}
 
 을 만족하는 $a$는 $\frac{p-1}{2}$ 개이므로 $\frac{1}{2}$ 의 확률로 위 합동식을 만족하는 $a$를 찾을 수 있다.
 
-그러한 $a$를 찾았다면 $x = a^{(p-1)/4}$ 이다.
+그러한 $a$를 찾았다면 $x = a^{(p-1)/4} \pmod{p}$ 이다.
 
 <br/>
 
