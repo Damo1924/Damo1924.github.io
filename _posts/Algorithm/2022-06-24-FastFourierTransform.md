@@ -219,7 +219,51 @@ w^{2k} = e^{\frac{4 \pi ki}{n}\} = e^{\frac{2 \pi ki}{n/2}\} = w_{n/2}^k
 > C++ STL의 `<complex>`에서는 복소수 자료형이 정의되어 있어 덧셈, 뺄셈, 곱셈 등이 가능하다.
 
 ```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+#include <complex>
+using namespace std;
+typedef complex<double> cpx;
+typedef long long ll;
+const double PI = acos(-1);
 
+void fft(vector<cpx> &a, cpx w) {
+    int n = a.size();
+    if (n == 1) return;
+    
+    vector<cpx> even(n / 2), odd(n / 2);
+    for (int i = 0; i < n; i++) {
+        if (i % 2) odd[i / 2] = a[i];
+        else even[i / 2] = a[i];
+    }
+    
+    fft(even, w * w);
+    fft(odd, w * w);
+    
+    cpx wk(1);
+    for (int k = 0; k < n / 2; k++) {
+        a[k] = even[k] + odd[k] * wk;
+        a[k + n / 2] = even[k] - odd[k] * wk;
+        wk *= w;
+    }
+}
+
+void multiply(vector<ll> &A, vector<ll> &B, vector<ll> &res) {
+    vector<cpx> a(A.begin(), A.end()), b(B.begin(), B.end());
+    int n = 2;
+    while (n < a.size() + b.size()) n *= 2;
+    a.resize(n); b.resize(n);
+    
+    double angle = 2 * PI / n;
+    cpx w(cos(angle), sin(angle));
+    fft(a, w); fft(b, w);
+    for (int i = 0; i < n; i++) a[i] *= b[i];
+    fft(a, cpx(1) / w);
+    res.resize(n);
+    for (int i = 0; i < n; i++) res[i] = (ll)round(a[i].real() / n);
+}
 ```
 
 <br/>
@@ -289,7 +333,7 @@ $i$를 이진법으로 나타낸 것을 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$
 
 의 위치로 옮기면 된다는 사실을 알 수 있다.
 
-따라서 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$ 에 있는 값과 (b_0 b_1 b_2 \dots b_{j-1} b_j)\_{(2)} 에 있는 값을 swap해주면 된다.
+따라서 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$ 에 있는 값과 $(b_0 b_1 b_2 \dots b_{j-1} b_j)\_{(2)}$ 에 있는 값을 swap해주면 된다.
 
 ---
 
@@ -298,8 +342,95 @@ $i$를 이진법으로 나타낸 것을 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$
 Bit reversal을 적용한 radix-2 DIT FFT를 구현해보았다.
 
 ```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+#include <complex>
+using namespace std;
+typedef complex<double> cpx;
+typedef long long ll;
+const double PI = acos(-1);
 
+void fft(vector<cpx> &a, bool inv) {
+    int n = a.size();
+    
+    for (int i = 1, j = 0; i < n; i++) { // bit reversal
+        int bit = (n >> 1);
+        for (; j >= bit; bit >>= 1) j -= bit;
+        j += bit;
+        if (i < j) swap(a[i], a[j]);
+    }
+    
+    for (int len = 2; len <= n; len <<= 1) {
+        double angle = 2 * PI / len * (inv ? -1 : 1);
+        cpx w(cos(angle), sin(angle)); // primitive len-th root of unity
+        for (int j = 0; j < n; j += len) {
+            cpx wk(1); // w^k
+            for (int k = 0; k < len / 2; k++) {
+                cpx even = a[j + k], odd = a[j + k + len / 2] * wk;
+                a[j + k] = even + odd;
+                a[j + k + len / 2] = even - odd;
+                wk *= w;
+            }
+        }
+    }
+    if (inv) for (int i = 0; i < n; i++) a[i] /= n;
+}
+
+void multiply(vector<ll> &A, vector<ll> &B, vector<ll> &res) {
+    vector<cpx> a(A.begin(), A.end()), b(B.begin(), B.end());
+    int n = 2;
+    while (n < a.size() + b.size()) n *= 2;
+    a.resize(n); b.resize(n);
+    fft(a, 0); fft(b, 0); // calculate each DFT
+    for (int i = 0; i < n; i++) a[i] *= b[i]; // get n points
+    fft(a, 1); // inverse DFT
+    res.resize(n);
+    for (int i = 0; i < n; i++) res[i] = (ll)round(a[i].real());
+}
 ```
+
+실제로 bit reversal을 하지 않은 코드보다 2배 정도 더 빠르며, 메모리도 적게 사용한다.
+
+<br/>
+
+## 5. Related Problems
+
+### [BOJ] 1067. 이동
+
+[BOJ 1067. 이동 문제 링크](https://www.acmicpc.net/problem/1067)
+
+수열에 맨 마지막 원소를 맨 앞으로 가져오는 것을 순환 이동이라고 한다.
+
+두 수열 $x_0, x_1, \dots, x_{n-1}$ 과 $y_0, y_1, \dots, y_{n-1}$ 이 주어졌을 때,
+
+두 수열에 자유롭게 순환 이동을 적용하여 얻을 수 있는 점수 $S$의 최댓값을 구하는 문제이다.
+
+\begin{aligned}
+S = x_0 y_0 + x_1 y_1 + \dots x_{n-1} y_{n-1}
+\end{aligned}
+
+두 수열의 원소를 계수로 갖는 두 다항식(하나는 정방향, 다른 하나는 역방향)을 곱하면 $n$차항의 계수가 점수 $S$와 같아진다.
+
+얻을 수 있는 점수는 총 $n$개인데, $n$개를 전부 계산하기 위해서는 한 다항식을 두 번 이어붙이면 된다.
+
+그러면 $n$차항부터 $2n-1$차항까지의 계수들이 두 수열로부터 얻을 수 있는 점수가 되고, 이 중 최댓값을 찾으면 된다.
+
+---
+
+### [BOJ] 10531. Golf Bot
+
+[BOJ 10531. Golf Bot 문제 링크](https://www.acmicpc.net/problem/10531)
+
+$N$개의 서로 다른 거리로 공을 보낼 수 있는 골프 기계를 최대 두 번 이용하여 공을 홀에 넣을 수 있는지 판단하는 문제이다.
+
+골프 기계가 공을 보낼 수 있는 거리 $d$에 대하여 $d$차항의 계수를 $1$로 하고, 상수항이 $1$인 다항식을 제곱하면 된다.
+
+---
+
+
+
 
 <br/>
 
