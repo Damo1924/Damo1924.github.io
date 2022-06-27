@@ -1,5 +1,5 @@
 ---
-title: "Fast Fourier Transform Algorithm"
+title: "Fast Fourier Transform"
 toc: true
 toc_label: "On this page"
 toc_icon: "chevron-right"
@@ -136,11 +136,21 @@ DFT는 아래와 같이 행렬로 표현할 수 있다.
 
 ## 3. Cooley-Tukey Algorithm
 
-쿨리-튜키 알고리즘은 DFT를 구하기 위해 **분할 정복**을 이용하는 방법으로, 대표적인 FFT 알고리즘 중 하나이다.
+쿨리-튜키 알고리즘은 DFT를 구하기 위해 **분할 정복(divide and conquer)**을 이용하는 방법으로, 대표적인 FFT 알고리즘 중 하나이다.
+
+크기가 합성수 $N = N_1N_2$인 DFT를 크기가 $N_2$인 DFT $N_1$개로 나타냄으로써 시간을 단축한다.
+
+쿨리-튜키 알고리즘은 구현하는 방법이나 알고리즘을 적용하기 위한 특정한 조건에 따라 다양한 변형이 존재하는데,
+
+그 중 가장 간단하고 보편적인 형태인 **radix-2 DIT FFT**에 대해 알아보자.
+
+> DIT: Decimation In Time
 
 ---
 
 ### 3-1. Divide & Conquer
+
+**radix-2 DIT FFT**는 구해야하는 DFT를 짝수항과 홀수항으로 나누어서 각각에 대한 DFT를 구해주는 알고리즘이다.
 
 $n = 2^k$ 일 때, $n-1$차 다항식
 
@@ -158,7 +168,7 @@ f_{even}(x) = a_{n-2} x^{(n-2)/2} + a_{n-4} x^{(n-4)/2} \dots + a_4 x^2 + a_2 x 
 f_{odd}(x) = a_{n-1} x^{(n-2)/2} + a_{n-3}x^{(n-4)/2} + \dots + a_5 x^2 + a_3 x + a_1 = \sum_{i=0}^{(n-2)/2} a_{2i+1} x^i
 \end{aligned}
 
-을 정의하면, 다음이 성립한다.
+을 정의하면 다음이 성립한다.
 
 \begin{aligned}
 f(x) = f_{even} \left( x^2 \right) + x \cdot f_{odd} \left( x^2 \right)
@@ -206,8 +216,41 @@ w^{2k} = e^{\frac{4 \pi ki}{n}\} = e^{\frac{2 \pi ki}{n/2}\} = w_{n/2}^k
 
 ### 3-3. Implementation
 
-C++ STL의 `<complex>`에서는 복소수 자료형이 정의되어 있어 덧셈, 뺄셈, 곱셈 등이 가능하다.
+> C++ STL의 `<complex>`에서는 복소수 자료형이 정의되어 있어 덧셈, 뺄셈, 곱셈 등이 가능하다.
 
 ```cpp
 
 ```
+
+<br/>
+
+## 4. Data Reordering Technique: Bit Reversal
+
+앞에서 구현한 FFT 함수는 호출될 때마다 입력으로 주어진 배열만큼의 새로운 배열을 잡아야하고, 그러다보니 시간이 비교적 오래걸린다는 단점이 있다.
+
+그러다보니 추가적인 자료구조를 사용하지 않는 **in-place algorithm**을 찾기 위한 많은 연구가 진행되었다.
+
+그 중에서 가장 널리 알려진 data reordering technique은 radix-2 algorithms에 대한 **bit reversal**이다.
+
+---
+
+### 4-1. IDEA
+
+
+
+---
+
+### 4-2. Implementation
+
+Bit reversal을 적용한 radix-2 DIT FFT를 구현해보았다.
+
+```cpp
+
+```
+
+<br/>
+
+## References
+
+[1] [WIKIPEDIA, 'Cooley-Tukey FFT algorithm'](https://en.m.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm)  
+[2] [WIKIPEDIA, '
