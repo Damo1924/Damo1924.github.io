@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Cooley-Tukey, 
+`Tags` Cooley-Tukey, 2-radix DIT FFT, Bit reversal, 
 
 <br/>
 
@@ -242,7 +242,7 @@ w^{2k} = e^{\frac{4 \pi ki}{n}\} = e^{\frac{2 \pi ki}{n/2}\} = w_{n/2}^k
 
 함수가 호출될 때마다 입력을 짝수항과 홀수항으로 나누기 때문에 아래와 같이 표현된다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/175852679-79c9e2bf-2f84-4b3d-a5da-8e80e5d83250.jpg" width="60%" height="60%"></center>
 
 따라서 총 $O(n \log n)$ 만큼의 메모리를 사용하게 된다. 그런데 애초부터
 
@@ -262,7 +262,34 @@ a_0, a_4, a_2, a_6, a_1, a_5, a_3, a_7
 
 그러기 위해서는 각 $i$에 대해 $a_i$가 어느 위치에 가야하는지를 알아야한다.
 
+앞에서 본 그림처럼 짝수항을 앞($0 \sim \frac{n}{2}-1$), 홀수항을 뒤($\frac{n}{2} \sim n-1$)로 위치를 옮긴다고 하자.
 
+$i$를 이진법으로 나타낸 것을 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$ 라고 할 때,
+
+- $b_0 = 0$ 이면 짝수이므로 $(b_j b_{j-1} \dots b_2 b_1)\_{(2)}$,
+- $b_0 = 1$ 이면 홀수이므로 $\frac{n}{2} + (b_j b_{j-1} \dots b_2 b_1)\_{(2)}$
+
+위치로 가게 된다. 그런데 이는 기존 $i$에서 $b_0$를 가장 앞으로 옮긴
+
+\begin{aligned}
+(b_0 b_j b_{j-1} \dots b_3 b_2 b_1)\_{(2)}
+\end{aligned}
+
+로 표현된다. 마찬가지로, $(b_j b_{j-1} \dots b_2 b_1)\_{(2)}$ 은 $b_1$이 $0$인지 $1$인지에 따라 위치가 결정되므로
+
+\begin{aligned}
+(b_1 b_j b_{j-1} \dots b_4 b_3 b_2)\_{(2)}
+\end{aligned}
+
+로 가게 된다. 이를 계속 반복해주면 결국 $a_i$는 **$i$를 이진법으로 표현한 것을 거꾸로 뒤집은**
+
+\begin{aligned}
+(b_0 b_1 b_2 \dots b_{j-1} b_j)\_{(2)}
+\end{aligned}
+
+의 위치로 옮기면 된다는 사실을 알 수 있다.
+
+따라서 $(b_j b_{j-1} \dots b_2 b_1 b_0)\_{(2)}$ 에 있는 값과 (b_0 b_1 b_2 \dots b_{j-1} b_j)\_{(2)} 에 있는 값을 swap해주면 된다.
 
 ---
 
