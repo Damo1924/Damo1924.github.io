@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Cooley-Tukey, 2-radix DIT FFT, Bit reversal, 
+`Tags` Cooley-Tukey, 2-radix DIT FFT, Bit reversal, 큰 수 곱셈
 
 <br/>
 
@@ -429,8 +429,47 @@ $N$개의 서로 다른 거리로 공을 보낼 수 있는 골프 기계를 최�
 
 ---
 
+### [BOJ] 15576. 큰 수 곱셈 (2)
 
+[BOJ 15576. 큰 수 곱셈 (2) 문제 링크](https://www.acmicpc.net/problem/15576)
 
+자릿수가 최대 $300000$ 인 두 정수가 주어질 때, 두 정수의 곱을 출력하는 문제이다.
+
+정수를 다항식처럼 생각해서 FFT를 이용해주면 된다.
+
+처음에는 다항식에서 $x = 10$ 으로 두고 구현하였는데, 생각해보니 $x = 1000$ 으로 두면 훨씬 빠르다는 것을 알게 되었다.
+
+문자열로 두 정수를 입력받고, 각 정수를 세 자리씩 끊어서 해당하는 차수의 항의 계수로 놓는다.
+
+곱하고 나면 계수가 $1000$을 넘어가는 항이 있기 때문에 $1000$으로 나눈 나머지만 남겨두고 몫은 다음 항에 더해준다.
+
+```cpp
+void mul(string s, string t) {
+    int n = s.size(), m = t.size();
+    vector<ll> a(n / 3 + 1), b(m / 3 + 1), res;
+    for (int i = 0; i < n; i += 3)
+        for (int j = 3; j; j--) if (n - i - j >= 0)
+            a[i / 3] = a[i / 3] * 10 + s[n - i - j] - '0';
+    for (int i = 0; i < m; i += 3)
+        for (int j = 3; j; j--) if (m - i - j >= 0)
+            b[i / 3] = b[i / 3] * 10 + t[m - i - j] - '0';
+    multiply(a, b, res);
+    for (int i = 1; i < res.size(); i++) {
+        res[i] += res[i - 1] / 1000;
+        res[i - 1] %= 1000;
+    }
+    int i = res.size() - 1;
+    while (i >= 0 && !res[i]) i--;
+    if (i < 0) cout << 0;
+    else {
+        cout << res[i--];
+        for (; i >= 0; i--) {
+            cout.width(3); cout.fill('0');
+            cout << res[i];
+        }
+    }
+}
+```
 
 <br/>
 
@@ -438,4 +477,3 @@ $N$개의 서로 다른 거리로 공을 보낼 수 있는 골프 기계를 최�
 
 [1] [WIKIPEDIA, 'Cooley-Tukey FFT algorithm'](https://en.m.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm)  
 [2] [WIKIPEDIA, 'Fast Fourier transform'](https://en.m.wikipedia.org/wiki/Fast_Fourier_transform)  
-[3]
