@@ -224,17 +224,43 @@ w^{2k} = e^{\frac{4 \pi ki}{n}\} = e^{\frac{2 \pi ki}{n/2}\} = w_{n/2}^k
 
 <br/>
 
-## 4. Data Reordering Technique: Bit Reversal
+## 4. Date Reordering for In-Place Algorithms
 
 앞에서 구현한 FFT 함수는 호출될 때마다 입력으로 주어진 배열만큼의 새로운 배열을 잡아야하고, 그러다보니 시간이 비교적 오래걸린다는 단점이 있다.
 
-그러다보니 추가적인 자료구조를 사용하지 않는 **in-place algorithm**을 찾기 위한 많은 연구가 진행되었다.
+그러다보니 추가적인 자료구조를 사용하지 않는 **in-place algorithm**을 찾기 위한 많은 연구가 진행되었는데,
 
-그 중에서 가장 널리 알려진 data reordering technique은 radix-2 algorithms에 대한 **bit reversal**이다.
+그 중 대표적인 data reordering technique인 **bit reversal**에 대해 알아보자.
 
 ---
 
-### 4-1. IDEA
+### 4-1. Bit Reversal
+
+먼저, 앞에서 구현한 FFT 함수가 어떤 배열들을 추가로 만드는지 관찰해보자.
+
+예를 들어, $n = 8$ 일 때 DFT를 구하는 과정을 생각해보자.
+
+함수가 호출될 때마다 입력을 짝수항과 홀수항으로 나누기 때문에 아래와 같이 표현된다.
+
+<center><img src="" width="60%" height="60%"></center>
+
+따라서 총 $O(n \log n)$ 만큼의 메모리를 사용하게 된다. 그런데 애초부터
+
+\begin{aligned}
+a_0, a_1, a_2, a_3, a_4, a_5, a_6, a_7
+\end{aligned}
+
+대신
+
+\begin{aligned}
+a_0, a_4, a_2, a_6, a_1, a_5, a_3, a_7
+\end{aligned}
+
+의 순서로 저장되어 있으면 이웃한 것들끼리 DFT를 수행해주면 된다는 것을 알 수 있다.
+
+이웃한 것들까지 DFT를 수행하고, 그 자리에 결과를 저장해주면 되므로 추가적인 배열을 사용하지 않아도 된다.
+
+그러기 위해서는 각 $i$에 대해 $a_i$가 어느 위치에 가야하는지를 알아야한다.
 
 
 
@@ -253,4 +279,5 @@ Bit reversal을 적용한 radix-2 DIT FFT를 구현해보았다.
 ## References
 
 [1] [WIKIPEDIA, 'Cooley-Tukey FFT algorithm'](https://en.m.wikipedia.org/wiki/Cooley%E2%80%93Tukey_FFT_algorithm)  
-[2] [WIKIPEDIA, '
+[2] [WIKIPEDIA, 'Fast Fourier transform'](https://en.m.wikipedia.org/wiki/Fast_Fourier_transform)  
+[3]
