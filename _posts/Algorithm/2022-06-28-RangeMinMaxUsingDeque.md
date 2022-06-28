@@ -20,11 +20,9 @@ comments: true
 m_i = \min_{i - d + 1 \leq j \leq i} a_j
 \end{aligned}
 
-라고 정의하자.
+라고 정의하자. $i \leq 0$ 인 $a_i$ 는 무시할 때, $m_1, m_2, \dots, m_n$ 의 값을 모두 구해야한다.
 
-$i \leq 0$ 인 $a_i$ 는 무시할 때, $m_1, m_2, \dots, m_n$ 의 값을 모두 구해야한다.
-
-</br>
+<br/>
 
 ## 2. Usable Methods: Segment tree, Priority queue
 
@@ -148,6 +146,7 @@ $N$개의 징검다리들이 있고, 각 징검다리를 밟으면 점수를 준
 > 
 > \begin{aligned}
 > dp_i = k_i + \max \left( \max_{i-d \leq j \leq i - 1} dp_j , 0 \right)
+> \end{aligned}
 > 
 > 점수가 음수일 수 있으므로, $i$번 징검다리만 밟고 끝내는 경우도 고려해야한다.
 
