@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 문자열 알고리즘, Z array, 문자열 검색
+`Tags` 문자열 알고리즘, Z array, 문자열 검색, 
 
 ## 1. Z array
 
@@ -36,7 +36,7 @@ Z 알고리즘은 Z 배열을 구하는 알고리즘이다.
 
 위와 같은 과정을 두 문자가 같지 않을 때까지 반복해주면 된다.
 
-이렇게 Z 배열을 구하면 $O(N^2)$이 걸리게 되는데, 다른 문자열 관련 알고리즘들과 마찬가지로 알고있는 정보를 이용해서 시간을 단축할 것이다.
+이렇게 Z 배열을 구하면 $O(N^2)$이 걸리게 되는데, 다른 문자열 관련 알고리즘들과 마찬가지로 **이미 알고있는 정보**를 이용해서 시간을 단축할 것이다.
 
 ---
 
@@ -65,13 +65,15 @@ $Z\[i-1\]$까지 구했을 때 $L \leq i- 1 < i$ 이므로
 
 **Case 2)** 이 경우에는 지금까지 구한 정보를 이용해서 $Z\[i\]$를 빠르게 구할 수 있다.
 
+<center><img src="https://user-images.githubusercontent.com/88201512/176568319-f71203b6-ef41-426f-92c5-cac42309ab29.jpg" width="70%" height="70%"></center>
+
 왼쪽 끝 인덱스가 $l$, 오른쪽 끝 인덱스가 $r$인 부분문자열을 $S(l, r)$라고 할 때,
 
 $S(L, R) = S(0, R - L)$ 이고 $S(i-L, R-L) = S(i, R)$ 이다.
 
 따라서 $Z\[i\]$를 구하기 위해 $0 \leq j \leq R - i$ 인 $j$에 대하여 $S\[j\]$와 $S\[i + j\]$을 비교하는 것은 $S\[j\]$와 $S\[i-L+j\]$를 비교하는 것과 동일하다.
 
-그런데 $S\[j\]$와 $S\[(i-L)+j\]$를 비교하는 것은 $Z\[i - L\]$을 구하면서 이미 수행한 과정이고, 이미 그 결과인 $Z\[i-L\]$을 알고 있다.
+그런데 $S\[j\]$와 $S\[(i-L)+j\]$를 비교하는 것은 $Z\[i - L\]$을 구하면서 이미 수행한 과정이다.
 
 그렇다면 다시 한 번 다음과 같이 경우를 나눌 수 있다.
 
@@ -143,9 +145,9 @@ int main()
 
 Z 알고리즘을 이용하면 텍스트 내에서 패턴을 빠르게 탐색할 수 있다.
 
-텍스트 $T$와 패턴 $P$에 대하여 새로운 문자열 $S = P#T$ 를 만들자.
+텍스트 $T$와 패턴 $P$에 대하여 새로운 문자열 $S = P?T$ 를 만들자.
 
-이때 $#$은 **텍스트와 패턴 모두에 포함되지 않는 임의의 문자**이다.
+이때 $?$은 **텍스트와 패턴 모두에 포함되지 않는 임의의 문자**이다.
 
 그렇다면 아래와 같이 텍스트 내의 패턴의 위치를 탐색할 수 있다.
 
@@ -163,7 +165,23 @@ KMP 알고리즘과 마찬가지로 $O(N + M)$의 시간복잡도로 문자열�
 
 <br/>
 
-## 4. Related Problems
+## 4. Finding Borders of a String
+
+Z 알고리즘만의 특장점은 문자열의 **border**를 다른 알고리즘에 비해 쉽게 구할 수 있다는 것이다.
+
+이때 문자열의 border란 해당 문자열보다 길이가 짧은 부분문자열들 중 **접두사(prefix)인 동시에 접미사(suffix)인 문자열**을 의미한다.
+
+문자열 $S$의 접미사 $S\[i\]S\[i+1\] \dots S\[n-1\]$ 이 border가 되기 위한 필요충분조건은
+
+\begin{aligned}
+i + z\[i\] = n
+\end{aligned}
+
+이다.
+
+<br/>
+
+## 5. Related Problems
 
 ### [BOJ] 13713. 문자열과 쿼리
 
@@ -179,12 +197,28 @@ $S$를 뒤집어서 Z 배열을 구해줌으로써 해결할 수 있다.
 
 [BOJ 16229. 반복 패턴 문제 링크](https://www.acmicpc.net/problem/16229)
 
+길이가 $N$인 주어진 문자열에 최대 $K$개의 글자를 뒤에 추가하여 패턴이 반복되는 형태로 만드는 문제이다.
 
+길이가 $i$인 패턴이 존재한다면 $Z\[i\] = N - i$ 를 만족해야하고,
+
+최대 $K$개의 글자를 추가할 수 있으므로 $i - (n%i) \leq k$ 를 만족해야한다.
+
+이때 $n % i$ 는 $n$을 $i$로 나눈 나머지인데, $n$이 $i$로 나누어 떨어지는 경우에는 $i$이다.
+
+---
+
+### [BOJ] 13576. Prefix와 Suffix
+
+[BOJ 13576. Prefix와 Suffix 문제 링크](https://www.acmicpc.net/problem/13576)
+
+주어진 문자열의 **접두사(prefix)인 동시에 접미사(suffix)인 문자열**, 즉 문자열의 border를 구하는 문제이다.
 
 <br/>
 
 ## References
 
-[1] 
+[1] [Codeforces, paladin8's blog, 'Z Algorithm'](https://codeforces.com/blog/entry/3107)  
+[2] [GeeksforGeeks, 'Z algorithm'](https://www.geeksforgeeks.org/z-algorithm-linear-time-pattern-searching-algorithm/)  
+[3] [Algorithms a contest approach, 'Borders of a string'](http://algorithmsforcontests.blogspot.com/2012/08/borders-of-string.html)  
 
 
