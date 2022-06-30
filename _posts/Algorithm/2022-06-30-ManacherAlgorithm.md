@@ -67,8 +67,27 @@ $i$와 $r$의 대소 관계에 따라서 두 가지 케이스로 나누어서 �
 
 펠린드롬에서 $i$의 대칭점 $2p - i$에 대하여 $A\[i\]$는 최소 $\min(r-i, A\[2p-i\])$ 임을 알 수 있다.
 
+<center><img src="https://user-images.githubusercontent.com/88201512/176627249-d5e83b7d-5118-4ce4-9b92-1cbdc5642434.jpg" width="70%" height="70%"></center>
+
 마찬가지로 그 다음부터 양 끝 문자끼리 차례대로 비교해나가며 $A\[i\]$를 구해주면 된다.
 
+<br/>
 
+## 3. Implementation
 
+주어진 문자열의 A 배열을 구하는 코드이다.
+
+```cpp
+
+```
+
+<br/>
+
+## 4. Related Problems
+
+<br/>
+
+## References
+
+[1] 
 
