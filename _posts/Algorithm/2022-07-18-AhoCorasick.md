@@ -30,7 +30,7 @@ comments: true
 
 ---
 
-### 1-1. Algorithm: Failure Link
+### 1-1. Failure Link
 
 우리는 KMP 알고리즘에서 실패 함수(failure function)라는 것을 이용해서 문자열 검색을 빠르게 수행할 수 있었다.
 
