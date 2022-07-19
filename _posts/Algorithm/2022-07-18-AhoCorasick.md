@@ -169,15 +169,24 @@ Output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 �
 
 주어진 문자열에 패턴들이 총 몇 번이나 나타나는지 구하는 문제이다.
 
+이번에는 output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 해당하는 노드의 개수를 전달해야한다.
+
+텍스트를 탐색하면서 지나는 노드들의 output link에 저장된 값을 모두 더해줌으로써 답을 구할 수 있다.
+
 ---
+
+### [BOJ] 2809. 아스키 거리
+
+[BOJ 2809. 아스키 거리 문제 링크](https://www.acmicpc.net/problem/2809)
+
+
 
 <br/>
 
 ## References
 
-[1] []()  
+[1] [위키백과, '아호-코라식 알고리즘'](https://ko.m.wikipedia.org/wiki/%EC%95%84%ED%98%B8_%EC%BD%94%EB%9D%BC%EC%8B%9D_%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98)  
 [2] [koosaga, 'Aho-Corasick Multiple Pattern Matching Algorithm'](https://koosaga.com/157)  
-[3] 
 
 
 
