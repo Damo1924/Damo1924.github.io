@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 문자열 알고리즘, string search, 
+`Tags` 문자열 알고리즘, string search, failure fuction
 
 ## 1. Aho-Corasick algorithm
 
@@ -72,11 +72,112 @@ comments: true
 
 이제 위의 두 링크를 포함한 트라이 자료구조를 구현해보자.
 
+현재 노드를 $x$, $x$에서 문자 $c$로 라벨린된 간선으로 연결된 노드를 $y$라고 하자.
 
+루트부터 $x$까지의 경로에 해당하는 문자열을 $S$라고 하면, 루트부터 $y$까지의 경로에 해당하는 문자열은 $Sc$이다.
 
+$x$의 failure link $p$에 대하여, 루트부터 $p$까지의 경로에 해당하는 문자열을 $T$라고 하면 $T$는 $S$의 접두사이면서 접미사인 부분문자열 중 가장 긴 것이다.
 
+만약 $p$에서 $c$로 라벨링된 간선으로 연결된 노드 $q$가 존재한다면,
 
+$y$에 해당하는 문자열 $Sc$의 접두사이면서 접미사인 부분문자열 중 가장 긴 것이 $Tc$라는 사실로부터 $q$가 $y$의 failure link가 된다.
 
+반대로 $p$에서 $c$로 라벨링된 간선으로 연결된 노드가 존재하지 않는다면, 그러한 노드가 존재할 때까지 $p$의 failure link를 타고 이동하면서 탐색해준다.
+
+위 과정을 통해 트라이의 각 노드의 failure link를 구하기 위해서는 현재 노드보다 깊이가 작은 노드들의 failure link를 알고 있어야하므로 **BFS로 트라이를 탐색**하면서 구할 수 있다.
+
+또한, 노드 $x$의 Output link는 $x$의 failure link $p$의 output link로부터 상수 시간에 구할 수 있다.
+
+아래 코드는 텍스트에서 패턴들의 존재 여부를 구하는 아호-코라식 알고리즘이다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+#include <memory.h>
+using namespace std;
+
+const int mxN = 1e5 + 1, mxC = 26;
+struct aho_corasick {
+    int trie[mxN][mxC], piv = 0; // trie
+    int fail[mxN]; // failure link
+    int term[mxN]; // output link
+    
+    void init(vector<string> &v) { // multiple patterns
+        memset(trie, 0, sizeof(trie));
+        memset(fail, 0, sizeof(fail));
+        memset(term, 0, sizeof(term));
+        piv = 0;
+        
+        for (string &s : v) {
+            int p = 0;
+            for (int i = 0; i < s.size(); i++) {
+                int j = s[i] - 'a';
+                if (!trie[p][j]) trie[p][j] = ++piv;
+                p = trie[p][j];
+            }
+            term[p] = 1;
+        }
+        
+        queue<int> q;
+        for (int i = 0; i < mxC; i++) if (trie[0][i]) q.push(trie[0][i]);
+        while (!q.empty()) {
+            int x = q.front();
+            q.pop();
+            for (int i = 0; i < mxC; i++) if (trie[x][i]) {
+                int p = fail[x];
+                while (p && !trie[p][i]) p = fail[p];
+                p = trie[p][i];
+                fail[trie[x][i]] = p;
+                if (term[p]) term[trie[x][i]] = 1;
+                q.push(trie[x][i]);
+            }
+        }
+    }
+    
+    bool query(string& s) {
+        int p = 0;
+        for (int i = 0; i < s.size(); i++) {
+            int j = s[i] - 'a';
+            while (p && !trie[p][j]) p = fail[p];
+            p = trie[p][j];
+            if (term[p]) return 1;
+        }
+        return 0;
+    }
+};
+```
+
+<br/>
+
+## 2. Related Problems
+
+### [BOJ] 9250. 문자열 집합 판별
+
+[BOJ 9250. 문자열 집합 판별 문제 링크](https://www.acmicpc.net/problem/9250)
+
+주어진 문자열에 패턴들의 존재 여부를 구하는 문제이다.
+
+Output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 해당하는 노드가 있는지만 전달하면 된다.
+
+---
+
+### [BOJ] 10256. 돌연변이
+
+[BOJ 10256. 돌연변이 문제 링크](https://www.acmicpc.net/problem/10256)
+
+주어진 문자열에 패턴들이 총 몇 번이나 나타나는지 구하는 문제이다.
+
+---
+
+<br/>
+
+## References
+
+[1] []()  
+[2] [koosaga, 'Aho-Corasick Multiple Pattern Matching Algorithm'](https://koosaga.com/157)  
+[3] 
 
 
 
