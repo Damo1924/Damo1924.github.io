@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` 문자열 알고리즘, string search, failure fuction
+`Tags` 문자열 알고리즘, Multiple pattern matching, string search, failure fuction
 
 ## 1. Aho-Corasick algorithm
 
@@ -163,6 +163,20 @@ Output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 �
 
 ---
 
+### [BOJ] 5735. Emoticons :-)
+
+[BOJ 5735. Emoticons :-) 문제 링크](https://www.acmicpc.net/problem/5735)
+
+주어진 문자열에서 이모티콘을 없애기 위해 특정 문자를 공백으로 대체하려고 한다.
+
+공백을 포함하지 않는 이모티콘들이 주어지고, 문자열에 이모티콘이 없도록 만들기 위해 공백으로 바꾸어야하는 문자의 개수의 최솟값을 구하는 문제이다.
+
+이는 찾은 이모티콘의 마지막 문자를 공백으로 대체해줌으로써 구할 수 있다.
+
+즉, 문자열에서 이모티콘을 찾으면 트라이의 루트 노드로 돌아가서 탐색을 이어나가면 된다.
+
+---
+
 ### [BOJ] 10256. 돌연변이
 
 [BOJ 10256. 돌연변이 문제 링크](https://www.acmicpc.net/problem/10256)
@@ -179,7 +193,9 @@ Output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 �
 
 [BOJ 2809. 아스키 거리 문제 링크](https://www.acmicpc.net/problem/2809)
 
+주어진 문자열에서 어떤 패턴에도 포함되지 않는 문자의 개수를 구하는 문제이다.
 
+트라이의 각 노드에서 끝나는 패턴들 중 길이가 가장 긴 것의 길이를 기억해두고, 이후 문자열을 선형탐색하면서 어떤 패턴에도 속하지 않은 문자를 찾아주면 된다.
 
 <br/>
 
