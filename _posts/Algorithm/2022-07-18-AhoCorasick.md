@@ -88,7 +88,7 @@ $y$에 해당하는 문자열 $Sc$의 접두사이면서 접미사인 부분문�
 
 또한, 노드 $x$의 Output link는 $x$의 failure link $p$의 output link로부터 상수 시간에 구할 수 있다.
 
-아래 코드는 텍스트에서 패턴들의 존재 여부를 구하는 아호-코라식 알고리즘이다.
+아래 코드는 **트라이를 2차원 배열로 구현한 아호-코라식 알고리즘**이다.
 
 ```cpp
 #include <iostream>
@@ -146,7 +146,80 @@ struct aho_corasick {
         }
         return 0;
     }
-};
+} aho_corasick;
+```
+
+`mxN`의 스케일이 $10^5$ 정도일 때까지는 위 코드를 사용해도 된다. 다만, 
+
+- `mxN`이 매우 커지면 메모리 제한에 걸린다.
+- 여러 테스트케이스에 대하여 답을 구해야하는 문제라면 배열을 초기화하는데 너무 많은 시간이 소요된다.
+
+와 같은 명확한 단점이 존재한다.
+
+이를 해결하기 위해서는 트라이의 각 노드를 나타내는 구조체를 구현해야한다.
+
+이때 연결된 노드의 주소를 **맵(map)**으로 기억하는 방법과 **벡터(vector)**로 기억하는 방법이 있는데,
+
+직접 여러 문제를 풀어본 결과, **벡터를 사용한 방법이 메모리와 속도 측면에서 모두 뛰어났다**.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct Trie {
+    int term;
+    vector<pair<char, Trie*>> ch;
+    Trie* fail;
+    Trie() { term = 0; ch.clear(); fail = nullptr; }
+    ~Trie() { for (auto& i : ch) delete i.second; }
+    int idx(char c) {
+        for (int i = 0; i < ch.size(); i++) if (ch[i].first == c) return i;
+        return ch.size();
+    }
+    void insert(string& s, int i) {
+        if (s.size() == i) {
+            term = 1;
+            return;
+        }
+        int j = idx(s[i]);
+        if (j == ch.size()) ch.push_back({ s[i], new Trie });
+        ch[j].second->insert(s, i + 1);
+    }
+    void init() {
+        queue<Trie*> q;
+        q.push(this);
+        while (!q.empty()) {
+            Trie* cur = q.front();
+            q.pop();
+            for (auto& i : cur->ch) {
+                Trie* nxt = i.second;
+                if (cur == this) nxt->fail = this;
+                else {
+                    Trie* tmp = cur->fail;
+                    while (tmp != this && tmp->idx(i.first) == tmp->ch.size()) tmp = tmp->fail;
+                    int j = tmp->idx(i.first);
+                    if (j < tmp->ch.size()) tmp = tmp->ch[j].second;
+                    nxt->fail = tmp;
+                    if (tmp->term) nxt->term = 1;
+                }
+                q.push(nxt);
+            }
+        }
+    }
+    bool query(string& s) {
+        Trie* cur = this;
+        for (int i = 0; i < s.size(); i++) {
+            while (cur != this && cur->idx(s[i]) == cur->ch.size()) cur = cur->fail;
+            int j = cur->idx(s[i]);
+            if (j < cur->ch.size()) cur = cur->ch[j].second;
+            if (cur->term) return 1;
+        }
+        return 0;
+    }
+} aho_corasick;
 ```
 
 <br/>
@@ -196,6 +269,10 @@ Output link를 통해 failure link를 타고 올라갔을 때 패턴의 끝에 �
 주어진 문자열에서 어떤 패턴에도 포함되지 않는 문자의 개수를 구하는 문제이다.
 
 트라이의 각 노드에서 끝나는 패턴들 중 길이가 가장 긴 것의 길이를 기억해두고, 이후 문자열을 선형탐색하면서 어떤 패턴에도 속하지 않은 문자를 찾아주면 된다.
+
+> 문제 조건 상 길이가 $5000$인 패턴이 $5000$개까지 주어질 수 있는데, 실제 데이터는 그보다 훨씬 작은 것 같다. (2022.07.20 기준)
+> 
+> 이차원 배열로 구현한 아호-코라식 알고리즘으로도 `mxN`의 값을 적절히 조절하면 AC를 받을 수 있지만, 벡터를 이용한 코드가 아무래도 더 적절한 풀이인 것 같다.
 
 <br/>
 
