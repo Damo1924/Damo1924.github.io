@@ -54,3 +54,63 @@ struct aho_corasick {
         return 0;
     }
 };
+
+//------------------------------------
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <queue>
+using namespace std;
+
+struct Trie {
+    int term;
+    vector<pair<char, Trie*>> ch;
+    Trie* fail;
+    Trie() { term = 0; ch.clear(); fail = nullptr; }
+    ~Trie() { for (auto& i : ch) delete i.second; }
+    int idx(char c) {
+        for (int i = 0; i < ch.size(); i++) if (ch[i].first == c) return i;
+        return ch.size();
+    }
+    void insert(string& s, int i) {
+        if (s.size() == i) {
+            term = 1;
+            return;
+        }
+        int j = idx(s[i]);
+        if (j == ch.size()) ch.push_back({ s[i], new Trie });
+        ch[j].second->insert(s, i + 1);
+    }
+    void init() {
+        queue<Trie*> q;
+        q.push(this);
+        while (!q.empty()) {
+            Trie* cur = q.front();
+            q.pop();
+            for (auto& i : cur->ch) {
+                Trie* nxt = i.second;
+                if (cur == this) nxt->fail = this;
+                else {
+                    Trie* tmp = cur->fail;
+                    while (tmp != this && tmp->idx(i.first) == tmp->ch.size()) tmp = tmp->fail;
+                    int j = tmp->idx(i.first);
+                    if (j < tmp->ch.size()) tmp = tmp->ch[j].second;
+                    nxt->fail = tmp;
+                    if (tmp->term) nxt->term = 1;
+                }
+                q.push(nxt);
+            }
+        }
+    }
+    bool query(string& s) {
+        Trie* cur = this;
+        for (int i = 0; i < s.size(); i++) {
+            while (cur != this && cur->idx(s[i]) == cur->ch.size()) cur = cur->fail;
+            int j = cur->idx(s[i]);
+            if (j < cur->ch.size()) cur = cur->ch[j].second;
+            if (cur->term) return 1;
+        }
+        return 0;
+    }
+} aho_corasick;
