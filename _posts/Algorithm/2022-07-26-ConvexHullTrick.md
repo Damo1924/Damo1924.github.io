@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` DP Optimization, 
+`Tags` DP Optimization, 4008, 13263, 6171, 10067
 
 ## 1. Idea of the Convex Hull Trick
 
@@ -26,7 +26,7 @@ DP_i = \min_{j < i} \left( DP_j + A_i \cdot B_j \right)
 
 이때 **$B_j$가 $j$에 대하여 감소**한다는 조건을 추가하면, 다음과 같은 그래프를 그릴 수 있다.
 
-<center><img src="" width="60%" height="60%"></center>
+<center><img src="https://user-images.githubusercontent.com/88201512/181435048-e067597e-dda0-4af0-b6d6-2a8b5b57d8e0.jpg" width="60%" height="60%"></center>
 
 $DP_i$를 구하기 위해 필요한 것은 지금까지 구한 $DP_j$들에 대응되는 직선들의 가장 아랫부분들을 이은 빨간색 그래프이다.
 
@@ -53,7 +53,7 @@ $B_j$가 $j$에 대하여 감소하기 때문에 위 직선이 마지막 구간 
 맨 뒤에 있는 직선 $y = B_j x + DP_j$ 이 $x$좌표가 $x_j$ 이상인 구간에서 최솟값에 해당한다고 하면, 두 직선의 교점의 $x$좌표는
 
 \begin{aligned}
-x_{ji} = \frac{DP_i + DP_j}{B_j - B_i}
+x_{ji} = \frac{DP_i - DP_j}{B_j - B_i}
 \end{aligned}
 
 만약 $x_{ji} > x_j$ 이면, 직선 $y = B_j x + DP_j$이 최솟값인 구간도 존재하므로 그대로 새로운 직선을 추가해주면 되고, 이때 $x_i = x_{ji}$ 가 된다.
@@ -227,11 +227,60 @@ CHT를 이용하면 $O(n)$으로 해결할 수 있다.
 
 ---
 
+### [BOJ] 4008. 특공대
 
+[BOJ 4008. 특공대 문제 링크](https://www.acmicpc.net/problem/4008)
+
+$n$명의 병사들이 있고, $i$번 병사의 전투력은 $x_i$로 주어진다.
+
+연속한 병사들로 하나의 특공대를 꾸리면 특공대의 전투력은 속해 있는 병사들의 전투력의 합이다.
+
+그런데 다음부터는 어떤 상수 $a, b, c$에 대하여 특공대의 전투력을 다음과 같이 계산한다고 한다.
+
+- 기존 전투력을 $x$라고 할 때, 새로운 전투력은 $ax^2 + bx + c$ 이다.
+
+이때 적절히 특공대를 꾸려서 얻을 수 있는 최대의 새로운 전투력을 구하는 문제이다.
+
+$j+1$번 병사부터 $i$번째 병사까지를 하나의 특공대로 만들면, 기존 전투력은 부분합 $s_k$를 이용하여 $s_i - s_j$ 로 구할 수 있다.
+
+$DP\[i\]$를 $i$번 병사까지로 얻을 수 있는 최대의 전투력이라고 정의하자. 그렇다면,
+
+\begin{aligned}
+DP\[i\] = \min_{j < i} \left( DP\[j\] + a(s_i - s_j)^2 + b(s_i - s_j) + c \right)
+\end{aligned}
+
+와 같은 점화식을 얻을 수 있다. 위 식에서 $j$와 관련없는 항들을 빼서 정리하면,
+
+\begin{aligned}
+DP\[i\] = \min_{j < i} \left( -2a s_j \cdot s_i + DP\[j\] + a s_j^2 - b s_j \right) + a s_i^2 + b s_i + c
+\end{aligned}
+
+가 된다. 이때 $a$가 음수이고 $s_j$는 $j$에 대하여 증가하기 때문에 직선 $y = -2a s_j x + DP\[j\] + a s_j^2 - b s_j$ 의 기울기가 점차 증가한다는 것을 알 수 있다.
+
+따라서 CHT를 이용하여 $O(n)$으로 해결할 수 있게 된다.
+
+---
+
+### [BOJ] 10067. 수열 나누기
+
+[BOJ 10067. 수열 나누기 문제 링크](https://www.acmicpc.net/problem/10067)
+
+음이 아닌 정수들로 이루어진 길이가 $n$인 수열에 대하여 선택한 부분수열을 두 조각으로 나누는 작업을 $k$번 수행하려고 한다.
+
+부분수열을 나누었을 때 각 부분에 있는 원소들의 합을 곱한 만큼 점수를 얻을 수 있다.
+
+이때 얻을 수 있는 최대 점수와 나누는 방법을 구하는 문제이다.
+
+이 문제의 핵심은 크게 세 가지이다.
+
+- 자르는 위치를 결정했다면 어느 순서로 자르던 간에 얻는 점수는 동일하므로 앞에서부터 자를 위치를 선택하면 된다.
+- $i$번째 자르는 위치로 $j$번 원소의 오른쪽을 선택했을 때 얻을 수 있는 최대 점수를 $DP\[j\]\[i\]$로 정의하면, 각 $i$마다 CHT를 이용해서 $O(n)$으로 구할 수 있다.
+- 역추적을 해서 나누는 방법을 얻을 수 있다.
 
 <br/>
 
 ## References
 
-[1] 
+[1] [secmem.org, koosaga, '동적 계획법을 최적화하는 9가지 방법 (Chapter 1)'](https://www.secmem.org/blog/2019/11/15/dpopt-ch1/)  
+[2] [Codeforces, meooow, 'Convex Hull Trick - Geometry being useful'](https://codeforces.com/blog/entry/63823)  
 
