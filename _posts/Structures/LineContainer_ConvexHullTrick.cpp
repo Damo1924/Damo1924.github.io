@@ -64,3 +64,38 @@ struct LineContainer : multiset<Line, less<>> {
         return l.a * x + l.b;
     }
 };
+
+// ----------------------
+
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <iterator>
+using namespace std;
+typedef long long ll;
+
+int idx = 0; // query로 주어지는 x의 값이 증가하는 경우 이분탐색을 사용하지 않고 O(n)으로 처리
+struct Line {
+    ll a, b, p; // y = ax + b, x = p
+    bool operator<(const Line& l) const { return p < l.p; }
+};
+struct LineContainer : vector<Line> {
+    ll div(ll a, ll b) { return a / b + ((a ^ b) > 0 && a % b); }
+    void add(ll a, ll b) {
+        while (!empty()) {
+            Line prv = back();
+            ll p = div(b - prv.b, prv.a - a);
+            if (p <= prv.p) pop_back();
+            else {
+                push_back({ a, b, p });
+                return;
+            }
+        }
+        push_back({ a, b, 0 });
+    }
+    ll query(ll x) {
+        if (idx >= size()) idx = size() - 1;
+        while (idx < size() && at(idx).p <= x) idx++;
+        return at(idx - 1).a * x + at(idx - 1).b;
+    }
+};
