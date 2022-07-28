@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` DP Optimization, 4008, 13263, 6171, 10067
+`Tags` DP Optimization, 4008, 13263, 6171, 10067, 12795
 
 ## 1. Idea of the Convex Hull Trick
 
@@ -276,6 +276,65 @@ DP\[i\] = \min_{j < i} \left( -2a s_j \cdot s_i + DP\[j\] + a s_j^2 - b s_j \rig
 - 자르는 위치를 결정했다면 어느 순서로 자르던 간에 얻는 점수는 동일하므로 앞에서부터 자를 위치를 선택하면 된다.
 - $i$번째 자르는 위치로 $j$번 원소의 오른쪽을 선택했을 때 얻을 수 있는 최대 점수를 $DP\[j\]\[i\]$로 정의하면, 각 $i$마다 CHT를 이용해서 $O(n)$으로 구할 수 있다.
 - 역추적을 해서 나누는 방법을 얻을 수 있다.
+
+<br/>
+
+## 6. What if $B_j$ is not sorted?
+
+추가적으로 $B_j$가 $j$에 대하여 감소하거나 증가하는 성질을 띠지 않는 경우를 살펴보자.
+
+이런 경우라면 **이진 탐색 트리를 사용하여 $B_j$를 정렬된 순서대로 직선들을 관리**함으로써 문제를 해결할 수 있다.
+
+직선을 삽입하고, 해당 직선과 **양쪽으로** 인접한 직선들과의 교점을 구하여 최대 또는 최소에 해당하지 않는 직선들을 삭제해주어야 한다.
+
+이진 탐색 트리는 삽입과 삭제에 $O(\log n)$이 걸리기 때문에 시간복잡도는 $O(n \log n)$으로 동일하다.
+
+---
+
+### 6-1. Implementation using set
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <set>
+using namespace std;
+typedef long long ll;
+
+struct Line {
+    mutable ll a, b, p; // y = ax + b, x = p 까지 최대값
+    bool operator<(const Line& l) const { return a < l.a; }
+    bool operator<(ll x) const { return p < x; }
+};
+struct LineContainer : multiset<Line, less<>> {
+    const ll inf = 9e18;
+    ll div(ll a, ll b) { return a / b - ((a ^ b) < 0 && a % b); } // 내림
+    bool isect(iterator x, iterator y) {
+        if (y == end()) { x->p = inf; return 0; }
+        if (x->a == y->a) x->p = (x->b > y->b ? inf : -inf);
+        else x->p = div(y->b - x->b, x->a - y->a);
+        return x->p >= y->p;
+    }
+    void add(ll a, ll b) {
+        auto z = insert({ a, b, 0 }), y = z++, x = y;
+        while (isect(y, z)) z = erase(z);
+        if (x != begin() && isect(--x, y)) isect(x, y = erase(y));
+        while ((y = x) != begin() && (--x)->p >= y->p) isect(x, erase(y));
+    }
+    ll query(ll x) { // return max value
+        auto l = *lower_bound(x);
+        return l.a * x + l.b;
+    }
+};
+```
+
+---
+
+### [BOJ] 12795. 반평면 땅따먹기
+
+[BOJ 12795. 반평면 땅따먹기 문제 링크](https://www.acmicpc.net/problem/12795)
+
+여러 개의 직선들이 기울기가 정렬되지 않은 상태로 주어지면서, 중간중간 특정 $x$값에서의 최댓값을 구해야한다.
 
 <br/>
 
