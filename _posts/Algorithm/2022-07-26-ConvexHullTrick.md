@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` DP, 
+`Tags` DP Optimization, 
 
 ## 1. Idea of the Convex Hull Trick
 
@@ -36,6 +36,10 @@ $DP_i$를 구하기 위해 필요한 것은 지금까지 구한 $DP_j$들에 대
 
 이분탐색으로 원하는 직선을 찾고, 최솟값을 구하는 과정의 시간복잡도는 $O(\log n)$ 이므로, 직선을 효율적으로 관리할 수 있다면 시간복잡도를 개선할 수 있을 것이다.
 
+> 같은 방법으로 **최댓값**을 구하는 문제도 처리할 수 있다.
+> 
+> 이 경우에는 **$B_j$가 $j$에 대하여 증가**해야하며, 그래프를 그리면 아래로 볼록한 볼록 껍질을 얻게 된다.
+
 <br/>
 
 ## 2. How to deal with a New Line
@@ -60,6 +64,8 @@ x_{ji} = \frac{DP_i + DP_j}{B_j - B_i}
 
 이 과정을 수행하기 위해 직선에 대해 알아야하는 정보는 해당 직선의 기울기와 $y$절편, 그리고 최솟값에 해당하는 구간의 시작 $x$좌표인 $x_i$이다.
 
+> 잘 생각해보면 최댓값을 구하는 경우에도 동일한 과정을 거쳐 직선을 처리할 수 있다는 것을 알 수 있다.
+
 <br/>
 
 ## 3. Time Complexity
@@ -70,18 +76,162 @@ x_{ji} = \frac{DP_i + DP_j}{B_j - B_i}
 
 이때 **$A_i$가 $i$에 대하여 증가**한다는 조건을 추가하면 모든 직선을 저장할 필요 없이 구간이 $A_i$보다 작다면 제거해버리면 되기 때문에 시간복잡도가 $O(n)$이 된다.
 
-직선들을 앞과 뒤에서 제거할 수 있어야하기 때문에 덱(deque)을 이용하면 쉽게 구현할 수 있다.
-
 <br/>
 
 ## 4. Implementation
 
+구현하는 방법은 다양하기 때문에 자신이 사용하기 편한 코드를 사용하자.
+
+나는 벡터를 이용하여 구현하였다.
+
+---
+
+### 4-1. Using binary search: $O(n \log n)$
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <iterator>
+using namespace std;
+typedef long long ll;
+
+struct Line {
+    ll a, b, p; // y = ax + b, x = p 부터 최대/최소값
+    bool operator<(const Line& l) const { return p < l.p; }
+};
+struct LineContainer : vector<Line> {
+    ll div(ll a, ll b) { return a / b + ((a ^ b) > 0 && a % b); } // 올림
+    void add(ll a, ll b) {
+        while (!empty()) {
+            Line prv = back();
+            ll p = div(b - prv.b, prv.a - a);
+            if (p <= prv.p) pop_back();
+            else {
+                push_back({ a, b, p });
+                return;
+            }
+        }
+        push_back({ a, b, 0 });
+    }
+    ll query(ll x) { // return max/min value at x
+        Line tmp = { 0, 0, x };
+        auto l = *prev(upper_bound(begin(), end(), tmp));
+        return l.a * x + l.b;
+    }
+};
+```
+
+---
+
+### 4-2. When query increases: $O(n)$
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <iterator>
+using namespace std;
+typedef long long ll;
+
+int idx = 0;
+struct Line {
+    ll a, b, p; // y = ax + b, x = p
+    bool operator<(const Line& l) const { return p < l.p; }
+};
+struct LineContainer : vector<Line> {
+    ll div(ll a, ll b) { return a / b + ((a ^ b) > 0 && a % b); }
+    void add(ll a, ll b) {
+        while (!empty()) {
+            Line prv = back();
+            ll p = div(b - prv.b, prv.a - a);
+            if (p <= prv.p) pop_back();
+            else {
+                push_back({ a, b, p });
+                return;
+            }
+        }
+        push_back({ a, b, 0 });
+    }
+    ll query(ll x) {
+        if (idx >= size()) idx = size() - 1;
+        while (idx < size() && at(idx).p <= x) idx++;
+        return at(idx - 1).a * x + at(idx - 1).b;
+    }
+};
+```
+
+<br/>
+
+## 5. Related Problems
+
+DP 점화식을 세웠을 때 볼록껍질 최적화를 사용 가능한지 확인하고 적용해준다.
+
+점화식을 적절한 형태로 변경하는 작업이 필요한 경우가 많다.
+
+---
+
+### [BOJ] 13263. 나무 자르기
+
+[BOJ 13263. 나무 자르기 문제 링크](https://www.acmicpc.net/problem/13263)
+
+나무를 길이 $1$만큼 자를 때마다 전기톱을 충전하여야 하는데, 전기톱의 충전 비용은 완전히 자른 나무의 번호의 최댓값이 $i$일 때 $b_i$이다.
+
+$i$번째 나무의 높이는 $a_i$이며, $a_i$는 $i$에 대하여 증가하고, $b_i$는 $i$에 대하여 감소한다.
+
+초기에 전기톱은 충전된 상태로 있으며, $a_1 = 1$ 이고 $b_n = 0$ 이다.
+
+즉, 높이가 가장 큰 $n$번째 나무를 완전히 자르고 나면 나머지 나무들을 추가 충전 비용 없이 모두 자를 수 있게 된다.
+
+그러므로 DP 배열을 다음과 정의하고 점화식을 세울 수 있다.
+
+- $DP\[i\]$ : $i$번째 나무를 완전히 자르는데 필요한 최소 비용
+- $DP\[i\] = \min_{j < i} \left( DP\[j\] + b_j a_i \right)$
+
+따라서 $DP\[i\]$ 는 직선 $y = b_j x + DP\[j\]$ 들이 있을 때 $x = a_i$ 에서의 최솟값이 되고,
+
+$b_j$가 $j$에 대하여 감소하므로, 이는 CHT를 이용해서 $O(n \log n)$으로 해결할 수 있다.
+
+또한 $a_i$가 $i$에 대하여 증가하기 때문에 $O(n)$으로도 해결할 수 있다.
+
+---
+
+### [BOJ] 6171. 땅따먹기
+
+[BOJ 6171. 땅따먹기 문제 링크](https://www.acmicpc.net/problem/6171)
+
+아래와 같이 땅의 가격이 매겨질 때, $N$개의 땅을 모두 사기 위한 최소 비용을 구하는 문제이다.
+
+- (여러 땅의 묶음의 가격) = (해당 땅들 중 가로의 길이의 최댓값) $\times$ (해당 땅들 중 세로의 길이의 최댓값)
+
+땅을 연속된 그룹으로만 묶을 수 있는 것이 아니라 아무렇게나 묶을 수 있기 때문에 CHT를 사용하는 문제라고 생각하기 어렵다.
+
+어떤 땅이 다른 땅에 포함된다면(가로와 세로의 길이가 모두 작거나 같다면), 해당 땅은 고려할 필요가 없다.
+
+이 사실을 이용하면,
+
+1. 땅들을 가로의 길이에 대해 정렬한다.
+2. 가로의 길이가 가장 긴 땅을 선택하고, 해당 땅보다 세로의 길이가 같거나 짧은 땅들과 묶는다.
+3. 위에서 묶은 땅들을 제외하고 남은 땅이 없을 때까지 2번 과정을 반복한다.
+
+와 같은 과정을 통해 최소 비용에 영향을 주는 땅들만 남길 수 있다.
+
+2번 과정에서 선택된 땅들을 가로의 길이에 대한 내림차순으로 정렬한다면, 자연스럽게 세로의 길이에 대한 오름차순으로도 정렬된다.
+
+이때 $i$번째 땅의 가로의 길이를 $b_i$, 세로의 길이를 $a_i$라고 하면 다음과 같이 DP 배열을 정의할 수 있다.
+
+- $DP\[i\]$ : $i$번째 땅까지 모두 사는데 필요한 최소 비용
+- $DP\[i\] = \min_{j < i} \left( DP\[j\] + a_i b_{j+1} \right)$
+
+CHT를 이용하면 $O(n)$으로 해결할 수 있다.
+
+---
 
 
 
+<br/>
 
+## References
 
-
-
-
+[1] 
 
