@@ -75,9 +75,65 @@ b_k = \sum_{i = ks}^{\min(n-1, (k+1)s - 1)} a_i
 
 쿼리의 개수를 $q$라고 하면 전체 시간복잡도는 $O(n + q \sqrt{n})$ 으로, 세그먼트 트리만큼은 아니지만 충분히 빠르다.
 
-```cpp
+아래는 [BOJ 2042. 구간 합 구하기](https://www.acmicpc.net/problem/2042)을 위 방법으로 해결한 코드이다.
 
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+using namespace std;
+typedef long long ll;
+
+struct sqrt_decomposition {
+    int n, s;
+    vector<ll> a, b;
+    sqrt_decomposition(int _n) {
+        n = _n, s = (int)sqrt(n) + 1;
+        a.resize(n);
+        b.resize(s, 0);
+    }
+    void init() {
+        for (int i = 0; i < n; i++) b[i / s] += a[i];
+    }
+    void upd(int i, ll val) {
+        b[i / s] += val - a[i];
+        a[i] = val;
+    }
+    ll query(int l, int r) {
+        ll ret = 0;
+        int L = l / s, R = r / s;
+        if (L == R) for (int i = l; i <= r; i++) ret += a[i];
+        else {
+            for (int i = l; i < (L + 1) * s; i++) ret += a[i];
+            for (int i = L + 1; i < R; i++) ret += b[i];
+            for (int i = R * s; i <= r; i++) ret += a[i];
+        }
+        return ret;
+    }
+};
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    int n, m, k; cin >> n >> m >> k;
+    sqrt_decomposition sd(n);
+    for (int i = 0; i < n; i++) cin >> sd.a[i];
+    sd.init();
+    for (int i = 0; i < m + k; i++) {
+        ll a, b, c; cin >> a >> b >> c;
+        if (a == 1) sd.upd(b - 1, c);
+        else cout << sd.query(b - 1, c - 1) << "\n";
+    }
+}
 ```
+
+<br/>
+
+## 2. Mo's Algorithm
+
+
 
 <br/>
 
