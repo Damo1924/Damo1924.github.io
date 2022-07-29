@@ -14,7 +14,7 @@ comments: true
 
 ## 1. Sqrt Decomposition
 
-**평방 분할(sqrt decomposition)**은 구간 쿼리를 $O(\sqrt{n})$에 처리할 수 있는 방법이다.
+**평방 분할(sqrt decomposition)**은 **전체 구간을 $\sqrt{n}$개의 같은 크기의 블록으로 나누어서 관리**함으로써 구간 쿼리를 $O(\sqrt{n})$에 처리할 수 있는 방법이다.
 
 예를 들어 부분 수열의 합을 구하는 쿼리나, 최대/최소값을 구하는 쿼리 같은 것들을 빠르게 구할 수 있다.
 
@@ -22,9 +22,14 @@ comments: true
 
 좀 더 직관적인 이해를 위해 구간 합 쿼리를 평방 분할을 이용해서 처리해보자.
 
-- 길이가 $n$인 수열 $a_0, a_1, a_2, \dots, a_{n-1}$ 에 대하여 임의의 두 정수 $l, r$($l < r$)가 주어졌을 때 구간 합 $a_l + a_{l+1} + \dots + a_r$ 의 값을 $O(\sqrt{n})$에 구하여라.
+---
 
-평방 분할은 **전체 구간을 $\sqrt{n}$개의 같은 크기의 블록으로 나누어서 관리**한다.
+### 1-1. Element Update & Range Query Problem
+
+길이가 $n$인 수열 $a_0, a_1, a_2, \dots, a_{n-1}$ 에 대하여 다음의 두 쿼리를 $O(\sqrt{n})$에 처리해야한다.
+
+- 임의의 두 정수 $i, v$에 대하여 $a_i = v$ 로 업데이트하는 쿼리
+- 임의의 두 정수 $l, r$($l < r$)가 주어졌을 때 구간 합 $a_l + a_{l+1} + \dots + a_r$ 의 값을 구하는 쿼리
 
 $\sqrt{n}$가 정수가 아닐 수 있으므로 올림을 해주어서 각 블록의 크기 $s$를 정해주자.
 
@@ -71,7 +76,7 @@ b_k = \sum_{i = ks}^{\min(n-1, (k+1)s - 1)} a_i
 
 블록의 구간의 합은 단순히 그 차이만큼 더해주면 되므로 $O(1)$에 처리할 수 있고,
 
-블록의 최대/최소값은 해당 블록을 전부 탐색하면 되므로 $O(s)$에 처리할 수 있다.
+> 만약 구간의 최대/최소값을 구하는 문제라면, 업데이트를 위해서는 해당 블록을 전부 탐색하면 되므로 $O(s)$가 걸린다.
 
 쿼리의 개수를 $q$라고 하면 전체 시간복잡도는 $O(n + q \sqrt{n})$ 으로, 세그먼트 트리만큼은 아니지만 충분히 빠르다.
 
@@ -128,6 +133,78 @@ int main() {
     }
 }
 ```
+
+---
+
+### 1-2. Update Range & Element Query Problem
+
+이번에는 주어진 구간에 속하는 원소들에 특정 값을 더해주고, 특정 원소 하나의 값을 출력하는 문제를 평방 분할로 해결해보자.
+
+구간 업데이트를 할 때 **양쪽 끝 블록에 속하는 원소들에는 직접 더해주고**, **블록이 구간 전체에 속한다면 해당 블록에 값을 더해준다**.
+
+그렇다면 원소 $i$의 값은 `a\[i\] + b\[i / s\]` 로 구할 수 있다.
+
+아래는 [BOJ 16975. 수열과 쿼리 21](https://www.acmicpc.net/problem/16975)을 평방 분할로 해결한 코드이다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+#include <math.h>
+using namespace std;
+typedef long long ll;
+
+struct sqrt_decomposition {
+    int n, s;
+    vector<ll> a, b;
+    sqrt_decomposition(int _n) {
+        n = _n, s = (int)sqrt(n) + 1;
+        a.resize(n);
+        b.resize(s, 0);
+    }
+    void upd(int l, int r, ll val) {
+        int L = l / s, R = r / s;
+        if (L == R) for (int i = l; i <= r; i++) a[i] += val;
+        else {
+            for (int i = l; i < (L + 1) * s; i++) a[i] += val;
+            for (int i = L + 1; i < R; i++) b[i] += val;
+            for (int i = R * s; i <= r; i++) a[i] += val;
+        }
+    }
+    ll query(int i) {
+        return a[i] + b[i / s];
+    }
+};
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+
+    int n; cin >> n;
+    sqrt_decomposition sd(n);
+    for (int i = 0; i < n; i++) cin >> sd.a[i];
+    int m; cin >> m;
+    while (m--) {
+        int t; cin >> t;
+        if (t == 1) {
+            int l, r, k; cin >> l >> r >> k;
+            sd.upd(l - 1, r - 1, k);
+        }
+        else {
+            int x; cin >> x;
+            cout << sd.query(x - 1) << "\n";
+        }
+    }
+}
+```
+
+---
+
+이렇게 평방 분할을 이용하면 다양한 구간 쿼리를 비교적 빠르게 처리할 수 있다.
+
+그럼에도 세그먼트 트리에 비해 메리트가 없어보이는 것이 사실이다.
+
+하지만 평방 분할의 진가는 **Mo's algorithm**에서 드러난다.
 
 <br/>
 
