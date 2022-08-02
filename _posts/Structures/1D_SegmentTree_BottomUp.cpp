@@ -123,8 +123,8 @@ struct segtree_lazy {
         prop(l); prop(r);
         ll res = 0;
         while (l <= r) {
-            if (l % 2 != 0) res += node[l++];
-            if (r % 2 == 0) res += node[r--];
+            if (l & 1) res += node[l++];
+            if (!(r & 1)) res += node[r--];
             l >>= 1; r >>= 1;
         }
         return res;
