@@ -1,4 +1,4 @@
-struct Segtree {
+struct Segtree { // Sum segtree
     int n;
     vector<int> node, a;
     Segtree() {}
@@ -28,7 +28,7 @@ struct Segtree {
 
 // ----------------------
 
-struct Segtree {
+struct Segtree { // Max segtree
     int n;
     vector<int> node, a;
     Segtree() {}
@@ -48,6 +48,28 @@ struct Segtree {
             if (r % 2 == 0) res = max(res, node[r--]);
             l /= 2; r /= 2;
         }
+        return res;
+    }
+};
+
+//------------------
+
+struct Segtree { // range update, element query
+    int n;
+    vector<int> node;
+    Segtree() {}
+    Segtree(int _n) : n(_n) { node.resize(2 * n); }
+    void upd(int l, int r, int val) {
+        l += n; r += n;
+        while (l <= r) {
+            if (l % 2 != 0) node[l++] += val;
+            if (r % 2 == 0) node[r--] += val;
+            l /= 2; r /= 2;
+        }
+    }
+    int query(int idx) {
+        int res = 0;
+        for (int i = n + idx; i; i /= 2) res += node[i];
         return res;
     }
 };
