@@ -86,9 +86,9 @@ void dfs(int i)
 
 ---
 
-### [백준] 2820. 자동차 공장
+### [BOJ] 2820. 자동차 공장
 
-[백준 2820. 자동차 공장 문제 링크](https://www.acmicpc.net/problem/2820)
+[BOJ 2820. 자동차 공장 문제 링크](https://www.acmicpc.net/problem/2820)
 
 자동차 공장에 $N$명의 직원이 있고, 각 직원은 $1$번부터 $N$번까지 번호가 있다.
 
@@ -103,98 +103,20 @@ void dfs(int i)
 
 **[SOLUTION]**
 
-공장의 직원 체계는 하나의 트리로 표현할 수 있다.
+ETT와 세그먼트 트리를 이용해서 트리 위에서의 구간 쿼리 또는 구간 업데이트를 수행하는 가장 간단한 형태의 문제이다.
 
-트리를 ETT로 표현하고, 만들어진 리스트에 대한 세그먼트 트리를 구현하자.
+공장의 직원 체계는 하나의 트리이므로, ETT를 통해 리스트로 변환할 수 있다.
 
-첫 번째 쿼리는 리스트의 구간 업데이트, 두 번째 쿼리는 한 원소의 값을 출력하는 것으로 생각할 수 있다.
+만들어진 리스트에 대한 세그먼트 트리를 구현하면 되는데,
 
-구간 업데이트이기 때문에 lazy propagation을 이용해도 되지만, 구간 합이 아니라 한 원소의 값을 출력하는 문제이므로 굳이 lazy propagation을 이용할 필요는 없다.
+- 첫 번째 쿼리는 리스트의 구간 업데이트
+- 두 번째 쿼리는 한 원소의 값을 출력
 
-> [백준 16975. 수열과 쿼리 21](https://www.acmicpc.net/problem/16975) 참고
+이므로 굳이 lazy propagation을 사용하지 않고도 해결할 수 있다.
 
-전체 코드는 다음과 같다.
+> [BOJ 16975. 수열과 쿼리 21](https://www.acmicpc.net/problem/16975)을 참고
 
-```cpp
-#include <iostream>
-#include <algorithm>
-#include <vector>
-#include <math.h>
-using namespace std;
-typedef long long ll;
-
-int p[500001], l[500001], s[500001], e[500001];
-
-vector<int> g[500001];
-
-int idx = 1;
-void dfs(int i)
-{
-    l[idx] = p[i];
-    s[i] = idx;
-    for (int j : g[i])
-    {
-        idx++;
-        dfs(j);
-    }
-    e[i] = idx;
-}
-
-ll query(vector<ll>& tree, int n, int s, int e, int x)
-{
-    if (e < x || x < s) return 0;
-    if (s == e) return tree[n];
-    
-    int m = (s + e) / 2;
-    return tree[n] + query(tree, 2 * n, s, m, x) + query(tree, 2 * n + 1, m + 1, e, x);
-}
-
-void upd(vector<ll>& tree, int n, int s, int e, int l, int r, ll diff)
-{
-    if (r < s || e < l) return;
-    if (l <= s && e <= r)
-    {
-        tree[n] += diff;
-        return;
-    }
-    
-    int m = (s + e) / 2;
-    upd(tree, 2 * n, s, m, l, r, diff);
-    upd(tree, 2 * n + 1, m + 1, e, l, r, diff);
-}
-
-int main()
-{
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL); cout.tie(NULL);
-    
-    int n, m; cin >> n >> m;
-    cin >> p[1];
-    for (int i = 2; i <= n; i++)
-    {
-        int a; cin >> p[i] >> a;
-        g[a].push_back(i);
-    }
-    dfs(1);
-    
-    int h = (int) ceil(log2(n));
-    vector<ll> tree(1 << (h + 1), 0);
-    
-    while (m--)
-    {
-        char c;
-        int a;
-        cin >> c >> a;
-        if (c == 'p')
-        {
-            int x; cin >> x;
-            upd(tree, 1, 1, n, s[a], e[a], x);
-            p[a] -= x; // 본인의 월급은 올리지 못한다.
-        }
-        else cout << p[a] + query(tree, 1, 1, n, s[a]) << "\n";
-    }
-}
-```
+직원 $i$의 부하 직원들은 구간 $\[s\[i\] + 1, e\[i\]\]$ 에 나타난다.
 
 <br/>
 
@@ -218,17 +140,3 @@ int main()
 
 [1] [Codeforces, ifsmirnov's blog, 'On Euler tour trees'](https://codeforces.com/blog/entry/18369)  
 [2] [WIKIPEDIA, 'Euler tour technique'](https://en.m.wikipedia.org/wiki/Euler_tour_technique)  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
