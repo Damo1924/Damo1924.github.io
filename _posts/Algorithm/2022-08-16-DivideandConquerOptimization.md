@@ -99,10 +99,54 @@ A_i = \max_{i \leq k \leq j} \left( (k - i) \cdot T_k + V_i \right)
 
 라고 쓸 수 있다. 이때 $A_i, A_{i+1}$에 해당하는 $k$값을 각각 $k_i, k_{i+1}$라고 하면,
 
-- $$
-- $$
+- $(k_{i+1} - i) \cdot T_{k_{i+1}\} + V_i \leq (k_i - i) \cdot T_{k_i} + V_i$
+- $(k_i - i - 1) \cdot T_{k_i} + V_{i+1} \leq (k_{i+1} - i - 1) \cdot T_{k_{i+1}\} + V_{i+1}$
 
+이 성립한다. 두 식을 더해주면,
 
+\begin{aligned}
+T_{k_{i+1}\} \leq T_{k_i}
+\end{aligned}
+
+를 얻을 수 있고, $T_j$는 단조감소하므로 $k_i \leq k_{i+1}$ 임을 알 수 있다.
+
+즉, 분할정복 최적화를 사용할 수 있는 문제이다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+typedef long long ll;
+const int mxN = 1e5 + 1;
+
+int N, D, T[mxN], V[mxN];
+ll ans = 0;
+void dnc_opt(int s, int e, int l, int r) {
+    if (s > e) return;
+    int m = (s + e) / 2;
+    pair<ll, int> res = { 0, -1 };
+    int L = max(l, m), R = min(r, m + D);
+    for (int i = L; i <= R; i++)
+        res = max(res, { 1ll * (i - m) * T[i] + V[m], i });
+    ans = max(ans, res.first);
+    dnc_opt(s, m - 1, l, res.second);
+    dnc_opt(m + 1, e, res.second, r);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    cin >> N >> D;
+    for (int i = 1; i <= N; i++) cin >> T[i];
+    for (int i = 1; i <= N; i++) cin >> V[i];
+    dnc_opt(1, N, 1, N);
+    cout << ans;
+}
+```
+
+---
 
 
 
