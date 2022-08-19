@@ -78,7 +78,17 @@ c(x_1, j_1) + c(x_2, j_2) < c(x_1, j_2) + c(x_2, j_1)
 분할정복으로 구현해주면 된다.
 
 ```cpp
-
+ll dp[mxM][mxN], c[mxN][mxN];
+void dnc_opt(int i, int s, int e, int l, int r) {
+    if (s > e) return;
+    int m = (s + e) / 2;
+    pair<ll, int> res = { 1e18, -1 };
+    for (int k = l; k <= r; k++)
+        res = min(res, { dp[i - 1][k] + c[m][k] });
+    dp[i][m] = res.first;
+    dnc_opt(i, s, m - 1, l, res.second);
+    dnc_opt(i, m + 1, e, res.second, r);
+}
 ```
 
 <br/>
@@ -111,6 +121,10 @@ T_{k_{i+1}\} \leq T_{k_i}
 를 얻을 수 있고, $T_j$는 단조감소하므로 $k_i \leq k_{i+1}$ 임을 알 수 있다.
 
 즉, 분할정복 최적화를 사용할 수 있는 문제이다.
+
+날짜의 수를 $N$, 숙성 시간의 최댓값을 $D$라고 할 때, 최적화를 사용하지 않으면 $O(ND)$이 걸리지만,
+
+분할정복 최적화를 사용하면 $O(N \cdot \min(D, \log N))$ 으로 해결할 수 있게 된다.
 
 ```cpp
 #include <iostream>
@@ -147,6 +161,79 @@ int main() {
 ```
 
 ---
+
+### [BOJ] 13261. 탈옥
+
+[BOJ 13261. 탈옥 문제 링크](https://www.acmicpc.net/problem/13261)
+
+$L$개의 칸으로 이루어진 감옥이 있고, 각 칸에는 죄수가 한 명씩 들어있다.
+
+$i$번 칸에 있는 죄수의 탈옥 능력을 수치로 나타낸 것을 $C_i > 0$라고 한다.
+
+감옥에는 최대 $G$명의 간수를 배치할 수 있고, 각 간수는 연속한 여러 개의 칸들을 감시할 수 있다.
+
+이때 감옥의 탈옥 위험도는 모든 $i$에 대하여 $C_i$와 $i$번 칸을 감시하고 있는 간수가 감시하고 있는 죄수의 수를 곱한 것을 모두 더한 것이다.
+
+감옥의 탈옥 위험도의 최솟값을 구하기 위해 다음과 같은 dp 배열을 정의하자.
+
+- $dp(i, j)$ : 간수를 $i$명 고용하여 만들 수 있는 $1$번 칸부터 $j$번 칸까지의 탈옥 위험도의 최솟값
+
+그렇다면 구하고자 하는 값은 $dp(G, L)$이 되고, 다음과 같은 점화식을 세울 수 있다.
+
+\begin{aligned}
+dp(i, j) = \min_{i - 1 \leq k < j} \left( dp(i - 1, k) + c(k, j) \right)
+\end{aligned}
+
+이때 비용 $c(k, j)$는 $i$번째 간수가 $k+1$번 칸부터 $j$번 칸까지를 감시할 때 발생하는 탈옥 위험도이다.
+
+\begin{aligned}
+c(k, j) = (j - k) \cdot \sum_{x = k + 1}^j C_x
+\end{aligned}
+
+위 비용 함수가 monotonicity condition을 만족한다는 것은 쉽게 알 수 있다.
+
+Naive하게 구하면 $O(GL^2)$이지만, 분할정복 최적화를 이용하면 $O(GL \log L)$ 의 시간복잡도로 해결할 수 있다.
+
+> $C_i$들의 prefix sum을 미리 구해두면 $c(k, j)$를 $O(1)$에 구할 수 있다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+typedef long long ll;
+
+int L, G, C[8001];
+ll S[8001], dp[801][8001];
+void dnc_opt(int i, int s, int e, int l, int r) {
+    if (s > e) return;
+    int m = (s + e) / 2;
+    pair<ll, int> res = { 1e18, -1 };
+    int L = max(l, i - 1), R = min(r, m - 1);
+    for (int k = L; k <= R; k++)
+        res = min(res, { dp[i - 1][k] + 1ll * (m - k) * (S[m] - S[k]), k });
+    dp[i][m] = res.first;
+    dnc_opt(i, s, m - 1, l, res.second);
+    dnc_opt(i, m + 1, e, res.second, r);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    cin >> L >> G;
+    for (int i = 1; i <= L; i++) {
+        cin >> C[i];
+        S[i] = S[i - 1] + C[i];
+        dp[1][i] = S[i] * i;
+    }
+    if (L <= G) cout << S[L];
+    else {
+        for (int i = 2; i <= G; i++) dnc_opt(i, 1, L, 1, L);
+        cout << dp[G][L];
+    }
+}
+```
 
 
 
