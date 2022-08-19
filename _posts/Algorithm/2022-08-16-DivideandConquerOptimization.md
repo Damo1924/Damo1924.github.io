@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` DP Optimization, 11001, 
+`Tags` DP Optimization, 11001, 13261
 
 ## 1. Preconditions to use Divide & Conquer optimization method
 
