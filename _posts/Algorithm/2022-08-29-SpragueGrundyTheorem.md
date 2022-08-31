@@ -60,14 +60,14 @@ $x \neq 0$ 인 상태에서는 $x = 0$ 이 되도록 돌을 가져가는 방법�
 
 스프라그-그런디 정리는 **Two-player impartial game을 Nim game으로 치환할 수 있다**고 말한다.
 
-Two-player impartial game의 임의의 상태 $v$에 대하여, $v_i$($i \in \{ 1, 2, \dots, k \}$, $k \geq 0$)을 $v$에서 도달할 수 있는 상태라고 정의하자.
+Two-player impartial game의 임의의 상태 $v$에 대하여, $v_i$($i \in \\{ 1, 2, \dots, k \\}$, $k \geq 0$)을 $v$에서 도달할 수 있는 상태라고 정의하자.
 
 상태 $v$의 게임이 $x$개의 돌로 이루어진 하나의 돌 무더기가 있는 Nim game으로 치환될 수 있는데,
 
 이러한 $x$를 상태 $v$에 대한 **Grundy value** 또는 **Nim-value**라고 한다. 또한,
 
 \begin{aligned}
-x = mex \{ x_1, x_2, \dots, x_k \}
+x = mex \\{ x_1, x_2, \dots, x_k \\}
 \end{aligned}
 
 가 성립한다. 이때 $x_i$는 상태 $v_i$의 Grundy value이다.
@@ -90,6 +90,14 @@ Grundy value는 앞서 정의했던 것처럼 재귀적으로 구할 수 있다.
 
 ---
 
+### [BOJ] 11694. 님 게임
+
+[BOJ 11694. 님 게임 문제 링크](https://www.acmicpc.net/problem/11694)
+
+
+
+---
+
 ### [BOJ] 13034. 다각형 게임
 
 [BOJ 13034. 다각형 게임 문제 링크](https://www.acmicpc.net/problem/13034)
@@ -104,8 +112,40 @@ Grundy value는 앞서 정의했던 것처럼 재귀적으로 구할 수 있다.
 
 두 플레이어가 최적의 방법으로 게임할 때, 누가 이기는지 구하는 문제이다.
 
+내부를 지나는 선분이 없는 볼록 $v$각형에서 선분을 그리는 상황을 생각해보자.
 
+두 꼭짓점을 선택해서 선분을 그리면 영역이 두 부분으로 나뉘어지며, 앞으로는 각 영역 내에서만 선분을 그릴 수 있게 된다.
 
+이 상태에서 도달할 수 있는 상태들은 모든 $0 \leq i \leq v - 2$ 에 대하여 두 영역이 각각 $i, v - 2 - i$ 개의 꼭짓점으로 가지도록 나뉘는 상태들이다.
+
+위 상태들의 Grundy value는 볼록 $i$각형과 볼록 $v - 2 - i$각형의 Grundy value를 XOR 연산 취해준 값이다.
+
+각 $v$($4 \leq v \leq n$)에 대해 $v-1$개의 상태의 Grundy value를 구한 후, mex값을 구해주어야하므로 시간복잡도는 $O(n^2)$이다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+int dp[1001], chk[1001];
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    int n; cin >> n;
+    dp[2] = 1; dp[3] = 1;
+    for (int i = 4; i <= n; i++) {
+        for (int j = 0; j <= i - 2; j++) chk[dp[j] ^ dp[i - 2 - j]] = i;
+        for (int j = 0; j <= 1000; j++) if (chk[j] != i) {
+            dp[i] = j;
+            break;
+        }
+    }
+    cout << (dp[n] ? "1" : "2");
+}
+```
 
 
 <br/>
