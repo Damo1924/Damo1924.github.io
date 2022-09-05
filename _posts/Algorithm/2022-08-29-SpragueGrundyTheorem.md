@@ -10,7 +10,7 @@ comments: true
 
 ---
 
-`Tags` Game Theory, 게임 이론, 스프라그-그런디 정리, 
+`Tags` Game Theory, 게임 이론, 스프라그-그런디 정리, 그런디 수
 
 ## 1. Perfect-Information Impartial Games
 
@@ -137,6 +137,49 @@ int main() {
 
 ---
 
+### [BOJ] 16877. 핌버
+
+[BOJ 16877. 핌버 문제 링크](https://www.acmicpc.net/problem/16877)
+
+마지막 돌을 가져가는 사람이 승리하는 님 게임에 규칙을 추가한 '핌버'라는 게임을 하고 있다.
+
+님 게임은 하나 이상의 돌을 가져갈 수 있었는데, 핌버에서는 **피보나치 수**만큼의 돌만 가져갈 수 있다.
+
+하나의 돌 무더기에 돌이 $p$($1 \leq p \leq 3 \cdot 10^5$)개가 있을 때의 Grundy value를 계산해두고,
+
+각 돌 무더기에 있는 돌의 개수에 해당하는 Grundy value들에 XOR 연산을 취해줌으로써 승자를 알 수 있다.
+
+```cpp
+#include <iostream>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+int f[31], g[3000001], chk[20];
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL); cout.tie(NULL);
+    
+    f[0] = 1; f[1] = 2;
+    for (int i = 2; i < 31; i++) f[i] = f[i - 2] + f[i - 1];
+    for (int i = 1, j = 0; i <= 3000000; i++) {
+        if (j < 31 && i == f[j]) j++;
+        for (int k = 0; k < j; k++) chk[g[i - f[k]]] = i; // 피보나치 수 만큼만 가져갈 수 있다.
+        while (chk[g[i]] == i) g[i]++; // mex 연산
+    }
+    
+    int n, x = 0; cin >> n;
+    for (int i = 0; i < n; i++) {
+        int p; cin >> p;
+        x ^= g[p]; // 님 게임으로 치환하여 해결
+    }
+    cout << (x ? "koosaga" : "cubelover");
+}
+```
+
+---
+
 ### [BOJ] 13034. 다각형 게임
 
 [BOJ 13034. 다각형 게임 문제 링크](https://www.acmicpc.net/problem/13034)
@@ -185,7 +228,6 @@ int main() {
     cout << (dp[n] ? "1" : "2");
 }
 ```
-
 
 <br/>
 
